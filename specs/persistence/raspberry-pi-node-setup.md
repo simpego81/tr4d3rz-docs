@@ -65,19 +65,16 @@ log {
 
 ## borsa-italiana-scraper Setup
 
-The scraper requires Node.js. The recommended version for ARMv6l is **Node.js 18.x LTS** (unofficial ARM build from NodeSource or direct download from nodejs.org).
+The target Raspberry Pi 1 is running **Node.js v14.15.1**. The `borsa-italiana-scraper` is fully compatible with Node 14's ES module support (`type: module`), but the `p-limit` dependency must be downgraded to version 4 (as version 5 requires Node >=18).
 
 ```bash
-# Install Node.js 18.x for ARMv6l
-# Download the official ARMv6l build from nodejs.org
-wget https://nodejs.org/dist/v18.20.2/node-v18.20.2-linux-armv6l.tar.xz
-tar -xf node-v18.20.2-linux-armv6l.tar.xz
-sudo cp -r node-v18.20.2-linux-armv6l/* /usr/local/
-
 # Clone the scraper
 git clone https://github.com/simpego81/borsa-italiana-scraper.git
 cd borsa-italiana-scraper
+
+# Install dependencies and downgrade p-limit for Node 14 compatibility
 npm install
+npm install p-limit@4
 
 # Run (once MQTT integration is complete — see ADR-0004)
 node index.js --period=1Y --mqtt=mqtt://localhost:1883

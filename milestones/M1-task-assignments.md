@@ -28,6 +28,6 @@
 **Objective**: Adapt the existing scraper to publish to the MQTT broker.
 
 **Tasks**:
-1. **MQTT Integration (Node.js)**: Add the `mqtt` npm package to `borsa-italiana-scraper`.
+1. **Node 14 Compatibility & MQTT**: Downgrade `p-limit` to version 4 (`npm install p-limit@4`) to ensure compatibility with Node.js 14.15.1 on the Raspberry Pi. Then, add the `mqtt` npm package.
 2. **Data Transformation**: Modify `index.js` to transform the scraped data into the schema defined in ADR-0004 (Unix timestamps, minified keys).
 3. **Publishing Logic**: Add a CLI flag `--mqtt=mqtt://<rpi-ip>:1883` to publish the transformed data to `data/ohlcv/history/{isin}` and `data/ohlcv/intraday/{isin}` instead of (or in addition to) saving to files.

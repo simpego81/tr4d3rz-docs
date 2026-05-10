@@ -40,7 +40,7 @@ The existing `borsa-italiana-scraper` repository will be integrated into the TR4
 - Reuses existing, tested scraping logic.
 
 **Negative**:
-- The ARMv6l architecture limits the Node.js version that can be run (typically capped at Node.js 18.x or 20.x unofficial builds). The scraper must remain compatible with older Node environments.
+- The user's Raspberry Pi 1 is running **Node.js 14.15.1**. The `borsa-italiana-scraper` codebase is fully compatible with Node 14 (ES modules via `type: module` are supported since Node 12.17+). However, the `p-limit` dependency must be downgraded from `^5.0.0` (which requires Node >=18) to `^4.0.0` (which supports Node >=14.13.1). The `axios` dependency (`^1.6.0`) is fully compatible with Node 14.
 - NanoMQ configuration must be carefully tuned to avoid overwhelming the 700MHz single-core CPU when multiple Evolution Nodes connect simultaneously.
 
 ## References
