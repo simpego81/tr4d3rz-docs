@@ -1,0 +1,51 @@
+direction: right
+
+title: TR4D3RZ — Node Deployment Map
+
+rpi: Raspberry Pi 1 {
+  shape: rectangle
+  style.fill: "#8b0000"
+  style.font-color: "#ffffff"
+  nanomq: NanoMQ Broker\n(MQTT 1883)
+  scraper: borsa-italiana-scraper\n(Node.js)
+  sqlite: SQLite Event Log\n(future M2)
+}
+
+evolution_pc: Evolution Node\n(Linux PC) {
+  shape: rectangle
+  style.fill: "#1a5c2a"
+  style.font-color: "#ffffff"
+  ev_rust: tr4d3rz-evolution\n(Rust)
+}
+
+observatory: Observatory Node\n(Browser) {
+  shape: rectangle
+  style.fill: "#1a3a5c"
+  style.font-color: "#ffffff"
+  obs_ui: tr4d3rz-observatory\n(TypeScript/WASM)
+}
+
+esp: Optimization Node\n(ESP8266) {
+  shape: rectangle
+  style.fill: "#5c3a1a"
+  style.font-color: "#ffffff"
+  fw: tr4d3rz-embedded\n(C/Rust no_std)
+}
+
+gateway: Gateway Node\n(Linux PC or RPi) {
+  shape: rectangle
+  style.fill: "#5c1a3a"
+  style.font-color: "#ffffff"
+  gw: tr4d3rz-messaging\n(UART Bridge)
+}
+
+internet: borsaitaliana.it\nAPI {
+  shape: cloud
+}
+
+internet -> rpi.scraper: HTTPS REST (daily/15min)
+rpi.scraper -> rpi.nanomq: data/ohlcv/# (JSON)
+rpi.nanomq -> evolution_pc.ev_rust: MQTT TCP 1883
+rpi.nanomq -> observatory.obs_ui: MQTT WebSocket 8083
+esp.fw -> gateway.gw: UART / USB capsule
+gateway.gw -> rpi.nanomq: MQTT TCP 1883
