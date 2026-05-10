@@ -1,0 +1,71 @@
+direction: right
+
+title: TR4D3RZ — Inter-Node Data Flows
+
+broker: NanoMQ Broker\n(Core Node) {
+  shape: cylinder
+  style.fill: "#2a2a2a"
+  style.font-color: "#ffffff"
+}
+
+scraper: borsa-italiana-scraper {
+  shape: rectangle
+  style.fill: "#8b0000"
+  style.font-color: "#ffffff"
+}
+
+evolution: Evolution Nodes {
+  shape: rectangle
+  style.fill: "#1a5c2a"
+  style.font-color: "#ffffff"
+}
+
+observatory: Observatory Nodes {
+  shape: rectangle
+  style.fill: "#1a3a5c"
+  style.font-color: "#ffffff"
+}
+
+persistence: Persistence Node {
+  shape: rectangle
+  style.fill: "#3a1a5c"
+  style.font-color: "#ffffff"
+}
+
+gateway: Gateway Node {
+  shape: rectangle
+  style.fill: "#5c1a3a"
+  style.font-color: "#ffffff"
+}
+
+stm32: Optimization Nodes\n(STM32) {
+  shape: rectangle
+  style.fill: "#5c3a1a"
+  style.font-color: "#ffffff"
+}
+
+# Flow 1: Market Data
+scraper -> broker: "1. OHLCV Feed (JSON)\n[QoS 0]"
+
+# Flow 2: Cooperative Signaling
+evolution -> broker: "2. Signals (CBOR)\n[QoS 0]"
+
+# Flow 3: Fitness & Niches
+evolution -> broker: "3. Fitness/Niche (CBOR)\n[QoS 1]"
+
+# Flow 4: Evolutionary Events
+evolution -> broker: "4. Mutation/Birth/Death (CBOR)\n[QoS 1]"
+
+# Flow 5: Archetypes
+persistence -> broker: "5. Archetypes (CBOR)\n[QoS 2]"
+
+# Subscriptions
+broker -> evolution: "OHLCV, Archetypes, Signals"
+broker -> observatory: "OHLCV, Fitness, Signals, Events"
+broker -> persistence: "Fitness, Events, Signals"
+
+# Flow 6: Offline Capsule Sync
+gateway -> broker: "Translate Capsule to MQTT"
+broker -> gateway: "Translate MQTT to Capsule"
+gateway -> stm32: "6. Genome Capsule (CBOR File)\nvia UART/USB"
+stm32 -> gateway: "6. Fitness Capsule (CBOR File)\nvia UART/USB"

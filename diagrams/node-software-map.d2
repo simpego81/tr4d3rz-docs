@@ -1,0 +1,113 @@
+direction: down
+
+title: TR4D3RZ — Software Stack per Nodo
+
+core_node: Core Infrastructure Node\n(Raspberry Pi 1 - ARMv6l) {
+  shape: rectangle
+  style.fill: "#8b0000"
+  style.font-color: "#ffffff"
+
+  nanomq: NanoMQ Broker {
+    shape: rectangle
+    style.fill: "#a00000"
+    style.font-color: "#ffffff"
+  }
+  scraper: borsa-italiana-scraper\n(Node.js 14.15.1) {
+    shape: rectangle
+    style.fill: "#a00000"
+    style.font-color: "#ffffff"
+  }
+  event_log: Event Logger\n(tr4d3rz-persistence / Rust) {
+    shape: rectangle
+    style.fill: "#a00000"
+    style.font-color: "#ffffff"
+  }
+}
+
+evolution_node: Evolution Nodes\n(Linux PC / Android) {
+  shape: rectangle
+  style.fill: "#1a5c2a"
+  style.font-color: "#ffffff"
+
+  lsystem: L-System Engine\n(tr4d3rz-core / Rust) {
+    shape: rectangle
+    style.fill: "#1a7a35"
+    style.font-color: "#ffffff"
+  }
+  fsm: FSM Runtime\n(tr4d3rz-core / Rust) {
+    shape: rectangle
+    style.fill: "#1a7a35"
+    style.font-color: "#ffffff"
+  }
+  evo_engine: Evolution Engine\n(tr4d3rz-evolution / Rust) {
+    shape: rectangle
+    style.fill: "#1a7a35"
+    style.font-color: "#ffffff"
+  }
+  mqtt_client: MQTT Client\n(tr4d3rz-messaging / Rust) {
+    shape: rectangle
+    style.fill: "#1a7a35"
+    style.font-color: "#ffffff"
+  }
+}
+
+observatory_node: Observatory Nodes\n(Browser / Tablet) {
+  shape: rectangle
+  style.fill: "#1a3a5c"
+  style.font-color: "#ffffff"
+
+  ui: Ecosystem UI\n(tr4d3rz-observatory / TypeScript) {
+    shape: rectangle
+    style.fill: "#1a4a7a"
+    style.font-color: "#ffffff"
+  }
+  galaxy: 3D Galaxy Engine\n(Three.js / WebGL) {
+    shape: rectangle
+    style.fill: "#1a4a7a"
+    style.font-color: "#ffffff"
+  }
+  wasm: WASM FSM Replay\n(tr4d3rz-core / WASM) {
+    shape: rectangle
+    style.fill: "#1a4a7a"
+    style.font-color: "#ffffff"
+  }
+  mqtt_ws: MQTT WS Client\n(TypeScript) {
+    shape: rectangle
+    style.fill: "#1a4a7a"
+    style.font-color: "#ffffff"
+  }
+}
+
+optimization_node: Optimization Nodes\n(ESP8266 / STM32) {
+  shape: rectangle
+  style.fill: "#5c3a1a"
+  style.font-color: "#ffffff"
+
+  micro_fsm: Micro FSM Runtime\n(tr4d3rz-embedded / C) {
+    shape: rectangle
+    style.fill: "#7a4e22"
+    style.font-color: "#ffffff"
+  }
+  capsule: Capsule Manager\n(tr4d3rz-embedded / C) {
+    shape: rectangle
+    style.fill: "#7a4e22"
+    style.font-color: "#ffffff"
+  }
+  micro_mqtt: Micro MQTT\n(ESP8266 only / C) {
+    shape: rectangle
+    style.fill: "#7a4e22"
+    style.font-color: "#ffffff"
+  }
+}
+
+gateway_node: Gateway Node\n(Linux / RPi) {
+  shape: rectangle
+  style.fill: "#5c1a3a"
+  style.font-color: "#ffffff"
+
+  translator: Protocol Translator\n(tr4d3rz-messaging / Python) {
+    shape: rectangle
+    style.fill: "#7a2250"
+    style.font-color: "#ffffff"
+  }
+}
