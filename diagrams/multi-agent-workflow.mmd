@@ -1,0 +1,33 @@
+graph TD
+    User["👤 User / Project Owner"]
+    Manus["🧠 Manus\nChief Architect & Orchestrator"]
+    Claude["🤖 Claude Code\nSystem & Protocol Designer"]
+    Gemini["⚡ Gemini CLI\nFast Prototyper & Automator"]
+    Copilot["🛠️ GitHub Copilot\nLocal Coding Assistant"]
+
+    Docs["📚 tr4d3rz-docs\nSpecs, ADRs, Diagrams"]
+    Core["⚙️ tr4d3rz-core\nL-System, FSM Runtime"]
+    Messaging["📡 tr4d3rz-messaging\nMQTT/NATS Layer"]
+    Evolution["🧬 tr4d3rz-evolution\nMutation, Fitness"]
+    Observatory["🔭 tr4d3rz-observatory\nUI, Visualization"]
+    Persistence["💾 tr4d3rz-persistence\nEvent Sourcing"]
+    Embedded["🔌 tr4d3rz-embedded\nESP8266, STM32"]
+
+    User -->|"vision & requirements"| Manus
+    Manus -->|"specs & task assignments"| Docs
+    Manus -->|"architecture directives"| Claude
+    Manus -->|"UI/automation tasks"| Gemini
+    Manus -->|"embedded tasks"| Copilot
+
+    Claude -->|"implements"| Core
+    Claude -->|"implements"| Messaging
+    Claude -->|"implements"| Evolution
+    Claude -->|"implements"| Persistence
+    Gemini -->|"implements"| Observatory
+    Copilot -->|"implements"| Embedded
+
+    Core -.->|"data contracts"| Messaging
+    Core -.->|"FSM types"| Evolution
+    Core -.->|"event types"| Persistence
+    Core -.->|"WASM build"| Observatory
+    Messaging -.->|"protocol"| Embedded

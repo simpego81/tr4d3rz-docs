@@ -1,0 +1,64 @@
+direction: right
+
+title: TR4D3RZ — System Overview (Milestone 0)
+
+# Node Classes
+observatory: Observatory Nodes {
+  shape: rectangle
+  style.fill: "#1a3a5c"
+  style.font-color: "#ffffff"
+  browser: Browser
+  tablet: Android Tablet
+  smartphone: Android Phone
+}
+
+evolution: Evolution Nodes {
+  shape: rectangle
+  style.fill: "#1a5c2a"
+  style.font-color: "#ffffff"
+  linux_pc: Linux PC
+  android_power: Android (powerful)
+  mimxrt: MIMXRT1050-EVK
+}
+
+optimization: Optimization Nodes {
+  shape: rectangle
+  style.fill: "#5c3a1a"
+  style.font-color: "#ffffff"
+  esp8266: ESP8266 D1 Mini
+  stm32f107: STM32F107
+  stm32f3: STM32F3 Discovery
+}
+
+persistence: Persistence Nodes {
+  shape: rectangle
+  style.fill: "#3a1a5c"
+  style.font-color: "#ffffff"
+  rpi2: Raspberry Pi 2
+  php_host: PHP Hosting
+}
+
+gateway: Gateway Nodes {
+  shape: rectangle
+  style.fill: "#5c1a3a"
+  style.font-color: "#ffffff"
+  uart_bridge: UART Bridge
+  protocol_xlate: Protocol Translator
+}
+
+# Messaging Backbone
+mqtt: MQTT Broker {
+  shape: cylinder
+  style.fill: "#2a2a2a"
+  style.font-color: "#ffffff"
+}
+
+# Connections
+evolution -> mqtt: publish signals / genomes
+observatory -> mqtt: subscribe ecosystem events
+optimization -> gateway: UART / USB capsule
+gateway -> mqtt: relay
+persistence -> mqtt: subscribe all events
+mqtt -> persistence: event log
+mqtt -> evolution: fitness results / signals
+mqtt -> observatory: ecosystem state

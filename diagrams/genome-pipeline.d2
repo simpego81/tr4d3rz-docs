@@ -1,0 +1,43 @@
+direction: down
+
+title: TR4D3RZ — Genome Pipeline
+
+lsystem: L-System {
+  shape: rectangle
+  style.fill: "#1a3a5c"
+  style.font-color: "#ffffff"
+  desc: "Generates topology\nmodularity\nrecursive structure"
+}
+
+graph_expansion: Graph Expansion {
+  shape: rectangle
+  style.fill: "#1a5c2a"
+  style.font-color: "#ffffff"
+  desc: "Hybrid Graph Genome\nnodes + edges + weights"
+}
+
+normalized_graph: Normalized Graph {
+  shape: rectangle
+  style.fill: "#5c3a1a"
+  style.font-color: "#ffffff"
+  desc: "Validated topology\nresolved references"
+}
+
+fsm: Executable FSM {
+  shape: rectangle
+  style.fill: "#3a1a5c"
+  style.font-color: "#ffffff"
+  desc: "States + Transitions\nConditions + Actions\nSignal subscriptions"
+}
+
+phenotype: Phenotype Runtime {
+  shape: rectangle
+  style.fill: "#5c1a3a"
+  style.font-color: "#ffffff"
+  desc: "Executes on OHLCV data\nEmits signals\nGenerates fitness metrics"
+}
+
+lsystem -> graph_expansion: expand rules
+graph_expansion -> normalized_graph: normalize + validate
+normalized_graph -> fsm: compile to FSM
+fsm -> phenotype: instantiate + run
