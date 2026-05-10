@@ -27,8 +27,8 @@ Stabilire le fondamenta architetturali e operative del progetto TR4D3RZ. Questa 
 
 - [x] ADR-0001: Repository Structure
 - [x] ADR-0002: Technology Stack
-- [ ] ADR-0003: Messaging Protocol Details
-- [ ] ADR-0004: Genome Representation (L-System + Graph)
+- [x] ADR-0003: MQTT Broker & Data Source Node
+- [x] ADR-0004: OHLCV Data Contract
 - [ ] ADR-0005: FSM Runtime Interface
 
 ### Diagrammi
@@ -49,8 +49,8 @@ Stabilire le fondamenta architetturali e operative del progetto TR4D3RZ. Questa 
 
 - [x] Definizione ruoli AI (Manus, Claude Code, Gemini CLI, GitHub Copilot)
 - [x] Definizione regole operative multi-agent
-- [ ] Template di task assignment per Claude Code
-- [ ] Template di task assignment per Gemini CLI
+- [x] Template di task assignment per Claude Code
+- [x] Template di task assignment per Gemini CLI
 
 ---
 
