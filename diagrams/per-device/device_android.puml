@@ -1,20 +1,20 @@
 @startuml TR4D3RZ_android
 !include <archimate/Archimate>
 
-skinparam backgroundColor #8080f1
+skinparam backgroundColor #FFFFFF
 skinparam defaultFontName "Courier New"
-skinparam defaultFontColor #201d1d
+skinparam defaultFontColor #000000
 skinparam defaultFontSize 11
-skinparam ArrowColor #000000
-skinparam packageBorderColor #444466
-skinparam packageBackgroundColor #7e7e9c
-skinparam packageFontColor #cccccc
+skinparam ArrowColor #333333
+skinparam packageBorderColor #333333
+skinparam packageBackgroundColor #EFEFEF
+skinparam packageFontColor #000000
 skinparam packageFontSize 12
 skinparam packageFontStyle bold
-skinparam nodeBorderColor #556688
-skinparam noteBorderColor #556688
-skinparam noteBackgroundColor #585f68
-skinparam noteFontColor #aaaaaa
+skinparam nodeBorderColor #333333
+skinparam noteBorderColor #333333
+skinparam noteBackgroundColor #FFFDE7
+skinparam noteFontColor #000000
 scale 1.5
 
 title TR4D3RZ — Device View: Android Powerful · (ARM64)\nArchiMate Architecture v2.0  |  2026-05-12
