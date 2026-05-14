@@ -1,0 +1,90 @@
+@startuml TR4D3RZ_rpi1
+!include <archimate/Archimate>
+
+skinparam backgroundColor #8080f1
+skinparam defaultFontName "Courier New"
+skinparam defaultFontColor #201d1d
+skinparam defaultFontSize 11
+skinparam ArrowColor #000000
+skinparam packageBorderColor #444466
+skinparam packageBackgroundColor #7e7e9c
+skinparam packageFontColor #cccccc
+skinparam packageFontSize 12
+skinparam packageFontStyle bold
+skinparam nodeBorderColor #556688
+skinparam noteBorderColor #556688
+skinparam noteBackgroundColor #585f68
+skinparam noteFontColor #aaaaaa
+scale 1.5
+
+title TR4D3RZ — Device View: Raspberry Pi 1 · (ARM1176 · ARMv6l · 700MHz)\nArchiMate Architecture v2.0  |  2026-05-12
+
+package "Motivation Layer" <<rectangle>> {
+  Motivation_Goal(goal_distribute, "Distributed Heterogeneous\nComputation")
+  Motivation_Goal(goal_predict, "Discover Predictive\nPatterns")
+  Motivation_Principle(prin_async, "Asynchronous Distributed\nEcology (no global sync)")
+  Motivation_Principle(prin_replay, "Distributed Observability\n(serializable & replayable)")
+  Motivation_Driver(driver_italian, "Italian Stock Market\nOHLCV Data")
+}
+
+package "Business Layer" <<rectangle>> {
+  Business_Process(proc_ingest, "Market Data Ingestion\n(OHLCV Feed)")
+  Business_Service(svc_prediction, "Prediction Service\n(daily investment signals)")
+}
+
+package "Application Layer" <<rectangle>> {
+  package "Core Infrastructure Node  [Raspberry Pi 1 · ARMv6l]" <<Node>> {
+    Application_Service(ci_svc, "Core Infrastructure Service")
+    Application_Component(ci_broker, "NanoMQ Broker\nMQTT 3.1.1/5.0\nTCP:1883 · WS:8083")
+    Application_Component(ci_scraper, "borsa-italiana-scraper\nNode.js 14.15.1\nHTTPS → MQTT pub")
+    Application_Component(ci_logger, "Event Logger  [M2]\nRust · SQLite WAL\nappend-only")
+    Application_Component(ci_persist, "Persistence Service  [M2]\nRust · Parquet export\narchetype store")
+    Application_Component(ci_cron, "Cron Scheduler\nmarket-hours aware\n18:30 daily + 15min intraday")
+  }
+}
+
+package "Data Objects" <<rectangle>> {
+  Business_Object(data_ohlcv, "OHLCV Payload\n(JSON · ADR-0004 schema)")
+}
+
+package "Technology Layer" <<rectangle>> {
+  package "Core Infrastructure" <<Node>> {
+    Technology_Device(hw_rpi1, "Raspberry Pi 1\n(ARM1176 · ARMv6l · 700MHz)")
+  }
+  package "Infrastructure" <<rectangle>> {
+    Technology_Node(mqtt_broker, "NanoMQ Broker\n[ARMv6l compiled]\nMQTT 3.1.1/5.0")
+    Technology_SystemSoftware(rt_rust, "Rust Runtime\n(tr4d3rz-core · evolution · messaging)")
+    Technology_SystemSoftware(rt_nodejs, "Node.js 14.15.1\n(borsa-italiana-scraper)")
+    Technology_Service(net_mqtt, "MQTT Service\n(TCP:1883 · WS:8083)")
+    Technology_Service(net_https, "HTTPS Service\n(borsaitaliana.it REST API)")
+  }
+  package "Storage" <<rectangle>> {
+    Technology_Artifact(db_sqlite, "SQLite Database\n(WAL mode · event log · archetypes)")
+    Technology_Artifact(db_parquet, "Parquet Files\n(large datasets · historical archive)")
+    Technology_Artifact(log_events, "Event Log\n(mutation · death · signal · migration\n· lineage · archetype_creation)")
+  }
+}
+
+' ── Relations ──────────────────────────────────────────────
+Rel_Realization_Up(proc_ingest, goal_distribute)
+Rel_Influence_Up(driver_italian, goal_predict)
+Rel_Influence_Up(prin_async, goal_distribute)
+Rel_Influence_Up(prin_replay, goal_distribute)
+Rel_Realization_Up(ci_svc, proc_ingest)
+Rel_Serving_Up(ci_svc, svc_prediction)
+Rel_Composition_Down(ci_svc, ci_broker)
+Rel_Composition_Down(ci_svc, ci_scraper)
+Rel_Composition_Down(ci_svc, ci_logger)
+Rel_Composition_Down(ci_svc, ci_persist)
+Rel_Composition_Down(ci_svc, ci_cron)
+Rel_Assignment_Down(ci_svc, hw_rpi1)
+Rel_Realization_Up(rt_rust,   ci_svc)
+Rel_Realization_Up(rt_nodejs, ci_scraper)
+Rel_Access_Up(ci_scraper, data_ohlcv, "publishes data/ohlcv/#  QoS 0")
+Rel_Realization_Up(net_mqtt, mqtt_broker)
+Rel_Access_Up(ci_logger,  db_sqlite)
+Rel_Access_Up(ci_persist, db_sqlite)
+Rel_Access_Up(ci_persist, db_parquet)
+Rel_Access_Up(ci_logger,  log_events)
+
+@enduml

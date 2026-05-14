@@ -1,0 +1,75 @@
+@startuml TR4D3RZ_str
+!include <archimate/Archimate>
+
+skinparam backgroundColor #8080f1
+skinparam defaultFontName "Courier New"
+skinparam defaultFontColor #201d1d
+skinparam defaultFontSize 11
+skinparam ArrowColor #000000
+skinparam packageBorderColor #444466
+skinparam packageBackgroundColor #7e7e9c
+skinparam packageFontColor #cccccc
+skinparam packageFontSize 12
+skinparam packageFontStyle bold
+skinparam nodeBorderColor #556688
+skinparam noteBorderColor #556688
+skinparam noteBackgroundColor #585f68
+skinparam noteFontColor #aaaaaa
+scale 1.5
+
+title TR4D3RZ — Device View: Olimex STR-E912 · (ARM9 · 48MHz)\nArchiMate Architecture v2.0  |  2026-05-12
+
+package "Motivation Layer" <<rectangle>> {
+  Motivation_Goal(goal_distribute, "Distributed Heterogeneous\nComputation")
+  Motivation_Principle(prin_async, "Asynchronous Distributed\nEcology (no global sync)")
+}
+
+package "Business Layer" <<rectangle>> {
+  Business_Process(proc_evolution, "Evolutionary Process\n(Genome → FSM → Fitness)")
+}
+
+package "Application Layer" <<rectangle>> {
+  package "Gateway Nodes  [Linux · RPi]" <<Cloud>> {
+    Application_Service(gw_svc, "Gateway Service")
+    Application_Component(gw_uart, "UART Bridge\n(serial framing · CBOR)")
+    Application_Component(gw_protocol, "Protocol Translator\n(UART/USB ↔ MQTT)")
+    Application_Component(gw_delayed, "Delayed Sync\n(capsule queue · offline)")
+  }
+  package "Genome Capsule System  [tr4d3rz-embedded]" <<Frame>> {
+    Application_Component(capsule_mgr,  "Genome Capsule Manager\n(task packages · compressed datasets\n· deferred results)")
+    Application_Component(capsule_cbor, "CBOR Serializer\n(embedded-safe · no_std)")
+  }
+}
+
+package "Data Objects" <<rectangle>> {
+  Business_Object(data_capsule, "Genome Capsule\n(CBOR file · offline sync)")
+}
+
+package "Technology Layer" <<rectangle>> {
+  package "Low Power Nodes" <<Node>> {
+    Technology_Device(hw_str, "Olimex STR-E912\n(ARM9 · 48MHz)")
+  }
+  package "Infrastructure" <<rectangle>> {
+    Technology_SystemSoftware(rt_cbor, "CBOR Serialization\n(embedded · no_std · FlatBuffers alt.)")
+    Technology_Service(net_uart, "UART Service\n(serial · CBOR framing)")
+    Technology_Service(net_mqtt, "MQTT Service\n(TCP:1883 · WS:8083)")
+  }
+  package "Storage" <<rectangle>> {
+    Technology_Artifact(capsule_fs, "Genome Capsule Files\n(CBOR binary · offline sync)")
+  }
+}
+
+' ── Relations ──────────────────────────────────────────────
+Rel_Realization_Up(proc_evolution, goal_distribute)
+Rel_Influence_Up(prin_async, goal_distribute)
+Rel_Realization_Up(gw_svc, proc_evolution)
+Rel_Composition_Down(gw_svc, gw_uart)
+Rel_Composition_Down(gw_svc, gw_protocol)
+Rel_Composition_Down(gw_svc, gw_delayed)
+Rel_Assignment_Down(gw_svc, hw_str)
+Rel_Realization_Up(rt_cbor, capsule_cbor)
+Rel_Access_Up(gw_svc, capsule_fs)
+Rel_Association(gw_uart, hw_str, "UART")
+Rel_Access_Up(capsule_mgr, data_capsule, "exchanges offline UART/USB")
+
+@enduml

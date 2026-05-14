@@ -1,0 +1,69 @@
+@startuml TR4D3RZ_phone
+!include <archimate/Archimate>
+
+skinparam backgroundColor #8080f1
+skinparam defaultFontName "Courier New"
+skinparam defaultFontColor #201d1d
+skinparam defaultFontSize 11
+skinparam ArrowColor #000000
+skinparam packageBorderColor #444466
+skinparam packageBackgroundColor #7e7e9c
+skinparam packageFontColor #cccccc
+skinparam packageFontSize 12
+skinparam packageFontStyle bold
+skinparam nodeBorderColor #556688
+skinparam noteBorderColor #556688
+skinparam noteBackgroundColor #585f68
+skinparam noteFontColor #aaaaaa
+scale 1.5
+
+title TR4D3RZ — Device View: Android Smartphone\nArchiMate Architecture v2.0  |  2026-05-12
+
+package "Motivation Layer" <<rectangle>> {
+  Motivation_Goal(goal_observe, "Full Ecosystem\nObservability")
+  Motivation_Principle(prin_replay, "Distributed Observability\n(serializable & replayable)")
+}
+
+package "Business Layer" <<rectangle>> {
+  Business_Process(proc_observe, "Ecosystem Observation\n& Replay")
+  Business_Service(svc_monitoring, "Monitoring Service\n(real-time health)")
+}
+
+package "Application Layer" <<rectangle>> {
+  package "Observatory Nodes  [Browser · Tablet · Smartphone]" <<Cloud>> {
+    Application_Service(obs_svc, "Observatory Service")
+    Application_Component(obs_deploymap, "Deploy Architecture Map\n(node status · connectivity)")
+    Application_Component(obs_ecology, "Signal Ecology View\n(cooperative signaling heatmap)")
+    Application_Component(obs_market, "Market Overlay\n(market events ↔ ecosystem)")
+    Application_Component(obs_replay, "Replay System\n(temporal · lineage · rewind)")
+  }
+}
+
+package "Data Objects" <<rectangle>> {
+  Business_Object(data_signal, "Cooperative Signal\n(CBOR · QoS 0 · agent_id)")
+  Business_Object(data_fitness, "Fitness Record\n(CBOR · QoS 1 · multi-dim)")
+}
+
+package "Technology Layer" <<rectangle>> {
+  package "Observatory Devices" <<Node>> {
+    Technology_Device(hw_phone, "Android Smartphone")
+  }
+  package "Infrastructure" <<rectangle>> {
+    Technology_SystemSoftware(rt_wasm, "WebAssembly Runtime\n(browser FSM replay)")
+    Technology_Service(net_mqtt, "MQTT Service\n(WS:8083)")
+  }
+}
+
+' ── Relations ──────────────────────────────────────────────
+Rel_Realization_Up(proc_observe, goal_observe)
+Rel_Influence_Up(prin_replay, goal_observe)
+Rel_Realization_Up(obs_svc, proc_observe)
+Rel_Serving_Up(obs_svc, svc_monitoring)
+Rel_Composition_Down(obs_svc, obs_deploymap)
+Rel_Composition_Down(obs_svc, obs_ecology)
+Rel_Composition_Down(obs_svc, obs_market)
+Rel_Composition_Down(obs_svc, obs_replay)
+Rel_Assignment_Down(obs_svc, hw_phone)
+Rel_Realization_Up(rt_wasm, obs_wasm)
+
+@enduml
