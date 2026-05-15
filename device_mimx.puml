@@ -1,0 +1,96 @@
+@startuml TR4D3RZ_mimx
+!include <archimate/Archimate>
+
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName "Courier New"
+skinparam defaultFontColor #000000
+skinparam defaultFontSize 11
+skinparam ArrowColor #333333
+skinparam packageBorderColor #333333
+skinparam packageBackgroundColor #EFEFEF
+skinparam packageFontColor #000000
+skinparam packageFontSize 12
+skinparam packageFontStyle bold
+skinparam nodeBorderColor #333333
+skinparam noteBorderColor #333333
+skinparam noteBackgroundColor #FFFDE7
+skinparam noteFontColor #000000
+scale 1.5
+
+title TR4D3RZ — Device View: MIMXRT1050-EVK · (Cortex-M7 · 600MHz)\nArchiMate Architecture v2.0  |  2026-05-12
+
+package "Motivation Layer" <<rectangle>> {
+  Motivation_Goal(goal_evolve, "Evolve Trading\nStrategies Autonomously")
+  Motivation_Goal(goal_distribute, "Distributed Heterogeneous\nComputation")
+  Motivation_Principle(prin_openended, "Open-Ended Evolution\n(no rigid structural limits)")
+  Motivation_Driver(driver_research, "Evolutionary Research\nPlatform")
+}
+
+package "Business Layer" <<rectangle>> {
+  Business_Process(proc_evolution, "Evolutionary Process\n(Genome → FSM → Fitness)")
+  Business_Service(svc_prediction, "Prediction Service\n(daily investment signals)")
+}
+
+package "Application Layer" <<rectangle>> {
+  package "Evolution Nodes  [Linux PC · Android · MIMXRT1050]" <<Cloud>> {
+    Application_Service(evo_svc, "Evolution Service")
+    Application_Component(evo_mutation, "Mutation Engine\n(structural · parametric · crossover)")
+    Application_Component(evo_cluster, "Clustering System\n(niche discovery · GA)")
+    Application_Component(evo_niche, "Niche Discovery\n(market regime classification)")
+    Application_Component(evo_phenotype, "Phenotype Analyzer\n(FSM runtime evaluation)")
+    Application_Component(evo_mqtt, "MQTT Client\n(tr4d3rz-messaging · Rust)")
+  }
+  package "Genome Pipeline  [tr4d3rz-core · Rust]" <<Frame>> {
+    Application_Component(lsystem,   "L-System Generator\n(topology · modularity · recursion)")
+    Application_Component(graph_exp, "Graph Expansion\n(normalized graph)")
+    Application_Component(fsm_gen,   "FSM Generator\n(state/transition table)")
+    Application_Component(phenotype, "Phenotype Runtime\n(executes FSM · emits signals)")
+  }
+  package "Fitness System  [tr4d3rz-evolution · Rust]" <<Frame>> {
+    Application_Component(fit_calc,     "Fitness Calculator\n(predictive_power + niche_strength\n+ cooperation_value + stat_confidence\n- computational_cost - signal_noise)")
+    Application_Component(fit_niche,    "Niche Evaluator\n(niche consistency · specialization)")
+    Application_Component(fit_coop,     "Cooperation Scorer\n(cooperation contribution)")
+    Application_Component(fit_metrics,  "Base Metrics\n(trade_count · success_rate · CAGR\n· profit_factor)")
+    Application_Component(fit_advanced, "Advanced Metrics\n(signal_entropy · stat_confidence\n· computational_efficiency)")
+  }
+}
+
+package "Data Objects" <<rectangle>> {
+  Business_Object(data_genome, "Hybrid Graph Genome\n(CBOR · L-System generated)")
+  Business_Object(data_fsm, "FSM Definition\n(state · transition · condition)")
+  Business_Object(data_fitness, "Fitness Record\n(CBOR · QoS 1 · multi-dim)")
+}
+
+package "Technology Layer" <<rectangle>> {
+  package "High Performance Nodes" <<Node>> {
+    Technology_Device(hw_mimx, "MIMXRT1050-EVK\n(Cortex-M7 · 600MHz)")
+  }
+  package "Infrastructure" <<rectangle>> {
+    Technology_SystemSoftware(rt_rust, "Rust Runtime\n(tr4d3rz-core · evolution · messaging)")
+    Technology_Service(net_mqtt, "MQTT Service\n(TCP:1883 · WS:8083)")
+  }
+}
+
+' ── Relations ──────────────────────────────────────────────
+Rel_Realization_Up(proc_evolution, goal_evolve)
+Rel_Influence_Up(driver_research, goal_evolve)
+Rel_Influence_Up(prin_openended, goal_evolve)
+Rel_Realization_Up(evo_svc, proc_evolution)
+Rel_Serving_Up(evo_svc, svc_prediction)
+Rel_Composition_Down(evo_svc, evo_mutation)
+Rel_Composition_Down(evo_svc, evo_cluster)
+Rel_Composition_Down(evo_svc, evo_niche)
+Rel_Composition_Down(evo_svc, evo_phenotype)
+Rel_Composition_Down(evo_svc, evo_mqtt)
+Rel_Assignment_Down(evo_svc, hw_mimx)
+Rel_Realization_Up(rt_rust, evo_svc)
+Rel_Flow_Right(lsystem, graph_exp, "generates topology")
+Rel_Flow_Right(graph_exp, fsm_gen, "expands to")
+Rel_Flow_Right(fsm_gen, phenotype, "compiles to")
+Rel_Access_Up(evo_mutation, lsystem)
+Rel_Access_Up(evo_phenotype, phenotype)
+Rel_Access_Up(lsystem, data_genome, "generates")
+Rel_Access_Up(fsm_gen, data_fsm, "produces")
+Rel_Access_Down(fit_calc, data_fitness, "produces")
+
+@enduml

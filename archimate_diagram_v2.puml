@@ -1,0 +1,445 @@
+@startuml TR4D3RZ_Distributed_Evolutionary_System_v2
+!include <archimate/Archimate>
+
+skinparam backgroundColor #8080f1
+skinparam defaultFontName "Courier New"
+skinparam defaultFontColor #201d1d
+skinparam defaultFontSize 11
+skinparam ArrowColor #000000
+skinparam packageBorderColor #444466
+skinparam packageBackgroundColor #7e7e9c
+skinparam packageFontColor #cccccc
+skinparam packageFontSize 12
+skinparam packageFontStyle bold
+skinparam nodeBorderColor #556688
+skinparam noteBorderColor #556688
+skinparam noteBackgroundColor #585f68
+skinparam noteFontColor #aaaaaa
+scale 1.5
+
+title TR4D3RZ — Distributed Evolutionary Signal Ecology System\nArchiMate Architecture v2.0  |  2026-05-12
+
+' ============================================================
+' MOTIVATION LAYER
+' ============================================================
+
+package "Motivation Layer" <<rectangle>> {
+
+  Motivation_Goal(goal_predict,    "Discover Predictive\nPatterns")
+  Motivation_Goal(goal_evolve,     "Evolve Trading\nStrategies Autonomously")
+  Motivation_Goal(goal_distribute, "Distributed Heterogeneous\nComputation")
+  Motivation_Goal(goal_observe,    "Full Ecosystem\nObservability")
+
+  Motivation_Principle(prin_openended,  "Open-Ended Evolution\n(no rigid structural limits)")
+  Motivation_Principle(prin_async,      "Asynchronous Distributed\nEcology (no global sync)")
+  Motivation_Principle(prin_niche,      "Emergent Niche\nSpecialization")
+  Motivation_Principle(prin_coop,       "Cooperative Signaling\n(events, not references)")
+  Motivation_Principle(prin_replay,     "Distributed Observability\n(serializable & replayable)")
+
+  Motivation_Driver(driver_research,  "Evolutionary Research\nPlatform")
+  Motivation_Driver(driver_emergence, "Emergent Structure\nDiscovery")
+  Motivation_Driver(driver_italian,   "Italian Stock Market\nOHLCV Data")
+}
+
+' ============================================================
+' BUSINESS LAYER
+' ============================================================
+
+package "Business Layer" <<rectangle>> {
+
+  Business_Process(proc_ingest,    "Market Data Ingestion\n(OHLCV Feed)")
+  Business_Process(proc_evolution, "Evolutionary Process\n(Genome → FSM → Fitness)")
+  Business_Process(proc_signal,    "Cooperative Signal\nGeneration")
+  Business_Process(proc_persist,   "Ecosystem Memory\n(Event Sourcing)")
+  Business_Process(proc_observe,   "Ecosystem Observation\n& Replay")
+
+  Business_Service(svc_prediction,  "Prediction Service\n(daily investment signals)")
+  Business_Service(svc_monitoring,  "Monitoring Service\n(real-time health)")
+  Business_Service(svc_knowledge,   "Knowledge Service\n(archetype library)")
+
+  Business_Object(bo_ohlcv,     "OHLCV Data\n(Italian Market)")
+  Business_Object(bo_genome,    "Hybrid Graph Genome\n(L-System generated)")
+  Business_Object(bo_archetype, "Archetype\n(proven FSM motif)")
+  Business_Object(bo_niche,     "Market Niche\n(emergent cluster)")
+  Business_Object(bo_signal,    "Investment Signal\n(daily output)")
+}
+
+' ============================================================
+' APPLICATION LAYER — CORE INFRASTRUCTURE
+' ============================================================
+
+package "Application Layer — Core Infrastructure" <<rectangle>> {
+
+  package "Core Infrastructure Node  [Raspberry Pi 1 · ARMv6l]" <<Node>> {
+    Application_Component(ci_broker,    "NanoMQ Broker\nMQTT 3.1.1/5.0\nTCP:1883 · WS:8083")
+    Application_Component(ci_scraper,   "borsa-italiana-scraper\nNode.js 14.15.1\nHTTPS → MQTT pub")
+    Application_Component(ci_logger,    "Event Logger  [M2]\nRust · SQLite WAL\nappend-only")
+    Application_Component(ci_persist,   "Persistence Service  [M2]\nRust · Parquet export\narchetype store")
+    Application_Component(ci_cron,      "Cron Scheduler\nmarket-hours aware\n18:30 daily + 15min intraday")
+    Application_Service(ci_svc,         "Core Infrastructure Service")
+  }
+}
+
+' ============================================================
+' APPLICATION LAYER — NODE TYPES
+' ============================================================
+
+package "Application Layer — Node Types" <<rectangle>> {
+
+  package "Observatory Nodes  [Browser · Tablet · Smartphone]" <<Cloud>> {
+    Application_Component(obs_deploymap,  "Deploy Architecture Map\n(node status · connectivity)")
+    Application_Component(obs_theorymap,  "Theory Map\n(FSM motif browser · archetypes)")
+    Application_Component(obs_galaxy,     "Evolution Galaxy  [3D]\n(clusters · species · niches)")
+    Application_Component(obs_ecology,    "Signal Ecology View\n(cooperative signaling heatmap)")
+    Application_Component(obs_market,     "Market Overlay\n(market events ↔ ecosystem)")
+    Application_Component(obs_replay,     "Replay System\n(temporal · lineage · rewind)")
+    Application_Component(obs_wasm,       "WASM FSM Replay\n(browser-side execution)")
+    Application_Service(obs_svc,          "Observatory Service")
+  }
+
+  package "Evolution Nodes  [Linux PC · Android · MIMXRT1050]" <<Cloud>> {
+    Application_Component(evo_mutation,   "Mutation Engine\n(structural · parametric · crossover)")
+    Application_Component(evo_cluster,    "Clustering System\n(niche discovery · GA)")
+    Application_Component(evo_niche,      "Niche Discovery\n(market regime classification)")
+    Application_Component(evo_phenotype,  "Phenotype Analyzer\n(FSM runtime evaluation)")
+    Application_Component(evo_mqtt,       "MQTT Client\n(tr4d3rz-messaging · Rust)")
+    Application_Service(evo_svc,          "Evolution Service")
+  }
+
+  package "Optimization Nodes  [ESP8266 · STM32F107 · STM32F3]" <<Cloud>> {
+    Application_Component(opt_tuning,     "Parameter Tuning\n(micro-optimization)")
+    Application_Component(opt_validation, "Micro Validation\n(local fitness check)")
+    Application_Component(opt_local,      "Local Optimizer\n(offline genome tuning)")
+    Application_Component(opt_capsule,    "Capsule Manager\n(CBOR I/O · UART/USB)")
+    Application_Service(opt_svc,          "Optimization Service")
+  }
+
+  package "Persistence Nodes  [Raspberry Pi 2 · PHP hosting]" <<Cloud>> {
+    Application_Component(per_lineage,    "Lineage Storage\n(birth · death · mutation)")
+    Application_Component(per_archetype,  "Archetype Memory\n(motif FSM · patterns · niches)")
+    Application_Component(per_events,     "Event Logger\n(mutation · signal · migration)")
+    Application_Component(per_relay,      "Relay Service\n(delayed sync · offline nodes)")
+    Application_Service(per_svc,          "Persistence Service")
+  }
+
+  package "Gateway Nodes  [Linux · RPi]" <<Cloud>> {
+    Application_Component(gw_uart,       "UART Bridge\n(serial framing · CBOR)")
+    Application_Component(gw_protocol,   "Protocol Translator\n(UART/USB ↔ MQTT)")
+    Application_Component(gw_delayed,    "Delayed Sync\n(capsule queue · offline)")
+    Application_Service(gw_svc,          "Gateway Service")
+  }
+}
+
+' ============================================================
+' APPLICATION LAYER — CORE COMPONENTS
+' ============================================================
+
+package "Application Layer — Core Components" <<rectangle>> {
+
+  package "Genome Pipeline  [tr4d3rz-core · Rust]" <<Frame>> {
+    Application_Component(lsystem,       "L-System Generator\n(topology · modularity · recursion)")
+    Application_Component(graph_exp,     "Graph Expansion\n(normalized graph)")
+    Application_Component(fsm_gen,       "FSM Generator\n(state/transition table)")
+    Application_Component(phenotype,     "Phenotype Runtime\n(executes FSM · emits signals)")
+  }
+
+  package "Condition Primitives  [tr4d3rz-core · Rust]" <<Frame>> {
+    Application_Component(cond_ohlcv,    "OHLCV Primitives\n(open · high · low · close · volume)")
+    Application_Component(cond_ind,      "Indicator Primitives\n(EMA · SMA · IIR · volatility · range)")
+    Application_Component(cond_bucket,   "Bucketization Engine\n(LOW · NORMAL · HIGH · EXTREME)")
+    Application_Component(cond_temporal, "Temporal Conditions\n(windows · sequences · delay)")
+    Application_Component(cond_coop,     "Cooperative Conditions\n(inter-agent signals · events)")
+  }
+
+  package "Fitness System  [tr4d3rz-evolution · Rust]" <<Frame>> {
+    Application_Component(fit_calc,      "Fitness Calculator\n(predictive_power + niche_strength\n+ cooperation_value + stat_confidence\n- computational_cost - signal_noise)")
+    Application_Component(fit_niche,     "Niche Evaluator\n(niche consistency · specialization)")
+    Application_Component(fit_coop,      "Cooperation Scorer\n(cooperation contribution)")
+    Application_Component(fit_metrics,   "Base Metrics\n(trade_count · success_rate · CAGR\n· profit_factor)")
+    Application_Component(fit_advanced,  "Advanced Metrics\n(signal_entropy · stat_confidence\n· computational_efficiency)")
+  }
+
+  package "Signaling System  [tr4d3rz-messaging]" <<Frame>> {
+    Application_Component(sig_broker,    "Signal Broker\n(MQTT topic router)")
+    Application_Component(sig_router,    "Event Router\n(QoS-aware dispatch)")
+    Application_Component(sig_sub,       "Subscription Manager\n(topic filters · wildcards)")
+  }
+
+  package "Genome Capsule System  [tr4d3rz-embedded]" <<Frame>> {
+    Application_Component(capsule_mgr,   "Genome Capsule Manager\n(task packages · compressed datasets\n· deferred results)")
+    Application_Component(capsule_cbor,  "CBOR Serializer\n(embedded-safe · no_std)")
+  }
+
+  Application_Interface(mqtt_if,   "MQTT Interface\n(TCP:1883 · WS:8083)")
+  Application_Interface(uart_if,   "UART/USB Interface\n(CBOR framing)")
+  Application_Interface(rest_api,  "REST API\n(borsaitaliana.it · HTTPS)")
+}
+
+' ============================================================
+' DATA OBJECTS
+' ============================================================
+
+package "Data Objects" <<rectangle>> {
+  Business_Object(data_ohlcv,     "OHLCV Payload\n(JSON · ADR-0004 schema)")
+  Business_Object(data_genome,    "Hybrid Graph Genome\n(CBOR · L-System generated)")
+  Business_Object(data_fsm,       "FSM Definition\n(state · transition · condition)")
+  Business_Object(data_signal,    "Cooperative Signal\n(CBOR · QoS 0 · agent_id)")
+  Business_Object(data_fitness,   "Fitness Record\n(CBOR · QoS 1 · multi-dim)")
+  Business_Object(data_event,     "System Event\n(CBOR · QoS 1 · append-only)")
+  Business_Object(data_archetype, "Archetype\n(CBOR · QoS 2 · FSM motif)")
+  Business_Object(data_capsule,   "Genome Capsule\n(CBOR file · offline sync)")
+}
+
+' ============================================================
+' TECHNOLOGY LAYER — HARDWARE
+' ============================================================
+
+package "Technology Layer — Hardware" <<rectangle>> {
+
+  package "High Performance Nodes" <<Node>> {
+    Technology_Device(hw_linux,   "Linux PCs\n(x86_64)")
+    Technology_Device(hw_android, "Android Powerful\n(ARM64)")
+    Technology_Device(hw_mimx,    "MIMXRT1050-EVK\n(Cortex-M7 · 600MHz)")
+  }
+
+  package "Medium Performance Nodes" <<Node>> {
+    Technology_Device(hw_rasp2,   "Raspberry Pi 2\n(ARMv7 · 900MHz)")
+    Technology_Device(hw_ra8,     "Renesas RA8\n(Cortex-M85)")
+    Technology_Device(hw_stm32f3, "STM32F3 Discovery\n(Cortex-M4 · 72MHz)")
+  }
+
+  package "Low Power Nodes" <<Node>> {
+    Technology_Device(hw_esp,     "ESP8266 D1 Mini\n(Xtensa LX106 · 80MHz)")
+    Technology_Device(hw_stm32f1, "STM32F107VC\n(Cortex-M3 · 72MHz)")
+    Technology_Device(hw_str,     "Olimex STR-E912\n(ARM9 · 48MHz)")
+  }
+
+  package "Core Infrastructure" <<Node>> {
+    Technology_Device(hw_rpi1,    "Raspberry Pi 1\n(ARM1176 · ARMv6l · 700MHz)")
+  }
+
+  package "Offline IoT Nodes" <<Node>> {
+    Technology_Device(hw_m24lr,   "M24LR Discovery\n(NFC/RFID · I2C · offline capsule)")
+  }
+
+  package "Observatory Devices" <<Node>> {
+    Technology_Device(hw_browser, "Web Browser\n(Chrome · Firefox)")
+    Technology_Device(hw_tablet,  "Android Tablet")
+    Technology_Device(hw_phone,   "Android Smartphone")
+  }
+}
+
+' ============================================================
+' TECHNOLOGY LAYER — INFRASTRUCTURE & STORAGE
+' ============================================================
+
+package "Technology Layer — Infrastructure" <<rectangle>> {
+  Technology_Node(mqtt_broker,    "NanoMQ Broker\n[ARMv6l compiled]\nMQTT 3.1.1/5.0")
+  Technology_Node(web_server,     "Web Server\n(static assets · Observatory UI)")
+  Technology_Node(php_hosting,    "PHP Free Hosting\n(Persistence relay · secondary store)")
+
+  Technology_SystemSoftware(rt_rust,    "Rust Runtime\n(tr4d3rz-core · evolution · messaging)")
+  Technology_SystemSoftware(rt_wasm,    "WebAssembly Runtime\n(browser FSM replay)")
+  Technology_SystemSoftware(rt_nodejs,  "Node.js 14.15.1\n(borsa-italiana-scraper)")
+  Technology_SystemSoftware(rt_threejs, "Three.js / WebGL\n(3D Galaxy visualization)")
+  Technology_SystemSoftware(rt_cbor,    "CBOR Serialization\n(embedded · no_std · FlatBuffers alt.)")
+
+  Technology_Service(net_mqtt,  "MQTT Service\n(TCP:1883 · WS:8083)")
+  Technology_Service(net_uart,  "UART Service\n(serial · CBOR framing)")
+  Technology_Service(net_usb,   "USB/Filesystem Service\n(capsule exchange)")
+  Technology_Service(net_https, "HTTPS Service\n(borsaitaliana.it REST API)")
+}
+
+package "Technology Layer — Storage" <<rectangle>> {
+  Technology_Artifact(db_sqlite,  "SQLite Database\n(WAL mode · event log · archetypes)")
+  Technology_Artifact(db_parquet, "Parquet Files\n(large datasets · historical archive)")
+  Technology_Artifact(log_events, "Event Log\n(mutation · death · signal · niche_discovery\n· migration · lineage · archetype_creation)")
+  Technology_Artifact(capsule_fs, "Genome Capsule Files\n(CBOR binary · offline sync)")
+  Technology_Interface(storage_if,"Storage Interface")
+}
+
+' ============================================================
+' RELATIONS — MOTIVATION → BUSINESS
+' ============================================================
+
+Rel_Realization_Up(proc_evolution, goal_evolve)
+Rel_Realization_Up(proc_signal,    goal_predict)
+Rel_Realization_Up(proc_observe,   goal_observe)
+Rel_Realization_Up(proc_persist,   goal_distribute)
+Rel_Realization_Up(proc_ingest,    goal_distribute)
+
+Rel_Influence_Up(driver_research,  goal_evolve)
+Rel_Influence_Up(driver_emergence, goal_predict)
+Rel_Influence_Up(driver_italian,   goal_predict)
+
+Rel_Influence_Up(prin_openended,   goal_evolve)
+Rel_Influence_Up(prin_async,       goal_distribute)
+Rel_Influence_Up(prin_niche,       goal_predict)
+Rel_Influence_Up(prin_coop,        goal_predict)
+Rel_Influence_Up(prin_replay,      goal_observe)
+
+Rel_Realization_Up(svc_prediction, proc_signal)
+Rel_Realization_Up(svc_monitoring, proc_observe)
+Rel_Realization_Up(svc_knowledge,  proc_persist)
+
+' ============================================================
+' RELATIONS — BUSINESS → APPLICATION
+' ============================================================
+
+Rel_Realization_Up(evo_svc,  proc_evolution)
+Rel_Realization_Up(obs_svc,  proc_observe)
+Rel_Realization_Up(ci_svc,   proc_ingest)
+Rel_Realization_Up(per_svc,  proc_persist)
+
+Rel_Serving_Up(evo_svc,  svc_prediction)
+Rel_Serving_Up(obs_svc,  svc_monitoring)
+Rel_Serving_Up(per_svc,  svc_knowledge)
+Rel_Serving_Up(ci_svc,   svc_prediction)
+
+' ============================================================
+' RELATIONS — APPLICATION — NODE COMPOSITION
+' ============================================================
+
+Rel_Composition_Down(ci_svc,  ci_broker)
+Rel_Composition_Down(ci_svc,  ci_scraper)
+Rel_Composition_Down(ci_svc,  ci_logger)
+Rel_Composition_Down(ci_svc,  ci_persist)
+Rel_Composition_Down(ci_svc,  ci_cron)
+
+Rel_Composition_Down(obs_svc, obs_deploymap)
+Rel_Composition_Down(obs_svc, obs_theorymap)
+Rel_Composition_Down(obs_svc, obs_galaxy)
+Rel_Composition_Down(obs_svc, obs_ecology)
+Rel_Composition_Down(obs_svc, obs_market)
+Rel_Composition_Down(obs_svc, obs_replay)
+Rel_Composition_Down(obs_svc, obs_wasm)
+
+Rel_Composition_Down(evo_svc, evo_mutation)
+Rel_Composition_Down(evo_svc, evo_cluster)
+Rel_Composition_Down(evo_svc, evo_niche)
+Rel_Composition_Down(evo_svc, evo_phenotype)
+Rel_Composition_Down(evo_svc, evo_mqtt)
+
+Rel_Composition_Down(opt_svc, opt_tuning)
+Rel_Composition_Down(opt_svc, opt_validation)
+Rel_Composition_Down(opt_svc, opt_local)
+Rel_Composition_Down(opt_svc, opt_capsule)
+
+Rel_Composition_Down(per_svc, per_lineage)
+Rel_Composition_Down(per_svc, per_archetype)
+Rel_Composition_Down(per_svc, per_events)
+Rel_Composition_Down(per_svc, per_relay)
+
+Rel_Composition_Down(gw_svc,  gw_uart)
+Rel_Composition_Down(gw_svc,  gw_protocol)
+Rel_Composition_Down(gw_svc,  gw_delayed)
+
+' ============================================================
+' RELATIONS — GENOME PIPELINE
+' ============================================================
+
+Rel_Flow_Right(lsystem,   graph_exp, "generates topology")
+Rel_Flow_Right(graph_exp, fsm_gen,   "expands to")
+Rel_Flow_Right(fsm_gen,   phenotype, "compiles to")
+
+Rel_Association(phenotype, cond_ohlcv,    "evaluates")
+Rel_Association(phenotype, cond_ind,      "evaluates")
+Rel_Association(phenotype, cond_bucket,   "uses")
+Rel_Association(phenotype, cond_temporal, "uses")
+Rel_Association(phenotype, cond_coop,     "subscribes")
+
+Rel_Access_Up(evo_mutation,  lsystem)
+Rel_Access_Up(evo_phenotype, phenotype)
+Rel_Access_Up(evo_cluster,   fit_niche)
+
+' ============================================================
+' RELATIONS — FITNESS
+' ============================================================
+
+Rel_Composition_Down(fit_calc, fit_metrics)
+Rel_Composition_Down(fit_calc, fit_advanced)
+Rel_Association(fit_calc, fit_niche, "includes")
+Rel_Association(fit_calc, fit_coop,  "includes")
+
+Rel_Access_Down(fit_calc,  data_fitness, "produces")
+Rel_Access_Down(fit_niche, data_archetype, "analyzes")
+
+' ============================================================
+' RELATIONS — SIGNALING SYSTEM
+' ============================================================
+
+Rel_Composition_Down(sig_broker, sig_router)
+Rel_Composition_Down(sig_broker, sig_sub)
+
+Rel_Flow_Up(evo_svc,  sig_broker, "publishes signals/fitness/events")
+Rel_Flow_Up(opt_svc,  sig_broker, "publishes fitness/capsule")
+Rel_Flow_Down(sig_broker, obs_svc,  "subscribes all topics")
+Rel_Flow_Down(sig_broker, per_svc,  "logs events/fitness/archetypes")
+Rel_Flow_Down(sig_broker, evo_svc,  "delivers OHLCV/archetypes")
+
+' ============================================================
+' RELATIONS — DATA FLOWS (MQTT TOPICS)
+' ============================================================
+
+Rel_Access_Up(ci_scraper,  data_ohlcv,    "publishes data/ohlcv/#  QoS 0")
+Rel_Access_Up(phenotype,   data_signal,   "emits ecosystem/signal/# QoS 0")
+Rel_Access_Up(fit_calc,    data_fitness,  "publishes ecosystem/fitness/# QoS 1")
+Rel_Access_Up(evo_mutation, data_event,   "publishes evolution/mutation/# QoS 1")
+Rel_Access_Up(per_archetype, data_archetype, "publishes lineage/archetype/# QoS 2")
+Rel_Access_Up(capsule_mgr, data_capsule,  "exchanges offline UART/USB")
+
+Rel_Access_Up(lsystem,    data_genome, "generates")
+Rel_Access_Up(fsm_gen,    data_fsm,    "produces")
+
+' ============================================================
+' RELATIONS — APPLICATION → TECHNOLOGY
+' ============================================================
+
+Rel_Realization_Up(mqtt_if, net_mqtt)
+Rel_Realization_Up(uart_if, net_uart)
+Rel_Realization_Up(rest_api, net_https)
+
+Rel_Realization_Up(net_mqtt, mqtt_broker)
+
+Rel_Assignment_Down(ci_svc,  hw_rpi1)
+Rel_Assignment_Down(evo_svc, hw_linux)
+Rel_Assignment_Down(evo_svc, hw_android)
+Rel_Assignment_Down(evo_svc, hw_mimx)
+Rel_Assignment_Down(opt_svc, hw_esp)
+Rel_Assignment_Down(opt_svc, hw_stm32f1)
+Rel_Assignment_Down(opt_svc, hw_stm32f3)
+Rel_Assignment_Down(opt_svc, hw_ra8)
+Rel_Assignment_Down(opt_svc, hw_m24lr)
+Rel_Assignment_Down(gw_svc,  hw_str)
+Rel_Assignment_Down(per_svc, hw_rasp2)
+Rel_Assignment_Down(per_svc, php_hosting)
+Rel_Assignment_Down(obs_svc, hw_browser)
+Rel_Assignment_Down(obs_svc, hw_tablet)
+Rel_Assignment_Down(obs_svc, hw_phone)
+
+Rel_Realization_Up(rt_rust,    evo_svc)
+Rel_Realization_Up(rt_rust,    opt_svc)
+Rel_Realization_Up(rt_rust,    per_svc)
+Rel_Realization_Up(rt_rust,    ci_svc)
+Rel_Realization_Up(rt_wasm,    obs_wasm)
+Rel_Realization_Up(rt_nodejs,  ci_scraper)
+Rel_Realization_Up(rt_threejs, obs_galaxy)
+Rel_Realization_Up(rt_cbor,    capsule_cbor)
+
+Rel_Access_Up(per_svc,    db_sqlite)
+Rel_Access_Up(per_svc,    db_parquet)
+Rel_Access_Up(per_events, log_events)
+Rel_Access_Up(gw_svc,     capsule_fs)
+Rel_Access_Up(opt_svc,    capsule_fs)
+
+' ============================================================
+' RELATIONS — GATEWAY / NETWORK
+' ============================================================
+
+Rel_Association(gw_svc,  mqtt_broker, "bridges to MQTT")
+Rel_Association(gw_uart, hw_esp,      "UART")
+Rel_Association(gw_uart, hw_stm32f1,  "UART")
+Rel_Association(gw_uart, hw_str,      "UART")
+Rel_Assignment_Down(gw_svc, hw_str)
+
+@enduml

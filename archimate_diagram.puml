@@ -1,0 +1,296 @@
+@startuml Manus_Distributed_Evolutionary_System
+!include <archimate/Archimate>
+
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+scale 1.2
+
+title Distributed Evolutionary Signal Ecology System - ArchiMate Architecture
+
+' ============================================
+' MOTIVAZIONE E OBIETTIVI
+' ============================================
+
+package "Motivation Layer" <<rectangle>> {
+  Motivation_Goal(goal_predict, "Discover Predictive Patterns")
+  Motivation_Goal(goal_evolve, "Evolve Trading Strategies")
+  Motivation_Goal(goal_distribute, "Distributed Computation")
+
+  Motivation_Driver(driver_research, "Evolutionary Research Platform")
+  Motivation_Driver(driver_emergence, "Emergent Structure Discovery")
+}
+
+' ============================================
+' LIVELLO BUSINESS
+' ============================================
+
+package "Business Layer" <<rectangle>> {
+  Business_Process(proc_evolution, "Evolutionary Process")
+  Business_Process(proc_signal, "Signal Generation")
+  Business_Process(proc_observation, "Ecosystem Observation")
+
+  Business_Service(svc_prediction, "Prediction Service")
+  Business_Service(svc_monitoring, "Monitoring Service")
+}
+
+' ============================================
+' LIVELLO APPLICAZIONE - NODI
+' ============================================
+
+package "Application Layer - Node Types" <<rectangle>> {
+
+  package "Observatory Nodes" <<Cloud>> {
+    Application_Component(obs_ui, "UI Component")
+    Application_Component(obs_replay, "Replay System")
+    Application_Component(obs_viz, "Visualization Engine")
+    Application_Service(obs_svc, "Observatory Service")
+  }
+
+  package "Evolution Nodes" <<Cloud>> {
+    Application_Component(evo_mutation, "Mutation Engine")
+    Application_Component(evo_cluster, "Clustering System")
+    Application_Component(evo_niche, "Niche Discovery")
+    Application_Component(evo_phenotype, "Phenotype Analyzer")
+    Application_Service(evo_svc, "Evolution Service")
+  }
+
+  package "Optimization Nodes" <<Cloud>> {
+    Application_Component(opt_tuning, "Parameter Tuning")
+    Application_Component(opt_validation, "Micro Validation")
+    Application_Component(opt_local, "Local Optimizer")
+    Application_Service(opt_svc, "Optimization Service")
+  }
+
+  package "Persistence Nodes" <<Cloud>> {
+    Application_Component(per_lineage, "Lineage Storage")
+    Application_Component(per_archetype, "Archetype Memory")
+    Application_Component(per_events, "Event Logger")
+    Application_Service(per_svc, "Persistence Service")
+  }
+
+  package "Gateway Nodes" <<Cloud>> {
+    Application_Component(gw_uart, "UART Bridge")
+    Application_Component(gw_protocol, "Protocol Translator")
+    Application_Service(gw_svc, "Gateway Service")
+  }
+}
+
+' ============================================
+' LIVELLO APPLICAZIONE - COMPONENTI CORE
+' ============================================
+
+package "Application Layer - Core Components" <<rectangle>> {
+
+  package "Evolutionary Pipeline" <<Frame>> {
+    Application_Component(lsystem, "L-System Generator")
+    Application_Component(graph_exp, "Graph Expansion")
+    Application_Component(fsm_gen, "FSM Generator")
+    Application_Component(phenotype, "Phenotype Runtime")
+  }
+
+  package "Fitness System" <<Frame>> {
+    Application_Component(fit_calc, "Fitness Calculator")
+    Application_Component(fit_niche, "Niche Evaluator")
+    Application_Component(fit_coop, "Cooperation Scorer")
+  }
+
+  package "Signaling System" <<Frame>> {
+    Application_Component(sig_broker, "Signal Broker")
+    Application_Component(sig_router, "Event Router")
+    Application_Component(sig_subscription, "Subscription Manager")
+  }
+
+  Application_Component(genome_capsule, "Genome Capsule Manager")
+
+  Application_Interface(mqtt_if, "MQTT Interface")
+  Application_Interface(rest_api, "REST API")
+}
+
+' ============================================
+' DATA OBJECTS
+' ============================================
+
+package "Data Objects" <<rectangle>> {
+  Business_Object(data_ohlcv, "OHLCV Data")
+  Business_Object(data_genome, "Hybrid Graph Genome")
+  Business_Object(data_fsm, "FSM Definition")
+  Business_Object(data_signal, "Trading Signal")
+  Business_Object(data_event, "System Event")
+  Business_Object(data_archetype, "Archetype")
+}
+
+' ============================================
+' LIVELLO TECNOLOGIA
+' ============================================
+
+package "Technology Layer - Hardware" <<rectangle>> {
+
+  package "High Performance Nodes" <<Node>> {
+    Technology_Device(hw_linux, "Linux PCs")
+    Technology_Device(hw_android_power, "Android Powerful")
+    Technology_Device(hw_mimx, "MIMXRT1050-EVK")
+  }
+
+  package "Medium Performance Nodes" <<Node>> {
+    Technology_Device(hw_rasp, "Raspberry Pi 2")
+    Technology_Device(hw_ra8, "Renesas RA8")
+    Technology_Device(hw_stm32f3, "STM32F3")
+  }
+
+  package "Low Power Nodes" <<Node>> {
+    Technology_Device(hw_esp, "ESP8266")
+    Technology_Device(hw_stm32f1, "STM32F107")
+    Technology_Device(hw_str, "Olimex STR-E912")
+  }
+
+  package "Observatory Devices" <<Node>> {
+    Technology_Device(hw_browser, "Web Browser")
+    Technology_Device(hw_tablet, "Android Tablet")
+    Technology_Device(hw_phone, "Smartphone")
+  }
+}
+
+package "Technology Layer - Infrastructure" <<rectangle>> {
+  Technology_Node(mqtt_broker, "MQTT Broker")
+  Technology_Node(web_server, "Web Server")
+
+  Technology_SystemSoftware(runtime_rust, "Rust Runtime")
+  Technology_SystemSoftware(runtime_wasm, "WebAssembly Runtime")
+
+  Technology_Service(net_mqtt, "MQTT Service")
+  Technology_Service(net_uart, "UART Service")
+  Technology_Service(net_usb, "USB Service")
+}
+
+package "Technology Layer - Storage" <<rectangle>> {
+  Technology_Artifact(db_sqlite, "SQLite Database")
+  Technology_Artifact(db_parquet, "Parquet Files")
+  Technology_Artifact(log_events, "Event Log")
+
+  Technology_Interface(storage_if, "Storage Interface")
+}
+
+' ============================================
+' RELAZIONI - MOTIVAZIONE -> BUSINESS
+' ============================================
+
+Rel_Realization_Up(proc_evolution, goal_evolve)
+Rel_Realization_Up(proc_signal, goal_predict)
+Rel_Realization_Up(proc_observation, goal_distribute)
+
+Rel_Influence_Up(driver_research, goal_evolve)
+Rel_Influence_Up(driver_emergence, goal_predict)
+
+Rel_Realization_Up(svc_prediction, proc_signal)
+Rel_Realization_Up(svc_monitoring, proc_observation)
+
+' ============================================
+' RELAZIONI - BUSINESS -> APPLICATION
+' ============================================
+
+Rel_Realization_Up(evo_svc, proc_evolution)
+Rel_Realization_Up(obs_svc, proc_observation)
+
+Rel_Serving_Up(evo_svc, svc_prediction)
+Rel_Serving_Up(obs_svc, svc_monitoring)
+
+' ============================================
+' RELAZIONI - APPLICATION - NODI
+' ============================================
+
+Rel_Composition_Down(obs_svc, obs_ui)
+Rel_Composition_Down(obs_svc, obs_replay)
+Rel_Composition_Down(obs_svc, obs_viz)
+
+Rel_Composition_Down(evo_svc, evo_mutation)
+Rel_Composition_Down(evo_svc, evo_cluster)
+Rel_Composition_Down(evo_svc, evo_niche)
+Rel_Composition_Down(evo_svc, evo_phenotype)
+
+Rel_Composition_Down(opt_svc, opt_tuning)
+Rel_Composition_Down(opt_svc, opt_validation)
+Rel_Composition_Down(opt_svc, opt_local)
+
+Rel_Composition_Down(per_svc, per_lineage)
+Rel_Composition_Down(per_svc, per_archetype)
+Rel_Composition_Down(per_svc, per_events)
+
+Rel_Composition_Down(gw_svc, gw_uart)
+Rel_Composition_Down(gw_svc, gw_protocol)
+
+' ============================================
+' RELAZIONI - EVOLUTIONARY PIPELINE
+' ============================================
+
+Rel_Flow_Right(lsystem, graph_exp, "generates")
+Rel_Flow_Right(graph_exp, fsm_gen, "expands to")
+Rel_Flow_Right(fsm_gen, phenotype, "creates")
+
+Rel_Access_Up(evo_mutation, lsystem)
+Rel_Access_Up(evo_phenotype, phenotype)
+
+' ============================================
+' RELAZIONI - SIGNALING
+' ============================================
+
+Rel_Composition_Down(sig_broker, sig_router)
+Rel_Composition_Down(sig_broker, sig_subscription)
+
+Rel_Flow_Up(evo_svc, sig_broker, "publishes")
+Rel_Flow_Up(opt_svc, sig_broker, "publishes")
+Rel_Flow_Down(sig_broker, obs_svc, "subscribes")
+Rel_Flow_Down(sig_broker, per_svc, "logs")
+
+' ============================================
+' RELAZIONI - DATA
+' ============================================
+
+Rel_Access_Up(phenotype, data_ohlcv, "reads")
+Rel_Access_Up(lsystem, data_genome, "generates")
+Rel_Access_Up(fsm_gen, data_fsm, "produces")
+Rel_Access_Up(phenotype, data_signal, "emits")
+Rel_Access_Up(sig_broker, data_event, "routes")
+Rel_Access_Up(per_archetype, data_archetype, "stores")
+
+Rel_Access_Down(fit_calc, data_signal, "evaluates")
+Rel_Access_Down(fit_niche, data_archetype, "analyzes")
+
+' ============================================
+' RELAZIONI - APPLICATION -> TECHNOLOGY
+' ============================================
+
+Rel_Realization_Up(mqtt_if, net_mqtt)
+Rel_Realization_Up(net_mqtt, mqtt_broker)
+
+Rel_Assignment_Down(evo_svc, hw_linux)
+Rel_Assignment_Down(evo_svc, hw_android_power)
+Rel_Assignment_Down(evo_svc, hw_mimx)
+
+Rel_Assignment_Down(opt_svc, hw_esp)
+Rel_Assignment_Down(opt_svc, hw_stm32f1)
+Rel_Assignment_Down(opt_svc, hw_stm32f3)
+
+Rel_Assignment_Down(per_svc, hw_rasp)
+
+Rel_Assignment_Down(obs_svc, hw_browser)
+Rel_Assignment_Down(obs_svc, hw_tablet)
+Rel_Assignment_Down(obs_svc, hw_phone)
+
+Rel_Realization_Up(runtime_rust, evo_svc)
+Rel_Realization_Up(runtime_rust, opt_svc)
+Rel_Realization_Up(runtime_rust, per_svc)
+Rel_Realization_Up(runtime_wasm, obs_svc)
+
+Rel_Access_Up(per_svc, db_sqlite)
+Rel_Access_Up(per_svc, db_parquet)
+Rel_Access_Up(per_events, log_events)
+
+' ============================================
+' NETWORK CONNECTIVITY
+' ============================================
+
+Rel_Association(gw_svc, mqtt_broker, "bridges to")
+Rel_Association(gw_uart, hw_esp, "UART")
+Rel_Association(gw_uart, hw_stm32f1, "UART")
+
+@enduml

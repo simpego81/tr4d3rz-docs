@@ -1,0 +1,84 @@
+@startuml TR4D3RZ_rasp2
+!include <archimate/Archimate>
+
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName "Courier New"
+skinparam defaultFontColor #000000
+skinparam defaultFontSize 11
+skinparam ArrowColor #333333
+skinparam packageBorderColor #333333
+skinparam packageBackgroundColor #EFEFEF
+skinparam packageFontColor #000000
+skinparam packageFontSize 12
+skinparam packageFontStyle bold
+skinparam nodeBorderColor #333333
+skinparam noteBorderColor #333333
+skinparam noteBackgroundColor #FFFDE7
+skinparam noteFontColor #000000
+scale 1.5
+
+title TR4D3RZ — Device View: Raspberry Pi 2 · (ARMv7 · 900MHz)\nArchiMate Architecture v2.0  |  2026-05-12
+
+package "Motivation Layer" <<rectangle>> {
+  Motivation_Goal(goal_distribute, "Distributed Heterogeneous\nComputation")
+  Motivation_Goal(goal_observe, "Full Ecosystem\nObservability")
+  Motivation_Principle(prin_replay, "Distributed Observability\n(serializable & replayable)")
+  Motivation_Principle(prin_async, "Asynchronous Distributed\nEcology (no global sync)")
+  Motivation_Driver(driver_research, "Evolutionary Research\nPlatform")
+}
+
+package "Business Layer" <<rectangle>> {
+  Business_Process(proc_persist, "Ecosystem Memory\n(Event Sourcing)")
+  Business_Service(svc_knowledge, "Knowledge Service\n(archetype library)")
+}
+
+package "Application Layer" <<rectangle>> {
+  package "Persistence Nodes  [Raspberry Pi 2 · PHP hosting]" <<Cloud>> {
+    Application_Service(per_svc, "Persistence Service")
+    Application_Component(per_lineage, "Lineage Storage\n(birth · death · mutation)")
+    Application_Component(per_archetype, "Archetype Memory\n(motif FSM · patterns · niches)")
+    Application_Component(per_events, "Event Logger\n(mutation · signal · migration)")
+    Application_Component(per_relay, "Relay Service\n(delayed sync · offline nodes)")
+  }
+}
+
+package "Data Objects" <<rectangle>> {
+  Business_Object(data_event, "System Event\n(CBOR · QoS 1 · append-only)")
+  Business_Object(data_fitness, "Fitness Record\n(CBOR · QoS 1 · multi-dim)")
+  Business_Object(data_archetype, "Archetype\n(CBOR · QoS 2 · FSM motif)")
+}
+
+package "Technology Layer" <<rectangle>> {
+  package "Medium Performance Nodes" <<Node>> {
+    Technology_Device(hw_rasp2, "Raspberry Pi 2\n(ARMv7 · 900MHz)")
+  }
+  package "Infrastructure" <<rectangle>> {
+    Technology_SystemSoftware(rt_rust, "Rust Runtime\n(tr4d3rz-core · evolution · messaging)")
+    Technology_Service(net_mqtt, "MQTT Service\n(TCP:1883 · WS:8083)")
+  }
+  package "Storage" <<rectangle>> {
+    Technology_Artifact(db_sqlite, "SQLite Database\n(WAL mode · event log · archetypes)")
+    Technology_Artifact(db_parquet, "Parquet Files\n(large datasets · historical archive)")
+    Technology_Artifact(log_events, "Event Log\n(mutation · death · signal · migration\n· lineage · archetype_creation)")
+  }
+}
+
+' ── Relations ──────────────────────────────────────────────
+Rel_Realization_Up(proc_persist, goal_distribute)
+Rel_Influence_Up(driver_research, goal_distribute)
+Rel_Influence_Up(prin_replay, goal_observe)
+Rel_Influence_Up(prin_async, goal_distribute)
+Rel_Realization_Up(per_svc, proc_persist)
+Rel_Serving_Up(per_svc, svc_knowledge)
+Rel_Composition_Down(per_svc, per_lineage)
+Rel_Composition_Down(per_svc, per_archetype)
+Rel_Composition_Down(per_svc, per_events)
+Rel_Composition_Down(per_svc, per_relay)
+Rel_Assignment_Down(per_svc, hw_rasp2)
+Rel_Realization_Up(rt_rust, per_svc)
+Rel_Access_Up(per_svc, db_sqlite)
+Rel_Access_Up(per_svc, db_parquet)
+Rel_Access_Up(per_events, log_events)
+Rel_Access_Up(per_archetype, data_archetype, "publishes lineage/archetype/# QoS 2")
+
+@enduml

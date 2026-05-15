@@ -1,9 +1,96 @@
-﻿<!DOCTYPE html>
+﻿# generate_docs.ps1 — Regenerates docs/*.html with proper ArchiMate entity boxes + SVG relation arrows
+Set-Location "c:\projects\seq\tr4"
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
+$deviceList = @(
+    @{ name = "android";  puml = "device_android.puml" },
+    @{ name = "browser";  puml = "device_browser.puml" },
+    @{ name = "esp";      puml = "device_esp.puml"     },
+    @{ name = "linux";    puml = "device_linux.puml"   },
+    @{ name = "mimx";     puml = "device_mimx.puml"    },
+    @{ name = "phone";    puml = "device_phone.puml"   },
+    @{ name = "ra8";      puml = "device_ra8.puml"     },
+    @{ name = "rasp2";    puml = "device_rasp2.puml"   },
+    @{ name = "rpi1";     puml = "device_rpi1.puml"    },
+    @{ name = "stm32f1";  puml = "device_stm32f1.puml" },
+    @{ name = "stm32f3";  puml = "device_stm32f3.puml" },
+    @{ name = "str";      puml = "device_str.puml"     },
+    @{ name = "tablet";   puml = "device_tablet.puml"  },
+    @{ name = "m24lr";    puml = "device_m24lr.puml"   }
+)
+
+# ── Extract KB JSON object from existing HTML ──────────────────────────────────
+function Extract-KB($html) {
+    $kbStart = $html.IndexOf('const KB = {')
+    if ($kbStart -lt 0) { return '{}' }
+    $kbStart += 'const KB = '.Length
+    $depth = 0; $i = $kbStart
+    while ($i -lt $html.Length) {
+        $c = $html[$i]
+        if ($c -eq '{') { $depth++ }
+        elseif ($c -eq '}') { $depth--; if ($depth -eq 0) { break } }
+        $i++
+    }
+    return $html.Substring($kbStart, $i - $kbStart + 1)
+}
+
+# ── Extract relationships from PUML ───────────────────────────────────────────
+function Extract-RELS($puml) {
+    $rels = New-Object System.Collections.Generic.List[string]
+    $relRegex = [regex]'Rel_(\w+?)(?:_(?:Up|Down|Left|Right|Up2|Down2))?\s*\(\s*(\w+)\s*,\s*(\w+)(?:\s*,\s*"([^"]*)")?\)'
+    foreach ($m in $relRegex.Matches($puml)) {
+        $type = $m.Groups[1].Value
+        $from = $m.Groups[2].Value
+        $to   = $m.Groups[3].Value
+        $lbl  = $m.Groups[4].Value -replace "'", "\'"
+        $rels.Add("  { from: '$from', to: '$to', type: '$type', label: '$lbl' }")
+    }
+    return "[`n" + ($rels -join ",`n") + "`n]"
+}
+
+# ── Extract page title from existing HTML ─────────────────────────────────────
+function Extract-Title($html) {
+    if ($html -match '<h1[^>]*>([^<]+)<\/h1>') { return $matches[1].Trim() }
+    if ($html -match '<title>([^<]+)<\/title>') { return $matches[1].Trim() }
+    return 'TR4D3RZ — Device View'
+}
+
+# ── Transform tbody: strip Tailwind colour classes, add id= to arch-box ───────
+function Transform-Tbody($html) {
+    $start = $html.IndexOf('<tbody>')
+    $end   = $html.LastIndexOf('</tbody>') + '</tbody>'.Length
+    if ($start -lt 0 -or $end -le $start) { return '<tbody></tbody>' }
+    $tbody = $html.Substring($start, $end - $start)
+
+    # Strip tailwind colour utility classes from arch-box (bg-*, border-*, text-*)
+    $tbody = [regex]::Replace($tbody,
+        'class="arch-box(?:\s+(?:bg|border|text)-\w+-\d+)*\s*"',
+        'class="arch-box"')
+
+    # Add id attribute matching showModal argument
+    $tbody = [regex]::Replace($tbody,
+        'onclick="showModal\(''(\w+)''\)"',
+        'id="$1" onclick="showModal(''$1'')"')
+
+    # Normalise layer-label Tailwind colours → semantic CSS classes
+    $tbody = [regex]::Replace($tbody, 'class="layer-label\s+bg-purple-\d+\s+text-purple-\d+"', 'class="layer-label layer-Motivation"')
+    $tbody = [regex]::Replace($tbody, 'class="layer-label\s+bg-yellow-\d+\s+text-yellow-\d+"', 'class="layer-label layer-Business"')
+    $tbody = [regex]::Replace($tbody, 'class="layer-label\s+bg-blue-\d+\s+text-blue-\d+"',   'class="layer-label layer-Application"')
+    $tbody = [regex]::Replace($tbody, 'class="layer-label\s+bg-green-\d+\s+text-green-\d+"', 'class="layer-label layer-Technology"')
+
+    return $tbody
+}
+
+# ══════════════════════════════════════════════════════════════════════════════
+# HTML TEMPLATE  (%%TITLE%% %%TBODY%% %%KB%% %%RELS%% are replaced per device)
+# ══════════════════════════════════════════════════════════════════════════════
+$TEMPLATE = @'
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TR4D3RZ — Device View: Web Browser · (Chrome · Firefox) — ArchiMate Architecture v2.0  |  2026-05-12</title>
+<title>%%TITLE%%</title>
 <style>
 /* ── Reset ── */
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -120,7 +207,7 @@ body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
 
 <!-- ── Device header ── -->
 <div class="device-header">
-  <h1>TR4D3RZ — Device View: Web Browser · (Chrome · Firefox) — ArchiMate Architecture v2.0  |  2026-05-12</h1>
+  <h1>%%TITLE%%</h1>
   <p>ArchiMate Device View · Click any element for details · Hover to highlight relationships</p>
 </div>
 
@@ -155,77 +242,7 @@ body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
         <th>Motivation</th>
       </tr>
     </thead>
-    <tbody>
-        <tr>
-  <td class="layer-label layer-Motivation">Motivation<br>Layer</td>
-  <td class="grid-cell">
-  </td>
-  <td class="grid-cell">
-  </td>
-  <td class="grid-cell">
-  </td>
-  <td class="grid-cell">
-    <div class="arch-box" id="goal_observe" id="goal_observe" id="goal_observe" id="goal_observe" id="goal_observe" onclick="showModal('goal_observe')" title="Full Ecosystem Observability">Full Ecosystem<br>Observability</div>
-    <div class="arch-box" id="prin_replay" id="prin_replay" id="prin_replay" id="prin_replay" id="prin_replay" onclick="showModal('prin_replay')" title="Distributed Observability (serializable & replayable)">Distributed Observability<br>(serializable & replayable)</div>
-    <div class="arch-box" id="prin_coop" id="prin_coop" id="prin_coop" id="prin_coop" id="prin_coop" onclick="showModal('prin_coop')" title="Cooperative Signaling (events, not references)">Cooperative Signaling<br>(events, not references)</div>
-    <div class="arch-box" id="driver_research" id="driver_research" id="driver_research" id="driver_research" id="driver_research" onclick="showModal('driver_research')" title="Evolutionary Research Platform">Evolutionary Research<br>Platform</div>
-  </td>
-</tr>
-<tr>
-  <td class="layer-label layer-Business">Business<br>Layer</td>
-  <td class="grid-cell">
-  </td>
-  <td class="grid-cell">
-    <div class="arch-box" id="proc_observe" id="proc_observe" id="proc_observe" id="proc_observe" id="proc_observe" onclick="showModal('proc_observe')" title="Ecosystem Observation & Replay">Ecosystem Observation<br>& Replay</div>
-    <div class="arch-box" id="svc_monitoring" id="svc_monitoring" id="svc_monitoring" id="svc_monitoring" id="svc_monitoring" onclick="showModal('svc_monitoring')" title="Monitoring Service (real-time health)">Monitoring Service<br>(real-time health)</div>
-  </td>
-  <td class="grid-cell">
-    <div class="arch-box" id="data_ohlcv" id="data_ohlcv" id="data_ohlcv" id="data_ohlcv" id="data_ohlcv" onclick="showModal('data_ohlcv')" title="OHLCV Payload (JSON · ADR-0004 schema)">OHLCV Payload<br>(JSON · ADR-0004 schema)</div>
-    <div class="arch-box" id="data_signal" id="data_signal" id="data_signal" id="data_signal" id="data_signal" onclick="showModal('data_signal')" title="Cooperative Signal (CBOR · QoS 0 · agent_id)">Cooperative Signal<br>(CBOR · QoS 0 · agent_id)</div>
-    <div class="arch-box" id="data_fitness" id="data_fitness" id="data_fitness" id="data_fitness" id="data_fitness" onclick="showModal('data_fitness')" title="Fitness Record (CBOR · QoS 1 · multi-dim)">Fitness Record<br>(CBOR · QoS 1 · multi-dim)</div>
-    <div class="arch-box" id="data_archetype" id="data_archetype" id="data_archetype" id="data_archetype" id="data_archetype" onclick="showModal('data_archetype')" title="Archetype (CBOR · QoS 2 · FSM motif)">Archetype<br>(CBOR · QoS 2 · FSM motif)</div>
-    <div class="arch-box" id="data_fsm" id="data_fsm" id="data_fsm" id="data_fsm" id="data_fsm" onclick="showModal('data_fsm')" title="FSM Definition (state · transition · condition)">FSM Definition<br>(state · transition · condition)</div>
-  </td>
-  <td class="grid-cell">
-  </td>
-</tr>
-<tr>
-  <td class="layer-label layer-Application">Application<br>Layer</td>
-  <td class="grid-cell">
-    <div class="arch-box" id="obs_deploymap" id="obs_deploymap" id="obs_deploymap" id="obs_deploymap" id="obs_deploymap" onclick="showModal('obs_deploymap')" title="Deploy Architecture Map (node status · connectivity)">Deploy Architecture Map<br>(node status · connectivity)</div>
-    <div class="arch-box" id="obs_theorymap" id="obs_theorymap" id="obs_theorymap" id="obs_theorymap" id="obs_theorymap" onclick="showModal('obs_theorymap')" title="Theory Map (FSM motif browser · archetypes)">Theory Map<br>(FSM motif browser · archetypes)</div>
-    <div class="arch-box" id="obs_galaxy" id="obs_galaxy" id="obs_galaxy" id="obs_galaxy" id="obs_galaxy" onclick="showModal('obs_galaxy')" title="Evolution Galaxy  [3D] (clusters · species · niches)">Evolution Galaxy  [3D]<br>(clusters · species · niches)</div>
-    <div class="arch-box" id="obs_ecology" id="obs_ecology" id="obs_ecology" id="obs_ecology" id="obs_ecology" onclick="showModal('obs_ecology')" title="Signal Ecology View (cooperative signaling heatmap)">Signal Ecology View<br>(cooperative signaling heatmap)</div>
-    <div class="arch-box" id="obs_market" id="obs_market" id="obs_market" id="obs_market" id="obs_market" onclick="showModal('obs_market')" title="Market Overlay (market events ↔ ecosystem)">Market Overlay<br>(market events ↔ ecosystem)</div>
-    <div class="arch-box" id="obs_replay" id="obs_replay" id="obs_replay" id="obs_replay" id="obs_replay" onclick="showModal('obs_replay')" title="Replay System (temporal · lineage · rewind)">Replay System<br>(temporal · lineage · rewind)</div>
-    <div class="arch-box" id="obs_wasm" id="obs_wasm" id="obs_wasm" id="obs_wasm" id="obs_wasm" onclick="showModal('obs_wasm')" title="WASM FSM Replay (browser-side execution)">WASM FSM Replay<br>(browser-side execution)</div>
-  </td>
-  <td class="grid-cell">
-    <div class="arch-box" id="obs_svc" id="obs_svc" id="obs_svc" id="obs_svc" id="obs_svc" onclick="showModal('obs_svc')" title="Observatory Service">Observatory Service</div>
-  </td>
-  <td class="grid-cell">
-  </td>
-  <td class="grid-cell">
-  </td>
-</tr>
-<tr>
-  <td class="layer-label layer-Technology">Technology<br>Layer</td>
-  <td class="grid-cell">
-    <div class="arch-box" id="hw_browser" id="hw_browser" id="hw_browser" id="hw_browser" id="hw_browser" onclick="showModal('hw_browser')" title="Web Browser (Chrome · Firefox)">Web Browser<br>(Chrome · Firefox)</div>
-    <div class="arch-box" id="web_server" id="web_server" id="web_server" id="web_server" id="web_server" onclick="showModal('web_server')" title="Web Server (static assets · Observatory UI)">Web Server<br>(static assets · Observatory UI)</div>
-    <div class="arch-box" id="rt_wasm" id="rt_wasm" id="rt_wasm" id="rt_wasm" id="rt_wasm" onclick="showModal('rt_wasm')" title="WebAssembly Runtime (browser FSM replay)">WebAssembly Runtime<br>(browser FSM replay)</div>
-    <div class="arch-box" id="rt_threejs" id="rt_threejs" id="rt_threejs" id="rt_threejs" id="rt_threejs" onclick="showModal('rt_threejs')" title="Three.js / WebGL (3D Galaxy visualization)">Three.js / WebGL<br>(3D Galaxy visualization)</div>
-  </td>
-  <td class="grid-cell">
-    <div class="arch-box" id="net_mqtt" id="net_mqtt" id="net_mqtt" id="net_mqtt" id="net_mqtt" onclick="showModal('net_mqtt')" title="MQTT Service (WS:8083)">MQTT Service<br>(WS:8083)</div>
-  </td>
-  <td class="grid-cell">
-  </td>
-  <td class="grid-cell">
-  </td>
-</tr>
-
-      </tbody>
+    %%TBODY%%
   </table>
 </div>
 
@@ -251,29 +268,12 @@ body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
 // ════════════════════════════════════════════════════════
 // 1. Knowledge Base  (element metadata — injected per device)
 // ════════════════════════════════════════════════════════
-const KB = {"goal_observe": {"title": "Full Ecosystem Observability", "type": "Motivation_Goal", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Goal — a desired end-state.", "role": "Every evolutionary event must be observable, replayable, and visualizable in real-time. The system must be transparent enough for human researchers to understand emergent behaviors.", "tech": "Implemented via the Observatory Service (TypeScript/Three.js), WASM FSM Replay, event sourcing in SQLite/Parquet, and MQTT WebSocket streaming.", "relations": "Realized by the Observatory Service. Supported by the Persistence Service event store."}, "prin_replay": {"title": "Distributed Observability", "type": "Motivation_Principle", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Principle — a fundamental architectural guideline.", "role": "All evolutionary events must be serializable and replayable. The system must support temporal replay of any past ecosystem state for research and debugging.", "tech": "Implemented via append-only SQLite event log, Parquet historical archive, WASM FSM Replay in the browser, and the Replay System in the Observatory.", "relations": "Influences the Observatory Service. Realized by the Persistence Service and Event Logger."}, "prin_coop": {"title": "Cooperative Signaling", "type": "Motivation_Principle", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Principle — a fundamental architectural guideline.", "role": "Agents communicate via events (MQTT signals), not direct references. This enables loose coupling and emergent cooperative behaviors without central coordination.", "tech": "Implemented via the Cooperative Signal MQTT topic (ecosystem/signal/#, CBOR, QoS 0) and the Cooperative Conditions package in tr4d3rz-core.", "relations": "Influences the Cooperative Signal Generation process. Realized by the Signaling System."}, "driver_research": {"title": "Evolutionary Research Platform", "type": "Motivation_Driver", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Driver — an external or internal condition that motivates the architecture.", "role": "TR4D3RZ is designed as a research platform for studying open-ended evolution in financial markets, not just a trading system.", "tech": "Manifested in the Observatory's Theory Map, the Archetype Library, and the Niche Atlas.", "relations": "Motivates the Observability and Evolution goals."}, "proc_observe": {"title": "Ecosystem Observation & Replay", "type": "Business_Process", "layer": "Business", "aspect": "Behavior", "type_desc": "ArchiMate Business Process — a sequence of behaviors achieving a business outcome.", "role": "Provides real-time and historical views of the ecosystem: node deployment map, theory map, 3D galaxy visualization, signal ecology heatmap, and temporal replay.", "tech": "Implemented by Observatory Service (TypeScript/Vite/Three.js) in tr4d3rz-observatory. Connects to NanoMQ via MQTT WebSocket (WS:8083).", "relations": "Realized by Observatory Service. Consumes all MQTT topics."}, "svc_monitoring": {"title": "Monitoring Service", "type": "Business_Service", "layer": "Business", "aspect": "Behavior", "type_desc": "ArchiMate Business Service — an explicitly defined exposed business behavior.", "role": "Real-time health monitoring of all ecosystem nodes: MQTT connectivity, evolution rate, fitness distribution, niche count, and archetype stability.", "tech": "Implemented via the Deploy Architecture Map in the Observatory. Subscribes to all MQTT topics and tracks last-seen timestamps for each node.", "relations": "Served by Observatory Service."}, "obs_svc": {"title": "Observatory Service", "type": "Application_Service", "layer": "Application", "aspect": "Behavior", "type_desc": "ArchiMate Application Service — ecosystem visualization and monitoring.", "role": "The main service of Observatory Nodes (Browser, Tablet, Smartphone). Provides real-time and historical views of the ecosystem via a web-based dashboard.", "tech": "TypeScript/Vite/React (tr4d3rz-observatory). Connects to NanoMQ via MQTT WebSocket (WS:8083). Three.js for 3D visualization. WASM for FSM replay.", "relations": "Realizes Ecosystem Observation process. Serves Monitoring Service."}, "obs_deploymap": {"title": "Deploy Architecture Map", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — node deployment visualization.", "role": "Shows the real-time status of all ecosystem nodes: connectivity, evolution rate, last-seen timestamp, MQTT topic activity. The operational dashboard of TR4D3RZ.", "tech": "TypeScript/D3.js. Subscribes to all MQTT topics. Updates node status in real-time via WebSocket.", "relations": "Consumes all MQTT topics. Visualizes node connectivity."}, "obs_theorymap": {"title": "Theory Map", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — archetype and FSM browser.", "role": "Provides a browsable library of discovered archetypes (proven FSM motifs). Allows researchers to inspect FSM graphs, fitness histories, and market conditions where each archetype excels.", "tech": "TypeScript/React. Fetches archetypes from Persistence Service. Renders FSM graphs using D3.js force layout.", "relations": "Consumes Archetype data from Persistence Service."}, "obs_galaxy": {"title": "Evolution Galaxy [3D]", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — 3D ecosystem visualization.", "role": "Renders the entire ecosystem as a 3D galaxy: each agent is a star, niches are clusters, fitness is brightness, cooperative signals are particle streams. The flagship visualization of TR4D3RZ.", "tech": "Three.js/WebGL. Each agent mapped to 3D coordinates via fitness vector PCA. Real-time updates via MQTT WebSocket. Supports up to 10,000 simultaneous agents.", "relations": "Consumes Fitness Records and Niche data from MQTT."}, "obs_ecology": {"title": "Signal Ecology View", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — cooperative signal heatmap.", "role": "Visualizes the cooperative signaling patterns across the ecosystem as a heatmap: which agents are signaling to which, signal frequency, and emergent communication clusters.", "tech": "TypeScript/D3.js heatmap. Subscribes to ecosystem/signal/# MQTT topic. Aggregates signal frequency by agent pair.", "relations": "Consumes Cooperative Signals from MQTT."}, "obs_market": {"title": "Market Overlay", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — market-ecosystem correlation view.", "role": "Correlates ecosystem events (archetype activations, niche shifts, fitness spikes) with market events (earnings, volatility, sector rotations). Enables research into market-ecology relationships.", "tech": "TypeScript/React. Overlays OHLCV data with ecosystem event timeline. Subscribes to data/ohlcv/# and ecosystem/# MQTT topics.", "relations": "Consumes OHLCV data and ecosystem events from MQTT."}, "obs_replay": {"title": "Replay System", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — temporal ecosystem replay.", "role": "Allows researchers to replay any past ecosystem state: scrub through time, rewind to specific events, and observe how the ecosystem evolved. Essential for research and debugging.", "tech": "TypeScript/React. Reads from Persistence Service event store. Supports temporal scrubbing, event filtering, and speed control.", "relations": "Reads from Persistence Service event store."}, "obs_wasm": {"title": "WASM FSM Replay", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — browser-side FSM execution.", "role": "Executes FSM agents directly in the browser using WebAssembly, enabling researchers to replay individual agent decisions against historical OHLCV data without server-side computation.", "tech": "Rust compiled to WASM (wasm-pack). Runs the same FSM Runtime as Evolution Nodes. Accepts FSM CBOR + OHLCV CSV as input.", "relations": "Executes FSM Capsules in browser. Consumes OHLCV data."}, "data_ohlcv": {"title": "OHLCV Payload (JSON · ADR-0004 schema)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business Object — the data contract for market data.", "role": "The standardized OHLCV data payload published to MQTT by the scraper. Defined in ADR-0004 with minified keys for bandwidth efficiency.", "tech": "JSON format. Schema: {isin: string, o: float, h: float, l: float, c: float, v: int, t: string, ts: int}. Published to data/ohlcv/history/{isin} and data/ohlcv/intraday/{isin}.", "relations": "Produced by borsa-italiana-scraper. Consumed by Evolution Nodes."}, "data_signal": {"title": "Cooperative Signal (CBOR · QoS 0)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business Object — inter-agent communication payload.", "role": "The cooperative signal broadcast by each agent to the ecosystem. Contains the agent's current state: fitness, niche, active conditions, and investment signals.", "tech": "CBOR format. Schema: {agent_id, niche_id, fitness_vector, active_conditions, signal_type, isin, action, confidence, timestamp_ms}. QoS 0 (fire-and-forget).", "relations": "Produced by Open Event Emitter. Consumed by Cooperative Conditions and Observatory."}, "data_fitness": {"title": "Fitness Record (CBOR · QoS 1)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business Object — fitness evaluation result.", "role": "The multi-dimensional fitness record for each agent after evaluation. Contains all fitness dimensions for niche discovery and archetype selection.", "tech": "CBOR format. Schema: {agent_id, timestamp_ms, trade_count, cagr, profit_factor, signal_entropy, stat_confidence, comp_efficiency, composite_fitness}. QoS 1.", "relations": "Produced by Fitness Calculator. Consumed by Niche Evaluator and Persistence Service."}, "data_archetype": {"title": "Archetype (CBOR · QoS 2)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business Object — proven FSM motif.", "role": "A proven high-fitness FSM pattern broadcast to all nodes for seeding new genomes. QoS 2 ensures exactly-once delivery for this critical knowledge transfer.", "tech": "CBOR format. Schema: {archetype_id, fsm_cbor, fitness_vector, discovery_timestamp, niche_id, usage_count}. QoS 2 (exactly once). Published to ecosystem/archetype/#.", "relations": "Produced by Persistence Service. Consumed by Evolution Nodes and Observatory Theory Map."}, "data_fsm": {"title": "FSM Definition (state · transition · condition)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business_Object element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "hw_browser": {"title": "Web Browser (Chrome/Firefox)", "type": "Technology_Device", "layer": "Technology", "aspect": "Active Structure", "type_desc": "ArchiMate Technology Device — a virtual IT resource.", "role": "The primary Observatory Node. Runs the full Observatory Service including 3D Galaxy visualization (Three.js/WebGL) and WASM FSM Replay. Connects to NanoMQ via WebSocket.", "tech": "Chrome/Firefox with WebGL and WebAssembly support. TypeScript/Vite/React. MQTT via WebSocket (WS:8083). Three.js for 3D. WASM for FSM replay.", "relations": "Hosts Observatory Service. Connects to RPi1 via MQTT WebSocket."}, "web_server": {"title": "Web Server (static assets · Observatory UI)", "type": "Technology_Node", "layer": "Technology", "aspect": "Active Structure", "type_desc": "ArchiMate Technology_Node element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "rt_wasm": {"title": "WebAssembly Runtime", "type": "Technology_SystemSoftware", "layer": "Technology", "aspect": "Active Structure", "type_desc": "ArchiMate Technology System Software — browser-side execution environment.", "role": "The WebAssembly runtime in the browser for FSM replay. Enables the same Rust FSM code used in Evolution Nodes to run directly in the browser without server-side computation.", "tech": "wasm-pack compiled Rust. WASM module size: ~200KB. Runs FSM state machine against OHLCV CSV input. Supported in all modern browsers.", "relations": "Realizes WASM FSM Replay component."}, "rt_threejs": {"title": "Three.js / WebGL", "type": "Technology_SystemSoftware", "layer": "Technology", "aspect": "Active Structure", "type_desc": "ArchiMate Technology System Software — 3D rendering environment.", "role": "The 3D rendering engine for the Evolution Galaxy visualization. Renders up to 10,000 agent-stars with real-time updates via MQTT WebSocket.", "tech": "Three.js r160+. WebGL 2.0. InstancedMesh for performance (10K+ agents). Custom shader for fitness-based star brightness. Orbit controls for navigation.", "relations": "Realizes Evolution Galaxy 3D component."}, "net_mqtt": {"title": "MQTT Service (TCP:1883 · WS:8083)", "type": "Technology_Service", "layer": "Technology", "aspect": "Behavior", "type_desc": "ArchiMate Technology Service — an explicitly defined exposed technology behavior.", "role": "The MQTT messaging service exposed by NanoMQ. TCP:1883 for embedded and server nodes; WS:8083 for browser-based Observatory. The backbone of all inter-node communication.", "tech": "MQTT 3.1.1 and 5.0. Topic hierarchy: data/ohlcv/#, ecosystem/signal/#, ecosystem/fitness/#, ecosystem/niche/#, ecosystem/archetype/#, embedded/capsule/#.", "relations": "Realized by NanoMQ Broker. Used by all nodes."}};
+const KB = %%KB%%;
 
 // ════════════════════════════════════════════════════════
 // 2. Relationships   (from PUML — injected per device)
 // ════════════════════════════════════════════════════════
-const RELS = [
-  { from: 'proc_observe', to: 'goal_observe', type: 'Realization', label: '' },
-  { from: 'driver_research', to: 'goal_observe', type: 'Influence', label: '' },
-  { from: 'prin_replay', to: 'goal_observe', type: 'Influence', label: '' },
-  { from: 'prin_coop', to: 'goal_observe', type: 'Influence', label: '' },
-  { from: 'obs_svc', to: 'proc_observe', type: 'Realization', label: '' },
-  { from: 'obs_svc', to: 'svc_monitoring', type: 'Serving', label: '' },
-  { from: 'obs_svc', to: 'obs_deploymap', type: 'Composition', label: '' },
-  { from: 'obs_svc', to: 'obs_theorymap', type: 'Composition', label: '' },
-  { from: 'obs_svc', to: 'obs_galaxy', type: 'Composition', label: '' },
-  { from: 'obs_svc', to: 'obs_ecology', type: 'Composition', label: '' },
-  { from: 'obs_svc', to: 'obs_market', type: 'Composition', label: '' },
-  { from: 'obs_svc', to: 'obs_replay', type: 'Composition', label: '' },
-  { from: 'obs_svc', to: 'obs_wasm', type: 'Composition', label: '' },
-  { from: 'obs_svc', to: 'hw_browser', type: 'Assignment', label: '' },
-  { from: 'rt_wasm', to: 'obs_wasm', type: 'Realization', label: '' },
-  { from: 'rt_threejs', to: 'obs_galaxy', type: 'Realization', label: '' }
-];
+const RELS = %%RELS%%;
 
 // ════════════════════════════════════════════════════════
 // 3. ArchiMate Type Icons  (inline SVG pictograms)
@@ -603,3 +603,37 @@ dw.addEventListener('scroll', drawRelations);
 </script>
 </body>
 </html>
+'@
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Main generation loop
+# ══════════════════════════════════════════════════════════════════════════════
+$ok = 0; $skip = 0
+foreach ($dev in $deviceList) {
+    $htmlPath = "docs\$($dev.name).html"
+    $pumlPath = $dev.puml
+
+    if (-not (Test-Path $htmlPath)) { Write-Warning "SKIP (no html): $htmlPath"; $skip++; continue }
+    if (-not (Test-Path $pumlPath)) { Write-Warning "SKIP (no puml): $pumlPath"; $skip++; continue }
+
+    $html = [System.IO.File]::ReadAllText((Resolve-Path $htmlPath), [System.Text.Encoding]::UTF8)
+    $puml = [System.IO.File]::ReadAllText((Resolve-Path $pumlPath), [System.Text.Encoding]::UTF8)
+
+    $kb    = Extract-KB    $html
+    $rels  = Extract-RELS  $puml
+    $title = Extract-Title $html
+    $tbody = Transform-Tbody $html
+
+    $out = $TEMPLATE
+    $out = $out.Replace('%%TITLE%%', $title)
+    $out = $out.Replace('%%TBODY%%', $tbody)
+    $out = $out.Replace('%%KB%%',    $kb)
+    $out = $out.Replace('%%RELS%%',  $rels)
+
+    [System.IO.File]::WriteAllText((Resolve-Path $htmlPath), $out, [System.Text.Encoding]::UTF8)
+    Write-Host "OK  $htmlPath  (KB $($kb.Length) chars, $($rels.Split('{').Count - 1) rels)"
+    $ok++
+}
+
+Write-Host ""
+Write-Host "Done: $ok generated, $skip skipped."
