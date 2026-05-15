@@ -121,7 +121,7 @@ body { font-family: 'Courier New', monospace; background: #0f172a; color: #e2e8f
   cursor: pointer;
   transition: r 0.2s;
 }
-.node.dimmed circle { opacity: 0.15; }
+.node.dimmed circle { opacity: 0.1; }
 .node.highlight circle { stroke-width: 3; r: 10; }
 
 .node text {
@@ -663,36 +663,125 @@ function handleNodeClick(event, d) {
   showModal(d);
 }
 
-function highlightConnected(nodeId, persistent = false) {
-  // Find all connected nodes (direct and transitive)
-  const connected = new Set([nodeId]);
-  const visited = new Set();
+/**
+ * Find the unique upstream path to Motivation Layer using DFS with backtracking
+ *
+ * @param {string} startNodeId - Starting node ID
+ * @returns {Set<string>} Set of node IDs in the upstream path
+ */
+function findUpstreamPath(startNodeId) {
+  const path = [startNodeId];
+  const pathSet = new Set(path);
 
-  function traverse(id) {
-    if (visited.has(id)) return;
-    visited.add(id);
-    connected.add(id);
+  function dfs(currentId) {
+    const currentNode = graphData.nodes.find(n => n.id === currentId);
 
-    graphData.links.forEach(link => {
-      if (link.source.id === id && !visited.has(link.target.id)) {
-        traverse(link.target.id);
-      }
-      if (link.target.id === id && !visited.has(link.source.id)) {
-        traverse(link.source.id);
-      }
+    // If we reached the Motivation Layer, stop
+    if (currentNode && currentNode.layer === 'Motivation') {
+      return true;
+    }
+
+    // Find incoming links (predecessors) - links that point TO this node
+    const incomingLinks = graphData.links.filter(link => {
+      const targetId = link.target.id || link.target;
+      return targetId === currentId;
     });
+
+    // Try each predecessor
+    for (const link of incomingLinks) {
+      const sourceId = link.source.id || link.source;
+
+      if (!pathSet.has(sourceId)) {
+        path.push(sourceId);
+        pathSet.add(sourceId);
+
+        if (dfs(sourceId)) {
+          return true; // Path found, stop
+        }
+
+        // Backtrack if this branch doesn't lead to Motivation
+        path.pop();
+        pathSet.delete(sourceId);
+      }
+    }
+
+    return false;
   }
 
-  traverse(nodeId);
+  dfs(startNodeId);
+  return pathSet;
+}
 
-  // Dim all nodes/links
-  nodeElements.classed('dimmed', d => !connected.has(d.id));
+/**
+ * Find all downstream paths (tree structure) to Technology layer
+ *
+ * @param {string} startNodeId - Starting node ID
+ * @returns {Set<string>} Set of all node IDs in the downstream tree
+ */
+function findDownstreamTree(startNodeId) {
+  const tree = new Set([startNodeId]);
+  const visited = new Set([startNodeId]);
+
+  function traverse(currentId) {
+    // Find outgoing links (successors) - links that start FROM this node
+    const outgoingLinks = graphData.links.filter(link => {
+      const sourceId = link.source.id || link.source;
+      return sourceId === currentId;
+    });
+
+    for (const link of outgoingLinks) {
+      const targetId = link.target.id || link.target;
+
+      if (!visited.has(targetId)) {
+        visited.add(targetId);
+        tree.add(targetId);
+        traverse(targetId); // Continue on all branches
+      }
+    }
+  }
+
+  traverse(startNodeId);
+  return tree;
+}
+
+/**
+ * Highlight connected nodes using selective upstream/downstream logic (Revision 01)
+ *
+ * @param {string} nodeId - ID of the clicked node
+ * @param {boolean} persistent - Whether to maintain focus (currently unused)
+ *
+ * Behavior:
+ * - Upstream: Find SINGLE path to Motivation Layer (DFS, first found)
+ * - Downstream: Find ALL paths to Technology Devices (recursive traversal)
+ * - Dim all other nodes/links (opacity 0.1)
+ *
+ * See: specs/observatory/holistic-view-generation-spec.md § 3.3
+ */
+function highlightConnected(nodeId, persistent = false) {
+  // 1. Find upstream path to Motivation Layer
+  const upstreamPath = findUpstreamPath(nodeId);
+
+  // 2. Find downstream tree to Technology layer
+  const downstreamTree = findDownstreamTree(nodeId);
+
+  // 3. Merge the two sets (upstream path + downstream tree)
+  const highlighted = new Set([...upstreamPath, ...downstreamTree]);
+
+  // 4. Apply dimmed/highlight classes to nodes
+  nodeElements.classed('dimmed', d => !highlighted.has(d.id));
   nodeElements.classed('highlight', d => d.id === nodeId);
 
-  linkElements.classed('dimmed', d =>
-    !connected.has(d.source.id) || !connected.has(d.target.id));
-  linkElements.classed('highlight', d =>
-    connected.has(d.source.id) && connected.has(d.target.id));
+  // 5. Apply dimmed/highlight classes to links
+  linkElements.classed('dimmed', d => {
+    const sourceId = d.source.id || d.source;
+    const targetId = d.target.id || d.target;
+    return !highlighted.has(sourceId) || !highlighted.has(targetId);
+  });
+  linkElements.classed('highlight', d => {
+    const sourceId = d.source.id || d.source;
+    const targetId = d.target.id || d.target;
+    return highlighted.has(sourceId) && highlighted.has(targetId);
+  });
 }
 
 function clearHighlight() {
