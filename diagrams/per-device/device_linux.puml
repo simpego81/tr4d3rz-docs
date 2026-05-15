@@ -80,6 +80,7 @@ package "Data Objects" <<rectangle>> {
   Business_Object(data_signal, "Cooperative Signal\n(CBOR · QoS 0 · agent_id)")
   Business_Object(data_fitness, "Fitness Record\n(CBOR · QoS 1 · multi-dim)")
   Business_Object(data_event, "System Event\n(CBOR · QoS 1 · append-only)")
+  Business_Object(data_archetype, "Archetype\n(CBOR · QoS 2 · FSM motif)")
 }
 
 package "Technology Layer" <<rectangle>> {

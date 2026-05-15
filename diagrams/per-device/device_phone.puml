@@ -36,6 +36,7 @@ package "Application Layer" <<rectangle>> {
     Application_Component(obs_ecology, "Signal Ecology View\n(cooperative signaling heatmap)")
     Application_Component(obs_market, "Market Overlay\n(market events ↔ ecosystem)")
     Application_Component(obs_replay, "Replay System\n(temporal · lineage · rewind)")
+    Application_Component(obs_wasm, "WASM FSM Replay\n(browser-side execution)")
   }
 }
 
@@ -63,6 +64,7 @@ Rel_Composition_Down(obs_svc, obs_deploymap)
 Rel_Composition_Down(obs_svc, obs_ecology)
 Rel_Composition_Down(obs_svc, obs_market)
 Rel_Composition_Down(obs_svc, obs_replay)
+Rel_Composition_Down(obs_svc, obs_wasm)
 Rel_Assignment_Down(obs_svc, hw_phone)
 Rel_Realization_Up(rt_wasm, obs_wasm)
 

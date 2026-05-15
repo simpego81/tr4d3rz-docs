@@ -1,19 +1,19 @@
 @startuml TR4D3RZ_Distributed_Evolutionary_System_v2
 !include <archimate/Archimate>
 
-skinparam backgroundColor #1a1a2e
+skinparam backgroundColor #8080f1
 skinparam defaultFontName "Courier New"
-skinparam defaultFontColor #e0e0e0
+skinparam defaultFontColor #201d1d
 skinparam defaultFontSize 11
-skinparam ArrowColor #888888
+skinparam ArrowColor #000000
 skinparam packageBorderColor #444466
-skinparam packageBackgroundColor #0d0d1a
+skinparam packageBackgroundColor #7e7e9c
 skinparam packageFontColor #cccccc
 skinparam packageFontSize 12
 skinparam packageFontStyle bold
 skinparam nodeBorderColor #556688
 skinparam noteBorderColor #556688
-skinparam noteBackgroundColor #0d1520
+skinparam noteBackgroundColor #585f68
 skinparam noteFontColor #aaaaaa
 scale 1.5
 
@@ -218,6 +218,10 @@ package "Technology Layer — Hardware" <<rectangle>> {
     Technology_Device(hw_rpi1,    "Raspberry Pi 1\n(ARM1176 · ARMv6l · 700MHz)")
   }
 
+  package "Offline IoT Nodes" <<Node>> {
+    Technology_Device(hw_m24lr,   "M24LR Discovery\n(NFC/RFID · I2C · offline capsule)")
+  }
+
   package "Observatory Devices" <<Node>> {
     Technology_Device(hw_browser, "Web Browser\n(Chrome · Firefox)")
     Technology_Device(hw_tablet,  "Android Tablet")
@@ -232,6 +236,7 @@ package "Technology Layer — Hardware" <<rectangle>> {
 package "Technology Layer — Infrastructure" <<rectangle>> {
   Technology_Node(mqtt_broker,    "NanoMQ Broker\n[ARMv6l compiled]\nMQTT 3.1.1/5.0")
   Technology_Node(web_server,     "Web Server\n(static assets · Observatory UI)")
+  Technology_Node(php_hosting,    "PHP Free Hosting\n(Persistence relay · secondary store)")
 
   Technology_SystemSoftware(rt_rust,    "Rust Runtime\n(tr4d3rz-core · evolution · messaging)")
   Technology_SystemSoftware(rt_wasm,    "WebAssembly Runtime\n(browser FSM replay)")
@@ -248,7 +253,7 @@ package "Technology Layer — Infrastructure" <<rectangle>> {
 package "Technology Layer — Storage" <<rectangle>> {
   Technology_Artifact(db_sqlite,  "SQLite Database\n(WAL mode · event log · archetypes)")
   Technology_Artifact(db_parquet, "Parquet Files\n(large datasets · historical archive)")
-  Technology_Artifact(log_events, "Event Log\n(mutation · death · signal · migration\n· lineage · archetype_creation)")
+  Technology_Artifact(log_events, "Event Log\n(mutation · death · signal · niche_discovery\n· migration · lineage · archetype_creation)")
   Technology_Artifact(capsule_fs, "Genome Capsule Files\n(CBOR binary · offline sync)")
   Technology_Interface(storage_if,"Storage Interface")
 }
@@ -403,7 +408,11 @@ Rel_Assignment_Down(evo_svc, hw_mimx)
 Rel_Assignment_Down(opt_svc, hw_esp)
 Rel_Assignment_Down(opt_svc, hw_stm32f1)
 Rel_Assignment_Down(opt_svc, hw_stm32f3)
+Rel_Assignment_Down(opt_svc, hw_ra8)
+Rel_Assignment_Down(opt_svc, hw_m24lr)
+Rel_Assignment_Down(gw_svc,  hw_str)
 Rel_Assignment_Down(per_svc, hw_rasp2)
+Rel_Assignment_Down(per_svc, php_hosting)
 Rel_Assignment_Down(obs_svc, hw_browser)
 Rel_Assignment_Down(obs_svc, hw_tablet)
 Rel_Assignment_Down(obs_svc, hw_phone)
@@ -431,5 +440,6 @@ Rel_Association(gw_svc,  mqtt_broker, "bridges to MQTT")
 Rel_Association(gw_uart, hw_esp,      "UART")
 Rel_Association(gw_uart, hw_stm32f1,  "UART")
 Rel_Association(gw_uart, hw_str,      "UART")
+Rel_Assignment_Down(gw_svc, hw_str)
 
 @enduml
