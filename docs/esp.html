@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>esp — TR4D3RZ ArchiMate</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: 'Courier New', monospace; background: #f8fafc; }
+  .arch-grid { width: 100%; border-collapse: separate; border-spacing: 6px; }
+  .arch-grid th { background: #e2e8f0; padding: 10px; text-align: center; font-weight: bold; font-size: 0.85rem; border-radius: 4px; }
+  .layer-label { width: 90px; text-align: center; font-weight: bold; font-size: 0.8rem; padding: 8px 4px; border-radius: 4px; vertical-align: middle; }
+  .grid-cell { border: 1px dashed #cbd5e1; padding: 8px; min-height: 120px; vertical-align: top; background: #f8fafc; border-radius: 4px; width: 22%; }
+  .arch-box { border: 2px solid; padding: 7px 8px; border-radius: 6px; font-size: 0.78rem; text-align: center; cursor: pointer; margin-bottom: 6px; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.1); line-height: 1.4; }
+  .arch-box:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); filter: brightness(0.95); }
+  #overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:40; }
+  #modal { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:28px; border-radius:10px; max-width:560px; width:92%; z-index:50; box-shadow:0 25px 50px rgba(0,0,0,0.25); }
+  .badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:0.72rem; font-weight:600; margin-right:4px; }
+  .badge-layer-Motivation { background:#e9d5ff; color:#6b21a8; }
+  .badge-layer-Business { background:#fef08a; color:#854d0e; }
+  .badge-layer-Application { background:#bfdbfe; color:#1e40af; }
+  .badge-layer-Technology { background:#bbf7d0; color:#14532d; }
+</style>
+</head>
+<body class="p-6">
+<div class="max-w-screen-2xl mx-auto">
+
+  <!-- Header -->
+  <div class="flex flex-wrap justify-between items-start mb-6 gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">TR4D3RZ — Device View: ESP8266 D1 Mini · (Xtensa LX106 · 80MHz) — ArchiMate Architecture v2.0  |  2026-05-12</h1>
+      <p class="text-sm text-gray-500 mt-1">TR4D3RZ — Interactive ArchiMate Device View · Click any element for details</p>
+    </div>
+    <a href="index.html" class="bg-slate-700 text-white px-4 py-2 rounded-lg text-sm hover:bg-slate-800 transition-colors">← All Devices</a>
+  </div>
+
+  <!-- Legend -->
+  <div class="flex flex-wrap gap-3 mb-5 text-xs font-semibold">
+    <span class="badge badge-layer-Motivation">Motivation Layer</span>
+    <span class="badge badge-layer-Business">Business Layer</span>
+    <span class="badge badge-layer-Application">Application Layer</span>
+    <span class="badge badge-layer-Technology">Technology Layer</span>
+    <span class="ml-4 text-gray-400">Aspects →</span>
+    <span class="text-gray-600">Active Structure</span>
+    <span class="text-gray-400">|</span>
+    <span class="text-gray-600">Behavior</span>
+    <span class="text-gray-400">|</span>
+    <span class="text-gray-600">Passive Structure</span>
+    <span class="text-gray-400">|</span>
+    <span class="text-gray-600">Motivation</span>
+  </div>
+
+  <!-- ArchiMate Grid -->
+  <div class="bg-white rounded-xl shadow-sm p-4 mb-8 overflow-x-auto">
+    <table class="arch-grid">
+      <thead>
+        <tr>
+          <th class="w-24"></th>
+          <th>Active Structure</th>
+          <th>Behavior</th>
+          <th>Passive Structure</th>
+          <th>Motivation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+  <td class="layer-label bg-purple-200 text-purple-900">Motivation<br>Layer</td>
+  <td class="grid-cell">
+  </td>
+  <td class="grid-cell">
+  </td>
+  <td class="grid-cell">
+  </td>
+  <td class="grid-cell">
+    <div class="arch-box bg-purple-100 border-purple-400 text-purple-900" onclick="showModal('goal_distribute')" title="Distributed Heterogeneous Computation">Distributed Heterogeneous<br>Computation</div>
+    <div class="arch-box bg-purple-100 border-purple-400 text-purple-900" onclick="showModal('prin_async')" title="Asynchronous Distributed Ecology (no global sync)">Asynchronous Distributed<br>Ecology (no global sync)</div>
+  </td>
+</tr>
+<tr>
+  <td class="layer-label bg-yellow-200 text-yellow-900">Business<br>Layer</td>
+  <td class="grid-cell">
+  </td>
+  <td class="grid-cell">
+    <div class="arch-box bg-yellow-100 border-yellow-400 text-yellow-900" onclick="showModal('proc_evolution')" title="Evolutionary Process (Genome → FSM → Fitness)">Evolutionary Process<br>(Genome → FSM → Fitness)</div>
+    <div class="arch-box bg-yellow-100 border-yellow-400 text-yellow-900" onclick="showModal('svc_prediction')" title="Prediction Service (daily investment signals)">Prediction Service<br>(daily investment signals)</div>
+  </td>
+  <td class="grid-cell">
+    <div class="arch-box bg-yellow-100 border-yellow-400 text-yellow-900" onclick="showModal('data_capsule')" title="Genome Capsule (CBOR file · offline sync)">Genome Capsule<br>(CBOR file · offline sync)</div>
+    <div class="arch-box bg-yellow-100 border-yellow-400 text-yellow-900" onclick="showModal('data_fitness')" title="Fitness Record (CBOR · QoS 1 · multi-dim)">Fitness Record<br>(CBOR · QoS 1 · multi-dim)</div>
+  </td>
+  <td class="grid-cell">
+  </td>
+</tr>
+<tr>
+  <td class="layer-label bg-blue-200 text-blue-900">Application<br>Layer</td>
+  <td class="grid-cell">
+    <div class="arch-box bg-blue-100 border-blue-400 text-blue-900" onclick="showModal('opt_tuning')" title="Parameter Tuning (micro-optimization)">Parameter Tuning<br>(micro-optimization)</div>
+    <div class="arch-box bg-blue-100 border-blue-400 text-blue-900" onclick="showModal('opt_validation')" title="Micro Validation (local fitness check)">Micro Validation<br>(local fitness check)</div>
+    <div class="arch-box bg-blue-100 border-blue-400 text-blue-900" onclick="showModal('opt_local')" title="Local Optimizer (offline genome tuning)">Local Optimizer<br>(offline genome tuning)</div>
+    <div class="arch-box bg-blue-100 border-blue-400 text-blue-900" onclick="showModal('opt_capsule')" title="Capsule Manager (CBOR I/O · UART/USB)">Capsule Manager<br>(CBOR I/O · UART/USB)</div>
+    <div class="arch-box bg-blue-100 border-blue-400 text-blue-900" onclick="showModal('capsule_mgr')" title="Genome Capsule Manager (task packages · compressed datasets · deferred results)">Genome Capsule Manager<br>(task packages · compressed datasets<br>· deferred results)</div>
+    <div class="arch-box bg-blue-100 border-blue-400 text-blue-900" onclick="showModal('capsule_cbor')" title="CBOR Serializer (embedded-safe · no_std)">CBOR Serializer<br>(embedded-safe · no_std)</div>
+  </td>
+  <td class="grid-cell">
+    <div class="arch-box bg-blue-100 border-blue-400 text-blue-900" onclick="showModal('opt_svc')" title="Optimization Service">Optimization Service</div>
+  </td>
+  <td class="grid-cell">
+  </td>
+  <td class="grid-cell">
+  </td>
+</tr>
+<tr>
+  <td class="layer-label bg-green-200 text-green-900">Technology<br>Layer</td>
+  <td class="grid-cell">
+    <div class="arch-box bg-green-100 border-green-400 text-green-900" onclick="showModal('hw_esp')" title="ESP8266 D1 Mini (Xtensa LX106 · 80MHz)">ESP8266 D1 Mini<br>(Xtensa LX106 · 80MHz)</div>
+    <div class="arch-box bg-green-100 border-green-400 text-green-900" onclick="showModal('rt_cbor')" title="CBOR Serialization (embedded · no_std · FlatBuffers alt.)">CBOR Serialization<br>(embedded · no_std · FlatBuffers alt.)</div>
+  </td>
+  <td class="grid-cell">
+    <div class="arch-box bg-green-100 border-green-400 text-green-900" onclick="showModal('net_mqtt')" title="MQTT Service (TCP:1883 · direct broker)">MQTT Service<br>(TCP:1883 · direct broker)</div>
+    <div class="arch-box bg-green-100 border-green-400 text-green-900" onclick="showModal('net_uart')" title="UART Service (serial · CBOR framing)">UART Service<br>(serial · CBOR framing)</div>
+  </td>
+  <td class="grid-cell">
+    <div class="arch-box bg-green-100 border-green-400 text-green-900" onclick="showModal('capsule_fs')" title="Genome Capsule Files (CBOR binary · offline sync)">Genome Capsule Files<br>(CBOR binary · offline sync)</div>
+  </td>
+  <td class="grid-cell">
+  </td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Original Diagram -->
+  <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+    <h2 class="text-lg font-bold text-gray-800 mb-4">Original PlantUML Diagram</h2>
+    <img src="../diagrams/per-device/device_esp.png" alt="ArchiMate Diagram for esp" class="w-full border border-gray-200 rounded-lg">
+  </div>
+
+  <!-- Element Count -->
+  <div class="text-xs text-gray-400 text-right">
+    18 architectural elements · Generated by Manus AI · TR4D3RZ v2.0
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div id="overlay" onclick="closeModal()"></div>
+<div id="modal">
+  <div class="flex justify-between items-start mb-3">
+    <h3 id="m-title" class="text-lg font-bold text-gray-900 pr-4"></h3>
+    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
+  </div>
+  <div class="flex flex-wrap gap-1 mb-3">
+    <span id="m-layer-badge" class="badge"></span>
+    <span class="badge bg-gray-100 text-gray-700" id="m-aspect"></span>
+    <span class="badge bg-slate-100 text-slate-600 font-mono" id="m-type"></span>
+  </div>
+  <p class="text-xs text-gray-500 mb-3 italic" id="m-type-desc"></p>
+  <div class="space-y-3 text-sm text-gray-700">
+    <div>
+      <span class="font-semibold text-gray-900">Role in TR4D3RZ:</span>
+      <p id="m-role" class="mt-1 text-gray-600"></p>
+    </div>
+    <div id="m-tech-block">
+      <span class="font-semibold text-gray-900">Technology:</span>
+      <p id="m-tech" class="mt-1 text-gray-600 font-mono text-xs"></p>
+    </div>
+    <div id="m-rel-block">
+      <span class="font-semibold text-gray-900">Relationships:</span>
+      <p id="m-relations" class="mt-1 text-gray-600"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+const KB = {"goal_distribute": {"title": "Distributed Heterogeneous Computation", "type": "Motivation_Goal", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Goal — a desired end-state.", "role": "Computation must span heterogeneous hardware (ARM1176 RPi, x86_64 Linux, ARM64 Android, Cortex-M, Xtensa) with no global synchronization, enabling true distributed evolutionary ecology.", "tech": "Achieved via MQTT-based asynchronous messaging (NanoMQ on RPi1), CBOR serialization for embedded nodes, and the Capsule System for offline nodes.", "relations": "Realized by all Application Services. Enabled by the Core Infrastructure Node (RPi1 + NanoMQ)."}, "prin_async": {"title": "Asynchronous Distributed Ecology", "type": "Motivation_Principle", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Principle — a fundamental architectural guideline.", "role": "No global clock, no global synchronization. Each node publishes and subscribes independently. Offline nodes are treated as 'delayed evolutionary nodes', not failures.", "tech": "Implemented via MQTT QoS 0/1/2 topic hierarchy, NanoMQ broker on RPi1, and the Delayed Sync component in Gateway Nodes.", "relations": "Influences all Application Services. Realized by the MQTT messaging infrastructure."}, "proc_evolution": {"title": "Evolutionary Process", "type": "Business_Process", "layer": "Business", "aspect": "Behavior", "type_desc": "ArchiMate Business Process — a sequence of behaviors achieving a business outcome.", "role": "The core evolutionary loop: generate genomes via L-System, compile to FSM, evaluate fitness on OHLCV data, select survivors, mutate, repeat. Runs continuously on Evolution Nodes.", "tech": "Implemented in tr4d3rz-evolution (Rust). Uses L-System grammar for genome generation, petgraph for graph representation, and custom FSM compiler.", "relations": "Realized by Evolutionary Computing Service. Consumes OHLCV data. Produces Fitness Records and Cooperative Signals."}, "svc_prediction": {"title": "Prediction Service", "type": "Business_Service", "layer": "Business", "aspect": "Behavior", "type_desc": "ArchiMate Business Service — an explicitly defined exposed business behavior.", "role": "The external-facing output of the system: daily investment signals for Italian stocks, derived from the highest-fitness FSM archetypes currently active in the ecosystem.", "tech": "Signals are published to ecosystem/archetype/# MQTT topic (CBOR, QoS 2). The Observatory Market Overlay correlates signals with market events.", "relations": "Served by Core Infrastructure Service and Evolutionary Computing Service."}, "opt_svc": {"title": "Optimization Service", "type": "Application_Service", "layer": "Application", "aspect": "Behavior", "type_desc": "ArchiMate Application_Service element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "opt_tuning": {"title": "Parameter Tuning (micro-optimization)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "opt_validation": {"title": "Micro Validation (local fitness check)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "opt_local": {"title": "Local Optimizer (offline genome tuning)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "opt_capsule": {"title": "Capsule Manager (CBOR I/O · UART/USB)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "capsule_mgr": {"title": "Genome Capsule Manager", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — offline genome packaging.", "role": "Packages genomes, archetypes, and OHLCV datasets into self-contained Capsules for deployment to offline embedded nodes. Enables evolution on nodes without network connectivity.", "tech": "Rust (tr4d3rz-embedded, no_std). Capsule format: CBOR with header (version, node_id, timestamp) + genome FSM + compressed OHLCV dataset.", "relations": "Produces Genome Capsule objects. Delivered via UART Bridge."}, "capsule_cbor": {"title": "CBOR Serializer", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — embedded-safe serialization.", "role": "Serializes and deserializes all data structures to/from CBOR format for embedded nodes. Uses no_std Rust for compatibility with bare-metal environments (no OS, no heap allocator).", "tech": "Rust no_std (ciborium or serde_cbor with no_std feature). Supports fixed-size buffers for embedded targets. Used on STM32, ESP8266, STR-E912.", "relations": "Serializes Genome Capsules and FSM data for embedded deployment."}, "data_capsule": {"title": "Genome Capsule (CBOR file · offline sync)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business Object — offline evolution package.", "role": "A self-contained package for deploying evolution to offline embedded nodes. Contains a genome FSM and compressed OHLCV dataset, enabling nodes to evolve without network connectivity.", "tech": "CBOR binary file. Delivered via UART Bridge. Produced by Genome Capsule Manager. Consumed by Micro FSM Runtime on embedded nodes.", "relations": "Produced by Genome Capsule Manager. Delivered via UART to embedded nodes."}, "data_fitness": {"title": "Fitness Record (CBOR · QoS 1)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business Object — fitness evaluation result.", "role": "The multi-dimensional fitness record for each agent after evaluation. Contains all fitness dimensions for niche discovery and archetype selection.", "tech": "CBOR format. Schema: {agent_id, timestamp_ms, trade_count, cagr, profit_factor, signal_entropy, stat_confidence, comp_efficiency, composite_fitness}. QoS 1.", "relations": "Produced by Fitness Calculator. Consumed by Niche Evaluator and Persistence Service."}, "hw_esp": {"title": "ESP8266 D1 Mini (Xtensa · 80MHz)", "type": "Technology_Device", "layer": "Technology", "aspect": "Active Structure", "type_desc": "ArchiMate Technology Device — a physical IT resource.", "role": "Low-power WiFi Optimization Node. The ESP8266 has built-in WiFi, making it the simplest node to connect to the MQTT ecosystem. Limited RAM (80KB) constrains genome complexity.", "tech": "ESP8266, Xtensa LX106, 80MHz, 80KB RAM. Arduino/Rust. Built-in WiFi. MQTT via TCP:1883. Genome complexity limited to small FSMs.", "relations": "Hosts Micro FSM Runtime (WiFi). Connects via MQTT."}, "rt_cbor": {"title": "CBOR Serialization (embedded · no_std · FlatBuffers alt.)", "type": "Technology_SystemSoftware", "layer": "Technology", "aspect": "Active Structure", "type_desc": "ArchiMate Technology_SystemSoftware element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "net_mqtt": {"title": "MQTT Service (TCP:1883 · WS:8083)", "type": "Technology_Service", "layer": "Technology", "aspect": "Behavior", "type_desc": "ArchiMate Technology Service — an explicitly defined exposed technology behavior.", "role": "The MQTT messaging service exposed by NanoMQ. TCP:1883 for embedded and server nodes; WS:8083 for browser-based Observatory. The backbone of all inter-node communication.", "tech": "MQTT 3.1.1 and 5.0. Topic hierarchy: data/ohlcv/#, ecosystem/signal/#, ecosystem/fitness/#, ecosystem/niche/#, ecosystem/archetype/#, embedded/capsule/#.", "relations": "Realized by NanoMQ Broker. Used by all nodes."}, "net_uart": {"title": "UART Service", "type": "Technology_Service", "layer": "Technology", "aspect": "Behavior", "type_desc": "ArchiMate Technology Service — serial communication service.", "role": "The UART serial communication service for embedded nodes without WiFi (STM32F107, STR-E912). Provides reliable message delivery via CBOR framing over serial.", "tech": "115200 baud, 8N1. CBOR framing: 4-byte length prefix + CBOR payload. Handled by UART Bridge in Gateway Node.", "relations": "Used by STM32F107 and STR-E912 nodes. Bridged to MQTT by Gateway Node."}, "capsule_fs": {"title": "Genome Capsule Files (CBOR binary)", "type": "Technology_Artifact", "layer": "Technology", "aspect": "Passive Structure", "type_desc": "ArchiMate Technology Artifact — a physical piece of data.", "role": "Self-contained binary files containing a genome FSM + compressed OHLCV dataset for deployment to offline embedded nodes. The offline evolution mechanism of TR4D3RZ.", "tech": "CBOR binary format. Header: {version, node_id, timestamp, genome_size, dataset_size}. Payload: FSM CBOR + compressed OHLCV. Delivered via UART Bridge.", "relations": "Produced by Genome Capsule Manager. Delivered to embedded nodes via UART."}};
+
+function showModal(id) {
+  const d = KB[id];
+  if (!d) return;
+  document.getElementById('m-title').textContent = d.title;
+  document.getElementById('m-type').textContent = d.type;
+  document.getElementById('m-type-desc').textContent = d.type_desc;
+  document.getElementById('m-role').textContent = d.role;
+  document.getElementById('m-tech').textContent = d.tech;
+  document.getElementById('m-relations').textContent = d.relations;
+  
+  const layerBadge = document.getElementById('m-layer-badge');
+  layerBadge.textContent = d.layer + ' Layer';
+  layerBadge.className = 'badge badge-layer-' + d.layer;
+  
+  document.getElementById('m-aspect').textContent = d.aspect;
+  
+  document.getElementById('m-tech-block').style.display = d.tech ? 'block' : 'none';
+  document.getElementById('m-rel-block').style.display = d.relations ? 'block' : 'none';
+  
+  document.getElementById('overlay').style.display = 'block';
+  document.getElementById('modal').style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('modal').style.display = 'none';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>

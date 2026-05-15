@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>rpi1 — TR4D3RZ ArchiMate</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: 'Courier New', monospace; background: #f8fafc; }
+  .arch-grid { width: 100%; border-collapse: separate; border-spacing: 6px; }
+  .arch-grid th { background: #e2e8f0; padding: 10px; text-align: center; font-weight: bold; font-size: 0.85rem; border-radius: 4px; }
+  .layer-label { width: 90px; text-align: center; font-weight: bold; font-size: 0.8rem; padding: 8px 4px; border-radius: 4px; vertical-align: middle; }
+  .grid-cell { border: 1px dashed #cbd5e1; padding: 8px; min-height: 120px; vertical-align: top; background: #f8fafc; border-radius: 4px; width: 22%; }
+  .arch-box { border: 2px solid; padding: 7px 8px; border-radius: 6px; font-size: 0.78rem; text-align: center; cursor: pointer; margin-bottom: 6px; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.1); line-height: 1.4; }
+  .arch-box:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); filter: brightness(0.95); }
+  #overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:40; }
+  #modal { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:28px; border-radius:10px; max-width:560px; width:92%; z-index:50; box-shadow:0 25px 50px rgba(0,0,0,0.25); }
+  .badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:0.72rem; font-weight:600; margin-right:4px; }
+  .badge-layer-Motivation { background:#e9d5ff; color:#6b21a8; }
+  .badge-layer-Business { background:#fef08a; color:#854d0e; }
+  .badge-layer-Application { background:#bfdbfe; color:#1e40af; }
+  .badge-layer-Technology { background:#bbf7d0; color:#14532d; }
+</style>
+</head>
+<body class="p-6">
+<div class="max-w-screen-2xl mx-auto">
+
+  <!-- Header -->
+  <div class="flex flex-wrap justify-between items-start mb-6 gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">TR4D3RZ — Device View: Raspberry Pi 1 · (ARM1176 · ARMv6l · 700MHz) — ArchiMate Architecture v2.0  |  2026-05-12</h1>
+      <p class="text-sm text-gray-500 mt-1">TR4D3RZ — Interactive ArchiMate Device View · Click any element for details</p>
+    </div>
+    <a href="index.html" class="bg-slate-700 text-white px-4 py-2 rounded-lg text-sm hover:bg-slate-800 transition-colors">← All Devices</a>
+  </div>
+
+  <!-- Legend -->
+  <div class="flex flex-wrap gap-3 mb-5 text-xs font-semibold">
+    <span class="badge badge-layer-Motivation">Motivation Layer</span>
+    <span class="badge badge-layer-Business">Business Layer</span>
+    <span class="badge badge-layer-Application">Application Layer</span>
+    <span class="badge badge-layer-Technology">Technology Layer</span>
+    <span class="ml-4 text-gray-400">Aspects →</span>
+    <span class="text-gray-600">Active Structure</span>
+    <span class="text-gray-400">|</span>
+    <span class="text-gray-600">Behavior</span>
+    <span class="text-gray-400">|</span>
+    <span class="text-gray-600">Passive Structure</span>
+    <span class="text-gray-400">|</span>
+    <span class="text-gray-600">Motivation</span>
+  </div>
+
+  <!-- ArchiMate Grid -->
+  <div class="bg-white rounded-xl shadow-sm p-4 mb-8 overflow-x-auto">
+    <table class="arch-grid">
+      <thead>
+        <tr>
+          <th class="w-24"></th>
+          <th>Active Structure</th>
+          <th>Behavior</th>
+          <th>Passive Structure</th>
+          <th>Motivation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+  <td class="layer-label bg-purple-200 text-purple-900">Motivation<br>Layer</td>
+  <td class="grid-cell">
+  </td>
+  <td class="grid-cell">
+  </td>
+  <td class="grid-cell">
+  </td>
+  <td class="grid-cell">
+    <div class="arch-box bg-purple-100 border-purple-400 text-purple-900" onclick="showModal('goal_distribute')" title="Distributed Heterogeneous Computation">Distributed Heterogeneous<br>Computation</div>
+    <div class="arch-box bg-purple-100 border-purple-400 text-purple-900" onclick="showModal('goal_predict')" title="Discover Predictive Patterns">Discover Predictive<br>Patterns</div>
+    <div class="arch-box bg-purple-100 border-purple-400 text-purple-900" onclick="showModal('prin_async')" title="Asynchronous Distributed Ecology (no global sync)">Asynchronous Distributed<br>Ecology (no global sync)</div>
+    <div class="arch-box bg-purple-100 border-purple-400 text-purple-900" onclick="showModal('prin_replay')" title="Distributed Observability (serializable & replayable)">Distributed Observability<br>(serializable & replayable)</div>
+    <div class="arch-box bg-purple-100 border-purple-400 text-purple-900" onclick="showModal('driver_italian')" title="Italian Stock Market OHLCV Data">Italian Stock Market<br>OHLCV Data</div>
+  </td>
+</tr>
+<tr>
+  <td class="layer-label bg-yellow-200 text-yellow-900">Business<br>Layer</td>
+  <td class="grid-cell">
+  </td>
+  <td class="grid-cell">
+    <div class="arch-box bg-yellow-100 border-yellow-400 text-yellow-900" onclick="showModal('proc_ingest')" title="Market Data Ingestion (OHLCV Feed)">Market Data Ingestion<br>(OHLCV Feed)</div>
+    <div class="arch-box bg-yellow-100 border-yellow-400 text-yellow-900" onclick="showModal('svc_prediction')" title="Prediction Service (daily investment signals)">Prediction Service<br>(daily investment signals)</div>
+  </td>
+  <td class="grid-cell">
+    <div class="arch-box bg-yellow-100 border-yellow-400 text-yellow-900" onclick="showModal('data_ohlcv')" title="OHLCV Payload (JSON · ADR-0004 schema)">OHLCV Payload<br>(JSON · ADR-0004 schema)</div>
+  </td>
+  <td class="grid-cell">
+  </td>
+</tr>
+<tr>
+  <td class="layer-label bg-blue-200 text-blue-900">Application<br>Layer</td>
+  <td class="grid-cell">
+    <div class="arch-box bg-blue-100 border-blue-400 text-blue-900" onclick="showModal('ci_broker')" title="NanoMQ Broker MQTT 3.1.1/5.0 TCP:1883 · WS:8083">NanoMQ Broker<br>MQTT 3.1.1/5.0<br>TCP:1883 · WS:8083</div>
+    <div class="arch-box bg-blue-100 border-blue-400 text-blue-900" onclick="showModal('ci_scraper')" title="borsa-italiana-scraper Node.js 14.15.1 HTTPS → MQTT pub">borsa-italiana-scraper<br>Node.js 14.15.1<br>HTTPS → MQTT pub</div>
+    <div class="arch-box bg-blue-100 border-blue-400 text-blue-900" onclick="showModal('ci_logger')" title="Event Logger  [M2] Rust · SQLite WAL append-only">Event Logger  [M2]<br>Rust · SQLite WAL<br>append-only</div>
+    <div class="arch-box bg-blue-100 border-blue-400 text-blue-900" onclick="showModal('ci_persist')" title="Persistence Service  [M2] Rust · Parquet export archetype store">Persistence Service  [M2]<br>Rust · Parquet export<br>archetype store</div>
+    <div class="arch-box bg-blue-100 border-blue-400 text-blue-900" onclick="showModal('ci_cron')" title="Cron Scheduler market-hours aware 18:30 daily + 15min intraday">Cron Scheduler<br>market-hours aware<br>18:30 daily + 15min intraday</div>
+  </td>
+  <td class="grid-cell">
+    <div class="arch-box bg-blue-100 border-blue-400 text-blue-900" onclick="showModal('ci_svc')" title="Core Infrastructure Service">Core Infrastructure Service</div>
+  </td>
+  <td class="grid-cell">
+  </td>
+  <td class="grid-cell">
+  </td>
+</tr>
+<tr>
+  <td class="layer-label bg-green-200 text-green-900">Technology<br>Layer</td>
+  <td class="grid-cell">
+    <div class="arch-box bg-green-100 border-green-400 text-green-900" onclick="showModal('hw_rpi1')" title="Raspberry Pi 1 (ARM1176 · ARMv6l · 700MHz)">Raspberry Pi 1<br>(ARM1176 · ARMv6l · 700MHz)</div>
+    <div class="arch-box bg-green-100 border-green-400 text-green-900" onclick="showModal('mqtt_broker')" title="NanoMQ Broker [ARMv6l compiled] MQTT 3.1.1/5.0">NanoMQ Broker<br>[ARMv6l compiled]<br>MQTT 3.1.1/5.0</div>
+    <div class="arch-box bg-green-100 border-green-400 text-green-900" onclick="showModal('rt_rust')" title="Rust Runtime (tr4d3rz-core · evolution · messaging)">Rust Runtime<br>(tr4d3rz-core · evolution · messaging)</div>
+    <div class="arch-box bg-green-100 border-green-400 text-green-900" onclick="showModal('rt_nodejs')" title="Node.js 14.15.1 (borsa-italiana-scraper)">Node.js 14.15.1<br>(borsa-italiana-scraper)</div>
+  </td>
+  <td class="grid-cell">
+    <div class="arch-box bg-green-100 border-green-400 text-green-900" onclick="showModal('net_mqtt')" title="MQTT Service (TCP:1883 · WS:8083)">MQTT Service<br>(TCP:1883 · WS:8083)</div>
+    <div class="arch-box bg-green-100 border-green-400 text-green-900" onclick="showModal('net_https')" title="HTTPS Service (borsaitaliana.it REST API)">HTTPS Service<br>(borsaitaliana.it REST API)</div>
+  </td>
+  <td class="grid-cell">
+    <div class="arch-box bg-green-100 border-green-400 text-green-900" onclick="showModal('db_sqlite')" title="SQLite Database (WAL mode · event log · archetypes)">SQLite Database<br>(WAL mode · event log · archetypes)</div>
+    <div class="arch-box bg-green-100 border-green-400 text-green-900" onclick="showModal('db_parquet')" title="Parquet Files (large datasets · historical archive)">Parquet Files<br>(large datasets · historical archive)</div>
+    <div class="arch-box bg-green-100 border-green-400 text-green-900" onclick="showModal('log_events')" title="Event Log (mutation · death · signal · migration · lineage · archetype_creation)">Event Log<br>(mutation · death · signal · migration<br>· lineage · archetype_creation)</div>
+  </td>
+  <td class="grid-cell">
+  </td>
+</tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Original Diagram -->
+  <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+    <h2 class="text-lg font-bold text-gray-800 mb-4">Original PlantUML Diagram</h2>
+    <img src="../diagrams/per-device/device_rpi1.png" alt="ArchiMate Diagram for rpi1" class="w-full border border-gray-200 rounded-lg">
+  </div>
+
+  <!-- Element Count -->
+  <div class="text-xs text-gray-400 text-right">
+    23 architectural elements · Generated by Manus AI · TR4D3RZ v2.0
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div id="overlay" onclick="closeModal()"></div>
+<div id="modal">
+  <div class="flex justify-between items-start mb-3">
+    <h3 id="m-title" class="text-lg font-bold text-gray-900 pr-4"></h3>
+    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
+  </div>
+  <div class="flex flex-wrap gap-1 mb-3">
+    <span id="m-layer-badge" class="badge"></span>
+    <span class="badge bg-gray-100 text-gray-700" id="m-aspect"></span>
+    <span class="badge bg-slate-100 text-slate-600 font-mono" id="m-type"></span>
+  </div>
+  <p class="text-xs text-gray-500 mb-3 italic" id="m-type-desc"></p>
+  <div class="space-y-3 text-sm text-gray-700">
+    <div>
+      <span class="font-semibold text-gray-900">Role in TR4D3RZ:</span>
+      <p id="m-role" class="mt-1 text-gray-600"></p>
+    </div>
+    <div id="m-tech-block">
+      <span class="font-semibold text-gray-900">Technology:</span>
+      <p id="m-tech" class="mt-1 text-gray-600 font-mono text-xs"></p>
+    </div>
+    <div id="m-rel-block">
+      <span class="font-semibold text-gray-900">Relationships:</span>
+      <p id="m-relations" class="mt-1 text-gray-600"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+const KB = {"goal_distribute": {"title": "Distributed Heterogeneous Computation", "type": "Motivation_Goal", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Goal — a desired end-state.", "role": "Computation must span heterogeneous hardware (ARM1176 RPi, x86_64 Linux, ARM64 Android, Cortex-M, Xtensa) with no global synchronization, enabling true distributed evolutionary ecology.", "tech": "Achieved via MQTT-based asynchronous messaging (NanoMQ on RPi1), CBOR serialization for embedded nodes, and the Capsule System for offline nodes.", "relations": "Realized by all Application Services. Enabled by the Core Infrastructure Node (RPi1 + NanoMQ)."}, "goal_predict": {"title": "Discover Predictive Patterns", "type": "Motivation_Goal", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Goal — a desired end-state the architecture is designed to achieve.", "role": "The primary scientific goal of TR4D3RZ: discover statistically significant, non-obvious patterns in Italian stock market OHLCV data through evolutionary computation rather than manual feature engineering.", "tech": "Achieved via L-System genome generation → FSM compilation → backtesting on historical OHLCV data → fitness evaluation with stat_confidence metric.", "relations": "Realized by the Evolutionary Process. Influenced by the OHLCV Data Driver."}, "prin_async": {"title": "Asynchronous Distributed Ecology", "type": "Motivation_Principle", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Principle — a fundamental architectural guideline.", "role": "No global clock, no global synchronization. Each node publishes and subscribes independently. Offline nodes are treated as 'delayed evolutionary nodes', not failures.", "tech": "Implemented via MQTT QoS 0/1/2 topic hierarchy, NanoMQ broker on RPi1, and the Delayed Sync component in Gateway Nodes.", "relations": "Influences all Application Services. Realized by the MQTT messaging infrastructure."}, "prin_replay": {"title": "Distributed Observability", "type": "Motivation_Principle", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Principle — a fundamental architectural guideline.", "role": "All evolutionary events must be serializable and replayable. The system must support temporal replay of any past ecosystem state for research and debugging.", "tech": "Implemented via append-only SQLite event log, Parquet historical archive, WASM FSM Replay in the browser, and the Replay System in the Observatory.", "relations": "Influences the Observatory Service. Realized by the Persistence Service and Event Logger."}, "driver_italian": {"title": "Italian Stock Market OHLCV Data", "type": "Motivation_Driver", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Driver — an external data source that drives the system.", "role": "The primary data input: Open, High, Low, Close, Volume data for ~429 Italian companies from borsaitaliana.it, scraped daily and intraday.", "tech": "Scraped by borsa-italiana-scraper (Node.js 14.15.1) running on RPi1. Schema defined in ADR-0004: {o, h, l, c, v, t, ts} with Unix ms timestamps.", "relations": "Consumed by the Market Data Ingestion process. Published to data/ohlcv/# MQTT topic."}, "proc_ingest": {"title": "Market Data Ingestion", "type": "Business_Process", "layer": "Business", "aspect": "Behavior", "type_desc": "ArchiMate Business Process — a sequence of behaviors achieving a business outcome.", "role": "Acquires OHLCV data from borsaitaliana.it, normalizes it to the ADR-0004 schema, and publishes it to the MQTT broker for consumption by Evolution Nodes.", "tech": "Implemented by borsa-italiana-scraper (Node.js 14.15.1) on RPi1. Runs daily at 18:30 (historical) and every 15min during market hours (intraday). Rate-limited to avoid IP bans.", "relations": "Realized by Core Infrastructure Service. Produces OHLCV Payload data objects."}, "svc_prediction": {"title": "Prediction Service", "type": "Business_Service", "layer": "Business", "aspect": "Behavior", "type_desc": "ArchiMate Business Service — an explicitly defined exposed business behavior.", "role": "The external-facing output of the system: daily investment signals for Italian stocks, derived from the highest-fitness FSM archetypes currently active in the ecosystem.", "tech": "Signals are published to ecosystem/archetype/# MQTT topic (CBOR, QoS 2). The Observatory Market Overlay correlates signals with market events.", "relations": "Served by Core Infrastructure Service and Evolutionary Computing Service."}, "ci_svc": {"title": "Core Infrastructure Service", "type": "Application_Service", "layer": "Application", "aspect": "Behavior", "type_desc": "ArchiMate Application Service — an explicitly defined exposed application behavior.", "role": "The central service of the Core Infrastructure Node (RPi1). Orchestrates data ingestion, MQTT brokering, event logging, and persistence. The backbone of the entire ecosystem.", "tech": "Composed of NanoMQ Broker, borsa-italiana-scraper, Event Logger, Persistence Service, and Cron Scheduler. Deployed on Raspberry Pi 1 (ARM1176, 700MHz).", "relations": "Realizes Market Data Ingestion process. Serves Prediction Service."}, "ci_broker": {"title": "NanoMQ Broker", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — an encapsulation of application functionality.", "role": "The central MQTT message broker for the entire TR4D3RZ ecosystem. All inter-node communication passes through this component. Selected over Mosquitto due to ARMv6l compatibility issues.", "tech": "NanoMQ compiled from source for ARMv6l. Supports MQTT 3.1.1 and 5.0. TCP:1883 for embedded nodes, WS:8083 for browser Observatory. Max ~1000 concurrent connections on RPi1.", "relations": "Realizes MQTT Service. Used by all Evolution, Observatory, and Persistence Nodes."}, "ci_scraper": {"title": "borsa-italiana-scraper", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — an encapsulation of application functionality.", "role": "Scrapes OHLCV data from borsaitaliana.it for ~429 Italian companies. Transforms data to ADR-0004 schema and publishes to MQTT broker. The sole data ingestion point.", "tech": "Node.js 14.15.1 (ARMv6l compatible). Uses p-limit@4 (downgraded from v5 for Node 14 compatibility). Runs on cron schedule: 18:30 daily (historical) + 15min intraday.", "relations": "Produces OHLCV Payload data objects. Publishes to data/ohlcv/# MQTT topic."}, "ci_logger": {"title": "Event Logger [M2]", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — planned for Milestone 2.", "role": "Captures all ecosystem events (mutations, deaths, signals, archetype discoveries) in an append-only SQLite database with WAL mode for concurrent reads.", "tech": "Rust implementation (tr4d3rz-persistence). SQLite with WAL mode. Event schema: {event_type, agent_id, timestamp_ms, payload_cbor}. Planned for Milestone 2.", "relations": "Writes to SQLite Database and Event Log artifacts."}, "ci_persist": {"title": "Persistence Service [M2]", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — planned for Milestone 2.", "role": "Manages long-term storage of archetypes, niche atlas, and historical OHLCV data. Exports to Parquet format for large dataset analysis. Serves the Knowledge Service.", "tech": "Rust implementation (tr4d3rz-persistence). SQLite for archetypes, Parquet for historical data. Planned for Milestone 2.", "relations": "Reads/writes SQLite Database and Parquet Files. Serves Knowledge Service."}, "ci_cron": {"title": "Cron Scheduler", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — an encapsulation of application functionality.", "role": "Triggers the borsa-italiana-scraper on a market-hours-aware schedule. Knows Italian stock market hours (09:00-17:30 CET) and triggers intraday scraping only during market hours.", "tech": "Linux cron on RPi1. Daily historical scrape at 18:30 CET. Intraday scrape every 15 minutes between 09:00-17:30 CET on trading days.", "relations": "Triggers borsa-italiana-scraper component."}, "data_ohlcv": {"title": "OHLCV Payload (JSON · ADR-0004 schema)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business Object — the data contract for market data.", "role": "The standardized OHLCV data payload published to MQTT by the scraper. Defined in ADR-0004 with minified keys for bandwidth efficiency.", "tech": "JSON format. Schema: {isin: string, o: float, h: float, l: float, c: float, v: int, t: string, ts: int}. Published to data/ohlcv/history/{isin} and data/ohlcv/intraday/{isin}.", "relations": "Produced by borsa-italiana-scraper. Consumed by Evolution Nodes."}, "hw_rpi1": {"title": "Raspberry Pi 1 (ARM1176 · ARMv6l · 700MHz)", "type": "Technology_Device", "layer": "Technology", "aspect": "Active Structure", "type_desc": "ArchiMate Technology Device — a physical IT resource.", "role": "The Core Infrastructure Node of TR4D3RZ. Hosts the NanoMQ MQTT broker and borsa-italiana-scraper. The single point of data ingestion and message routing for the entire ecosystem.", "tech": "ARM1176JZF-S, ARMv6l, 700MHz, 512MB RAM. Linux 5.10.103+. NanoMQ compiled from source for ARMv6l. Node.js 14.15.1. Power consumption: ~3W.", "relations": "Hosts Core Infrastructure Service. Connected to all other nodes via MQTT."}, "mqtt_broker": {"title": "NanoMQ Broker [ARMv6l compiled]", "type": "Technology_Node", "layer": "Technology", "aspect": "Active Structure", "type_desc": "ArchiMate Technology Node — a computational resource.", "role": "The MQTT message broker running on RPi1. All inter-node communication passes through this node. NanoMQ was selected over Mosquitto due to ARMv6l compatibility (Mosquitto 2.x has Illegal Instruction bugs on ARM1176).", "tech": "NanoMQ compiled from source for ARMv6l. MQTT 3.1.1 and 5.0. TCP:1883 (embedded nodes), WS:8083 (browser). Max ~1000 concurrent connections.", "relations": "Realizes MQTT Service. Central hub for all ecosystem communication."}, "rt_rust": {"title": "Rust Runtime", "type": "Technology_SystemSoftware", "layer": "Technology", "aspect": "Active Structure", "type_desc": "ArchiMate Technology System Software — software environment for components.", "role": "The Rust runtime environment for all tr4d3rz components: tr4d3rz-core, tr4d3rz-evolution, tr4d3rz-messaging, tr4d3rz-persistence. Provides memory safety and zero-cost abstractions.", "tech": "Rust stable (2021 edition). Key crates: tokio (async), petgraph (graphs), serde/ciborium (CBOR), rumqttc (MQTT client), polars (dataframes).", "relations": "Realizes all Rust-based Application Components."}, "rt_nodejs": {"title": "Node.js 14.15.1", "type": "Technology_SystemSoftware", "layer": "Technology", "aspect": "Active Structure", "type_desc": "ArchiMate Technology System Software — software environment for components.", "role": "The Node.js runtime for borsa-italiana-scraper on RPi1. Version 14.15.1 is the highest version compatible with ARMv6l. p-limit downgraded to v4 for Node 14 compatibility.", "tech": "Node.js 14.15.1 LTS on ARMv6l. Key packages: axios@1.6 (HTTP), p-limit@4 (concurrency), mqtt (MQTT client). ES Modules supported.", "relations": "Realizes borsa-italiana-scraper component."}, "net_mqtt": {"title": "MQTT Service (TCP:1883 · WS:8083)", "type": "Technology_Service", "layer": "Technology", "aspect": "Behavior", "type_desc": "ArchiMate Technology Service — an explicitly defined exposed technology behavior.", "role": "The MQTT messaging service exposed by NanoMQ. TCP:1883 for embedded and server nodes; WS:8083 for browser-based Observatory. The backbone of all inter-node communication.", "tech": "MQTT 3.1.1 and 5.0. Topic hierarchy: data/ohlcv/#, ecosystem/signal/#, ecosystem/fitness/#, ecosystem/niche/#, ecosystem/archetype/#, embedded/capsule/#.", "relations": "Realized by NanoMQ Broker. Used by all nodes."}, "net_https": {"title": "HTTPS Service (borsaitaliana.it REST API)", "type": "Technology_Service", "layer": "Technology", "aspect": "Behavior", "type_desc": "ArchiMate Technology Service — an external data service.", "role": "The external HTTPS API of borsaitaliana.it used by the scraper to fetch OHLCV data. Rate-limited; the scraper uses p-limit to avoid IP bans.", "tech": "HTTPS REST API. Endpoints: /borsa/azioni/{isin}/scheda.html (historical), /borsa/azioni/{isin}/intraday.html (intraday). HTML parsing with cheerio.", "relations": "Consumed by borsa-italiana-scraper."}, "db_sqlite": {"title": "SQLite Database (WAL mode)", "type": "Technology_Artifact", "layer": "Technology", "aspect": "Passive Structure", "type_desc": "ArchiMate Technology Artifact — a physical piece of data.", "role": "The primary operational database for TR4D3RZ. Stores event log, archetype library, niche atlas, and signal history. WAL mode enables concurrent reads during writes.", "tech": "SQLite 3.x with WAL mode. Tables: events, archetypes, niches, signals, agents. Indexed by timestamp and agent_id. Located on RPi1 (events) and RPi2 (archetypes).", "relations": "Written by Event Logger and Persistence Service. Read by Replay System and Theory Map."}, "db_parquet": {"title": "Parquet Files (historical archive)", "type": "Technology_Artifact", "layer": "Technology", "aspect": "Passive Structure", "type_desc": "ArchiMate Technology Artifact — a physical piece of data.", "role": "Long-term historical archive of OHLCV data and fitness records in columnar Parquet format. Enables efficient large-scale analysis with pandas/polars.", "tech": "Apache Parquet format. Partitioned by date and ISIN. Compressed with Snappy. Located on RPi2 or external storage. Exported by Parquet Exporter.", "relations": "Written by Parquet Exporter. Read by offline analysis tools."}, "log_events": {"title": "Event Log", "type": "Technology_Artifact", "layer": "Technology", "aspect": "Passive Structure", "type_desc": "ArchiMate Technology Artifact — a physical piece of data.", "role": "The append-only log of all evolutionary events: mutations, deaths, signals, migrations, archetype discoveries, niche formations. The complete history of the ecosystem.", "tech": "SQLite table: events(event_id, event_type, agent_id, timestamp_ms, payload_cbor). Append-only (no UPDATE/DELETE). Indexed by timestamp.", "relations": "Written by Event Logger. Read by Replay System."}};
+
+function showModal(id) {
+  const d = KB[id];
+  if (!d) return;
+  document.getElementById('m-title').textContent = d.title;
+  document.getElementById('m-type').textContent = d.type;
+  document.getElementById('m-type-desc').textContent = d.type_desc;
+  document.getElementById('m-role').textContent = d.role;
+  document.getElementById('m-tech').textContent = d.tech;
+  document.getElementById('m-relations').textContent = d.relations;
+  
+  const layerBadge = document.getElementById('m-layer-badge');
+  layerBadge.textContent = d.layer + ' Layer';
+  layerBadge.className = 'badge badge-layer-' + d.layer;
+  
+  document.getElementById('m-aspect').textContent = d.aspect;
+  
+  document.getElementById('m-tech-block').style.display = d.tech ? 'block' : 'none';
+  document.getElementById('m-rel-block').style.display = d.relations ? 'block' : 'none';
+  
+  document.getElementById('overlay').style.display = 'block';
+  document.getElementById('modal').style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('modal').style.display = 'none';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
