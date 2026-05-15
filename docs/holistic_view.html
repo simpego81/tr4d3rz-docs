@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TR4D3RZ — Holistic Concentric ArchiMate View</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+/* ── Reset ── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Courier New', monospace; background: #0f172a; color: #e2e8f0; overflow: hidden; }
+
+/* ── Top bar ── */
+.topbar {
+  background: #1e293b;
+  border-bottom: 2px solid #334155;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.5);
+}
+.topbar a { color: #94a3b8; text-decoration: none; font-size: .8rem; font-weight: 600; }
+.topbar a:hover { color: #e2e8f0; }
+.topbar .title { font-size: 1rem; font-weight: 800; color: #e2e8f0; }
+.topbar .stats { font-size: .7rem; color: #64748b; }
+
+/* ── Control panel ── */
+.controls {
+  position: fixed;
+  top: 60px;
+  left: 20px;
+  background: rgba(30, 41, 59, 0.95);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 12px;
+  z-index: 90;
+  max-width: 280px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.4);
+}
+.controls h3 {
+  font-size: .75rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 8px;
+}
+.controls label {
+  display: block;
+  font-size: .7rem;
+  color: #cbd5e1;
+  margin: 6px 0 3px;
+}
+.controls button {
+  background: #334155;
+  color: #e2e8f0;
+  border: 1px solid #475569;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: .7rem;
+  cursor: pointer;
+  margin-top: 8px;
+  width: 100%;
+}
+.controls button:hover { background: #475569; }
+
+/* ── Legend ── */
+.legend {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(30, 41, 59, 0.95);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 12px;
+  z-index: 90;
+  max-width: 320px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.4);
+  font-size: .68rem;
+}
+.legend h4 {
+  font-size: .7rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 6px;
+}
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+  color: #cbd5e1;
+}
+.legend-circle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  flex-shrink: 0;
+}
+
+/* ── SVG Container ── */
+#graph-container {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+}
+
+/* ── SVG Styles ── */
+.node circle {
+  stroke-width: 2;
+  cursor: pointer;
+  transition: r 0.2s;
+}
+.node.dimmed circle { opacity: 0.15; }
+.node.highlight circle { stroke-width: 3; r: 10; }
+
+.node text {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  fill: #e2e8f0;
+  text-anchor: middle;
+  pointer-events: none;
+  user-select: none;
+}
+.node.dimmed text { opacity: 0.15; }
+
+.link {
+  stroke-opacity: 0.3;
+  stroke-width: 1;
+  fill: none;
+}
+.link.dimmed { stroke-opacity: 0.05; }
+.link.highlight { stroke-opacity: 0.8; stroke-width: 2; }
+
+/* Radial ring guides */
+.ring-guide {
+  fill: none;
+  stroke: #334155;
+  stroke-width: 1;
+  stroke-dasharray: 4,4;
+  opacity: 0.3;
+}
+
+/* ── Tooltip ── */
+#tooltip {
+  position: fixed;
+  background: rgba(30, 41, 59, 0.98);
+  border: 1px solid #475569;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: .75rem;
+  color: #e2e8f0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 110;
+  max-width: 300px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.5);
+}
+#tooltip.visible { opacity: 1; }
+#tooltip .title { font-weight: 700; margin-bottom: 4px; color: #f1f5f9; }
+#tooltip .type { font-size: .65rem; color: #94a3b8; font-style: italic; }
+#tooltip .devices { font-size: .65rem; color: #64748b; margin-top: 4px; }
+
+/* ── Modal ── */
+#overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.8);
+  z-index: 120;
+}
+#modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #1e293b;
+  border: 1px solid #475569;
+  padding: 24px;
+  border-radius: 12px;
+  max-width: 560px;
+  width: 92%;
+  z-index: 130;
+  box-shadow: 0 25px 60px rgba(0,0,0,.6);
+  overflow-y: auto;
+  max-height: 80vh;
+  color: #e2e8f0;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 12px;
+}
+.modal-header h3 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  padding-right: 12px;
+  line-height: 1.3;
+}
+.modal-close {
+  font-size: 1.3rem;
+  color: #94a3b8;
+  cursor: pointer;
+  background: none;
+  border: none;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.modal-close:hover { color: #e2e8f0; }
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: .7rem;
+  font-weight: 700;
+  margin-right: 4px;
+  margin-bottom: 8px;
+}
+.badge-Motivation { background: #7c3aed; color: #f5f3ff; }
+.badge-Business   { background: #b45309; color: #fffbeb; }
+.badge-Application{ background: #1e40af; color: #eff6ff; }
+.badge-Technology { background: #166534; color: #f0fdf4; }
+.m-field { margin-bottom: 12px; }
+.m-label {
+  font-size: .68rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 4px;
+}
+.m-value {
+  font-size: .82rem;
+  color: #cbd5e1;
+  line-height: 1.55;
+}
+.m-mono {
+  font-family: monospace;
+  font-size: .74rem;
+  color: #94a3b8;
+  white-space: pre-wrap;
+}
+</style>
+</head>
+<body>
+
+<!-- ── Top navigation ── -->
+<div class="topbar">
+  <a href="index.html">← All Devices</a>
+  <span class="title">Holistic Concentric ArchiMate View</span>
+  <span class="stats" id="stats">Loading...</span>
+</div>
+
+<!-- ── Controls ── -->
+<div class="controls">
+  <h3>Controls</h3>
+  <label>
+    <input type="checkbox" id="show-labels" checked> Show Labels
+  </label>
+  <label>
+    <input type="checkbox" id="show-rings" checked> Show Ring Guides
+  </label>
+  <button id="reset-zoom">Reset Zoom</button>
+  <button id="clear-focus">Clear Focus</button>
+</div>
+
+<!-- ── Legend ── -->
+<div class="legend">
+  <h4>Concentric Layers</h4>
+  <div class="legend-row">
+    <div class="legend-circle" style="color: #7c3aed;"></div>
+    <span>R1: Motivation (center)</span>
+  </div>
+  <div class="legend-row">
+    <div class="legend-circle" style="color: #b45309;"></div>
+    <span>R2: Business</span>
+  </div>
+  <div class="legend-row">
+    <div class="legend-circle" style="color: #1e40af;"></div>
+    <span>R3: Application</span>
+  </div>
+  <div class="legend-row">
+    <div class="legend-circle" style="color: #166534;"></div>
+    <span>R4: Technology</span>
+  </div>
+  <div class="legend-row">
+    <div class="legend-circle" style="color: #059669;"></div>
+    <span>R5: Devices (outer)</span>
+  </div>
+</div>
+
+<!-- ── Graph SVG ── -->
+<div id="graph-container"></div>
+
+<!-- ── Tooltip ── -->
+<div id="tooltip">
+  <div class="title" id="tooltip-title"></div>
+  <div class="type" id="tooltip-type"></div>
+  <div class="devices" id="tooltip-devices"></div>
+</div>
+
+<!-- ── Element detail modal ── -->
+<div id="overlay" onclick="closeModal()"></div>
+<div id="modal">
+  <div class="modal-header">
+    <h3 id="m-title"></h3>
+    <button class="modal-close" onclick="closeModal()">✕</button>
+  </div>
+  <div id="m-badges"></div>
+  <p id="m-type-desc" style="font-size:.73rem;color:#94a3b8;font-style:italic;margin-bottom:14px;"></p>
+  <div class="m-field"><div class="m-label">Role in TR4D3RZ</div><div class="m-value" id="m-role"></div></div>
+  <div class="m-field" id="m-tech-block"><div class="m-label">Technology</div><div class="m-value m-mono" id="m-tech"></div></div>
+  <div class="m-field" id="m-rel-block"><div class="m-label">Relationships</div><div class="m-value" id="m-relations"></div></div>
+  <div class="m-field"><div class="m-label">Devices</div><div class="m-value" id="m-devices"></div></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// Configuration
+// ═══════════════════════════════════════════════════════════════════
+
+const CONFIG = {
+  width: window.innerWidth,
+  height: window.innerHeight - 60,
+  centerX: window.innerWidth / 2,
+  centerY: (window.innerHeight - 60) / 2,
+  radii: {
+    Motivation: 80,
+    Business: 180,
+    Application: 320,
+    Technology: 480,
+    Device: 600
+  },
+  colors: {
+    Motivation: '#7c3aed',
+    Business: '#b45309',
+    Application: '#1e40af',
+    Technology: '#166534',
+    Device: '#059669'
+  },
+  nodeRadius: {
+    default: 6,
+    hover: 8,
+    highlight: 10
+  }
+};
+
+// Layer to radius mapping
+function getLayerRadius(element) {
+  if (element.type === 'Technology_Device') {
+    return CONFIG.radii.Device;
+  }
+  return CONFIG.radii[element.layer] || CONFIG.radii.Technology;
+}
+
+// Layer to color mapping
+function getLayerColor(element) {
+  if (element.type === 'Technology_Device') {
+    return CONFIG.colors.Device;
+  }
+  return CONFIG.colors[element.layer] || '#64748b';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Data Loading and Initialization
+// ═══════════════════════════════════════════════════════════════════
+
+let graphData = { nodes: [], links: [] };
+let simulation;
+let svg, g, linkElements, nodeElements;
+let zoom;
+let focusedNodeId = null;
+
+d3.json('archimate_data.json').then(data => {
+  console.log('Loaded ArchiMate data:', data);
+
+  // Convert elements to nodes array
+  graphData.nodes = Object.entries(data.elements).map(([id, elem]) => ({
+    id,
+    ...elem,
+    radius: getLayerRadius(elem),
+    color: getLayerColor(elem)
+  }));
+
+  // Convert relationships to links array
+  graphData.links = data.relationships.map(rel => ({
+    source: rel.from,
+    target: rel.to,
+    type: rel.type,
+    label: rel.label || ''
+  }));
+
+  // Update stats
+  document.getElementById('stats').textContent =
+    `${graphData.nodes.length} elements · ${graphData.links.length} relationships`;
+
+  initializeGraph();
+}).catch(err => {
+  console.error('Failed to load archimate_data.json:', err);
+  document.getElementById('stats').textContent = 'Error loading data';
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// Graph Initialization
+// ═══════════════════════════════════════════════════════════════════
+
+function initializeGraph() {
+  // Create SVG
+  svg = d3.select('#graph-container')
+    .append('svg')
+    .attr('width', CONFIG.width)
+    .attr('height', CONFIG.height);
+
+  // Add zoom behavior
+  zoom = d3.zoom()
+    .scaleExtent([0.3, 5])
+    .on('zoom', (event) => {
+      g.attr('transform', event.transform);
+      updateLabelVisibility(event.transform.k);
+    });
+
+  svg.call(zoom);
+
+  // Create main group for zooming/panning
+  g = svg.append('g');
+
+  // Draw ring guides
+  drawRingGuides();
+
+  // Create link elements
+  linkElements = g.append('g')
+    .attr('class', 'links')
+    .selectAll('line')
+    .data(graphData.links)
+    .enter()
+    .append('line')
+    .attr('class', 'link')
+    .attr('stroke', d => getLinkColor(d.type))
+    .attr('stroke-dasharray', d => getLinkDashArray(d.type));
+
+  // Create node elements
+  const nodeGroup = g.append('g')
+    .attr('class', 'nodes')
+    .selectAll('g')
+    .data(graphData.nodes)
+    .enter()
+    .append('g')
+    .attr('class', 'node')
+    .call(drag());
+
+  nodeGroup.append('circle')
+    .attr('r', CONFIG.nodeRadius.default)
+    .attr('fill', d => d.color)
+    .attr('stroke', d => d.color)
+    .on('mouseenter', handleNodeHover)
+    .on('mouseleave', handleNodeLeave)
+    .on('click', handleNodeClick);
+
+  nodeGroup.append('text')
+    .attr('dy', -10)
+    .text(d => getTruncatedTitle(d.title))
+    .style('opacity', 1);
+
+  nodeElements = nodeGroup;
+
+  // Initialize force simulation
+  initializeSimulation();
+
+  // Controls
+  document.getElementById('show-labels').addEventListener('change', (e) => {
+    nodeElements.selectAll('text').style('opacity', e.target.checked ? 1 : 0);
+  });
+
+  document.getElementById('show-rings').addEventListener('change', (e) => {
+    g.selectAll('.ring-guide').style('opacity', e.target.checked ? 0.3 : 0);
+  });
+
+  document.getElementById('reset-zoom').addEventListener('click', () => {
+    svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
+  });
+
+  document.getElementById('clear-focus').addEventListener('click', clearFocus);
+
+  // Escape key to close modal
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Force Simulation
+// ═══════════════════════════════════════════════════════════════════
+
+function initializeSimulation() {
+  simulation = d3.forceSimulation(graphData.nodes)
+    .force('link', d3.forceLink(graphData.links)
+      .id(d => d.id)
+      .distance(80)
+      .strength(0.3))
+    .force('charge', d3.forceManyBody()
+      .strength(-150)
+      .distanceMax(200))
+    .force('radial', d3.forceRadial(
+      d => d.radius,
+      CONFIG.centerX,
+      CONFIG.centerY)
+      .strength(0.8))
+    .force('collision', d3.forceCollide().radius(25))
+    .on('tick', ticked);
+}
+
+function ticked() {
+  linkElements
+    .attr('x1', d => d.source.x)
+    .attr('y1', d => d.source.y)
+    .attr('x2', d => d.target.x)
+    .attr('y2', d => d.target.y);
+
+  nodeElements
+    .attr('transform', d => `translate(${d.x},${d.y})`);
+}
+
+function drag() {
+  function dragstarted(event, d) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+
+  function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+
+  function dragended(event, d) {
+    if (!event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+
+  return d3.drag()
+    .on('start', dragstarted)
+    .on('drag', dragged)
+    .on('end', dragended);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Visual Helpers
+// ═══════════════════════════════════════════════════════════════════
+
+function drawRingGuides() {
+  const rings = [
+    { radius: CONFIG.radii.Motivation, label: 'Motivation' },
+    { radius: CONFIG.radii.Business, label: 'Business' },
+    { radius: CONFIG.radii.Application, label: 'Application' },
+    { radius: CONFIG.radii.Technology, label: 'Technology' },
+    { radius: CONFIG.radii.Device, label: 'Devices' }
+  ];
+
+  rings.forEach(ring => {
+    g.append('circle')
+      .attr('class', 'ring-guide')
+      .attr('cx', CONFIG.centerX)
+      .attr('cy', CONFIG.centerY)
+      .attr('r', ring.radius);
+  });
+}
+
+function getTruncatedTitle(title, maxLength = 25) {
+  if (title.length <= maxLength) return title;
+  return title.substring(0, maxLength) + '...';
+}
+
+function updateLabelVisibility(zoomScale) {
+  // Semantic zoom: hide labels when zoomed out
+  if (zoomScale < 0.5) {
+    nodeElements.selectAll('text').style('opacity', 0);
+  } else if (zoomScale > 2) {
+    // Show full titles when zoomed in
+    nodeElements.selectAll('text').text(d => d.title);
+  } else {
+    // Show truncated titles at medium zoom
+    const showLabels = document.getElementById('show-labels').checked;
+    nodeElements.selectAll('text')
+      .style('opacity', showLabels ? 1 : 0)
+      .text(d => getTruncatedTitle(d.title));
+  }
+}
+
+function getLinkColor(relType) {
+  const colors = {
+    Realization: '#3b82f6',
+    Composition: '#374151',
+    Serving: '#7c3aed',
+    Assignment: '#374151',
+    Flow: '#f59e0b',
+    Access: '#10b981',
+    Influence: '#9ca3af',
+    Association: '#6b7280'
+  };
+  return colors[relType] || '#6b7280';
+}
+
+function getLinkDashArray(relType) {
+  const dashed = ['Realization', 'Influence', 'Access'];
+  return dashed.includes(relType) ? '4,3' : '0';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Interactivity
+// ═══════════════════════════════════════════════════════════════════
+
+function handleNodeHover(event, d) {
+  // Show tooltip
+  const tooltip = document.getElementById('tooltip');
+  document.getElementById('tooltip-title').textContent = d.title;
+  document.getElementById('tooltip-type').textContent = d.type_desc || d.type;
+  document.getElementById('tooltip-devices').textContent =
+    `Devices: ${d.devices.join(', ')}`;
+
+  tooltip.classList.add('visible');
+  tooltip.style.left = (event.pageX + 15) + 'px';
+  tooltip.style.top = (event.pageY + 15) + 'px';
+
+  // Highlight connected nodes (if not in focus mode)
+  if (!focusedNodeId) {
+    highlightConnected(d.id);
+  }
+}
+
+function handleNodeLeave(event, d) {
+  // Hide tooltip
+  document.getElementById('tooltip').classList.remove('visible');
+
+  // Clear highlight (if not in focus mode)
+  if (!focusedNodeId) {
+    clearHighlight();
+  }
+}
+
+function handleNodeClick(event, d) {
+  event.stopPropagation();
+
+  // Set focus mode
+  focusedNodeId = d.id;
+  highlightConnected(d.id, true);
+
+  // Open modal with full details
+  showModal(d);
+}
+
+function highlightConnected(nodeId, persistent = false) {
+  // Find all connected nodes (direct and transitive)
+  const connected = new Set([nodeId]);
+  const visited = new Set();
+
+  function traverse(id) {
+    if (visited.has(id)) return;
+    visited.add(id);
+    connected.add(id);
+
+    graphData.links.forEach(link => {
+      if (link.source.id === id && !visited.has(link.target.id)) {
+        traverse(link.target.id);
+      }
+      if (link.target.id === id && !visited.has(link.source.id)) {
+        traverse(link.source.id);
+      }
+    });
+  }
+
+  traverse(nodeId);
+
+  // Dim all nodes/links
+  nodeElements.classed('dimmed', d => !connected.has(d.id));
+  nodeElements.classed('highlight', d => d.id === nodeId);
+
+  linkElements.classed('dimmed', d =>
+    !connected.has(d.source.id) || !connected.has(d.target.id));
+  linkElements.classed('highlight', d =>
+    connected.has(d.source.id) && connected.has(d.target.id));
+}
+
+function clearHighlight() {
+  nodeElements.classed('dimmed', false);
+  nodeElements.classed('highlight', false);
+  linkElements.classed('dimmed', false);
+  linkElements.classed('highlight', false);
+}
+
+function clearFocus() {
+  focusedNodeId = null;
+  clearHighlight();
+  closeModal();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Modal
+// ═══════════════════════════════════════════════════════════════════
+
+function showModal(data) {
+  document.getElementById('m-title').textContent = data.title;
+  document.getElementById('m-type-desc').textContent = data.type_desc || '';
+  document.getElementById('m-role').textContent = data.role || 'N/A';
+  document.getElementById('m-tech').textContent = data.tech || 'N/A';
+  document.getElementById('m-relations').textContent = data.relations || 'N/A';
+  document.getElementById('m-devices').textContent = data.devices.join(', ');
+
+  // Badges
+  const badgesHtml = `
+    <span class="badge badge-${data.layer}">${data.layer} Layer</span>
+    <span class="badge" style="background:#334155;color:#e2e8f0;">${data.aspect}</span>
+    <code style="font-size:.68rem;background:#1e293b;color:#94a3b8;padding:2px 6px;border-radius:4px;margin-left:4px;border:1px solid #334155;">${data.type}</code>
+  `;
+  document.getElementById('m-badges').innerHTML = badgesHtml;
+
+  // Show/hide tech and relations blocks
+  document.getElementById('m-tech-block').style.display = data.tech ? 'block' : 'none';
+  document.getElementById('m-rel-block').style.display = data.relations ? 'block' : 'none';
+
+  document.getElementById('overlay').style.display = 'block';
+  document.getElementById('modal').style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('modal').style.display = 'none';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Window Resize
+// ═══════════════════════════════════════════════════════════════════
+
+window.addEventListener('resize', () => {
+  CONFIG.width = window.innerWidth;
+  CONFIG.height = window.innerHeight - 60;
+  CONFIG.centerX = CONFIG.width / 2;
+  CONFIG.centerY = CONFIG.height / 2;
+
+  svg.attr('width', CONFIG.width).attr('height', CONFIG.height);
+
+  // Update ring guides
+  g.selectAll('.ring-guide')
+    .attr('cx', CONFIG.centerX)
+    .attr('cy', CONFIG.centerY);
+
+  // Restart simulation with new center
+  simulation.force('radial', d3.forceRadial(
+    d => d.radius,
+    CONFIG.centerX,
+    CONFIG.centerY)
+    .strength(0.8));
+  simulation.alpha(0.3).restart();
+});
+
+</script>
+</body>
+</html>
