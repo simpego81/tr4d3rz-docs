@@ -359,6 +359,14 @@ const CONFIG = {
   }
 };
 
+// Layer order for up/downstream traversal (1 = most peripheral, 5 = most central)
+const LAYER_ORDER = { Motivation: 5, Business: 4, Application: 3, Technology: 2 };
+
+function getLayerOrder(node) {
+  if (node.type === 'Technology_Device') return 1;
+  return LAYER_ORDER[node.layer] || 2;
+}
+
 // Layer to radius mapping
 function getLayerRadius(element) {
   if (element.type === 'Technology_Device') {
@@ -472,7 +480,17 @@ function initializeGraph() {
 
   nodeGroup.append('text')
     .attr('dy', -10)
-    .text(d => getTruncatedTitle(d.title))
+    .each(function(d) {
+      const shortCaption = createShortCaption(d.title);
+      const lines = shortCaption.split('\n');
+      const textElement = d3.select(this);
+      lines.forEach((line, i) => {
+        textElement.append('tspan')
+          .attr('x', 0)
+          .attr('dy', i === 0 ? 0 : '1em')
+          .text(line);
+      });
+    })
     .style('opacity', 1);
 
   nodeElements = nodeGroup;
@@ -580,9 +598,50 @@ function drawRingGuides() {
   });
 }
 
-function getTruncatedTitle(title, maxLength = 25) {
-  if (title.length <= maxLength) return title;
-  return title.substring(0, maxLength) + '...';
+/**
+ * Create a smart short caption for node labels in the graph.
+ *
+ * @param {string} title - Full title from the node data
+ * @returns {string} Short caption with intelligent wrapping
+ *
+ * Processing:
+ * 1. Remove text in parentheses (e.g., "Component (Core)" → "Component")
+ * 2. Take only first line if multi-line input
+ * 3. Insert \n between consecutive words if their sum exceeds 10 characters
+ *
+ * Example: "Application Component (Core)" → "Application\nComponent"
+ *
+ * The full title remains available for tooltips and modal.
+ *
+ * See: specs/observatory/holistic-view-generation-spec.md § 3.3 Node Captions
+ */
+function createShortCaption(title) {
+  // 1. Remove text in parentheses
+  let text = title.replace(/\s*\([^)]*\)/g, '');
+
+  // 2. Take only first line if multi-line
+  text = text.split('\n')[0];
+
+  // 3. Smart word wrapping on 10+ character threshold
+  const words = text.trim().split(/\s+/);
+  if (words.length === 0) return '';
+  if (words.length === 1) return words[0];
+
+  const lines = [];
+  let currentLine = words[0];
+
+  for (let i = 1; i < words.length; i++) {
+    // If current line + space + next word exceeds 10 characters, wrap
+    if (currentLine.length + 1 + words[i].length > 10) {
+      lines.push(currentLine);
+      currentLine = words[i];
+    } else {
+      currentLine = currentLine + ' ' + words[i];
+    }
+  }
+  lines.push(currentLine);
+
+  return lines.join('\n');
 }
 
 function updateLabelVisibility(zoomScale) {
@@ -590,14 +649,31 @@ function updateLabelVisibility(zoomScale) {
   if (zoomScale < 0.5) {
     nodeElements.selectAll('text').style('opacity', 0);
   } else if (zoomScale > 2) {
-    // Show full titles when zoomed in
-    nodeElements.selectAll('text').text(d => d.title);
-  } else {
-    // Show truncated titles at medium zoom
+    // Show full titles when zoomed in (single line, can be long)
     const showLabels = document.getElementById('show-labels').checked;
-    nodeElements.selectAll('text')
-      .style('opacity', showLabels ? 1 : 0)
-      .text(d => getTruncatedTitle(d.title));
+    nodeElements.selectAll('text').each(function(d) {
+      const textElement = d3.select(this);
+      textElement.selectAll('tspan').remove();
+      textElement.append('tspan')
+        .attr('x', 0)
+        .attr('dy', 0)
+        .text(d.title);
+    }).style('opacity', showLabels ? 1 : 0);
+  } else {
+    // Show smart short captions at medium zoom (multi-line)
+    const showLabels = document.getElementById('show-labels').checked;
+    nodeElements.selectAll('text').each(function(d) {
+      const textElement = d3.select(this);
+      textElement.selectAll('tspan').remove();
+      const shortCaption = createShortCaption(d.title);
+      const lines = shortCaption.split('\n');
+      lines.forEach((line, i) => {
+        textElement.append('tspan')
+          .attr('x', 0)
+          .attr('dy', i === 0 ? 0 : '1em')
+          .text(line);
+      });
+    }).style('opacity', showLabels ? 1 : 0);
   }
 }
 
@@ -636,18 +712,18 @@ function handleNodeHover(event, d) {
   tooltip.style.left = (event.pageX + 15) + 'px';
   tooltip.style.top = (event.pageY + 15) + 'px';
 
-  // Highlight connected nodes (if not in focus mode)
-  if (!focusedNodeId) {
-    highlightConnected(d.id);
-  }
+  // Always highlight connected nodes on hover
+  highlightConnected(d.id);
 }
 
 function handleNodeLeave(event, d) {
   // Hide tooltip
   document.getElementById('tooltip').classList.remove('visible');
 
-  // Clear highlight (if not in focus mode)
-  if (!focusedNodeId) {
+  // Restore focus highlight if in focus mode, otherwise clear
+  if (focusedNodeId) {
+    highlightConnected(focusedNodeId);
+  } else {
     clearHighlight();
   }
 }
@@ -657,55 +733,52 @@ function handleNodeClick(event, d) {
 
   // Set focus mode
   focusedNodeId = d.id;
-  highlightConnected(d.id, true);
+  highlightConnected(d.id);
 
   // Open modal with full details
   showModal(d);
 }
 
 /**
- * Find the unique upstream path to Motivation Layer using DFS with backtracking
+ * Find the unique upstream path to Motivation Layer.
+ * Follows any link (both directions) toward nodes with strictly higher layer order.
+ * Layer order: Motivation(5) > Business(4) > Application(3) > Technology(2) > Device(1)
  *
- * @param {string} startNodeId - Starting node ID
+ * @param {string} startNodeId
+ * @param {Map} nodeMap - pre-built Map<id, node>
  * @returns {Set<string>} Set of node IDs in the upstream path
  */
-function findUpstreamPath(startNodeId) {
-  const path = [startNodeId];
-  const pathSet = new Set(path);
+function findUpstreamPath(startNodeId, nodeMap) {
+  const pathSet = new Set([startNodeId]);
+  const visited = new Set([startNodeId]);
 
   function dfs(currentId) {
-    const currentNode = graphData.nodes.find(n => n.id === currentId);
+    const currentNode = nodeMap.get(currentId);
+    if (!currentNode) return;
+    if (currentNode.layer === 'Motivation') return; // reached top
+    const currentOrder = getLayerOrder(currentNode);
 
-    // If we reached the Motivation Layer, stop
-    if (currentNode && currentNode.layer === 'Motivation') {
-      return true;
-    }
+    for (const link of graphData.links) {
+      const srcId = link.source.id || link.source;
+      const tgtId = link.target.id || link.target;
 
-    // Find incoming links (predecessors) - links that point TO this node
-    const incomingLinks = graphData.links.filter(link => {
-      const targetId = link.target.id || link.target;
-      return targetId === currentId;
-    });
+      // check both ends of the link
+      let neighborId = null;
+      if (srcId === currentId) neighborId = tgtId;
+      else if (tgtId === currentId) neighborId = srcId;
 
-    // Try each predecessor
-    for (const link of incomingLinks) {
-      const sourceId = link.source.id || link.source;
+      if (!neighborId || visited.has(neighborId)) continue;
 
-      if (!pathSet.has(sourceId)) {
-        path.push(sourceId);
-        pathSet.add(sourceId);
+      const neighbor = nodeMap.get(neighborId);
+      if (!neighbor) continue;
 
-        if (dfs(sourceId)) {
-          return true; // Path found, stop
-        }
-
-        // Backtrack if this branch doesn't lead to Motivation
-        path.pop();
-        pathSet.delete(sourceId);
+      if (getLayerOrder(neighbor) > currentOrder) {
+        visited.add(neighborId);
+        pathSet.add(neighborId);
+        dfs(neighborId);
+        return; // single path per spec — stop after first higher-layer neighbor
       }
     }
-
-    return false;
   }
 
   dfs(startNodeId);
@@ -713,29 +786,41 @@ function findUpstreamPath(startNodeId) {
 }
 
 /**
- * Find all downstream paths (tree structure) to Technology layer
+ * Find all downstream paths (tree structure) toward Technology Devices.
+ * Follows any link (both directions) toward nodes with strictly lower layer order.
+ * Layer order: Motivation(5) > Business(4) > Application(3) > Technology(2) > Device(1)
  *
- * @param {string} startNodeId - Starting node ID
+ * @param {string} startNodeId
+ * @param {Map} nodeMap - pre-built Map<id, node>
  * @returns {Set<string>} Set of all node IDs in the downstream tree
  */
-function findDownstreamTree(startNodeId) {
+function findDownstreamTree(startNodeId, nodeMap) {
   const tree = new Set([startNodeId]);
   const visited = new Set([startNodeId]);
 
   function traverse(currentId) {
-    // Find outgoing links (successors) - links that start FROM this node
-    const outgoingLinks = graphData.links.filter(link => {
-      const sourceId = link.source.id || link.source;
-      return sourceId === currentId;
-    });
+    const currentNode = nodeMap.get(currentId);
+    if (!currentNode) return;
+    const currentOrder = getLayerOrder(currentNode);
 
-    for (const link of outgoingLinks) {
-      const targetId = link.target.id || link.target;
+    for (const link of graphData.links) {
+      const srcId = link.source.id || link.source;
+      const tgtId = link.target.id || link.target;
 
-      if (!visited.has(targetId)) {
-        visited.add(targetId);
-        tree.add(targetId);
-        traverse(targetId); // Continue on all branches
+      // check both ends of the link
+      let neighborId = null;
+      if (srcId === currentId) neighborId = tgtId;
+      else if (tgtId === currentId) neighborId = srcId;
+
+      if (!neighborId || visited.has(neighborId)) continue;
+
+      const neighbor = nodeMap.get(neighborId);
+      if (!neighbor) continue;
+
+      if (getLayerOrder(neighbor) < currentOrder) {
+        visited.add(neighborId);
+        tree.add(neighborId);
+        traverse(neighborId); // all branches
       }
     }
   }
@@ -757,12 +842,15 @@ function findDownstreamTree(startNodeId) {
  *
  * See: specs/observatory/holistic-view-generation-spec.md § 3.3
  */
-function highlightConnected(nodeId, persistent = false) {
-  // 1. Find upstream path to Motivation Layer
-  const upstreamPath = findUpstreamPath(nodeId);
+function highlightConnected(nodeId) {
+  // Build lookup map once for performance
+  const nodeMap = new Map(graphData.nodes.map(n => [n.id, n]));
 
-  // 2. Find downstream tree to Technology layer
-  const downstreamTree = findDownstreamTree(nodeId);
+  // 1. Find upstream path to Motivation Layer
+  const upstreamPath = findUpstreamPath(nodeId, nodeMap);
+
+  // 2. Find downstream tree to Technology Devices
+  const downstreamTree = findDownstreamTree(nodeId, nodeMap);
 
   // 3. Merge the two sets (upstream path + downstream tree)
   const highlighted = new Set([...upstreamPath, ...downstreamTree]);
@@ -828,6 +916,11 @@ function showModal(data) {
 function closeModal() {
   document.getElementById('overlay').style.display = 'none';
   document.getElementById('modal').style.display = 'none';
+  // Clear focus whenever the detail popup is closed
+  if (focusedNodeId) {
+    focusedNodeId = null;
+    clearHighlight();
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════

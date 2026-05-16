@@ -55,10 +55,15 @@ I nodi devono essere vincolati a distanze radiali fisse dal centro in base al lo
 - **Visualizzazione**: Gli archi (link) devono rappresentare le relazioni ArchiMate (Composition, Realization, Flow, ecc.) con stili differenziati.
 
 ### 3.3 Interazione e UX
-- **Focus Mode (Revisione 01)**: Al click su un elemento, l'evidenziazione deve essere selettiva per mostrare il contesto operativo del componente:
+- **Node Captions (Revisione 01)**: Per gestire l'alta densità di nodi, implementare una logica di "Short Caption" per le etichette visualizzate nel grafo:
+    - **Pulizia**: Rimuovere le parti di testo racchiuse tra parentesi (es. "Application Component (Core)" -> "Application Component").
+    - **Wrapping**: Se la somma dei caratteri di due parole consecutive supera i 10 caratteri, inserire un ritorno a capo (`\n`) tra di esse.
+    - **Full Text**: Il testo originale completo deve rimanere disponibile per il tooltip e il modale.
+- **Focus Mode (Revisione 01)**: Al click su un elemento, l'evidenziazione deve essere selettiva:
     - **Upstream (Motivation)**: Evidenziare il percorso unico (unique path) che risale dall'elemento verso il Motivation Layer.
     - **Downstream (Technology)**: Evidenziare tutti i percorsi ramificati (tree structure) che discendono dall'elemento verso i Technology Devices.
-    - **Visualizzazione**: Sbiadire (opacity = 0.1) tutti gli altri nodi e archi che non appartengono a questi due flussi specifici.
+    - **Visualizzazione**: Sbiadire (opacity = 0.1) tutti gli altri nodi e archi.
+    - **Mouseover Bug Fix**: Assicurarsi che l'interazione di mouseover (tooltip/highlight temporaneo) continui a funzionare correttamente anche dopo che un nodo è stato selezionato (click).
 - **Semantic Zoom**:
     - Zoom basso: Solo icone o punti colorati.
     - Zoom medio: Caption brevi.
