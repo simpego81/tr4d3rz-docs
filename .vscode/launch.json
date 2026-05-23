@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug holistic_view.html (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:8080/holistic_view.html",
+      "webRoot": "${workspaceFolder}/docs",
+      "preLaunchTask": "Serve docs/ (HTTP 8080)",
+      "sourceMapPathOverrides": {
+        "webpack:///./~/*": "${workspaceFolder}/node_modules/*"
+      }
+    },
+    {
+      "name": "Debug index.html (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:8080/index.html",
+      "webRoot": "${workspaceFolder}/docs",
+      "preLaunchTask": "Serve docs/ (HTTP 8080)"
+    }
+  ]
+}

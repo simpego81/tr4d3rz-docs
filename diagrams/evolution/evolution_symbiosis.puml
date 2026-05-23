@@ -1,0 +1,63 @@
+@startuml evolution_symbiosis
+skinparam monochrome true
+
+title Simbiosi multi-agente e signaling feromonico
+
+box "Distributed Node - RPi / ESP32 / STM32 (Node A)" #LightGreen
+  participant "Agente A\n(Specialista)" as A
+end box
+
+box "Edge Node - Linux Gateway" #LightYellow
+  participant "MQTT Broker" as MQTT
+end box
+
+box "Distributed Node - RPi / ESP32 / STM32 (Node B)" #PaleGreen
+  participant "Agente B\n(Sottoscritto alla nicchia)" as B
+end box
+
+box "Cloud/Hub - Linux Server" #LightBlue
+  participant "Fitness Evaluator" as FE
+end box
+
+== Rilevamento pattern e segnale feromonico ==
+
+A -> A : detect_pattern(high_volatility)
+A -> MQTT : publish("tr4d3rz/ecosystem/signal/{agent_id}", CBOR_Pheromone_Signal)
+note right of A
+  **Hosted on:** Distributed Node - RPi / ESP32 / STM32
+  **Topic logico di nicchia:** high-volatility
+  **Topic MQTT canonico:** tr4d3rz/ecosystem/signal/{agent_id}
+  **Payload (CBOR map):**
+  {
+    "v": 1,
+    "ts": uint64,
+    "node": node_id,
+    "type": "ecosystem.signal.pheromone",
+    "agent_id": UUID,
+    "niche_id": "high-volatility",
+    "strength": float32,  // 0.0..1.0
+    "regime_type": text
+  }
+end note
+
+MQTT -> B : forward pheromone signal
+note left of B
+  **Hosted on:** Distributed Node - RPi / ESP32 / STM32
+  B subscribes to cooperative signal streams
+  and filters payload.niche_id == "high-volatility".
+end note
+
+B -> B : integrate strength and regime_type\nas extra FSM input
+B -> MQTT : publish("tr4d3rz/ecosystem/signal/{agent_id}", CBOR_Response_Signal)
+note left of B
+  Response payload keeps the same CBOR schema
+  and may lower or reinforce strength.
+end note
+
+MQTT -> A : deliver response signal
+A -> FE : report cooperation_gain
+B -> FE : report cooperation_gain
+FE -> MQTT : publish("tr4d3rz/ecosystem/fitness/{agent_id}", CBOR_Fitness_Update)
+
+footer Hosting: Distributed RPi/ESP32/STM32 -> Agents A/B and pheromone FSM inputs; Edge Linux Gateway -> MQTT Broker; Cloud/Hub Linux Server -> Fitness Evaluator | MQTT Topics: tr4d3rz/ecosystem/signal/{agent_id}, tr4d3rz/ecosystem/fitness/{agent_id} | CBOR Payload: v, ts, node, type, agent_id, niche_id, strength(0.0-1.0), regime_type
+@enduml

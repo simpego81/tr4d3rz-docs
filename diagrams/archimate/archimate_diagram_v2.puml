@@ -61,6 +61,7 @@ package "Business Layer" <<rectangle>> {
   Business_Object(bo_genome,    "Hybrid Graph Genome\n(L-System generated)")
   Business_Object(bo_archetype, "Archetype\n(proven FSM motif)")
   Business_Object(bo_niche,     "Market Niche\n(emergent cluster)")
+  Business_Object(bo_env,       "Local Environment\n(Biome - Agent/Market Coupling)")
   Business_Object(bo_signal,    "Investment Signal\n(daily output)")
 }
 
@@ -99,8 +100,8 @@ package "Application Layer — Node Types" <<rectangle>> {
 
   package "Evolution Nodes  [Linux PC · Android · MIMXRT1050]" <<Cloud>> {
     Application_Component(evo_mutation,   "Mutation Engine\n(structural · parametric · crossover)")
-    Application_Component(evo_cluster,    "Clustering System\n(niche discovery · GA)")
-    Application_Component(evo_niche,      "Niche Discovery\n(market regime classification)")
+    Application_Component(evo_cluster,    "Lineage Clustering\n(family identification)")
+    Application_Component(evo_emergence,  "Ecological Emergence Engine\n(agent-driven market clustering)")
     Application_Component(evo_phenotype,  "Phenotype Analyzer\n(FSM runtime evaluation)")
     Application_Component(evo_mqtt,       "MQTT Client\n(tr4d3rz-messaging · Rust)")
     Application_Service(evo_svc,          "Evolution Service")
@@ -119,6 +120,7 @@ package "Application Layer — Node Types" <<rectangle>> {
     Application_Component(per_archetype,  "Archetype Memory\n(motif FSM · patterns · niches)")
     Application_Component(per_events,     "Event Logger\n(mutation · signal · migration)")
     Application_Component(per_relay,      "Relay Service\n(delayed sync · offline nodes)")
+    Application_Component(per_pingpong,   "Ping-Pong Logic\n(Distributed Watchdog / Routing)\nHTTP GET/POST chain")
     Application_Service(per_svc,          "Persistence Service")
   }
 
@@ -236,7 +238,8 @@ package "Technology Layer — Hardware" <<rectangle>> {
 package "Technology Layer — Infrastructure" <<rectangle>> {
   Technology_Node(mqtt_broker,    "NanoMQ Broker\n[ARMv6l compiled]\nMQTT 3.1.1/5.0")
   Technology_Node(web_server,     "Web Server\n(static assets · Observatory UI)")
-  Technology_Node(php_hosting,    "PHP Free Hosting\n(Persistence relay · secondary store)")
+  Technology_Node(php_hosting,    "PHP Free Hosting\n(Distributed logic · secondary store)")
+  Technology_Artifact(db_mysql,   "Remote MySQL\n(Shared state \xb7 Top Genomes)")
 
   Technology_SystemSoftware(rt_rust,    "Rust Runtime\n(tr4d3rz-core · evolution · messaging)")
   Technology_SystemSoftware(rt_wasm,    "WebAssembly Runtime\n(browser FSM replay)")
@@ -350,7 +353,9 @@ Rel_Association(phenotype, cond_coop,     "subscribes")
 
 Rel_Access_Up(evo_mutation,  lsystem)
 Rel_Access_Up(evo_phenotype, phenotype)
-Rel_Access_Up(evo_cluster,   fit_niche)
+Rel_Access_Up(evo_emergence, fit_calc, "analyzes fitness success")
+Rel_Flow_Back(evo_emergence, lsystem, "applies specialization bias")
+Rel_Flow_Back(evo_emergence, evo_mutation, "guides mutation focus")
 
 ' ============================================================
 ' RELATIONS — FITNESS
@@ -442,4 +447,56 @@ Rel_Association(gw_uart, hw_stm32f1,  "UART")
 Rel_Association(gw_uart, hw_str,      "UART")
 Rel_Assignment_Down(gw_svc, hw_str)
 
+
+' ============================================================
+' ADDED RELATIONS FOR FULL CONNECTIVITY
+' ============================================================
+
+' --- Business Layer Refinement ---
+Rel_Realization_Up(evo_svc, proc_signal)
+Rel_Access_Down(proc_ingest, bo_ohlcv)
+Rel_Access_Down(proc_evolution, bo_genome)
+Rel_Access_Down(proc_persist, bo_archetype)
+Rel_Access_Down(proc_signal, bo_signal)
+Rel_Realization_Up(bo_ohlcv, data_ohlcv)
+Rel_Realization_Up(bo_genome, data_genome)
+Rel_Realization_Up(bo_archetype, data_archetype)
+Rel_Realization_Up(bo_signal, data_signal)
+Rel_Realization_Up(bo_niche, data_event)
+
+' --- Application Layer Structural Integrity ---
+Rel_Realization_Up(ci_broker, sig_broker)
+Rel_Composition_Down(per_svc, per_pingpong)
+Rel_Access_Down(per_pingpong, db_mysql)
+Rel_Realization_Up(rt_rust, lsystem)
+Rel_Realization_Up(rt_rust, fsm_gen)
+Rel_Realization_Up(rt_rust, phenotype)
+Rel_Realization_Up(rt_rust, fit_calc)
+Rel_Realization_Up(rt_rust, sig_router)
+
+' --- Technology Layer Assignments ---
+Rel_Assignment_Down(rt_rust, hw_linux)
+Rel_Assignment_Down(rt_rust, hw_android)
+Rel_Assignment_Down(rt_rust, hw_mimx)
+Rel_Assignment_Down(rt_rust, hw_rasp2)
+Rel_Assignment_Down(rt_nodejs, hw_rpi1)
+Rel_Assignment_Down(rt_wasm, hw_browser)
+Rel_Assignment_Down(rt_threejs, hw_browser)
+Rel_Assignment_Down(mqtt_broker, hw_rpi1)
+Rel_Assignment_Down(web_server, hw_rpi1)
+
+' --- Motivation Principles Realization ---
+Rel_Realization_Up(lsystem, prin_openended)
+Rel_Realization_Up(sig_broker, prin_coop)
+Rel_Realization_Up(sig_broker, prin_async)
+Rel_Realization_Up(obs_replay, prin_replay)
+Rel_Realization_Up(evo_niche, prin_niche)
+
+
+' --- Optimization Refinement ---
+Rel_Access_Down(opt_validation, phenotype, "validates")
+Rel_Flow_Up(opt_validation, fit_calc, "provides local fitness")
+Rel_Realization_Up(opt_validation, goal_evolve)
+
 @enduml
+

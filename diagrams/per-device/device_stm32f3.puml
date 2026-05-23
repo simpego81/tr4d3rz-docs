@@ -75,5 +75,11 @@ Rel_Realization_Up(rt_rust, opt_svc)
 Rel_Realization_Up(rt_cbor, capsule_cbor)
 Rel_Access_Up(opt_svc, capsule_fs)
 Rel_Access_Up(capsule_mgr, data_capsule, "exchanges offline UART/USB")
+Rel_Association(opt_tuning, capsule_mgr, "uses")
+Rel_Association(opt_validation, capsule_mgr, "uses")
+Rel_Association(opt_local, capsule_mgr, "optimizes")
+Rel_Association(opt_capsule, capsule_mgr, "manages")
+Rel_Composition_Down(capsule_mgr, capsule_cbor)
+Rel_Access_Up(capsule_cbor, data_capsule, "serializes")
 
 @enduml

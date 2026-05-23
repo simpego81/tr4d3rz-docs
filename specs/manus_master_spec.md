@@ -179,8 +179,19 @@ Ogni evento importante deve essere:
 
 Scoprire:
 - pattern predittivi emergenti,
-- nicchie di mercato,
-- strutture cooperative.
+- nicchie di mercato (Agent-Driven),
+- strutture cooperative,
+- **Ambienti Locali (Biomi)**: accoppiamenti stabili tra stirpi di agenti e cluster di titoli.
+
+---
+
+## Principi di Emergenza
+
+### 1. Agent-First Market Clustering
+Il mercato non è segmentato a priori. I cluster di titoli emergono dal successo degli individui: se più agenti geneticamente affini performano bene sugli stessi titoli, tale gruppo di titoli viene dichiarato una "Nicchia di Mercato".
+
+### 2. Specializzazione di Nicchia (Bias)
+Una volta identificata una nicchia, il sistema applica una pressione evolutiva locale (Specialization Bias) per ottimizzare la popolazione verso quel bioma specifico.
 
 ---
 

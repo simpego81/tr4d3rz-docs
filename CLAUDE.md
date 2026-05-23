@@ -50,14 +50,22 @@ Open `docs/index.html` in a browser.
    
 2. **Update the knowledge base** (if adding new elements):
    - Descriptions and technical details are embedded in the HTML files
-   - If you add new ArchiMate elements, you must update the `KB` (knowledge base) object in the corresponding HTML file or update the generator script
+   - If you add new ArchiMate elements, you must update the `KB` (knowledge base) object in the corresponding HTML file
 
 3. **Run the generator** to rebuild `docs/` folder (see command above)
+   - This automatically regenerates:
+     - All `docs/*.html` device pages
+     - `docs/archimate_data.json` for the holistic view
+     - Holistic view data feed is now synchronized with PUML changes
 
 4. **Commit both** the `.puml` source files AND the generated `docs/` folder:
    - GitHub Pages automatically redeploys when `docs/` changes are pushed
 
 **DO NOT edit HTML files directly** — they are auto-generated and will be overwritten.
+
+**NEW**: The holistic view (`docs/holistic_view.html`) now automatically reflects PUML changes via `archimate_data.json`.
+
+See `ARCHITECTURE_WORKFLOW.md` for detailed documentation on the generation system.
 
 ## ArchiMate Grid Structure
 

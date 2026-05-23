@@ -1,0 +1,60 @@
+@startuml evolution_lineage
+skinparam monochrome true
+left to right direction
+
+title Tracciamento discendenza e schema CBOR
+
+package "Cloud/Hub - Linux Server" <<Linux Server>> {
+  class "AgentLineageRecord" as AgentLineageRecord <<CBOR Schema>> {
+    + UUID: bytes[16]
+    + Parent_UUID: bytes[16] | null
+    + Generation_Index: uint32
+    + Archetype_Flag: bool
+    + Birth_Timestamp: uint64
+    + Mutation_Source: text
+  }
+
+  class "Rust Persistence Node" as RustPersistence <<Persistence>> {
+    + persist_cbor(record: AgentLineageRecord)
+    + publish_lineage_event(record)
+    + rebuild_dag(): LineageDAG
+    + query_by_generation(index: uint32)
+  }
+}
+
+package "Observatory - Browser / Mobile" <<Browser/Mobile>> {
+  class "LineageDAG" as LineageDAG <<Replay View>> {
+    + add_vertex(UUID)
+    + add_edge(Parent_UUID, UUID)
+    + mark_archetype(UUID)
+    + ancestors(UUID): Vec<UUID>
+    + descendants(UUID): Vec<UUID>
+  }
+}
+
+AgentLineageRecord "0..*" -- "0..1" AgentLineageRecord : descends from
+RustPersistence --> AgentLineageRecord : stores immutable record
+RustPersistence --> LineageDAG : publishes replay projection
+LineageDAG --> AgentLineageRecord : indexes
+
+note bottom of AgentLineageRecord
+  **Hosted on:** Cloud/Hub - Linux Server
+  **CBOR positional map:**
+  0: UUID bytes[16]
+  1: Parent_UUID bytes[16] | null
+  2: Generation_Index uint32
+  3: Archetype_Flag bool
+  4: Birth_Timestamp uint64
+  5: Mutation_Source text
+end note
+
+note right of RustPersistence
+  Persistence contract:
+  - decode CBOR payloads from lineage/evolution topics
+  - store records append-only for auditability
+  - rebuild ancestry as a DAG, not as a tree
+  - preserve archetype milestones for observatory replay
+end note
+
+footer Hosting: Cloud/Hub Linux Server -> Rust Persistence and CBOR schema; Observatory Browser/Mobile -> LineageDAG replay view | MQTT Topics: tr4d3rz/lineage/lineage/{agent_id}, tr4d3rz/lineage/archetype/{archetype_id}, tr4d3rz/evolution/birth/{agent_id}, tr4d3rz/evolution/mutation/{node_id} | CBOR Payload: UUID, Parent_UUID, Generation_Index, Archetype_Flag, Birth_Timestamp, Mutation_Source
+@enduml

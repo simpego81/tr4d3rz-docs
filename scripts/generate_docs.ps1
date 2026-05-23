@@ -3,20 +3,21 @@ Set-Location "c:\projects\seq\tr4"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 $deviceList = @(
-    @{ name = "android";  puml = "device_android.puml" },
-    @{ name = "browser";  puml = "device_browser.puml" },
-    @{ name = "esp";      puml = "device_esp.puml"     },
-    @{ name = "linux";    puml = "device_linux.puml"   },
-    @{ name = "mimx";     puml = "device_mimx.puml"    },
-    @{ name = "phone";    puml = "device_phone.puml"   },
-    @{ name = "ra8";      puml = "device_ra8.puml"     },
-    @{ name = "rasp2";    puml = "device_rasp2.puml"   },
-    @{ name = "rpi1";     puml = "device_rpi1.puml"    },
-    @{ name = "stm32f1";  puml = "device_stm32f1.puml" },
-    @{ name = "stm32f3";  puml = "device_stm32f3.puml" },
-    @{ name = "str";      puml = "device_str.puml"     },
-    @{ name = "tablet";   puml = "device_tablet.puml"  },
-    @{ name = "m24lr";    puml = "device_m24lr.puml"   }
+    @{ name = "android";  puml = "diagrams/per-device/device_android.puml" },
+    @{ name = "browser";  puml = "diagrams/per-device/device_browser.puml" },
+    @{ name = "esp";      puml = "diagrams/per-device/device_esp.puml"     },
+    @{ name = "linux";    puml = "diagrams/per-device/device_linux.puml"   },
+    @{ name = "mimx";     puml = "diagrams/per-device/device_mimx.puml"    },
+    @{ name = "phone";    puml = "diagrams/per-device/device_phone.puml"   },
+    @{ name = "ra8";      puml = "diagrams/per-device/device_ra8.puml"     },
+    @{ name = "rasp2";    puml = "diagrams/per-device/device_rasp2.puml"   },
+    @{ name = "rpi1";     puml = "diagrams/per-device/device_rpi1.puml"    },
+    @{ name = "stm32f1";  puml = "diagrams/per-device/device_stm32f1.puml" },
+    @{ name = "stm32f3";  puml = "diagrams/per-device/device_stm32f3.puml" },
+    @{ name = "str";      puml = "diagrams/per-device/device_str.puml"     },
+    @{ name = "tablet";   puml = "diagrams/per-device/device_tablet.puml"  },
+    @{ name = "m24lr";    puml = "diagrams/per-device/device_m24lr.puml"   },
+    @{ name = "php_hosting"; puml = "diagrams/per-device/device_php_hosting.puml" }
 )
 
 # ── Extract KB JSON object from existing HTML ──────────────────────────────────
@@ -66,6 +67,11 @@ function Transform-Tbody($html) {
     $tbody = [regex]::Replace($tbody,
         'class="arch-box(?:\s+(?:bg|border|text)-\w+-\d+)*\s*"',
         'class="arch-box"')
+
+    # Remove any existing id attributes from arch-box elements to prevent duplicates
+    $tbody = [regex]::Replace($tbody,
+        '(<div\s+class="arch-box")\s+(?:id="\w+"\s+)*',
+        '$1 ')
 
     # Add id attribute matching showModal argument
     $tbody = [regex]::Replace($tbody,
@@ -637,3 +643,6 @@ foreach ($dev in $deviceList) {
 
 Write-Host ""
 Write-Host "Done: $ok generated, $skip skipped."
+Write-Host ""
+Write-Host "Generating holistic view data..."
+& powershell.exe -ExecutionPolicy Bypass -NoProfile -File .\scripts\generate_holistic_data.ps1

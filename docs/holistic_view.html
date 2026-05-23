@@ -480,6 +480,7 @@ function initializeGraph() {
 
   nodeGroup.append('text')
     .attr('dy', -10)
+    .style('pointer-events', 'none')  // Allow mouse events to pass through to circle
     .each(function(d) {
       const shortCaption = createShortCaption(d.title);
       const lines = shortCaption.split('\n');
@@ -616,32 +617,69 @@ function drawRingGuides() {
  * See: specs/observatory/holistic-view-generation-spec.md § 3.3 Node Captions
  */
 function createShortCaption(title) {
-  // 1. Remove text in parentheses
+  // 1. Remove text in parentheses and special characters
   let text = title.replace(/\s*\([^)]*\)/g, '');
+  text = text.replace(/[·•→←]/g, '');  // Remove bullets and arrows
 
   // 2. Take only first line if multi-line
   text = text.split('\n')[0];
 
-  // 3. Smart word wrapping on 10+ character threshold
-  const words = text.trim().split(/\s+/);
+  // 3. Limit to max 2 words to prevent overcrowding
+  let words = text.trim().split(/\s+/);
   if (words.length === 0) return '';
-  if (words.length === 1) return words[0];
 
-  const lines = [];
-  let currentLine = words[0];
+  // Take first 2 words only
+  words = words.slice(0, 2);
 
-  for (let i = 1; i < words.length; i++) {
-    // If current line + space + next word exceeds 10 characters, wrap
-    if (currentLine.length + 1 + words[i].length > 10) {
-      lines.push(currentLine);
-      currentLine = words[i];
-    } else {
-      currentLine = currentLine + ' ' + words[i];
+  // 4. Apply abbreviations to each word
+  const abbreviations = {
+    'Application': 'App',
+    'Technology': 'Tech',
+    'Component': 'Comp',
+    'Service': 'Svc',
+    'Discovery': 'Disc',
+    'Evaluation': 'Eval',
+    'Generator': 'Gen',
+    'Calculator': 'Calc',
+    'Evolution': 'Evo',
+    'Database': 'DB',
+    'System': 'Sys',
+    'Mutation': 'Mut',
+    'Observatory': 'Obs',
+    'Primitives': 'Prim',
+    'Functions': 'Fn',
+    'Analyzer': 'Anlz',
+    'Manager': 'Mgr'
+  };
+
+  words = words.map(word => {
+    // Check if word matches any abbreviation (case insensitive)
+    for (const [full, abbr] of Object.entries(abbreviations)) {
+      if (word.toLowerCase() === full.toLowerCase()) {
+        return abbr;
+      }
     }
-  }
-  lines.push(currentLine);
+    return word;
+  });
 
-  return lines.join('\n');
+  // 5. Smart wrapping with shorter threshold
+  if (words.length === 1) {
+    // Single word: truncate if too long
+    const word = words[0];
+    if (word.length > 10) {
+      return word.substring(0, 8) + '..';
+    }
+    return word;
+  }
+
+  // Two words: check if they fit on one line (max 10 chars total)
+  const combined = words.join(' ');
+  if (combined.length <= 10) {
+    return combined;  // Fits on one line
+  }
+
+  // Split to two lines if combined is too long
+  return words.join('\n');
 }
 
 function updateLabelVisibility(zoomScale) {
@@ -740,136 +778,157 @@ function handleNodeClick(event, d) {
 }
 
 /**
- * Find the unique upstream path to Motivation Layer.
- * Follows any link (both directions) toward nodes with strictly higher layer order.
+ * Highlight connected nodes using BFS traversal with controlled same-layer exploration.
+ * Finds paths upstream (toward Motivation) and downstream (toward Devices).
+ *
  * Layer order: Motivation(5) > Business(4) > Application(3) > Technology(2) > Device(1)
  *
- * @param {string} startNodeId
- * @param {Map} nodeMap - pre-built Map<id, node>
- * @returns {Set<string>} Set of node IDs in the upstream path
- */
-function findUpstreamPath(startNodeId, nodeMap) {
-  const pathSet = new Set([startNodeId]);
-  const visited = new Set([startNodeId]);
-
-  function dfs(currentId) {
-    const currentNode = nodeMap.get(currentId);
-    if (!currentNode) return;
-    if (currentNode.layer === 'Motivation') return; // reached top
-    const currentOrder = getLayerOrder(currentNode);
-
-    for (const link of graphData.links) {
-      const srcId = link.source.id || link.source;
-      const tgtId = link.target.id || link.target;
-
-      // check both ends of the link
-      let neighborId = null;
-      if (srcId === currentId) neighborId = tgtId;
-      else if (tgtId === currentId) neighborId = srcId;
-
-      if (!neighborId || visited.has(neighborId)) continue;
-
-      const neighbor = nodeMap.get(neighborId);
-      if (!neighbor) continue;
-
-      if (getLayerOrder(neighbor) > currentOrder) {
-        visited.add(neighborId);
-        pathSet.add(neighborId);
-        dfs(neighborId);
-        return; // single path per spec — stop after first higher-layer neighbor
-      }
-    }
-  }
-
-  dfs(startNodeId);
-  return pathSet;
-}
-
-/**
- * Find all downstream paths (tree structure) toward Technology Devices.
- * Follows any link (both directions) toward nodes with strictly lower layer order.
- * Layer order: Motivation(5) > Business(4) > Application(3) > Technology(2) > Device(1)
+ * Same-layer traversal is limited to MAX_SAME_LAYER_DISTANCE hops to avoid exploring
+ * the entire layer graph.
  *
- * @param {string} startNodeId
- * @param {Map} nodeMap - pre-built Map<id, node>
- * @returns {Set<string>} Set of all node IDs in the downstream tree
- */
-function findDownstreamTree(startNodeId, nodeMap) {
-  const tree = new Set([startNodeId]);
-  const visited = new Set([startNodeId]);
-
-  function traverse(currentId) {
-    const currentNode = nodeMap.get(currentId);
-    if (!currentNode) return;
-    const currentOrder = getLayerOrder(currentNode);
-
-    for (const link of graphData.links) {
-      const srcId = link.source.id || link.source;
-      const tgtId = link.target.id || link.target;
-
-      // check both ends of the link
-      let neighborId = null;
-      if (srcId === currentId) neighborId = tgtId;
-      else if (tgtId === currentId) neighborId = srcId;
-
-      if (!neighborId || visited.has(neighborId)) continue;
-
-      const neighbor = nodeMap.get(neighborId);
-      if (!neighbor) continue;
-
-      if (getLayerOrder(neighbor) < currentOrder) {
-        visited.add(neighborId);
-        tree.add(neighborId);
-        traverse(neighborId); // all branches
-      }
-    }
-  }
-
-  traverse(startNodeId);
-  return tree;
-}
-
-/**
- * Highlight connected nodes using selective upstream/downstream logic (Revision 01)
- *
- * @param {string} nodeId - ID of the clicked node
- * @param {boolean} persistent - Whether to maintain focus (currently unused)
- *
- * Behavior:
- * - Upstream: Find SINGLE path to Motivation Layer (DFS, first found)
- * - Downstream: Find ALL paths to Technology Devices (recursive traversal)
- * - Dim all other nodes/links (opacity 0.1)
- *
- * See: specs/observatory/holistic-view-generation-spec.md § 3.3
+ * @param {string} nodeId - Starting node ID
  */
 function highlightConnected(nodeId) {
-  // Build lookup map once for performance
   const nodeMap = new Map(graphData.nodes.map(n => [n.id, n]));
+  const MAX_SAME_LAYER_DISTANCE = 2;  // Max hops within same layer
 
-  // 1. Find upstream path to Motivation Layer
-  const upstreamPath = findUpstreamPath(nodeId, nodeMap);
+  /**
+   * BFS traversal upstream (toward Motivation layer)
+   */
+  function findUpstreamPathBFS(startId) {
+    const queue = [{id: startId, distance: 0}];
+    const visited = new Set([startId]);
+    const pathNodes = new Set([startId]);
+    const pathLinks = new Set();
 
-  // 2. Find downstream tree to Technology Devices
-  const downstreamTree = findDownstreamTree(nodeId, nodeMap);
+    while (queue.length > 0) {
+      const {id: currentId, distance} = queue.shift();
+      const currentNode = nodeMap.get(currentId);
+      if (!currentNode) continue;
 
-  // 3. Merge the two sets (upstream path + downstream tree)
-  const highlighted = new Set([...upstreamPath, ...downstreamTree]);
+      const currentOrder = getLayerOrder(currentNode);
+      const reachedMotivation = currentNode.layer === 'Motivation';
 
-  // 4. Apply dimmed/highlight classes to nodes
-  nodeElements.classed('dimmed', d => !highlighted.has(d.id));
+      graphData.links.forEach(link => {
+        const srcId = link.source.id || link.source;
+        const tgtId = link.target.id || link.target;
+        const neighborId = (srcId === currentId) ? tgtId :
+                           (tgtId === currentId) ? srcId : null;
+
+        if (!neighborId || visited.has(neighborId)) return;
+
+        const neighbor = nodeMap.get(neighborId);
+        if (!neighbor) return;
+
+        const neighborOrder = getLayerOrder(neighbor);
+
+        // Traversal logic:
+        // 1. Always traverse to higher layers (neighborOrder > currentOrder)
+        // 2. Allow limited same-layer traversal (neighborOrder === currentOrder)
+        //    - Only if distance < MAX_SAME_LAYER_DISTANCE
+        //    - Stop same-layer traversal once Motivation is reached
+        const isHigherLayer = neighborOrder > currentOrder;
+        const isSameLayer = neighborOrder === currentOrder;
+        const withinSameLayerLimit = distance < MAX_SAME_LAYER_DISTANCE;
+
+        const shouldTraverse =
+          isHigherLayer ||
+          (isSameLayer && withinSameLayerLimit && !reachedMotivation);
+
+        if (shouldTraverse) {
+          visited.add(neighborId);
+          pathNodes.add(neighborId);
+          pathLinks.add(link);
+
+          // Reset distance counter when moving to higher layer
+          const newDistance = isSameLayer ? distance + 1 : 0;
+          queue.push({id: neighborId, distance: newDistance});
+        }
+      });
+    }
+
+    return {nodes: pathNodes, links: pathLinks};
+  }
+
+  /**
+   * BFS traversal downstream (toward Technology devices)
+   */
+  function findDownstreamPathBFS(startId) {
+    const queue = [{id: startId, distance: 0}];
+    const visited = new Set([startId]);
+    const pathNodes = new Set([startId]);
+    const pathLinks = new Set();
+
+    while (queue.length > 0) {
+      const {id: currentId, distance} = queue.shift();
+      const currentNode = nodeMap.get(currentId);
+      if (!currentNode) continue;
+
+      const currentOrder = getLayerOrder(currentNode);
+      const reachedDevice = currentNode.type === 'Technology_Device';
+
+      graphData.links.forEach(link => {
+        const srcId = link.source.id || link.source;
+        const tgtId = link.target.id || link.target;
+        const neighborId = (srcId === currentId) ? tgtId :
+                           (tgtId === currentId) ? srcId : null;
+
+        if (!neighborId || visited.has(neighborId)) return;
+
+        const neighbor = nodeMap.get(neighborId);
+        if (!neighbor) return;
+
+        const neighborOrder = getLayerOrder(neighbor);
+
+        // Traversal logic (mirror of upstream):
+        // 1. Always traverse to lower layers (neighborOrder < currentOrder)
+        // 2. Allow limited same-layer traversal (neighborOrder === currentOrder)
+        //    - Only if distance < MAX_SAME_LAYER_DISTANCE
+        //    - Stop same-layer traversal once Device is reached
+        const isLowerLayer = neighborOrder < currentOrder;
+        const isSameLayer = neighborOrder === currentOrder;
+        const withinSameLayerLimit = distance < MAX_SAME_LAYER_DISTANCE;
+
+        const shouldTraverse =
+          isLowerLayer ||
+          (isSameLayer && withinSameLayerLimit && !reachedDevice);
+
+        if (shouldTraverse) {
+          visited.add(neighborId);
+          pathNodes.add(neighborId);
+          pathLinks.add(link);
+
+          // Reset distance counter when moving to lower layer
+          const newDistance = isSameLayer ? distance + 1 : 0;
+          queue.push({id: neighborId, distance: newDistance});
+        }
+      });
+    }
+
+    return {nodes: pathNodes, links: pathLinks};
+  }
+
+  // Execute BFS traversals
+  const upstreamResult = findUpstreamPathBFS(nodeId);
+  const downstreamResult = findDownstreamPathBFS(nodeId);
+
+  // Merge results
+  const highlightedNodes = new Set([
+    ...upstreamResult.nodes,
+    ...downstreamResult.nodes
+  ]);
+
+  const highlightedLinks = new Set([
+    ...upstreamResult.links,
+    ...downstreamResult.links
+  ]);
+
+  // Apply classes
+  nodeElements.classed('dimmed', d => !highlightedNodes.has(d.id));
   nodeElements.classed('highlight', d => d.id === nodeId);
 
-  // 5. Apply dimmed/highlight classes to links
-  linkElements.classed('dimmed', d => {
-    const sourceId = d.source.id || d.source;
-    const targetId = d.target.id || d.target;
-    return !highlighted.has(sourceId) || !highlighted.has(targetId);
-  });
-  linkElements.classed('highlight', d => {
-    const sourceId = d.source.id || d.source;
-    const targetId = d.target.id || d.target;
-    return highlighted.has(sourceId) && highlighted.has(targetId);
-  });
+  linkElements.classed('dimmed', d => !highlightedLinks.has(d));
+  linkElements.classed('highlight', d => highlightedLinks.has(d));
 }
 
 function clearHighlight() {

@@ -64,3 +64,16 @@ Nodi intermedi (spesso script in esecuzione su PC Linux o Raspberry Pi secondari
 | Software / Componente | Repository di Origine | Stack Tecnologico | Descrizione e Note |
 |---|---|---|---|
 | **Protocol Translator** | `tr4d3rz-messaging` | Python / Rust | Demone che ascolta su una porta seriale (UART/USB), riceve i pacchetti CBOR dai nodi STM32 e li inoltra al broker MQTT, facendo anche il percorso inverso. |
+
+---
+
+## 6. External Persistence & Logic (PHP Hosting Gratuiti)
+
+Servizi esterni di hosting PHP/MySQL utilizzati come memoria distribuita secondaria e watchdog computazionale.
+
+| Software / Componente | Repository di Origine | Stack Tecnologico | Descrizione e Note |
+|---|---|---|---|
+| **Ping-Pong Watchdog** | `tr4d3rz-persistence-web` | PHP | Script che si invocano a vicenda tramite HTTP GET/POST per mantenere attiva la computazione distribuita nonostante i limiti di timeout dei servizi gratuiti. |
+| **Distributed Registry** | `tr4d3rz-persistence-web` | PHP / MySQL | Registro remoto dei genomi più promettenti (Archetypes) e degli endpoint dei nodi attivi. |
+| **Relay Service** | `tr4d3rz-persistence-web` | PHP | Funge da punto di rendezvous per nodi dietro NAT o con connettività intermittente. |
+

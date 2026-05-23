@@ -1,7 +1,15 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python *)"
+      "Bash(python *)",
+      "Bash(powershell.exe *)",
+      "Bash(cat)",
+      "Bash(chmod +x /tmp/check_disconnected.sh)",
+      "Bash(bash /tmp/check_disconnected.sh)",
+      "Bash(chmod +x /tmp/check_disconnected2.sh)",
+      "Bash(bash /tmp/check_disconnected2.sh)",
+      "Bash(python3 -c \"import json; f=open\\('docs/archimate_data.json'\\); d=json.load\\(f\\); print\\(list\\(d.keys\\(\\)\\)\\)\")",
+      "Bash(python3 *)"
     ]
   }
 }

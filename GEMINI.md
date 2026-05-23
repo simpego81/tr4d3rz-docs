@@ -26,13 +26,40 @@ The documentation site is a static HTML site generated from ArchiMate models def
 
 - **Regenerate Documentation Site:**
   ```powershell
-  powershell.exe -NoProfile -File .\generate_docs.ps1
+  powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\generate_docs.ps1
   ```
 - **Preview Site:** Open `docs/index.html` in a browser.
 - **Update Process:**
-  1. Modify `.puml` files (either in the root or `diagrams/per-device/`).
+  1. Modify `.puml` files (primarily in `diagrams/per-device/` for device views or `diagrams/archimate/` for global views).
   2. Run the generation script.
   3. Commit both the `.puml` changes and the updated `docs/` folder.
+
+---
+
+## Repository Structure (Documentation Repo)
+- `adr/`: Architecture Decision Records.
+- `diagrams/`: Source diagrams.
+  - `archimate/`: Main ArchiMate models.
+  - `per-device/`: Individual device architecture models.
+  - `evolution/`: Evolutionary logic diagrams.
+- `docs/`: Generated static site (HTML/JSON).
+- `milestones/`: Project roadmap and status.
+- `protocols/`: Communication and data contracts.
+- `scripts/`: Generation and utility scripts.
+- `specs/`: Detailed technical specifications.
+  - `observatory/research/`: Research notes and holistic view experiments.
+- `out/`: Temporary build/render outputs.
+
+---
+
+## Ecosystem Repositories Map
+- `tr4d3rz-docs`: This repository (Architecture/Specs).
+- `tr4d3rz-core`: Genome L-System and FSM runtime.
+- `tr4d3rz-messaging`: MQTT/NATS gateway and protocol translation.
+- `tr4d3rz-evolution`: Evolutionary loop, mutations, niche discovery.
+- `tr4d3rz-observatory`: **(Gemini CLI Home)** UI, visualization, and replay.
+- `tr4d3rz-persistence`: Event sourcing and archetype memory.
+- `tr4d3rz-embedded`: Optimized nodes for ESP8266/STM32.
 
 ---
 
@@ -47,15 +74,6 @@ The documentation site is a static HTML site generated from ArchiMate models def
 ### ArchiMate Documentation
 - **Grid Structure:** Device pages follow a strict 4x4 grid (Layers: Motivation, Business, Application, Technology; Aspects: Active Structure, Behavior, Passive Structure, Motivation).
 - **Interactivity:** Elements in the HTML site are interactive; descriptions and technical details are extracted from the HTML metadata and updated via the generator.
-
-### Repository Map
-- `tr4d3rz-docs`: This repository (Architecture/Specs).
-- `tr4d3rz-core`: Genome L-System and FSM runtime.
-- `tr4d3rz-messaging`: MQTT/NATS gateway and protocol translation.
-- `tr4d3rz-evolution`: Evolutionary loop, mutations, niche discovery.
-- `tr4d3rz-observatory`: **(Gemini CLI Home)** UI, visualization, and replay.
-- `tr4d3rz-persistence`: Event sourcing and archetype memory.
-- `tr4d3rz-embedded`: Optimized nodes for ESP8266/STM32.
 
 ---
 

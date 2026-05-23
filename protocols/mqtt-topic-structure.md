@@ -18,7 +18,12 @@ tr4d3rz/
 ├── ecosystem/
 │   ├── signal/{agent_id}          # Cooperative signals emitted by agents
 │   ├── fitness/{agent_id}         # Fitness evaluation results
-│   └── niche/{niche_id}           # Niche discovery events
+│   ├── niche/{niche_id}           # Niche discovery events
+│   ├── environment/{env_id}/
+│   │   ├── definition             # Local Environment (Biome) definition
+│   │   ├── bias                   # Local Bias signals (topology/context)
+│   │   └── lifecycle              # Biome lifecycle events (Birth/Expansion/Climax/Collapse)
+│   └── prediction/{timeframe}     # Aggregated prediction signals (daily/weekly)
 ├── evolution/
 │   ├── mutation/{node_id}         # Mutation events
 │   ├── birth/{agent_id}           # New agent created
@@ -46,12 +51,20 @@ tr4d3rz/
 | Topic Pattern | QoS | Rationale |
 |---|---|---|
 | `ecosystem/signal/*` | 0 | High-frequency, loss-tolerant |
+| `ecosystem/fitness/*` | 1 | Important for evolution tracking |
+| `ecosystem/niche/*` | 1 | Important for niche discovery |
+| `ecosystem/environment/*/definition` | 2 | Critical, Biome definition must not be lost |
+| `ecosystem/environment/*/bias` | 1 | Important for specialization |
+| `ecosystem/environment/*/lifecycle` | 2 | Critical, lifecycle events must be tracked |
+| `ecosystem/prediction/*` | 1 | Important but can be regenerated |
 | `evolution/mutation/*` | 1 | Important but not critical |
 | `evolution/birth/*` | 1 | Should be delivered |
 | `evolution/death/*` | 1 | Should be delivered |
 | `lineage/archetype/*` | 2 | Critical, must not be lost |
 | `lineage/lineage/*` | 2 | Critical, must not be lost |
+| `data/ohlcv/*` | 0 | High-frequency, can be replayed from source |
 | `node/*/capsule/*` | 1 | Reliable delivery required |
+| `node/*/status` | 0 | Heartbeat, loss-tolerant |
 
 ---
 

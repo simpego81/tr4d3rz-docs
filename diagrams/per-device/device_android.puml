@@ -30,6 +30,7 @@ package "Motivation Layer" <<rectangle>> {
 package "Business Layer" <<rectangle>> {
   Business_Process(proc_evolution, "Evolutionary Process\n(Genome → FSM → Fitness)")
   Business_Process(proc_signal, "Cooperative Signal\nGeneration")
+  Business_Process(proc_emergence, "Environment Emergence\n(biome detection · lifecycle)")
   Business_Service(svc_prediction, "Prediction Service\n(daily investment signals)")
 }
 
@@ -75,6 +76,7 @@ package "Data Objects" <<rectangle>> {
   Business_Object(data_signal, "Cooperative Signal\n(CBOR · QoS 0 · agent_id)")
   Business_Object(data_fitness, "Fitness Record\n(CBOR · QoS 1 · multi-dim)")
   Business_Object(data_event, "System Event\n(CBOR · QoS 1 · append-only)")
+  Business_Object(data_environment, "Local Environment (Biome)\n(CBOR · QoS 2 · emergent)")
 }
 
 package "Technology Layer" <<rectangle>> {
@@ -104,12 +106,30 @@ Rel_Realization_Up(rt_rust, evo_svc)
 Rel_Flow_Right(lsystem, graph_exp, "generates topology")
 Rel_Flow_Right(graph_exp, fsm_gen, "expands to")
 Rel_Flow_Right(fsm_gen, phenotype, "compiles to")
+Rel_Association(phenotype, cond_ohlcv, "evaluates")
+Rel_Association(phenotype, cond_ind, "evaluates")
+Rel_Association(phenotype, cond_bucket, "uses")
+Rel_Association(phenotype, cond_temporal, "uses")
+Rel_Association(phenotype, cond_coop, "subscribes")
 Rel_Access_Up(evo_mutation, lsystem)
 Rel_Access_Up(evo_phenotype, phenotype)
+Rel_Access_Up(evo_cluster, fit_niche)
+Rel_Composition_Down(fit_calc, fit_metrics)
+Rel_Composition_Down(fit_calc, fit_advanced)
+Rel_Association(fit_calc, fit_niche, "includes")
+Rel_Association(fit_calc, fit_coop, "includes")
+Rel_Composition_Down(sig_broker, sig_router)
+Rel_Composition_Down(sig_broker, sig_sub)
+Rel_Flow_Up(evo_svc, sig_broker, "publishes signals/fitness/events")
 Rel_Access_Up(lsystem, data_genome, "generates")
 Rel_Access_Up(fsm_gen, data_fsm, "produces")
 Rel_Access_Up(phenotype, data_signal, "emits ecosystem/signal/# QoS 0")
 Rel_Access_Up(fit_calc, data_fitness, "produces")
 Rel_Access_Up(evo_mutation, data_event, "publishes evolution/mutation/# QoS 1")
+Rel_Realization_Up(evo_niche, proc_emergence)
+Rel_Access_Up(evo_niche, data_fitness, "analyzes")
+Rel_Access_Down(evo_niche, data_environment, "declares ecosystem/environment/# QoS 2")
+Rel_Flow_Down(evo_niche, lsystem, "topology bias signal")
+Rel_Flow_Down(evo_niche, phenotype, "context awareness signal")
 
 @enduml

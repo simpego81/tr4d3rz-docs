@@ -1,0 +1,56 @@
+@startuml evolution_fitness
+skinparam monochrome true
+left to right direction
+
+title Ciclo di valutazione fitness
+
+node "Persistence" as P <<Cloud/Hub - Linux Server>>
+database "MQTT Broker" as MQTT <<Edge Node - Linux Gateway>>
+node "Core Runtime" as CR <<Distributed Node - RPi / ESP32 / STM32>>
+component "Agent FSM" as FSM <<Distributed Node - RPi / ESP32 / STM32>>
+node "Fitness Evaluator" as FE <<Cloud/Hub - Linux Server>>
+
+P -right-> MQTT : [1] publish OHLCV\n"tr4d3rz/data/ohlcv/{symbol}"
+MQTT -right-> CR : [2] deliver market tick
+CR -right-> FSM : [3] process OHLCV through FSM
+FSM -down-> CR : [4] Prediction(direction, confidence)
+CR -right-> FE : [5] submit prediction + next_tick
+FE -left-> FE : [6] compare prediction\nwith realized tick
+FE -left-> MQTT : [7] publish fitness update\n"tr4d3rz/ecosystem/fitness/{agent_id}"
+
+note bottom of P
+  **Hosted on:** Cloud/Hub - Linux Server
+  **Topic:** tr4d3rz/data/ohlcv/{symbol}
+  **Payload (CBOR map):**
+  {
+    "v": 1,
+    "ts": uint64,
+    "node": node_id,
+    "type": "data.ohlcv",
+    "symbol": text,
+    "open": float64,
+    "high": float64,
+    "low": float64,
+    "close": float64,
+    "volume": uint64
+  }
+end note
+
+note bottom of FE
+  **Hosted on:** Cloud/Hub - Linux Server
+  **Topic:** tr4d3rz/ecosystem/fitness/{agent_id}
+  **Payload (CBOR map):**
+  {
+    "v": 1,
+    "ts": uint64,
+    "node": node_id,
+    "type": "ecosystem.fitness.update",
+    "agent_id": UUID,
+    "fitness_score": float32,
+    "symbols_count": uint32,
+    "timestamp": uint64
+  }
+end note
+
+footer Hosting: Cloud/Hub Linux Server -> Persistence/Fitness Evaluator; Edge Linux Gateway -> MQTT Broker; Distributed RPi/ESP32/STM32 -> Core Runtime/Agent FSM | MQTT Topics: tr4d3rz/data/ohlcv/{symbol}, tr4d3rz/ecosystem/fitness/{agent_id} | CBOR Payloads: OHLCV market tick; agent_id, fitness_score, symbols_count, timestamp
+@enduml

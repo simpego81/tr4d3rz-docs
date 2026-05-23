@@ -1,0 +1,68 @@
+@startuml evolution_mutation
+skinparam monochrome true
+left to right direction
+
+title Mutazione e adattamento dell'agente
+
+[*] --> Active : birth\ntr4d3rz/evolution/birth/{agent_id}
+
+state Active <<Distributed Node - RPi / ESP32 / STM32>> {
+  state "Executing FSM" as Exec <<Distributed Node - RPi / ESP32 / STM32>>
+  state "Monitoring Fitness" as Mon <<Distributed Node - RPi / ESP32 / STM32>>
+  [*] --> Exec
+  Exec --> Mon : prediction_emitted
+  Mon --> Exec : fitness_ok
+}
+
+Active --> UnderMutation : low_fitness OR external_command\ntr4d3rz/ecosystem/fitness/{agent_id}
+
+state "Under Mutation" as UnderMutation <<Cloud/Hub - Linux Server>> {
+  state "Structural Revision" as Struct <<Cloud/Hub - Linux Server>>
+  state "Parametric Tuning" as Param <<Cloud/Hub - Linux Server>>
+  [*] --> Struct
+  Struct --> Param : topology_candidate_ready
+  Param --> Struct : optimization_failed
+  Param --> [*] : candidate_genome_ready
+}
+
+UnderMutation --> Validation : mutation_candidate\ntr4d3rz/evolution/mutation/{node_id}
+
+state Validation <<Cloud/Hub - Linux Server>> {
+  state "Local Sandbox Test" as Sandbox <<Cloud/Hub - Linux Server>>
+  state "Hardware Constraint Check" as HwCheck <<Cloud/Hub - Linux Server>>
+  [*] --> Sandbox
+  Sandbox --> HwCheck : tests_passed
+  HwCheck --> [*] : memory_ok && clock_ok
+  HwCheck --> UnderMutation : Hardware_Constraint violated
+}
+
+Validation --> ReDeployed : validation_passed\ntr4d3rz/node/{node_id}/capsule/in
+Validation --> Active : validation_failed\nkeep_previous_fsm
+
+state "Re-Deployed" as ReDeployed <<Distributed Node - RPi / ESP32 / STM32>> {
+  state "Capsule Transfer" as Capsule <<Edge Node - Linux Gateway / Distributed Node>>
+  state "Warmup" as Warm <<Distributed Node - RPi / ESP32 / STM32>>
+  [*] --> Capsule
+  Capsule --> Warm : loaded_on_node
+  Warm --> [*] : ready
+}
+
+ReDeployed --> Active : resume_operation
+
+note top of Validation
+  **Hosted on:** Cloud/Hub - Linux Server
+  **Hardware_Constraint:**
+  - KB RAM budget per target node
+  - Clock MHz budget per target node
+  - FSM table size must fit local capsule memory
+end note
+
+note bottom of ReDeployed
+  **Hosted on:** Distributed Node - RPi / ESP32 / STM32
+  Example embedded targets:
+  - STM32F1: 64KB RAM / 72MHz
+  - ESP8266: 32KB heap / 80MHz
+end note
+
+footer Hosting: Cloud/Hub Linux Server -> Mutation/Validation; Edge Linux Gateway -> capsule routing when needed; Distributed RPi/ESP32/STM32 -> Active/Re-Deployed runtime | MQTT Topics: tr4d3rz/ecosystem/fitness/{agent_id}, tr4d3rz/evolution/mutation/{node_id}, tr4d3rz/node/{node_id}/capsule/in, tr4d3rz/evolution/birth/{agent_id} | CBOR Payload: v, ts, node, type, agent_id, genome_string, fsm_table, generation, parent_id, fitness_score, Hardware_Constraint
+@enduml

@@ -39,6 +39,7 @@ package "Application Layer" <<rectangle>> {
     Application_Component(per_archetype, "Archetype Memory\n(motif FSM · patterns · niches)")
     Application_Component(per_events, "Event Logger\n(mutation · signal · migration)")
     Application_Component(per_relay, "Relay Service\n(delayed sync · offline nodes)")
+    Application_Component(per_pingpong, "Ping-Pong Logic\n(Distributed Watchdog / Routing)\nHTTP GET/POST chain")
   }
 }
 
@@ -80,5 +81,11 @@ Rel_Access_Up(per_svc, db_sqlite)
 Rel_Access_Up(per_svc, db_parquet)
 Rel_Access_Up(per_events, log_events)
 Rel_Access_Up(per_archetype, data_archetype, "publishes lineage/archetype/# QoS 2")
+
+
+Rel_Composition_Down(per_svc, per_pingpong)
+Rel_Assignment_Down(rt_rust, hw_rasp2)
+Rel_Realization_Up(rt_rust, per_lineage)
+Rel_Realization_Up(rt_rust, per_archetype)
 
 @enduml

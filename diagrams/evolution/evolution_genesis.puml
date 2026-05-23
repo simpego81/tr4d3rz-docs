@@ -1,0 +1,61 @@
+@startuml evolution_genesis
+skinparam monochrome true
+
+title Genesi evolutiva: trascrizione genomica
+
+box "Cloud/Hub - Linux Server" #LightBlue
+  actor "Mutation Engine" as ME
+  participant "L-System Generator" as LSG
+  participant "Graph Expansion" as GE
+  participant "FSM Generator" as FSMG
+end box
+
+box "Edge Node - Linux Gateway" #LightYellow
+  participant "MQTT Broker" as MQTT
+end box
+
+box "Distributed Node - RPi / ESP32 / STM32" #LightGreen
+  participant "Core Runtime" as RT
+end box
+
+ME -> LSG : trigger_transcription(seed, rules, parent_id)
+activate LSG
+note right of LSG
+  L-System expansion example:
+  G[+F]-X
+end note
+LSG -> LSG : expand_genome_string()
+LSG -> GE : normalize(genome_string)
+deactivate LSG
+
+activate GE
+GE -> GE : build_normalized_graph(nodes, edges)
+GE -> FSMG : compile_graph(normalized_graph)
+deactivate GE
+
+activate FSMG
+FSMG -> FSMG : emit_fsm_table(states, transitions)
+FSMG -> MQTT : publish("tr4d3rz/evolution/birth/{agent_id}", CBOR_Genesis)
+deactivate FSMG
+
+MQTT -> RT : deliver birth event
+RT -> RT : instantiate agent phenotype
+
+note right of MQTT
+  **Topic:** tr4d3rz/evolution/birth/{agent_id}
+  **Payload (CBOR map):**
+  {
+    "v": 1,
+    "ts": uint64,
+    "node": node_id,
+    "type": "evolution.birth",
+    "agent_id": UUID,
+    "genome_string": text,
+    "fsm_table": bytes,
+    "generation": uint32,
+    "parent_id": UUID | null
+  }
+end note
+
+footer Hosting: Cloud/Hub Linux Server -> genome pipeline; Edge Linux Gateway -> MQTT; Distributed RPi/ESP32/STM32 -> Core Runtime | MQTT Topics: tr4d3rz/evolution/birth/{agent_id} | CBOR Payload: v, ts, node, type, agent_id, genome_string, fsm_table, generation, parent_id
+@enduml

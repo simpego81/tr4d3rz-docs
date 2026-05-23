@@ -76,5 +76,10 @@ Rel_Realization_Up(rt_cbor, capsule_cbor)
 Rel_Access_Up(opt_svc, capsule_fs)
 Rel_Access_Up(capsule_mgr, data_capsule, "exchanges offline NFC/I2C")
 Rel_Access_Down(opt_local, data_fitness, "produces")
+Rel_Association(opt_tuning, capsule_mgr, "uses")
+Rel_Association(opt_validation, capsule_mgr, "uses")
+Rel_Association(opt_capsule, capsule_mgr, "manages")
+Rel_Composition_Down(capsule_mgr, capsule_cbor)
+Rel_Access_Up(capsule_cbor, data_capsule, "serializes")
 
 @enduml

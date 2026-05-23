@@ -1,0 +1,75 @@
+@startuml TR4D3RZ_php_hosting
+!include <archimate/Archimate>
+
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName "Courier New"
+skinparam defaultFontColor #000000
+skinparam defaultFontSize 11
+skinparam ArrowColor #333333
+skinparam packageBorderColor #333333
+skinparam packageBackgroundColor #EFEFEF
+skinparam packageFontColor #000000
+skinparam packageFontSize 12
+skinparam packageFontStyle bold
+skinparam nodeBorderColor #333333
+skinparam noteBorderColor #333333
+skinparam noteBackgroundColor #FFFDE7
+skinparam noteFontColor #000000
+scale 1.5
+
+title TR4D3RZ — Device View: Distributed PHP Hosting (Free Services)\nArchiMate Architecture v1.0  |  2026-05-16
+
+package "Motivation Layer" <<rectangle>> {
+  Motivation_Goal(goal_distribute, "Distributed Heterogeneous\nComputation")
+  Motivation_Goal(goal_persist, "Persistent External Memory")
+  Motivation_Principle(prin_pingpong, "Ping-Pong Computing\n(bypass execution limits)")
+}
+
+package "Business Layer" <<rectangle>> {
+  Business_Process(proc_relay, "Distributed Relay")
+  Business_Process(proc_archive, "Long-term Archival")
+}
+
+package "Application Layer" <<rectangle>> {
+  package "Distributed PHP Nodes" <<Cloud>> {
+    Application_Service(php_svc, "PHP Persistence & Logic Service")
+    Application_Component(php_pingpong, "Ping-Pong Logic\n(HTTP self-invocation chain)")
+    Application_Component(php_registry, "Genome Registry\n(Top archetypes storage)")
+    Application_Component(php_watchdog, "Distributed Watchdog\n(Health monitoring)")
+  }
+}
+
+package "Technology Layer" <<rectangle>> {
+  package "External Cloud Infrastructure" <<Node>> {
+    Technology_Node(php_hosting_1, "PHP Hosting Service A")
+    Technology_Node(php_hosting_2, "PHP Hosting Service B")
+    Technology_Artifact(db_mysql, "Remote MySQL Database")
+  }
+  
+  package "Communication" <<rectangle>> {
+    Technology_Service(net_http, "HTTP Service\n(GET / POST)")
+  }
+}
+
+' ── Relations ───────────────────────────────────────────
+Rel_Realization_Up(proc_relay, goal_distribute)
+Rel_Realization_Up(proc_archive, goal_persist)
+Rel_Influence_Up(prin_pingpong, goal_distribute)
+
+Rel_Realization_Up(php_svc, proc_relay)
+Rel_Realization_Up(php_svc, proc_archive)
+
+Rel_Composition_Down(php_svc, php_pingpong)
+Rel_Composition_Down(php_svc, php_registry)
+Rel_Composition_Down(php_svc, php_watchdog)
+
+Rel_Assignment_Down(php_svc, php_hosting_1)
+Rel_Assignment_Down(php_svc, php_hosting_2)
+
+Rel_Flow_Right(php_hosting_1, php_hosting_2, "HTTP Ping-Pong (GET/POST)")
+Rel_Flow_Left(php_hosting_2, php_hosting_1, "HTTP Ping-Pong (GET/POST)")
+
+Rel_Access_Up(php_registry, db_mysql, "Stores archetypes")
+Rel_Realization_Up(net_http, php_pingpong)
+
+@enduml

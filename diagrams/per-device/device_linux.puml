@@ -34,6 +34,7 @@ package "Motivation Layer" <<rectangle>> {
 package "Business Layer" <<rectangle>> {
   Business_Process(proc_evolution, "Evolutionary Process\n(Genome → FSM → Fitness)")
   Business_Process(proc_signal, "Cooperative Signal\nGeneration")
+  Business_Process(proc_emergence, "Environment Emergence\n(biome detection · lifecycle)")
   Business_Service(svc_prediction, "Prediction Service\n(daily investment signals)")
 }
 
@@ -81,6 +82,7 @@ package "Data Objects" <<rectangle>> {
   Business_Object(data_fitness, "Fitness Record\n(CBOR · QoS 1 · multi-dim)")
   Business_Object(data_event, "System Event\n(CBOR · QoS 1 · append-only)")
   Business_Object(data_archetype, "Archetype\n(CBOR · QoS 2 · FSM motif)")
+  Business_Object(data_environment, "Local Environment (Biome)\n(CBOR · QoS 2 · emergent)")
 }
 
 package "Technology Layer" <<rectangle>> {
@@ -96,10 +98,13 @@ package "Technology Layer" <<rectangle>> {
 ' ── Relations ──────────────────────────────────────────────
 Rel_Realization_Up(proc_evolution, goal_evolve)
 Rel_Realization_Up(proc_signal, goal_predict)
+Rel_Realization_Up(proc_emergence, goal_predict)
 Rel_Influence_Up(driver_research, goal_evolve)
 Rel_Influence_Up(driver_emergence, goal_predict)
+Rel_Influence_Up(driver_emergence, proc_emergence)
 Rel_Influence_Up(prin_openended, goal_evolve)
 Rel_Influence_Up(prin_niche, goal_predict)
+Rel_Influence_Up(prin_niche, proc_emergence)
 Rel_Influence_Up(prin_coop, goal_predict)
 Rel_Influence_Up(prin_async, goal_distribute)
 Rel_Realization_Up(evo_svc, proc_evolution)
@@ -137,5 +142,10 @@ Rel_Access_Up(fsm_gen, data_fsm, "produces")
 Rel_Access_Up(phenotype, data_signal, "emits ecosystem/signal/# QoS 0")
 Rel_Access_Up(fit_calc, data_fitness, "publishes ecosystem/fitness/# QoS 1")
 Rel_Access_Up(evo_mutation, data_event, "publishes evolution/mutation/# QoS 1")
+Rel_Realization_Up(evo_niche, proc_emergence)
+Rel_Access_Up(evo_niche, data_fitness, "analyzes")
+Rel_Access_Down(evo_niche, data_environment, "declares ecosystem/environment/# QoS 2")
+Rel_Flow_Down(evo_niche, lsystem, "topology bias signal")
+Rel_Flow_Down(evo_niche, phenotype, "context awareness signal")
 
 @enduml
