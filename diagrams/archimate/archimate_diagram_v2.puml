@@ -66,18 +66,18 @@ package "Business Layer" <<rectangle>> {
 }
 
 ' ============================================================
-' APPLICATION LAYER — CORE INFRASTRUCTURE
+' APPLICATION LAYER — CENTRAL INFRASTRUCTURE & PERSISTENCE
 ' ============================================================
 
-package "Application Layer — Core Infrastructure" <<rectangle>> {
+package "Application Layer — Central Infrastructure & Persistence" <<rectangle>> {
 
-  package "Core Infrastructure Node  [Raspberry Pi 1 · ARMv6l]" <<Node>> {
+  package "Central Node  [Raspberry Pi 2 · ARMv7 quad-core]" <<Node>> {
     Application_Component(ci_broker,    "NanoMQ Broker\nMQTT 3.1.1/5.0\nTCP:1883 · WS:8083")
     Application_Component(ci_scraper,   "borsa-italiana-scraper\nNode.js 14.15.1\nHTTPS → MQTT pub")
     Application_Component(ci_logger,    "Event Logger  [M2]\nRust · SQLite WAL\nappend-only")
     Application_Component(ci_persist,   "Persistence Service  [M2]\nRust · Parquet export\narchetype store")
     Application_Component(ci_cron,      "Cron Scheduler\nmarket-hours aware\n18:30 daily + 15min intraday")
-    Application_Service(ci_svc,         "Core Infrastructure Service")
+    Application_Service(ci_svc,         "Central Infrastructure & Persistence Service")
   }
 }
 
@@ -115,7 +115,7 @@ package "Application Layer — Node Types" <<rectangle>> {
     Application_Service(opt_svc,          "Optimization Service")
   }
 
-  package "Persistence Nodes  [Raspberry Pi 2 · PHP hosting]" <<Cloud>> {
+  package "External Persistence Extension  [PHP hosting]" <<Cloud>> {
     Application_Component(per_lineage,    "Lineage Storage\n(birth · death · mutation)")
     Application_Component(per_archetype,  "Archetype Memory\n(motif FSM · patterns · niches)")
     Application_Component(per_events,     "Event Logger\n(mutation · signal · migration)")
@@ -124,7 +124,7 @@ package "Application Layer — Node Types" <<rectangle>> {
     Application_Service(per_svc,          "Persistence Service")
   }
 
-  package "Gateway Nodes  [Linux · RPi]" <<Cloud>> {
+  package "Peripheral Gateway Nodes  [Linux · STR-E912]" <<Cloud>> {
     Application_Component(gw_uart,       "UART Bridge\n(serial framing · CBOR)")
     Application_Component(gw_protocol,   "Protocol Translator\n(UART/USB ↔ MQTT)")
     Application_Component(gw_delayed,    "Delayed Sync\n(capsule queue · offline)")
@@ -216,10 +216,6 @@ package "Technology Layer — Hardware" <<rectangle>> {
     Technology_Device(hw_str,     "Olimex STR-E912\n(ARM9 · 48MHz)")
   }
 
-  package "Core Infrastructure" <<Node>> {
-    Technology_Device(hw_rpi1,    "Raspberry Pi 1\n(ARM1176 · ARMv6l · 700MHz)")
-  }
-
   package "Offline IoT Nodes" <<Node>> {
     Technology_Device(hw_m24lr,   "M24LR Discovery\n(NFC/RFID · I2C · offline capsule)")
   }
@@ -236,7 +232,7 @@ package "Technology Layer — Hardware" <<rectangle>> {
 ' ============================================================
 
 package "Technology Layer — Infrastructure" <<rectangle>> {
-  Technology_Node(mqtt_broker,    "NanoMQ Broker\n[ARMv6l compiled]\nMQTT 3.1.1/5.0")
+  Technology_Node(mqtt_broker,    "NanoMQ Broker\n[ARMv7 RPi2]\nMQTT 3.1.1/5.0")
   Technology_Node(web_server,     "Web Server\n(static assets · Observatory UI)")
   Technology_Node(php_hosting,    "PHP Free Hosting\n(Distributed logic · secondary store)")
   Technology_Artifact(db_mysql,   "Remote MySQL\n(Shared state \xb7 Top Genomes)")
@@ -319,7 +315,7 @@ Rel_Composition_Down(obs_svc, obs_wasm)
 
 Rel_Composition_Down(evo_svc, evo_mutation)
 Rel_Composition_Down(evo_svc, evo_cluster)
-Rel_Composition_Down(evo_svc, evo_niche)
+Rel_Composition_Down(evo_svc, evo_emergence)
 Rel_Composition_Down(evo_svc, evo_phenotype)
 Rel_Composition_Down(evo_svc, evo_mqtt)
 
@@ -354,8 +350,8 @@ Rel_Association(phenotype, cond_coop,     "subscribes")
 Rel_Access_Up(evo_mutation,  lsystem)
 Rel_Access_Up(evo_phenotype, phenotype)
 Rel_Access_Up(evo_emergence, fit_calc, "analyzes fitness success")
-Rel_Flow_Back(evo_emergence, lsystem, "applies specialization bias")
-Rel_Flow_Back(evo_emergence, evo_mutation, "guides mutation focus")
+Rel_Flow_Up(evo_emergence, lsystem, "applies specialization bias")
+Rel_Flow_Up(evo_emergence, evo_mutation, "guides mutation focus")
 
 ' ============================================================
 ' RELATIONS — FITNESS
@@ -406,7 +402,7 @@ Rel_Realization_Up(rest_api, net_https)
 
 Rel_Realization_Up(net_mqtt, mqtt_broker)
 
-Rel_Assignment_Down(ci_svc,  hw_rpi1)
+Rel_Assignment_Down(ci_svc,  hw_rasp2)
 Rel_Assignment_Down(evo_svc, hw_linux)
 Rel_Assignment_Down(evo_svc, hw_android)
 Rel_Assignment_Down(evo_svc, hw_mimx)
@@ -479,18 +475,18 @@ Rel_Assignment_Down(rt_rust, hw_linux)
 Rel_Assignment_Down(rt_rust, hw_android)
 Rel_Assignment_Down(rt_rust, hw_mimx)
 Rel_Assignment_Down(rt_rust, hw_rasp2)
-Rel_Assignment_Down(rt_nodejs, hw_rpi1)
+Rel_Assignment_Down(rt_nodejs, hw_rasp2)
 Rel_Assignment_Down(rt_wasm, hw_browser)
 Rel_Assignment_Down(rt_threejs, hw_browser)
-Rel_Assignment_Down(mqtt_broker, hw_rpi1)
-Rel_Assignment_Down(web_server, hw_rpi1)
+Rel_Assignment_Down(mqtt_broker, hw_rasp2)
+Rel_Assignment_Down(web_server, hw_rasp2)
 
 ' --- Motivation Principles Realization ---
 Rel_Realization_Up(lsystem, prin_openended)
 Rel_Realization_Up(sig_broker, prin_coop)
 Rel_Realization_Up(sig_broker, prin_async)
 Rel_Realization_Up(obs_replay, prin_replay)
-Rel_Realization_Up(evo_niche, prin_niche)
+Rel_Realization_Up(evo_emergence, prin_niche)
 
 
 ' --- Optimization Refinement ---

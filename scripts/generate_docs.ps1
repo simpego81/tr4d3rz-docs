@@ -11,7 +11,7 @@ $deviceList = @(
     @{ name = "phone";    puml = "diagrams/per-device/device_phone.puml"   },
     @{ name = "ra8";      puml = "diagrams/per-device/device_ra8.puml"     },
     @{ name = "rasp2";    puml = "diagrams/per-device/device_rasp2.puml"   },
-    @{ name = "rpi1";     puml = "diagrams/per-device/device_rpi1.puml"    },
+    
     @{ name = "stm32f1";  puml = "diagrams/per-device/device_stm32f1.puml" },
     @{ name = "stm32f3";  puml = "diagrams/per-device/device_stm32f3.puml" },
     @{ name = "str";      puml = "diagrams/per-device/device_str.puml"     },

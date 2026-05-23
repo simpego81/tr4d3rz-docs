@@ -17,7 +17,7 @@ skinparam noteBackgroundColor #FFFDE7
 skinparam noteFontColor #000000
 scale 1.5
 
-title TR4D3RZ — Device View: Raspberry Pi 2 · (ARMv7 · 900MHz)\nArchiMate Architecture v2.0  |  2026-05-12
+title TR4D3RZ — Device View: Central Node Raspberry Pi 2 · (ARMv7 · 900MHz quad-core)\nArchiMate Architecture v2.0  |  2026-05-12
 
 package "Motivation Layer" <<rectangle>> {
   Motivation_Goal(goal_distribute, "Distributed Heterogeneous\nComputation")
@@ -28,34 +28,45 @@ package "Motivation Layer" <<rectangle>> {
 }
 
 package "Business Layer" <<rectangle>> {
+  Business_Process(proc_ingest, "Market Data Ingestion\n(OHLCV Feed)")
   Business_Process(proc_persist, "Ecosystem Memory\n(Event Sourcing)")
+  Business_Service(svc_prediction, "Prediction Service\n(daily investment signals)")
   Business_Service(svc_knowledge, "Knowledge Service\n(archetype library)")
 }
 
 package "Application Layer" <<rectangle>> {
-  package "Persistence Nodes  [Raspberry Pi 2 · PHP hosting]" <<Cloud>> {
-    Application_Service(per_svc, "Persistence Service")
+  package "Central Node  [Raspberry Pi 2 · ARMv7 quad-core]" <<Node>> {
+    Application_Service(ci_svc, "Central Infrastructure & Persistence Service")
+    Application_Component(ci_broker, "NanoMQ Broker\nMQTT 3.1.1/5.0\nTCP:1883 · WS:8083")
+    Application_Component(ci_scraper, "borsa-italiana-scraper\nNode.js 14.15.1\nHTTPS → MQTT pub")
+    Application_Component(ci_logger, "Event Logger  [M2]\nRust · SQLite WAL\nappend-only")
+    Application_Component(ci_persist, "Persistence Service  [M2]\nRust · Parquet export\narchetype store")
+    Application_Component(ci_cron, "Cron Scheduler\nmarket-hours aware\n18:30 daily + 15min intraday")
     Application_Component(per_lineage, "Lineage Storage\n(birth · death · mutation)")
     Application_Component(per_archetype, "Archetype Memory\n(motif FSM · patterns · niches)")
-    Application_Component(per_events, "Event Logger\n(mutation · signal · migration)")
     Application_Component(per_relay, "Relay Service\n(delayed sync · offline nodes)")
-    Application_Component(per_pingpong, "Ping-Pong Logic\n(Distributed Watchdog / Routing)\nHTTP GET/POST chain")
+    Application_Component(gw_protocol, "Local Gateway / Protocol Translator\nUART/USB ↔ MQTT\ncentral RPi2 endpoint")
   }
 }
 
 package "Data Objects" <<rectangle>> {
+  Business_Object(data_ohlcv, "OHLCV Payload\n(JSON · ADR-0004 schema)")
   Business_Object(data_event, "System Event\n(CBOR · QoS 1 · append-only)")
   Business_Object(data_fitness, "Fitness Record\n(CBOR · QoS 1 · multi-dim)")
   Business_Object(data_archetype, "Archetype\n(CBOR · QoS 2 · FSM motif)")
 }
 
 package "Technology Layer" <<rectangle>> {
-  package "Medium Performance Nodes" <<Node>> {
-    Technology_Device(hw_rasp2, "Raspberry Pi 2\n(ARMv7 · 900MHz)")
+  package "Central Infrastructure Hardware" <<Node>> {
+    Technology_Device(hw_rasp2, "Raspberry Pi 2\n(ARMv7 · 900MHz · quad-core · 1GB RAM)")
   }
   package "Infrastructure" <<rectangle>> {
+    Technology_Node(mqtt_broker, "NanoMQ Broker\n[ARMv7 RPi2]\nMQTT 3.1.1/5.0")
+    Technology_Node(web_server, "Web Server\n(static assets · Observatory UI)")
     Technology_SystemSoftware(rt_rust, "Rust Runtime\n(tr4d3rz-core · evolution · messaging)")
+    Technology_SystemSoftware(rt_nodejs, "Node.js 14.15.1\n(borsa-italiana-scraper)")
     Technology_Service(net_mqtt, "MQTT Service\n(TCP:1883 · WS:8083)")
+    Technology_Service(net_https, "HTTPS Service\n(borsaitaliana.it REST API)")
   }
   package "Storage" <<rectangle>> {
     Technology_Artifact(db_sqlite, "SQLite Database\n(WAL mode · event log · archetypes)")
@@ -65,27 +76,38 @@ package "Technology Layer" <<rectangle>> {
 }
 
 ' ── Relations ──────────────────────────────────────────────
+Rel_Realization_Up(proc_ingest, goal_distribute)
 Rel_Realization_Up(proc_persist, goal_distribute)
 Rel_Influence_Up(driver_research, goal_distribute)
 Rel_Influence_Up(prin_replay, goal_observe)
 Rel_Influence_Up(prin_async, goal_distribute)
-Rel_Realization_Up(per_svc, proc_persist)
-Rel_Serving_Up(per_svc, svc_knowledge)
-Rel_Composition_Down(per_svc, per_lineage)
-Rel_Composition_Down(per_svc, per_archetype)
-Rel_Composition_Down(per_svc, per_events)
-Rel_Composition_Down(per_svc, per_relay)
-Rel_Assignment_Down(per_svc, hw_rasp2)
-Rel_Realization_Up(rt_rust, per_svc)
-Rel_Access_Up(per_svc, db_sqlite)
-Rel_Access_Up(per_svc, db_parquet)
-Rel_Access_Up(per_events, log_events)
-Rel_Access_Up(per_archetype, data_archetype, "publishes lineage/archetype/# QoS 2")
-
-
-Rel_Composition_Down(per_svc, per_pingpong)
+Rel_Realization_Up(ci_svc, proc_ingest)
+Rel_Realization_Up(ci_svc, proc_persist)
+Rel_Serving_Up(ci_svc, svc_prediction)
+Rel_Serving_Up(ci_svc, svc_knowledge)
+Rel_Composition_Down(ci_svc, ci_broker)
+Rel_Composition_Down(ci_svc, ci_scraper)
+Rel_Composition_Down(ci_svc, ci_logger)
+Rel_Composition_Down(ci_svc, ci_persist)
+Rel_Composition_Down(ci_svc, ci_cron)
+Rel_Composition_Down(ci_svc, per_lineage)
+Rel_Composition_Down(ci_svc, per_archetype)
+Rel_Composition_Down(ci_svc, per_relay)
+Rel_Composition_Down(ci_svc, gw_protocol)
+Rel_Assignment_Down(ci_svc, hw_rasp2)
 Rel_Assignment_Down(rt_rust, hw_rasp2)
-Rel_Realization_Up(rt_rust, per_lineage)
-Rel_Realization_Up(rt_rust, per_archetype)
+Rel_Assignment_Down(rt_nodejs, hw_rasp2)
+Rel_Assignment_Down(mqtt_broker, hw_rasp2)
+Rel_Assignment_Down(web_server, hw_rasp2)
+Rel_Realization_Up(rt_rust, ci_logger)
+Rel_Realization_Up(rt_rust, ci_persist)
+Rel_Realization_Up(rt_nodejs, ci_scraper)
+Rel_Realization_Up(net_mqtt, mqtt_broker)
+Rel_Access_Up(ci_scraper, data_ohlcv, "publishes data/ohlcv/# QoS 0")
+Rel_Access_Up(ci_persist, db_sqlite)
+Rel_Access_Up(ci_persist, db_parquet)
+Rel_Access_Up(ci_logger, log_events)
+Rel_Access_Up(per_archetype, data_archetype, "publishes lineage/archetype/# QoS 2")
+Rel_Access_Up(ci_logger, data_event, "logs ecosystem/# QoS 1")
 
 @enduml

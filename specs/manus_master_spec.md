@@ -422,29 +422,40 @@ fitness =
 
 ---
 
-## 4. Persistence Nodes
+## 4. Central Infrastructure & Persistence Node
 
 ### Target
 
-- Raspberry Pi 2
-- hosting PHP gratuiti
+- Raspberry Pi 2 Model B (2015), ARMv7 quad-core, 1GB RAM
+- hosting PHP gratuiti come persistenza remota secondaria
 
 ### Responsabilità
 
+Il nodo Raspberry Pi 2 è la spina dorsale locale del sistema e consolida le responsabilità precedentemente separate fra infrastruttura core e persistenza. Ospita il broker MQTT, lo scraper OHLCV, il logger append-only, la persistenza SQLite/Parquet, il relay locale e i servizi gateway verso i nodi distribuiti.
+
+- MQTT broker centrale e WebSocket endpoint
+- data ingestion da Borsa Italiana tramite scraper
 - lineage storage
 - archetype memory
-- event logs
-- relay
+- event logs append-only
+- relay e delayed synchronization
+- gateway locale verso nodi embedded e offline
+
+### Gestione risorse
+
+La RPi 2 deve preservare la priorità del broker MQTT durante i picchi di scrittura dello scraper o del logger. La configurazione runtime deve prevedere priorità di processo o CPU affinity conservativa per NanoMQ, limitazione della concorrenza dello scraper e scritture SQLite in WAL mode per ridurre la contesa I/O.
 
 ---
 
-## 5. Gateway Nodes
+## 5. Peripheral Gateway / Bridge Nodes
 
 ### Responsabilità
 
+I gateway periferici restano disponibili solo come bridge fisici opzionali per hardware senza rete nativa. Tutti i nodi ESP8266, STM32 e Linux PC devono puntare all'unico endpoint IP del nodo centrale Raspberry Pi 2 per MQTT, WebSocket e relay locale.
+
 - UART bridging
-- protocol translation
-- delayed synchronization
+- protocol translation verso il nodo centrale RPi2
+- delayed synchronization tramite il nodo centrale RPi2
 
 ---
 
@@ -459,7 +470,7 @@ fitness =
 - Linux PCs legacy
 - Android tablets
 - Android smartphones
-- Raspberry Pi 2
+- Raspberry Pi 2 Model B (2015)
 - STM32F3 Discovery
 - M24LR Discovery
 - MIMXRT1050-EVK

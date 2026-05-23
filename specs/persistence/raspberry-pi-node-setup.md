@@ -1,4 +1,4 @@
-# Raspberry Pi 1 — Core Infrastructure Node Setup Guide
+# Raspberry Pi 2 — Central Infrastructure & Persistence Node Setup Guide
 
 **Status**: Draft
 **Author**: Manus (Chief Architect)
@@ -9,26 +9,24 @@
 
 | Property | Value |
 |---|---|
-| Model | Raspberry Pi 1 (ARM1176 / ARMv6l) |
-| Kernel | Linux 5.10.103+ |
-| CPU | ARM1176 @ 700MHz (single core) |
-| Architecture | ARMv6l, Little Endian |
-| OS | Raspbian (Bullseye or later) |
+| Model | Raspberry Pi 2 Model B (2015) |
+| Kernel | Linux 5.10+ or later |
+| CPU | ARM Cortex-A7 @ 900MHz (quad-core) |
+| Architecture | ARMv7, Little Endian |
+| RAM | 1GB |
+| OS | Raspberry Pi OS / Raspbian compatible release |
 
 ---
 
 ## Role in the Ecosystem
 
-This node acts as the **Core Infrastructure Node** for the local TR4D3RZ deployment. It hosts:
-1. **NanoMQ MQTT Broker** — The central message bus for all local nodes.
-2. **borsa-italiana-scraper** — The data ingestion process that fetches OHLCV data from `borsaitaliana.it` and publishes it to the MQTT broker.
-3. **Persistence Service** (future, Milestone 2) — SQLite-based event log and archetype memory.
+This node acts as the **Central Infrastructure & Persistence Node** for the local TR4D3RZ deployment. It hosts NanoMQ, the OHLCV scraper, the append-only event logger, the local persistence service and the relay/gateway endpoint. ESP8266, STM32 bridge processes and Linux PC evolution nodes must target the single RPi2 IP address for MQTT, WebSocket and local relay traffic.
 
 ---
 
 ## NanoMQ Installation
 
-NanoMQ must be compiled from source for ARMv6l, as pre-built binaries may not be available. The following procedure is recommended:
+NanoMQ remains the preferred MQTT broker because it is lightweight and suitable for IoT edge workloads. On ARMv7/RPi2 the Mosquitto 2.x illegal-instruction risk seen on older 32-bit ARM deployments is less critical, but NanoMQ still preserves a smaller and more controllable infrastructure footprint.
 
 ```bash
 # Install build dependencies
@@ -40,10 +38,10 @@ git clone https://github.com/emqx/nanomq.git
 cd nanomq
 git submodule update --init --recursive
 
-# Build (single-threaded to avoid OOM on 512MB RPi 1)
+# Build for the quad-core RPi2 while keeping RAM use conservative
 mkdir build && cd build
 cmake -DNNG_ENABLE_TLS=OFF -DBUILD_CLIENT=ON ..
-make -j1
+make -j2
 
 # Install
 sudo make install
@@ -53,6 +51,9 @@ sudo make install
 ```hocon
 listeners.tcp {
   bind = "0.0.0.0:1883"
+}
+listeners.ws {
+  bind = "0.0.0.0:8083/mqtt"
 }
 log {
   to = file
@@ -65,14 +66,14 @@ log {
 
 ## borsa-italiana-scraper Setup
 
-The target Raspberry Pi 1 is running **Node.js v14.15.1**. The `borsa-italiana-scraper` is fully compatible with Node 14's ES module support (`type: module`), but the `p-limit` dependency must be downgraded to version 4 (as version 5 requires Node >=18).
+The scraper environment is still assumed to use **Node.js v14.15.1** unless upgraded explicitly. The `borsa-italiana-scraper` project remains compatible with Node 14's ES module support (`type: module`), but `p-limit` should remain on version 4 when Node 14 is used.
 
 ```bash
 # Clone the scraper
 git clone https://github.com/simpego81/borsa-italiana-scraper.git
 cd borsa-italiana-scraper
 
-# Install dependencies and downgrade p-limit for Node 14 compatibility
+# Install dependencies and keep p-limit compatible with Node 14
 npm install
 npm install p-limit@4
 
@@ -82,15 +83,16 @@ node index.js --period=1Y --mqtt=mqtt://localhost:1883
 
 ---
 
-## Resource Constraints
+## Resource Management
 
-Given the ARMv6l CPU and limited RAM, the following constraints apply:
+The RPi2 quad-core CPU permits NanoMQ, scraper, logger and persistence service to run together, but broker responsiveness remains the priority. The recommended baseline is to reserve operational headroom for NanoMQ, limit scraper concurrency and keep persistence writes append-only.
 
-| Constraint | Limit | Mitigation |
+| Resource | RPi2 Baseline | Mitigation |
 |---|---|---|
-| CPU | 700MHz single core | Run NanoMQ and scraper at different times; use cron for scheduled scraping |
-| RAM | ~256–512MB | Limit scraper concurrency to 2–3 (not 5) |
-| Storage | SD card | Use SQLite with WAL mode; rotate Parquet files |
+| CPU | ARMv7 quad-core @ 900MHz | Run NanoMQ with higher process priority; optionally pin scraper/logger away from the broker core using CPU affinity. |
+| RAM | 1GB | Limit scraper concurrency to a conservative value and avoid large in-memory OHLCV batches. |
+| Storage | SD card | Use SQLite WAL mode, rotate logs and export historical data to Parquet in scheduled windows. |
+| Network | Single local endpoint | Keep ESP8266, STM32 bridges and Linux PC clients pointed to the same RPi2 IP for MQTT/WebSocket traffic. |
 
 ---
 
@@ -98,8 +100,8 @@ Given the ARMv6l CPU and limited RAM, the following constraints apply:
 
 ```cron
 # Daily historical data refresh at 18:30 (after market close)
-30 18 * * 1-5 cd /home/pi/borsa-italiana-scraper && node index.js --period=1M --mqtt=mqtt://localhost:1883
+30 18 * * 1-5 cd /home/pi/borsa-italiana-scraper && nice -n 5 node index.js --period=1M --mqtt=mqtt://localhost:1883
 
 # Intraday data every 15 minutes during market hours (09:00-17:30 CET)
-*/15 9-17 * * 1-5 cd /home/pi/borsa-italiana-scraper && node index.js --mode=intraday --resolution=5MN --mqtt=mqtt://localhost:1883
+*/15 9-17 * * 1-5 cd /home/pi/borsa-italiana-scraper && nice -n 5 node index.js --mode=intraday --resolution=5MN --mqtt=mqtt://localhost:1883
 ```

@@ -45,7 +45,6 @@
                                               "m24lr",
                                               "ra8",
                                               "rasp2",
-                                              "rpi1",
                                               "stm32f1",
                                               "stm32f3",
                                               "str"
@@ -926,6 +925,13 @@
                           },
                           {
                               "label":  "",
+                              "from":  "proc_ingest",
+                              "to":  "goal_distribute",
+                              "devices":  "rasp2",
+                              "type":  "Realization"
+                          },
+                          {
+                              "label":  "",
                               "from":  "proc_persist",
                               "to":  "goal_distribute",
                               "devices":  "rasp2",
@@ -940,49 +946,98 @@
                           },
                           {
                               "label":  "",
-                              "from":  "per_svc",
+                              "from":  "ci_svc",
+                              "to":  "proc_ingest",
+                              "devices":  "rasp2",
+                              "type":  "Realization"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "ci_svc",
                               "to":  "proc_persist",
                               "devices":  "rasp2",
                               "type":  "Realization"
                           },
                           {
                               "label":  "",
-                              "from":  "per_svc",
+                              "from":  "ci_svc",
+                              "to":  "svc_prediction",
+                              "devices":  "rasp2",
+                              "type":  "Serving"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "ci_svc",
                               "to":  "svc_knowledge",
                               "devices":  "rasp2",
                               "type":  "Serving"
                           },
                           {
                               "label":  "",
-                              "from":  "per_svc",
+                              "from":  "ci_svc",
+                              "to":  "ci_broker",
+                              "devices":  "rasp2",
+                              "type":  "Composition"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "ci_svc",
+                              "to":  "ci_scraper",
+                              "devices":  "rasp2",
+                              "type":  "Composition"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "ci_svc",
+                              "to":  "ci_logger",
+                              "devices":  "rasp2",
+                              "type":  "Composition"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "ci_svc",
+                              "to":  "ci_persist",
+                              "devices":  "rasp2",
+                              "type":  "Composition"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "ci_svc",
+                              "to":  "ci_cron",
+                              "devices":  "rasp2",
+                              "type":  "Composition"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "ci_svc",
                               "to":  "per_lineage",
                               "devices":  "rasp2",
                               "type":  "Composition"
                           },
                           {
                               "label":  "",
-                              "from":  "per_svc",
+                              "from":  "ci_svc",
                               "to":  "per_archetype",
                               "devices":  "rasp2",
                               "type":  "Composition"
                           },
                           {
                               "label":  "",
-                              "from":  "per_svc",
-                              "to":  "per_events",
-                              "devices":  "rasp2",
-                              "type":  "Composition"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "per_svc",
+                              "from":  "ci_svc",
                               "to":  "per_relay",
                               "devices":  "rasp2",
                               "type":  "Composition"
                           },
                           {
                               "label":  "",
-                              "from":  "per_svc",
+                              "from":  "ci_svc",
+                              "to":  "gw_protocol",
+                              "devices":  "rasp2",
+                              "type":  "Composition"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "ci_svc",
                               "to":  "hw_rasp2",
                               "devices":  "rasp2",
                               "type":  "Assignment"
@@ -990,27 +1045,83 @@
                           {
                               "label":  "",
                               "from":  "rt_rust",
-                              "to":  "per_svc",
+                              "to":  "hw_rasp2",
+                              "devices":  "rasp2",
+                              "type":  "Assignment"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "rt_nodejs",
+                              "to":  "hw_rasp2",
+                              "devices":  "rasp2",
+                              "type":  "Assignment"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "mqtt_broker",
+                              "to":  "hw_rasp2",
+                              "devices":  "rasp2",
+                              "type":  "Assignment"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "web_server",
+                              "to":  "hw_rasp2",
+                              "devices":  "rasp2",
+                              "type":  "Assignment"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "rt_rust",
+                              "to":  "ci_logger",
                               "devices":  "rasp2",
                               "type":  "Realization"
                           },
                           {
                               "label":  "",
-                              "from":  "per_svc",
+                              "from":  "rt_rust",
+                              "to":  "ci_persist",
+                              "devices":  "rasp2",
+                              "type":  "Realization"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "rt_nodejs",
+                              "to":  "ci_scraper",
+                              "devices":  "rasp2",
+                              "type":  "Realization"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "net_mqtt",
+                              "to":  "mqtt_broker",
+                              "devices":  "rasp2",
+                              "type":  "Realization"
+                          },
+                          {
+                              "label":  "publishes data/ohlcv/# QoS 0",
+                              "from":  "ci_scraper",
+                              "to":  "data_ohlcv",
+                              "devices":  "rasp2",
+                              "type":  "Access"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "ci_persist",
                               "to":  "db_sqlite",
                               "devices":  "rasp2",
                               "type":  "Access"
                           },
                           {
                               "label":  "",
-                              "from":  "per_svc",
+                              "from":  "ci_persist",
                               "to":  "db_parquet",
                               "devices":  "rasp2",
                               "type":  "Access"
                           },
                           {
                               "label":  "",
-                              "from":  "per_events",
+                              "from":  "ci_logger",
                               "to":  "log_events",
                               "devices":  "rasp2",
                               "type":  "Access"
@@ -1023,164 +1134,10 @@
                               "type":  "Access"
                           },
                           {
-                              "label":  "",
-                              "from":  "per_svc",
-                              "to":  "per_pingpong",
-                              "devices":  "rasp2",
-                              "type":  "Composition"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "rt_rust",
-                              "to":  "hw_rasp2",
-                              "devices":  "rasp2",
-                              "type":  "Assignment"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "rt_rust",
-                              "to":  "per_lineage",
-                              "devices":  "rasp2",
-                              "type":  "Realization"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "rt_rust",
-                              "to":  "per_archetype",
-                              "devices":  "rasp2",
-                              "type":  "Realization"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "proc_ingest",
-                              "to":  "goal_distribute",
-                              "devices":  "rpi1",
-                              "type":  "Realization"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "driver_italian",
-                              "to":  "goal_predict",
-                              "devices":  "rpi1",
-                              "type":  "Influence"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "prin_replay",
-                              "to":  "goal_distribute",
-                              "devices":  "rpi1",
-                              "type":  "Influence"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "ci_svc",
-                              "to":  "proc_ingest",
-                              "devices":  "rpi1",
-                              "type":  "Realization"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "ci_svc",
-                              "to":  "svc_prediction",
-                              "devices":  "rpi1",
-                              "type":  "Serving"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "ci_svc",
-                              "to":  "ci_broker",
-                              "devices":  "rpi1",
-                              "type":  "Composition"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "ci_svc",
-                              "to":  "ci_scraper",
-                              "devices":  "rpi1",
-                              "type":  "Composition"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "ci_svc",
-                              "to":  "ci_logger",
-                              "devices":  "rpi1",
-                              "type":  "Composition"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "ci_svc",
-                              "to":  "ci_persist",
-                              "devices":  "rpi1",
-                              "type":  "Composition"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "ci_svc",
-                              "to":  "ci_cron",
-                              "devices":  "rpi1",
-                              "type":  "Composition"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "ci_svc",
-                              "to":  "hw_rpi1",
-                              "devices":  "rpi1",
-                              "type":  "Assignment"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "rt_rust",
-                              "to":  "ci_svc",
-                              "devices":  "rpi1",
-                              "type":  "Realization"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "rt_nodejs",
-                              "to":  "ci_scraper",
-                              "devices":  "rpi1",
-                              "type":  "Realization"
-                          },
-                          {
-                              "label":  "publishes data/ohlcv/#  QoS 0",
-                              "from":  "ci_scraper",
-                              "to":  "data_ohlcv",
-                              "devices":  "rpi1",
-                              "type":  "Access"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "net_mqtt",
-                              "to":  "mqtt_broker",
-                              "devices":  "rpi1",
-                              "type":  "Realization"
-                          },
-                          {
-                              "label":  "",
+                              "label":  "logs ecosystem/# QoS 1",
                               "from":  "ci_logger",
-                              "to":  "db_sqlite",
-                              "devices":  "rpi1",
-                              "type":  "Access"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "ci_persist",
-                              "to":  "db_sqlite",
-                              "devices":  "rpi1",
-                              "type":  "Access"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "ci_persist",
-                              "to":  "db_parquet",
-                              "devices":  "rpi1",
-                              "type":  "Access"
-                          },
-                          {
-                              "label":  "",
-                              "from":  "ci_logger",
-                              "to":  "log_events",
-                              "devices":  "rpi1",
+                              "to":  "data_event",
+                              "devices":  "rasp2",
                               "type":  "Access"
                           },
                           {
@@ -1277,7 +1234,6 @@
                                                         "m24lr",
                                                         "ra8",
                                                         "rasp2",
-                                                        "rpi1",
                                                         "stm32f1",
                                                         "stm32f3",
                                                         "str"
@@ -1287,7 +1243,7 @@
                                         "relations":  "Influences all Application Services. Realized by the MQTT messaging infrastructure.",
                                         "role":  "No global clock, no global synchronization. Each node publishes and subscribes independently. Offline nodes are treated as \u0027delayed evolutionary nodes\u0027, not failures.",
                                         "type_desc":  "ArchiMate Principle — a fundamental architectural guideline.",
-                                        "tech":  "Implemented via MQTT QoS 0/1/2 topic hierarchy, NanoMQ broker on RPi1, and the Delayed Sync component in Gateway Nodes.",
+                                        "tech":  "Implemented via MQTT QoS 0/1/2 topic hierarchy, NanoMQ broker on RPi2, and the Delayed Sync component in Gateway Nodes.",
                                         "title":  "Asynchronous Distributed Ecology (no global sync)",
                                         "aspect":  "Motivation"
                                     },
@@ -1303,15 +1259,15 @@
                                     "aspect":  "Behavior"
                                 },
                      "net_https":  {
-                                       "devices":  "rpi1",
-                                       "layer":  "Technology",
+                                       "devices":  "rasp2",
+                                       "layer":  "",
                                        "type":  "Technology_Service",
                                        "relations":  "",
-                                       "role":  "The external HTTPS API of borsaitaliana.it used by the scraper to fetch OHLCV data. Rate-limited; the scraper uses p-limit to avoid IP bans.",
-                                       "type_desc":  "ArchiMate Technology Service — an external data service.",
+                                       "role":  "",
+                                       "type_desc":  "",
                                        "tech":  "",
                                        "title":  "HTTPS Service (borsaitaliana.it REST API)",
-                                       "aspect":  "Behavior"
+                                       "aspect":  ""
                                    },
                      "hw_phone":  {
                                       "devices":  "phone",
@@ -1335,17 +1291,6 @@
                                     "title":  "Renesas RA8 (Cortex-M85)",
                                     "aspect":  "Active Structure"
                                 },
-                     "per_events":  {
-                                        "devices":  "rasp2",
-                                        "layer":  "Application",
-                                        "type":  "Application_Component",
-                                        "relations":  "",
-                                        "role":  "An architectural element within the TR4D3RZ distributed system.",
-                                        "type_desc":  "ArchiMate Application_Component element.",
-                                        "tech":  "",
-                                        "title":  "Event Logger (mutation · signal · migration)",
-                                        "aspect":  "Active Structure"
-                                    },
                      "evo_phenotype":  {
                                            "devices":  [
                                                            "android",
@@ -1399,7 +1344,6 @@
                                                      "mimx",
                                                      "ra8",
                                                      "rasp2",
-                                                     "rpi1",
                                                      "stm32f3"
                                                  ],
                                      "layer":  "Technology",
@@ -1511,11 +1455,11 @@
                                       "devices":  "rasp2",
                                       "layer":  "Technology",
                                       "type":  "Technology_Device",
-                                      "relations":  "Hosts Persistence Service. Connects to RPi1 via MQTT.",
-                                      "role":  "The primary Persistence Node. More capable than RPi1 (ARMv7, quad-core, 1GB RAM), suitable for SQLite and Parquet operations.",
+                                      "relations":  "Hosts NanoMQ, gateway, ingestion, logging, persistence and scheduling services as the single central node.",
+                                      "role":  "The central Infrastructure and Persistence Node. ARMv7 quad-core with 1GB RAM, suitable for NanoMQ, gateway workloads, SQLite WAL, Parquet operations, scraping and scheduled jobs.",
                                       "type_desc":  "ArchiMate Technology Device — a physical IT resource.",
                                       "tech":  "ARMv7, 900MHz quad-core, 1GB RAM. Linux. Rust runtime (tr4d3rz-persistence). SQLite WAL, Parquet files.",
-                                      "title":  "Raspberry Pi 2 (ARMv7 · 900MHz)",
+                                      "title":  "Raspberry Pi 2 (ARMv7 · 900MHz · quad-core · 1GB RAM)",
                                       "aspect":  "Active Structure"
                                   },
                      "opt_validation":  {
@@ -1553,15 +1497,15 @@
                                         "aspect":  "Active Structure"
                                     },
                      "proc_ingest":  {
-                                         "devices":  "rpi1",
-                                         "layer":  "Business",
+                                         "devices":  "rasp2",
+                                         "layer":  "",
                                          "type":  "Business_Process",
-                                         "relations":  "Realized by Core Infrastructure Service. Produces OHLCV Payload data objects.",
-                                         "role":  "Acquires OHLCV data from borsaitaliana.it, normalizes it to the ADR-0004 schema, and publishes it to the MQTT broker for consumption by Evolution Nodes.",
-                                         "type_desc":  "ArchiMate Business Process — a sequence of behaviors achieving a business outcome.",
-                                         "tech":  "Implemented by borsa-italiana-scraper (Node.js 14.15.1) on RPi1. Runs daily at 18:30 (historical) and every 15min during market hours (intraday). Rate-limited to avoid IP bans.",
+                                         "relations":  "",
+                                         "role":  "",
+                                         "type_desc":  "",
+                                         "tech":  "",
                                          "title":  "Market Data Ingestion (OHLCV Feed)",
-                                         "aspect":  "Behavior"
+                                         "aspect":  ""
                                      },
                      "data_event":  {
                                         "devices":  [
@@ -1601,7 +1545,7 @@
                                                             "m24lr",
                                                             "mimx",
                                                             "ra8",
-                                                            "rpi1",
+                                                            "rasp2",
                                                             "stm32f1",
                                                             "stm32f3"
                                                         ],
@@ -1688,7 +1632,7 @@
                                         "devices":  "android",
                                         "layer":  "Technology",
                                         "type":  "Technology_Device",
-                                        "relations":  "Hosts Evolutionary Computing Service (mobile). Connects to RPi1 via MQTT.",
+                                        "relations":  "Hosts Evolutionary Computing Service (mobile). Connects to the central RPi2 endpoint via MQTT.",
                                         "role":  "Mobile Evolution Node. Runs the full evolutionary pipeline on ARM64 Android. Enables evolution on mobile devices, expanding the computational ecology.",
                                         "type_desc":  "ArchiMate Technology Device — a physical IT resource.",
                                         "tech":  "ARM64, Android. Rust runtime compiled for aarch64-linux-android. MQTT client via TCP:1883 or WS:8083.",
@@ -1707,16 +1651,13 @@
                                            "aspect":  "Behavior"
                                        },
                      "db_sqlite":  {
-                                       "devices":  [
-                                                       "rasp2",
-                                                       "rpi1"
-                                                   ],
+                                       "devices":  "rasp2",
                                        "layer":  "Technology",
                                        "type":  "Technology_Artifact",
                                        "relations":  "Written by Event Logger and Persistence Service. Read by Replay System and Theory Map.",
                                        "role":  "The primary operational database for TR4D3RZ. Stores event log, archetype library, niche atlas, and signal history. WAL mode enables concurrent reads during writes.",
                                        "type_desc":  "ArchiMate Technology Artifact — a physical piece of data.",
-                                       "tech":  "SQLite 3.x with WAL mode. Tables: events, archetypes, niches, signals, agents. Indexed by timestamp and agent_id. Located on RPi1 (events) and RPi2 (archetypes).",
+                                       "tech":  "SQLite 3.x with WAL mode. Tables: events, archetypes, niches, signals, agents. Indexed by timestamp and agent_id. Located on the central RPi2 node for events, archetypes, niches, signals and agents.",
                                        "title":  "SQLite Database (WAL mode · event log · archetypes)",
                                        "aspect":  "Passive Structure"
                                    },
@@ -1756,7 +1697,7 @@
                                         "devices":  "browser",
                                         "layer":  "Technology",
                                         "type":  "Technology_Device",
-                                        "relations":  "Hosts Observatory Service. Connects to RPi1 via MQTT WebSocket.",
+                                        "relations":  "Hosts Observatory Service. Connects to the central RPi2 MQTT WebSocket endpoint.",
                                         "role":  "The primary Observatory Node. Runs the full Observatory Service including 3D Galaxy visualization (Three.js/WebGL) and WASM FSM Replay. Connects to NanoMQ via WebSocket.",
                                         "type_desc":  "ArchiMate Technology Device — a virtual IT resource.",
                                         "tech":  "Chrome/Firefox with WebGL and WebAssembly support. TypeScript/Vite/React. MQTT via WebSocket (WS:8083). Three.js for 3D. WASM for FSM replay.",
@@ -1764,10 +1705,7 @@
                                         "aspect":  "Active Structure"
                                     },
                      "db_parquet":  {
-                                        "devices":  [
-                                                        "rasp2",
-                                                        "rpi1"
-                                                    ],
+                                        "devices":  "rasp2",
                                         "layer":  "Technology",
                                         "type":  "Technology_Artifact",
                                         "relations":  "Written by Parquet Exporter. Read by offline analysis tools.",
@@ -1800,17 +1738,16 @@
                                                              "mimx",
                                                              "ra8",
                                                              "rasp2",
-                                                             "rpi1",
                                                              "stm32f1",
                                                              "stm32f3",
                                                              "str"
                                                          ],
                                              "layer":  "Motivation",
                                              "type":  "Motivation_Goal",
-                                             "relations":  "Realized by all Application Services. Enabled by the Core Infrastructure Node (RPi1 + NanoMQ).",
-                                             "role":  "Computation must span heterogeneous hardware (ARM1176 RPi, x86_64 Linux, ARM64 Android, Cortex-M, Xtensa) with no global synchronization, enabling true distributed evolutionary ecology.",
+                                             "relations":  "Realized by all Application Services. Enabled by the Central Infrastructure \u0026 Persistence Node (RPi2 + NanoMQ).",
+                                             "role":  "Computation must span heterogeneous hardware (ARMv7 Raspberry Pi 2, x86_64 Linux, ARM64 Android, Cortex-M, Xtensa) with no global synchronization, enabling true distributed evolutionary ecology.",
                                              "type_desc":  "ArchiMate Goal — a desired end-state.",
-                                             "tech":  "Achieved via MQTT-based asynchronous messaging (NanoMQ on RPi1), CBOR serialization for embedded nodes, and the Capsule System for offline nodes.",
+                                             "tech":  "Achieved via MQTT-based asynchronous messaging (NanoMQ on RPi2), CBOR serialization for embedded nodes, and the Capsule System for offline nodes.",
                                              "title":  "Distributed Heterogeneous Computation",
                                              "aspect":  "Motivation"
                                          },
@@ -1832,21 +1769,6 @@
                                      "title":  "CBOR Serialization (embedded · no_std · FlatBuffers alt.)",
                                      "aspect":  "Active Structure"
                                  },
-                     "fit_advanced":  {
-                                          "devices":  [
-                                                          "android",
-                                                          "linux",
-                                                          "mimx"
-                                                      ],
-                                          "layer":  "Application",
-                                          "type":  "Application_Component",
-                                          "relations":  "",
-                                          "role":  "An architectural element within the TR4D3RZ distributed system.",
-                                          "type_desc":  "ArchiMate Application_Component element.",
-                                          "tech":  "",
-                                          "title":  "Advanced Metrics (signal_entropy · stat_confidence · computational_efficiency)",
-                                          "aspect":  "Active Structure"
-                                      },
                      "data_archetype":  {
                                             "devices":  [
                                                             "browser",
@@ -1864,15 +1786,15 @@
                                             "aspect":  "Passive Structure"
                                         },
                      "ci_cron":  {
-                                     "devices":  "rpi1",
-                                     "layer":  "Application",
+                                     "devices":  "rasp2",
+                                     "layer":  "",
                                      "type":  "Application_Component",
-                                     "relations":  "Triggers borsa-italiana-scraper component.",
-                                     "role":  "Triggers the borsa-italiana-scraper on a market-hours-aware schedule. Knows Italian stock market hours (09:00-17:30 CET) and triggers intraday scraping only during market hours.",
-                                     "type_desc":  "ArchiMate Application Component — an encapsulation of application functionality.",
-                                     "tech":  "Linux cron on RPi1. Daily historical scrape at 18:30 CET. Intraday scrape every 15 minutes between 09:00-17:30 CET on trading days.",
+                                     "relations":  "",
+                                     "role":  "",
+                                     "type_desc":  "",
+                                     "tech":  "",
                                      "title":  "Cron Scheduler market-hours aware 18:30 daily + 15min intraday",
-                                     "aspect":  "Active Structure"
+                                     "aspect":  ""
                                  },
                      "sig_sub":  {
                                      "devices":  [
@@ -1936,10 +1858,7 @@
                                              "aspect":  "Motivation"
                                          },
                      "log_events":  {
-                                        "devices":  [
-                                                        "rasp2",
-                                                        "rpi1"
-                                                    ],
+                                        "devices":  "rasp2",
                                         "layer":  "Technology",
                                         "type":  "Technology_Artifact",
                                         "relations":  "Written by Event Logger. Read by Replay System.",
@@ -1963,22 +1882,8 @@
                                        "title":  "Cooperative Signaling (events, not references)",
                                        "aspect":  "Motivation"
                                    },
-                     "per_pingpong":  {
-                                          "devices":  "rasp2",
-                                          "layer":  "",
-                                          "type":  "Application_Component",
-                                          "relations":  "",
-                                          "role":  "",
-                                          "type_desc":  "",
-                                          "tech":  "",
-                                          "title":  "Ping-Pong Logic (Distributed Watchdog / Routing) HTTP GET/POST chain",
-                                          "aspect":  ""
-                                      },
                      "goal_predict":  {
-                                          "devices":  [
-                                                          "linux",
-                                                          "rpi1"
-                                                      ],
+                                          "devices":  "linux",
                                           "layer":  "Motivation",
                                           "type":  "Motivation_Goal",
                                           "relations":  "Realized by the Evolutionary Process. Influenced by the OHLCV Data Driver.",
@@ -1987,6 +1892,21 @@
                                           "tech":  "Achieved via L-System genome generation → FSM compilation → backtesting on historical OHLCV data → fitness evaluation with stat_confidence metric.",
                                           "title":  "Discover Predictive Patterns",
                                           "aspect":  "Motivation"
+                                      },
+                     "proc_observe":  {
+                                          "devices":  [
+                                                          "browser",
+                                                          "phone",
+                                                          "tablet"
+                                                      ],
+                                          "layer":  "Business",
+                                          "type":  "Business_Process",
+                                          "relations":  "Realized by Observatory Service. Consumes all MQTT topics.",
+                                          "role":  "Provides real-time and historical views of the ecosystem: node deployment map, theory map, 3D galaxy visualization, signal ecology heatmap, and temporal replay.",
+                                          "type_desc":  "ArchiMate Business Process — a sequence of behaviors achieving a business outcome.",
+                                          "tech":  "Implemented by Observatory Service (TypeScript/Vite/Three.js) in tr4d3rz-observatory. Connects to NanoMQ via MQTT WebSocket (WS:8083).",
+                                          "title":  "Ecosystem Observation \u0026 Replay",
+                                          "aspect":  "Behavior"
                                       },
                      "lsystem":  {
                                      "devices":  [
@@ -2007,7 +1927,7 @@
                                         "devices":  [
                                                         "browser",
                                                         "linux",
-                                                        "rpi1"
+                                                        "rasp2"
                                                     ],
                                         "layer":  "Business",
                                         "type":  "Business_Object",
@@ -2151,20 +2071,26 @@
                                       "title":  "UART Service (serial · CBOR framing)",
                                       "aspect":  "Behavior"
                                   },
-                     "proc_observe":  {
+                     "data_fitness":  {
                                           "devices":  [
+                                                          "android",
                                                           "browser",
+                                                          "esp",
+                                                          "linux",
+                                                          "m24lr",
+                                                          "mimx",
                                                           "phone",
+                                                          "rasp2",
                                                           "tablet"
                                                       ],
                                           "layer":  "Business",
-                                          "type":  "Business_Process",
-                                          "relations":  "Realized by Observatory Service. Consumes all MQTT topics.",
-                                          "role":  "Provides real-time and historical views of the ecosystem: node deployment map, theory map, 3D galaxy visualization, signal ecology heatmap, and temporal replay.",
-                                          "type_desc":  "ArchiMate Business Process — a sequence of behaviors achieving a business outcome.",
-                                          "tech":  "Implemented by Observatory Service (TypeScript/Vite/Three.js) in tr4d3rz-observatory. Connects to NanoMQ via MQTT WebSocket (WS:8083).",
-                                          "title":  "Ecosystem Observation \u0026 Replay",
-                                          "aspect":  "Behavior"
+                                          "type":  "Business_Object",
+                                          "relations":  "",
+                                          "role":  "The multi-dimensional fitness record for each agent after evaluation. Contains all fitness dimensions for niche discovery and archetype selection.",
+                                          "type_desc":  "ArchiMate Business Object — fitness evaluation result.",
+                                          "tech":  "",
+                                          "title":  "Fitness Record (CBOR · QoS 1 · multi-dim)",
+                                          "aspect":  "Passive Structure"
                                       },
                      "net_mqtt":  {
                                       "devices":  [
@@ -2175,7 +2101,6 @@
                                                       "mimx",
                                                       "phone",
                                                       "rasp2",
-                                                      "rpi1",
                                                       "str",
                                                       "tablet"
                                                   ],
@@ -2203,27 +2128,6 @@
                                          "title":  "Signal Ecology View (cooperative signaling heatmap)",
                                          "aspect":  "Active Structure"
                                      },
-                     "data_fitness":  {
-                                          "devices":  [
-                                                          "android",
-                                                          "browser",
-                                                          "esp",
-                                                          "linux",
-                                                          "m24lr",
-                                                          "mimx",
-                                                          "phone",
-                                                          "rasp2",
-                                                          "tablet"
-                                                      ],
-                                          "layer":  "Business",
-                                          "type":  "Business_Object",
-                                          "relations":  "",
-                                          "role":  "The multi-dimensional fitness record for each agent after evaluation. Contains all fitness dimensions for niche discovery and archetype selection.",
-                                          "type_desc":  "ArchiMate Business Object — fitness evaluation result.",
-                                          "tech":  "",
-                                          "title":  "Fitness Record (CBOR · QoS 1 · multi-dim)",
-                                          "aspect":  "Passive Structure"
-                                      },
                      "opt_local":  {
                                        "devices":  [
                                                        "esp",
@@ -2294,15 +2198,15 @@
                                        "aspect":  "Active Structure"
                                    },
                      "ci_broker":  {
-                                       "devices":  "rpi1",
-                                       "layer":  "Application",
+                                       "devices":  "rasp2",
+                                       "layer":  "",
                                        "type":  "Application_Component",
-                                       "relations":  "Realizes MQTT Service. Used by all Evolution, Observatory, and Persistence Nodes.",
-                                       "role":  "The central MQTT message broker for the entire TR4D3RZ ecosystem. All inter-node communication passes through this component. Selected over Mosquitto due to ARMv6l compatibility issues.",
-                                       "type_desc":  "ArchiMate Application Component — an encapsulation of application functionality.",
-                                       "tech":  "NanoMQ compiled from source for ARMv6l. Supports MQTT 3.1.1 and 5.0. TCP:1883 for embedded nodes, WS:8083 for browser Observatory. Max ~1000 concurrent connections on RPi1.",
+                                       "relations":  "",
+                                       "role":  "",
+                                       "type_desc":  "",
+                                       "tech":  "",
                                        "title":  "NanoMQ Broker MQTT 3.1.1/5.0 TCP:1883 · WS:8083",
-                                       "aspect":  "Active Structure"
+                                       "aspect":  ""
                                    },
                      "obs_deploymap":  {
                                            "devices":  [
@@ -2333,27 +2237,16 @@
                                         "title":  "Event Router (QoS-aware dispatch)",
                                         "aspect":  "Active Structure"
                                     },
-                     "hw_rpi1":  {
-                                     "devices":  "rpi1",
-                                     "layer":  "Technology",
-                                     "type":  "Technology_Device",
-                                     "relations":  "Hosts Core Infrastructure Service. Connected to all other nodes via MQTT.",
-                                     "role":  "The Core Infrastructure Node of TR4D3RZ. Hosts the NanoMQ MQTT broker and borsa-italiana-scraper. The single point of data ingestion and message routing for the entire ecosystem.",
-                                     "type_desc":  "ArchiMate Technology Device — a physical IT resource.",
-                                     "tech":  "ARM1176JZF-S, ARMv6l, 700MHz, 512MB RAM. Linux 5.10.103+. NanoMQ compiled from source for ARMv6l. Node.js 14.15.1. Power consumption: ~3W.",
-                                     "title":  "Raspberry Pi 1 (ARM1176 · ARMv6l · 700MHz)",
-                                     "aspect":  "Active Structure"
-                                 },
                      "ci_svc":  {
-                                    "devices":  "rpi1",
-                                    "layer":  "Application",
+                                    "devices":  "rasp2",
+                                    "layer":  "",
                                     "type":  "Application_Service",
-                                    "relations":  "Realizes Market Data Ingestion process. Serves Prediction Service.",
-                                    "role":  "The central service of the Core Infrastructure Node (RPi1). Orchestrates data ingestion, MQTT brokering, event logging, and persistence. The backbone of the entire ecosystem.",
-                                    "type_desc":  "ArchiMate Application Service — an explicitly defined exposed application behavior.",
-                                    "tech":  "Composed of NanoMQ Broker, borsa-italiana-scraper, Event Logger, Persistence Service, and Cron Scheduler. Deployed on Raspberry Pi 1 (ARM1176, 700MHz).",
-                                    "title":  "Core Infrastructure Service",
-                                    "aspect":  "Behavior"
+                                    "relations":  "",
+                                    "role":  "",
+                                    "type_desc":  "",
+                                    "tech":  "",
+                                    "title":  "Central Infrastructure \u0026 Persistence Service",
+                                    "aspect":  ""
                                 },
                      "net_i2c":  {
                                      "devices":  "m24lr",
@@ -2367,26 +2260,26 @@
                                      "aspect":  "Behavior"
                                  },
                      "rt_nodejs":  {
-                                       "devices":  "rpi1",
-                                       "layer":  "Technology",
+                                       "devices":  "rasp2",
+                                       "layer":  "",
                                        "type":  "Technology_SystemSoftware",
-                                       "relations":  "Realizes borsa-italiana-scraper component.",
-                                       "role":  "The Node.js runtime for borsa-italiana-scraper on RPi1. Version 14.15.1 is the highest version compatible with ARMv6l. p-limit downgraded to v4 for Node 14 compatibility.",
-                                       "type_desc":  "ArchiMate Technology System Software — software environment for components.",
-                                       "tech":  "Node.js 14.15.1 LTS on ARMv6l. Key packages: axios@1.6 (HTTP), p-limit@4 (concurrency), mqtt (MQTT client). ES Modules supported.",
+                                       "relations":  "",
+                                       "role":  "",
+                                       "type_desc":  "",
+                                       "tech":  "",
                                        "title":  "Node.js 14.15.1 (borsa-italiana-scraper)",
-                                       "aspect":  "Active Structure"
+                                       "aspect":  ""
                                    },
                      "ci_logger":  {
-                                       "devices":  "rpi1",
-                                       "layer":  "Application",
+                                       "devices":  "rasp2",
+                                       "layer":  "",
                                        "type":  "Application_Component",
                                        "relations":  "",
-                                       "role":  "Captures all ecosystem events (mutations, deaths, signals, archetype discoveries) in an append-only SQLite database with WAL mode for concurrent reads.",
-                                       "type_desc":  "ArchiMate Application Component — planned for Milestone 2.",
+                                       "role":  "",
+                                       "type_desc":  "",
                                        "tech":  "",
                                        "title":  "Event Logger [M2] Rust · SQLite WAL append-only",
-                                       "aspect":  "Active Structure"
+                                       "aspect":  ""
                                    },
                      "capsule_mgr":  {
                                          "devices":  [
@@ -2444,27 +2337,16 @@
                                        "aspect":  "Active Structure"
                                    },
                      "mqtt_broker":  {
-                                         "devices":  "rpi1",
-                                         "layer":  "Technology",
+                                         "devices":  "rasp2",
+                                         "layer":  "",
                                          "type":  "Technology_Node",
-                                         "relations":  "Realizes MQTT Service. Central hub for all ecosystem communication.",
-                                         "role":  "The MQTT message broker running on RPi1. All inter-node communication passes through this node. NanoMQ was selected over Mosquitto due to ARMv6l compatibility (Mosquitto 2.x has Illegal Instruction bugs on ARM1176).",
-                                         "type_desc":  "ArchiMate Technology Node — a computational resource.",
-                                         "tech":  "NanoMQ compiled from source for ARMv6l. MQTT 3.1.1 and 5.0. TCP:1883 (embedded nodes), WS:8083 (browser). Max ~1000 concurrent connections.",
-                                         "title":  "NanoMQ Broker [ARMv6l compiled] MQTT 3.1.1/5.0",
-                                         "aspect":  "Active Structure"
+                                         "relations":  "",
+                                         "role":  "",
+                                         "type_desc":  "",
+                                         "tech":  "",
+                                         "title":  "NanoMQ Broker [ARMv7 RPi2] MQTT 3.1.1/5.0",
+                                         "aspect":  ""
                                      },
-                     "per_svc":  {
-                                     "devices":  "rasp2",
-                                     "layer":  "Application",
-                                     "type":  "Application_Service",
-                                     "relations":  "",
-                                     "role":  "An architectural element within the TR4D3RZ distributed system.",
-                                     "type_desc":  "ArchiMate Application_Service element.",
-                                     "tech":  "",
-                                     "title":  "Persistence Service",
-                                     "aspect":  "Behavior"
-                                 },
                      "evo_mqtt":  {
                                       "devices":  [
                                                       "android",
@@ -2550,15 +2432,15 @@
                                         "aspect":  "Active Structure"
                                     },
                      "ci_scraper":  {
-                                        "devices":  "rpi1",
-                                        "layer":  "Application",
+                                        "devices":  "rasp2",
+                                        "layer":  "",
                                         "type":  "Application_Component",
-                                        "relations":  "Produces OHLCV Payload data objects. Publishes to data/ohlcv/# MQTT topic.",
-                                        "role":  "Scrapes OHLCV data from borsaitaliana.it for ~429 Italian companies. Transforms data to ADR-0004 schema and publishes to MQTT broker. The sole data ingestion point.",
-                                        "type_desc":  "ArchiMate Application Component — an encapsulation of application functionality.",
-                                        "tech":  "Node.js 14.15.1 (ARMv6l compatible). Uses p-limit@4 (downgraded from v5 for Node 14 compatibility). Runs on cron schedule: 18:30 daily (historical) + 15min intraday.",
+                                        "relations":  "",
+                                        "role":  "",
+                                        "type_desc":  "",
+                                        "tech":  "",
                                         "title":  "borsa-italiana-scraper Node.js 14.15.1 HTTPS → MQTT pub",
-                                        "aspect":  "Active Structure"
+                                        "aspect":  ""
                                     },
                      "phenotype":  {
                                        "devices":  [
@@ -2631,7 +2513,10 @@
                                       "aspect":  "Active Structure"
                                   },
                      "web_server":  {
-                                        "devices":  "browser",
+                                        "devices":  [
+                                                        "browser",
+                                                        "rasp2"
+                                                    ],
                                         "layer":  "Technology",
                                         "type":  "Technology_Node",
                                         "relations":  "",
@@ -2645,7 +2530,7 @@
                                       "devices":  "linux",
                                       "layer":  "Technology",
                                       "type":  "Technology_Device",
-                                      "relations":  "Hosts Evolutionary Computing Service. Connects to RPi1 via MQTT.",
+                                      "relations":  "Hosts Evolutionary Computing Service. Connects to the central RPi2 endpoint via MQTT.",
                                       "role":  "The primary Evolution Nodes. Run the full evolutionary pipeline: genome generation, FSM compilation, fitness evaluation, mutation, and cooperative signaling. Highest computational capacity.",
                                       "type_desc":  "ArchiMate Technology Device — a physical IT resource.",
                                       "tech":  "x86_64, multi-core. Linux. Rust runtime (tr4d3rz-core, tr4d3rz-evolution, tr4d3rz-messaging). MQTT client via TCP:1883.",
@@ -2696,15 +2581,18 @@
                                       "aspect":  "Passive Structure"
                                   },
                      "gw_protocol":  {
-                                         "devices":  "str",
-                                         "layer":  "Application",
+                                         "devices":  [
+                                                         "rasp2",
+                                                         "str"
+                                                     ],
+                                         "layer":  "",
                                          "type":  "Application_Component",
                                          "relations":  "",
-                                         "role":  "Translates between UART/USB CBOR messages and MQTT topics. Maps embedded node message types to the correct MQTT topic hierarchy.",
-                                         "type_desc":  "ArchiMate Application Component — UART/USB to MQTT translation.",
+                                         "role":  "",
+                                         "type_desc":  "",
                                          "tech":  "",
-                                         "title":  "Protocol Translator (UART/USB ↔ MQTT)",
-                                         "aspect":  "Active Structure"
+                                         "title":  "Local Gateway / Protocol Translator UART/USB ↔ MQTT central RPi2 endpoint",
+                                         "aspect":  ""
                                      },
                      "hw_esp":  {
                                     "devices":  "esp",
@@ -2791,7 +2679,6 @@
                                                          "browser",
                                                          "phone",
                                                          "rasp2",
-                                                         "rpi1",
                                                          "tablet"
                                                      ],
                                          "layer":  "Motivation",
@@ -2815,27 +2702,31 @@
                                      "aspect":  "Active Structure"
                                  },
                      "ci_persist":  {
-                                        "devices":  "rpi1",
-                                        "layer":  "Application",
+                                        "devices":  "rasp2",
+                                        "layer":  "",
                                         "type":  "Application_Component",
-                                        "relations":  "Reads/writes SQLite Database and Parquet Files. Serves Knowledge Service.",
-                                        "role":  "Manages long-term storage of archetypes, niche atlas, and historical OHLCV data. Exports to Parquet format for large dataset analysis. Serves the Knowledge Service.",
-                                        "type_desc":  "ArchiMate Application Component — planned for Milestone 2.",
-                                        "tech":  "Rust implementation (tr4d3rz-persistence). SQLite for archetypes, Parquet for historical data. Planned for Milestone 2.",
+                                        "relations":  "",
+                                        "role":  "",
+                                        "type_desc":  "",
+                                        "tech":  "",
                                         "title":  "Persistence Service [M2] Rust · Parquet export archetype store",
-                                        "aspect":  "Active Structure"
+                                        "aspect":  ""
                                     },
-                     "driver_italian":  {
-                                            "devices":  "rpi1",
-                                            "layer":  "Motivation",
-                                            "type":  "Motivation_Driver",
-                                            "relations":  "",
-                                            "role":  "The primary data input: Open, High, Low, Close, Volume data for ~429 Italian companies from borsaitaliana.it, scraped daily and intraday.",
-                                            "type_desc":  "ArchiMate Driver — an external data source that drives the system.",
-                                            "tech":  "",
-                                            "title":  "Italian Stock Market OHLCV Data",
-                                            "aspect":  "Motivation"
-                                        },
+                     "fit_advanced":  {
+                                          "devices":  [
+                                                          "android",
+                                                          "linux",
+                                                          "mimx"
+                                                      ],
+                                          "layer":  "Application",
+                                          "type":  "Application_Component",
+                                          "relations":  "",
+                                          "role":  "An architectural element within the TR4D3RZ distributed system.",
+                                          "type_desc":  "ArchiMate Application_Component element.",
+                                          "tech":  "",
+                                          "title":  "Advanced Metrics (signal_entropy · stat_confidence · computational_efficiency)",
+                                          "aspect":  "Active Structure"
+                                      },
                      "prin_niche":  {
                                         "devices":  "linux",
                                         "layer":  "Motivation",
@@ -2889,9 +2780,9 @@
                                     }
                  },
     "metadata":  {
-                     "total_relationships":  137,
-                     "total_elements":  115,
-                     "generated":  "2026-05-23 12:49:48",
+                     "total_relationships":  131,
+                     "total_elements":  110,
+                     "generated":  "2026-05-23 15:30:27",
                      "version":  "2.0"
                  }
 }

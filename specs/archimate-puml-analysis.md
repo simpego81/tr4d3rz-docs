@@ -20,8 +20,8 @@ Questo documento analizza le discrepanze tra il diagramma PlantUML ArchiMate for
 - **Azione**: Aggiungere `Motivation_Principle` per "Open-Ended Evolution", "Asynchronous Distributed Ecology" e "Cooperative Signaling".
 
 ### B. Livello Application - Nodi e Componenti
-- **Discrepanza**: Il nodo "Core Infrastructure Node" (Raspberry Pi 1) con il ruolo di MQTT Broker e Data Ingestion (borsa-italiana-scraper) è completamente assente. Il PUML attuale delega la persistenza a un generico "Persistence Nodes".
-- **Azione**: Aggiungere il `Core Infrastructure Node` nell'Application Layer con i componenti `Data Ingestion` e `MQTT Broker`.
+- **Discrepanza**: il nodo centrale consolidato Raspberry Pi 2, con ruolo di MQTT Broker, Data Ingestion, persistenza locale e relay/gateway, deve essere rappresentato esplicitamente. Il PUML non deve più separare artificiosamente infrastruttura core e persistenza locale.
+- **Azione**: Modellare il `Central Infrastructure & Persistence Node` nell'Application Layer con i componenti `Data Ingestion`, `MQTT Broker`, `Event Logger`, `Persistence Service` e `Local Gateway / Relay`.
 - **Gap**: Mancano i componenti visivi descritti nella specifica master sotto "Visualizzazioni Richieste" (Deploy Architecture Map, Theory Map, Evolution Galaxy, Signal Ecology, Market Overlay).
 - **Azione**: Espandere l'`Observatory Node` per includere esplicitamente questi componenti di visualizzazione.
 
@@ -38,6 +38,6 @@ Questo documento analizza le discrepanze tra il diagramma PlantUML ArchiMate for
 
 ## 3. Conclusione
 
-Il file `archimate_diagram.puml` esistente è un'ottima base di partenza che cattura fedelmente la filosofia iniziale della specifica master. Tuttavia, non riflette le decisioni architetturali prese durante la Milestone 0 (es. il ruolo centrale del Core Node / Raspberry Pi 1 con NanoMQ e lo scraper) e omette alcuni dettagli specifici richiesti per la UI dell'Observatory. 
+Il file `archimate_diagram.puml` esistente è un'ottima base di partenza che cattura fedelmente la filosofia iniziale della specifica master. Tuttavia, deve riflettere la decisione architetturale più recente: il ruolo centrale della Raspberry Pi 2 come nodo unico per NanoMQ, scraper, persistenza locale e relay/gateway. Inoltre omette alcuni dettagli specifici richiesti per la UI dell'Observatory. 
 
 Procederò a generare un nuovo file `archimate_diagram_v2.puml` che integra tutte queste correzioni.

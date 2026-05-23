@@ -7,15 +7,17 @@ Questo documento definisce l'inventario del software in esecuzione su ciascuna c
 
 ---
 
-## 1. Core Infrastructure Node (Raspberry Pi 1)
+## 1. Central Infrastructure & Persistence Node (Raspberry Pi 2)
 
-Il nodo centrale di infrastruttura gestisce la raccolta dati e lo smistamento dei messaggi. Date le limitazioni hardware (ARMv6l, 700MHz), il software è selezionato per la massima efficienza.
+Il nodo centrale Raspberry Pi 2 gestisce raccolta dati, broker MQTT, logging append-only, persistenza locale e relay/gateway. Il profilo ARMv7 quad-core a 900MHz con 1GB RAM consente di consolidare servizi che prima erano separati, mantenendo NanoMQ prioritario rispetto ai picchi di scraper e logger.
 
 | Software / Componente | Repository di Origine | Stack Tecnologico | Descrizione e Note |
 |---|---|---|---|
-| **NanoMQ** | (Emqx/NanoMQ) | C | Broker MQTT ultra-leggero compilato da sorgente per ARMv6l. Sostituisce Mosquitto per evitare bug di compilazione noti su questa architettura. Espone la porta TCP 1883 e WebSocket 8083. |
-| **Data Scraper** | `borsa-italiana-scraper` | Node.js 14.15.1 | Script di ingestion che interroga le API di Borsa Italiana. È stato adattato (downgrade di `p-limit`) per girare su Node 14. Converte i dati in formato JSON standardizzato e li pubblica su MQTT. |
-| **Event Logger** (Futuro) | `tr4d3rz-persistence` | Rust | Demone che si iscrive a tutti gli eventi MQTT e li salva in append-only su un database SQLite locale. |
+| **NanoMQ** | (Emqx/NanoMQ) | C | Broker MQTT ultra-leggero per il nodo centrale ARMv7/RPi2. Espone la porta TCP 1883 e WebSocket 8083 verso ESP8266, STM32 tramite bridge, Linux PC e Observatory. |
+| **Data Scraper** | `borsa-italiana-scraper` | Node.js 14.15.1 | Script di ingestion che interroga le API di Borsa Italiana. È eseguito sulla RPi2 con concorrenza controllata, converte i dati in formato JSON standardizzato e li pubblica su MQTT. |
+| **Event Logger** (Futuro) | `tr4d3rz-persistence` | Rust | Demone che si iscrive a tutti gli eventi MQTT e li salva in append-only su un database SQLite locale in WAL mode. |
+| **Persistence Service** (Futuro) | `tr4d3rz-persistence` | Rust | Servizio locale per lineage, archetype memory e export Parquet. |
+| **Local Gateway / Relay** | `tr4d3rz-messaging` | Rust / Python | Endpoint locale verso il broker RPi2 per bridge UART/USB, nodi offline e delayed synchronization. |
 
 ---
 
@@ -28,7 +30,7 @@ I nodi evolutivi sono i "muscoli" del sistema. Eseguono il grosso del carico com
 | **L-System Engine** | `tr4d3rz-core` | Rust | Generatore di genomi ibridi (grafo) a partire da grammatiche L-System. |
 | **FSM Runtime** | `tr4d3rz-core` | Rust | Motore di esecuzione ad alte prestazioni che compila il genoma grafo in una Macchina a Stati Finiti ed elabora il flusso dati OHLCV in tempo reale. |
 | **Evolution Engine** | `tr4d3rz-evolution` | Rust | Gestisce le popolazioni di agenti, applica operatori di mutazione strutturale e calcola la fitness multi-dimensionale. |
-| **MQTT Client** | `tr4d3rz-messaging` | Rust | Sottosistema di comunicazione per ricevere i dati OHLCV dal Core Node e pubblicare i risultati di fitness e i segnali cooperativi. |
+| **MQTT Client** | `tr4d3rz-messaging` | Rust | Sottosistema di comunicazione per ricevere i dati OHLCV dal nodo centrale RPi2 e pubblicare i risultati di fitness e i segnali cooperativi. |
 
 ---
 
@@ -59,7 +61,7 @@ Nodi passivi dedicati esclusivamente all'osservabilità, alla visualizzazione e 
 
 ## 5. Gateway Nodes (Bridge UART/MQTT)
 
-Nodi intermedi (spesso script in esecuzione su PC Linux o Raspberry Pi secondarie) che fanno da ponte per l'hardware embedded privo di rete.
+Nodi intermedi opzionali, spesso script in esecuzione su PC Linux o bridge dedicati, che fanno da ponte fisico per l'hardware embedded privo di rete. Il loro endpoint logico resta sempre l'IP unico del nodo centrale RPi2.
 
 | Software / Componente | Repository di Origine | Stack Tecnologico | Descrizione e Note |
 |---|---|---|---|
