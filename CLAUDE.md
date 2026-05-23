@@ -147,7 +147,7 @@ The system runs on heterogeneous hardware — always check device-specific const
 
 - **ESP8266**: 80MHz, 80KB RAM — extremely constrained
 - **STM32F1/F3**: ARM Cortex-M3/M4 — no heap allocator
-- **Raspberry Pi 1**: ARMv6l, Node.js 14.15.1, limited RAM
+- **Raspberry Pi 2**: ARMv7, central MVP node for NanoMQ, scraper/relay and SQLite persistence services
 - **Linux/Android/Browser**: Full-featured environments
 
 **Before specifying a component**: Check the corresponding `device_*.puml` file to understand runtime and technology constraints for that device.
@@ -155,7 +155,7 @@ The system runs on heterogeneous hardware — always check device-specific const
 ## Milestone Roadmap
 
 - **M0 (Foundations)**: GitHub setup, architecture docs, protocol specs, multi-agent workflow ✅ Current
-- **M1 (Distributed MVP)**: MQTT messaging, minimal FSM runtime, OHLCV simulator, ESP8266 integration, minimal Observatory
+- **M1 (Foundational Backbone Single RPi2)**: MQTT messaging, minimal FSM runtime, OHLCV feed, ESP8266/simulator integration, persistence logger and minimal Observatory
 - **M2 (Basic Evolution)**: Mutations, fitness evaluation, lineage tracking, replay system
 - **M3 (Cooperative Ecology)**: Cooperative signaling, niche detection, archetype memory
 - **M4 (Full Observatory)**: Galaxy visualization, full replay, topology analysis

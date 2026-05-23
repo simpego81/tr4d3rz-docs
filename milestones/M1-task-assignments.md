@@ -1,33 +1,45 @@
-# Milestone 1: Task Assignments
+# Milestone 1: Foundational Backbone — Task Assignments
 
-**Status**: Ready for execution
-**Author**: Manus (Chief Architect)
+**Status**: Ready for execution  
+**Author**: Manus (Chief Architect)  
+**Architecture baseline**: Single Raspberry Pi 2 backbone  
+**Primary references**: `COMMUNICATION/SPEC_MASTER.md`, `COMMUNICATION/TASK_QUEUE.md`, `protocols/MVP_INTERFACE_CONTRACTS.md`
 
 ---
 
-## 1. Claude Code — `tr4d3rz-core` & `tr4d3rz-messaging`
+## 1. Obiettivo della milestone
 
-**Objective**: Implement the foundation of the FSM runtime and the messaging backbone.
+La Milestone 1 deve consegnare un walking skeleton dell'ecosistema TR4D3RZ, dimostrando la cooperazione fra Linux PC, Raspberry Pi 2, nodo embedded o simulatore, e browser. La Raspberry Pi 2 ospita il broker MQTT, lo scraper/relay e la persistenza locale, evitando qualsiasi ritorno a una topologia distribuita su nodi legacy separati.
 
-**Tasks**:
-1. **Core Types (Rust)**: Implement the basic data structures in `tr4d3rz-core` for the OHLCV data contract defined in ADR-0004.
-2. **Messaging (Rust)**: Implement a NanoMQ-compatible MQTT client in `tr4d3rz-messaging` that can subscribe to `data/ohlcv/#` and deserialize the JSON payloads into the core Rust types.
-3. **FSM Skeleton (Rust)**: Create the basic trait definitions for an FSM node, state, and transition in `tr4d3rz-core`.
+---
 
-## 2. Gemini CLI — `tr4d3rz-observatory`
+## 2. Task assegnati
 
-**Objective**: Build the initial Observatory UI skeleton to monitor the data feed.
+| Task | Agent | Repository | Obiettivo | Output principale |
+|---|---|---|---|---|
+| M1-T1 | Claude Code | `tr4d3rz-core` | Definire tipi Rust condivisi e trait FSM minimi. | Crate `no_std` con tipi OHLCV, Genome Capsule, Fitness Result. |
+| M1-T2 | Claude Code | `tr4d3rz-messaging` | Implementare backbone MQTT consolidato su RPi2. | Config NanoMQ, setup script, smoke pub/sub, systemd templates. |
+| M1-T3 | Claude Code | `tr4d3rz-persistence` | Persistenza eventi append-only su SQLite. | Subscriber MQTT e database schema v0.1. |
+| M1-T4 | Claude Code | `tr4d3rz-evolution` | Generatore minimo capsule e listener fitness. | CLI Linux per demo end-to-end. |
+| M1-T5 | GitHub Copilot | `tr4d3rz-embedded` | Nodo edge MVP per valutazione fitness fittizia. | Simulatore o firmware ESP8266 con capsule in/fitness out. |
+| M1-T6 | Gemini CLI | `tr4d3rz-observatory` | Dashboard browser MVP. | Timeline eventi, stato nodi, ultimo fitness e feed OHLCV. |
+| M1-T7 | Gemini CLI | Cross-repo | Audit di coerenza architetturale. | `ARCHITECTURAL_AUDIT.md` e aggiornamento `PROJECT_STATE.md`. |
 
-**Tasks**:
-1. **Project Setup**: Initialize a Vite + TypeScript + React project in `tr4d3rz-observatory`.
-2. **MQTT Client (TS)**: Implement an MQTT WebSocket client to connect to the NanoMQ broker on the Raspberry Pi.
-3. **Data Dashboard**: Create a simple real-time chart (e.g., using Chart.js or Lightweight Charts) that plots the incoming OHLCV data from `data/ohlcv/intraday/+`.
+---
 
-## 3. GitHub Copilot — `borsa-italiana-scraper` (Integration)
+## 3. Primo handover operativo
 
-**Objective**: Adapt the existing scraper to publish to the MQTT broker.
+Il primo task immediatamente consegnabile è `COMMUNICATION/TASKS/current_task.md`, assegnato a Claude Code per `tr4d3rz-messaging`. Questo abilita il backbone su cui gli altri repository potranno convergere.
 
-**Tasks**:
-1. **Node 14 Compatibility & MQTT**: Downgrade `p-limit` to version 4 (`npm install p-limit@4`) to ensure compatibility with Node.js 14.15.1 on the Raspberry Pi. Then, add the `mqtt` npm package.
-2. **Data Transformation**: Modify `index.js` to transform the scraped data into the schema defined in ADR-0004 (Unix timestamps, minified keys).
-3. **Publishing Logic**: Add a CLI flag `--mqtt=mqtt://<rpi-ip>:1883` to publish the transformed data to `data/ohlcv/history/{isin}` and `data/ohlcv/intraday/{isin}` instead of (or in addition to) saving to files.
+---
+
+## 4. Definition of Done M1
+
+| Criterio | Verifica |
+|---|---|
+| Broker RPi2 raggiungibile | Subscriber riceve `tr4d3rz/#`. |
+| Feed OHLCV pubblicato | Evento JSON ADR-0004 visibile in UI e persistito. |
+| Capsule consegnata | Evolution CLI pubblica capsule e edge node la riceve. |
+| Fitness pubblicato | Edge node pubblica result e persistence lo registra. |
+| Observatory funzionante | Browser mostra timeline e stato nodi. |
+| Audit completato | Gemini dichiara M1 `COMPLETED` oppure `BLOCKED` con motivazione. |
