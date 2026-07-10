@@ -17,7 +17,7 @@ skinparam noteBackgroundColor #FFFDE7
 skinparam noteFontColor #000000
 scale 1.5
 
-title TR4D3RZ — Device View: Central Node Raspberry Pi 2 · (ARMv7 · 900MHz quad-core)\nArchiMate Architecture v2.0  |  2026-05-12
+title TR4D3RZ — Device View: Central Node Raspberry Pi 2 · (ARMv7 · 900MHz quad-core)\nArchiMate Architecture v2.1  |  2026-07-10  |  M1-T3 Event Logger Implemented
 
 package "Motivation Layer" <<rectangle>> {
   Motivation_Goal(goal_distribute, "Distributed Heterogeneous\nComputation")
@@ -37,10 +37,12 @@ package "Business Layer" <<rectangle>> {
 package "Application Layer" <<rectangle>> {
   package "Central Node  [Raspberry Pi 2 · ARMv7 quad-core]" <<Node>> {
     Application_Service(ci_svc, "Central Infrastructure & Persistence Service")
-    Application_Component(ci_broker, "NanoMQ Broker\nMQTT 3.1.1/5.0\nTCP:1883 · WS:8083")
+    Application_Component(ci_broker, "NanoMQ Broker  [M1-T2 ✅]\nMQTT 3.1.1/5.0\nTCP:1883 · WS:8083\n12/13 tests passing")
+    Application_Component(ci_core, "tr4d3rz-core  [M1-T1 ✅]\nRust types library\nno_std · CBOR · WASM\n8/8 tests passing")
+    Application_Component(ci_messaging, "tr4d3rz-messaging  [M1-T2 ✅]\nRust MQTT client lib\ntype-safe · CBOR auto-encode\n12/13 tests passing")
     Application_Component(ci_scraper, "borsa-italiana-scraper\nNode.js 14.15.1\nHTTPS → MQTT pub")
-    Application_Component(ci_logger, "Event Logger  [M2]\nRust · SQLite WAL\nappend-only")
-    Application_Component(ci_persist, "Persistence Service  [M2]\nRust · Parquet export\narchetype store")
+    Application_Component(ci_logger, "Event Logger  [M1-T3 ✅]\nRust · SQLite WAL\nappend-only · 4 tests passing")
+    Application_Component(ci_persist, "Persistence Service  [M2 FUTURE]\nRust · Parquet export\narchetype store")
     Application_Component(ci_cron, "Cron Scheduler\nmarket-hours aware\n18:30 daily + 15min intraday")
     Application_Component(per_lineage, "Lineage Storage\n(birth · death · mutation)")
     Application_Component(per_archetype, "Archetype Memory\n(motif FSM · patterns · niches)")
@@ -86,6 +88,8 @@ Rel_Realization_Up(ci_svc, proc_persist)
 Rel_Serving_Up(ci_svc, svc_prediction)
 Rel_Serving_Up(ci_svc, svc_knowledge)
 Rel_Composition_Down(ci_svc, ci_broker)
+Rel_Composition_Down(ci_svc, ci_core)
+Rel_Composition_Down(ci_svc, ci_messaging)
 Rel_Composition_Down(ci_svc, ci_scraper)
 Rel_Composition_Down(ci_svc, ci_logger)
 Rel_Composition_Down(ci_svc, ci_persist)
@@ -99,6 +103,8 @@ Rel_Assignment_Down(rt_rust, hw_rasp2)
 Rel_Assignment_Down(rt_nodejs, hw_rasp2)
 Rel_Assignment_Down(mqtt_broker, hw_rasp2)
 Rel_Assignment_Down(web_server, hw_rasp2)
+Rel_Realization_Up(rt_rust, ci_core)
+Rel_Realization_Up(rt_rust, ci_messaging)
 Rel_Realization_Up(rt_rust, ci_logger)
 Rel_Realization_Up(rt_rust, ci_persist)
 Rel_Realization_Up(rt_nodejs, ci_scraper)
