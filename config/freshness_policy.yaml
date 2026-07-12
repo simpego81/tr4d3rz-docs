@@ -1,0 +1,8 @@
+# Freshness Policy Configuration
+# Defines how long each source type can be before being marked STALE
+
+roadmap_hours: 168        # 7 days - roadmap should be updated weekly
+archimate_hours: 720      # 30 days - architecture changes slowly
+ecosystem_hours: 24       # 1 day - agent state changes frequently
+project_state_hours: 168  # 7 days - project state updated weekly
+default_hours: 168        # 7 days - default for unknown sources

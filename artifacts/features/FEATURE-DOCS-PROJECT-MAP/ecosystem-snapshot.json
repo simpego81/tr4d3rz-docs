@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-07-12T15:52:14.505437Z",
+  "source_hash": "4fe58c5ad596ecf7f8439e8b75c3c0ec5c31978e1703cff0f3793ac48d1e588e",
+  "agents": [
+    {
+      "agent_id": "claude-code",
+      "role": "Implementation Agent",
+      "repositories": [
+        "tr4d3rz-core",
+        "tr4d3rz-messaging",
+        "tr4d3rz-evolution",
+        "tr4d3rz-persistence"
+      ],
+      "last_update": "2026-07-10T19:30:00+00:00",
+      "current_task": null,
+      "confidence_level": 90,
+      "blockers": [],
+      "vetos_issued_count": 1,
+      "vetos_received_count": 1
+    },
+    {
+      "agent_id": "github-copilot",
+      "role": "QA Validator",
+      "repositories": [
+        "tr4d3rz-embedded"
+      ],
+      "last_update": "2026-07-12T15:52:14.504925Z",
+      "current_task": "M1-T5",
+      "confidence_level": 95,
+      "blockers": [],
+      "vetos_issued_count": 1,
+      "vetos_received_count": 1
+    },
+    {
+      "agent_id": "hra",
+      "role": "Human Relation Agent",
+      "repositories": [],
+      "last_update": "2026-07-12T15:52:14.504925Z",
+      "current_task": null,
+      "confidence_level": 85,
+      "blockers": [],
+      "vetos_issued_count": 1,
+      "vetos_received_count": 1
+    },
+    {
+      "agent_id": "manus",
+      "role": "Chief Architect",
+      "repositories": [
+        "tr4d3rz-docs"
+      ],
+      "last_update": "2026-07-12T15:52:14.505437Z",
+      "current_task": null,
+      "confidence_level": 90,
+      "blockers": [],
+      "vetos_issued_count": 1,
+      "vetos_received_count": 1
+    }
+  ],
+  "rules_summary": {
+    "veto_gates": [
+      {
+        "name": "Pre-Commit Check",
+        "enforcer": "Librarian Agent",
+        "trigger": "Before task completion"
+      },
+      {
+        "name": "Protocol Integrity",
+        "enforcer": "Chief Architect",
+        "trigger": "Before protocol/contract change"
+      },
+      {
+        "name": "Demo Validation",
+        "enforcer": "QA Validator",
+        "trigger": "Before merge without observable demo"
+      },
+      {
+        "name": "Debuggability Gate",
+        "enforcer": "Debug Intelligence Agent",
+        "trigger": "Before merge without <2min diagnosis capability"
+      }
+    ],
+    "artifact_handoff": {
+      "enabled": true,
+      "artifact_path": "artifacts/features/FEATURE-XXX/"
+    },
+    "hra_protocol": {
+      "enabled": true,
+      "cadence": "daily morning (09:00) + evening (18:00), weekly convergence (Friday 17:00)"
+    }
+  },
+  "excluded_fields": [
+    "context_assumptions",
+    "recent_decisions",
+    "open_questions",
+    "uncertainty_sources",
+    "collaboration_surface",
+    "key_dependencies"
+  ]
+}

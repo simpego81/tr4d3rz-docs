@@ -1,0 +1,2406 @@
+{
+  "entities": {
+    "m1-foundational-backbone": {
+      "id": "m1-foundational-backbone",
+      "kind": "milestone",
+      "name": "M1: Foundational Backbone Single RPi2",
+      "summary": "MQTT messaging infrastructure, minimal FSM runtime, OHLCV feed, ESP8266/simulator integration, event logger, and minimal Observatory UI on Raspberry Pi 2",
+      "raw_data": {
+        "id": "m1-foundational-backbone",
+        "name": "M1: Foundational Backbone Single RPi2",
+        "summary": "MQTT messaging infrastructure, minimal FSM runtime, OHLCV feed, ESP8266/simulator integration, event logger, and minimal Observatory UI on Raspberry Pi 2",
+        "outcome": "Validated distributed messaging backbone with event persistence and browser-based monitoring",
+        "status": "IN_PROGRESS",
+        "start_date": "2026-06-01",
+        "end_date": null,
+        "critical_path": false,
+        "tasks": [
+          "m1-t0-specs-contracts",
+          "m1-t1-core-types",
+          "m1-t2-mqtt-client",
+          "m1-t2-b-remote-validation",
+          "m1-t3-event-persistence",
+          "m1-t4-evolution-cli",
+          "m1-t5-embedded-firmware",
+          "m1-t6-observatory-ui",
+          "m1-t7-cross-repo-audit"
+        ],
+        "owners": [
+          {
+            "role": "Chief Architect",
+            "agent": "Manus"
+          }
+        ],
+        "dependencies": [],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "evidence": [
+          {
+            "type": "spec",
+            "title": "SPEC_MASTER.md",
+            "url": "../COMMUNICATION/SPEC_MASTER.md",
+            "date": "2026-06-01T00:00:00Z"
+          },
+          {
+            "type": "spec",
+            "title": "MVP_INTERFACE_CONTRACTS.md",
+            "url": "../protocols/MVP_INTERFACE_CONTRACTS.md",
+            "date": "2026-06-01T00:00:00Z"
+          }
+        ],
+        "source_refs": [
+          {
+            "path": "state/roadmap.yaml",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m1-foundational-backbone.html",
+        "health": "HEALTHY",
+        "freshness": "FRESH"
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m2-basic-evolution": {
+      "id": "m2-basic-evolution",
+      "kind": "milestone",
+      "name": "M2: Basic Evolution",
+      "summary": "Mutation operators, fitness evaluation, lineage tracking, and replay system",
+      "raw_data": {
+        "id": "m2-basic-evolution",
+        "name": "M2: Basic Evolution",
+        "summary": "Mutation operators, fitness evaluation, lineage tracking, and replay system",
+        "outcome": "Functional evolutionary loop with mutation, selection, and replay capability",
+        "status": "PLANNED",
+        "start_date": null,
+        "end_date": null,
+        "critical_path": false,
+        "tasks": [
+          "m2-t1-mutation-operators",
+          "m2-t2-fitness-evaluation",
+          "m2-t3-lineage-tracking",
+          "m2-t4-replay-system"
+        ],
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m1-foundational-backbone"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.yaml",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m2-basic-evolution.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH"
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m3-cooperative-ecology": {
+      "id": "m3-cooperative-ecology",
+      "kind": "milestone",
+      "name": "M3: Cooperative Ecology",
+      "summary": "Cooperative signaling protocols, niche detection, and archetype memory",
+      "raw_data": {
+        "id": "m3-cooperative-ecology",
+        "name": "M3: Cooperative Ecology",
+        "summary": "Cooperative signaling protocols, niche detection, and archetype memory",
+        "outcome": "Agents cooperate through signaling and specialize into predictive niches",
+        "status": "PLANNED",
+        "start_date": null,
+        "end_date": null,
+        "critical_path": false,
+        "tasks": [
+          "m3-t1-cooperative-signaling",
+          "m3-t2-niche-detection",
+          "m3-t3-archetype-memory"
+        ],
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m2-basic-evolution"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.yaml",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m3-cooperative-ecology.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH"
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m4-full-observatory": {
+      "id": "m4-full-observatory",
+      "kind": "milestone",
+      "name": "M4: Full Observatory",
+      "summary": "Galaxy visualization, topology analysis, and real-time ecosystem monitoring",
+      "raw_data": {
+        "id": "m4-full-observatory",
+        "name": "M4: Full Observatory",
+        "summary": "Galaxy visualization, topology analysis, and real-time ecosystem monitoring",
+        "outcome": "3D visualization of agent ecology with interactive topology analysis",
+        "status": "PLANNED",
+        "start_date": null,
+        "end_date": null,
+        "critical_path": false,
+        "tasks": [
+          "m4-t1-galaxy-visualization",
+          "m4-t2-topology-analysis",
+          "m4-t3-realtime-monitoring"
+        ],
+        "owners": [
+          {
+            "role": "Visualization Agent",
+            "agent": "Antigravity"
+          }
+        ],
+        "dependencies": [
+          "m2-basic-evolution"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.yaml",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m4-full-observatory.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH"
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m5-production-signals": {
+      "id": "m5-production-signals",
+      "kind": "milestone",
+      "name": "M5: Production Signals",
+      "summary": "Signal ensemble logic, confidence scoring, and automated validation pipeline",
+      "raw_data": {
+        "id": "m5-production-signals",
+        "name": "M5: Production Signals",
+        "summary": "Signal ensemble logic, confidence scoring, and automated validation pipeline",
+        "outcome": "Production-ready signal generation with statistical confidence and validation",
+        "status": "PLANNED",
+        "start_date": null,
+        "end_date": null,
+        "critical_path": false,
+        "tasks": [
+          "m5-t1-ensemble-logic",
+          "m5-t2-confidence-scoring",
+          "m5-t3-validation-pipeline"
+        ],
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m3-cooperative-ecology"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.yaml",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m5-production-signals.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH"
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m1-t0-specs-contracts": {
+      "id": "m1-t0-specs-contracts",
+      "kind": "task",
+      "name": "M1-T0: Specifications & Contracts",
+      "summary": "Define MVP scope, SSOT specifications, and protocol contracts",
+      "raw_data": {
+        "id": "m1-t0-specs-contracts",
+        "name": "M1-T0: Specifications & Contracts",
+        "summary": "Define MVP scope, SSOT specifications, and protocol contracts",
+        "milestone_id": "m1-foundational-backbone",
+        "status": "COMPLETED",
+        "owners": [
+          {
+            "role": "Chief Architect",
+            "agent": "Manus"
+          }
+        ],
+        "dependencies": [],
+        "blockers": [],
+        "updated_at": "2026-06-15T00:00:00Z",
+        "acceptance_criteria": [
+          "SPEC_MASTER.md defines complete MVP scope",
+          "MVP_INTERFACE_CONTRACTS.md defines all payload schemas",
+          "TASK_QUEUE.md orchestrates agent handoffs",
+          "project-tasks.md provides stakeholder-facing view"
+        ],
+        "outputs": [
+          "SPEC_MASTER.md",
+          "TASK_QUEUE.md",
+          "MVP_INTERFACE_CONTRACTS.md",
+          "project-tasks.md"
+        ],
+        "estimated_effort": "M",
+        "actual_completion_date": "2026-06-15",
+        "evidence": [
+          {
+            "type": "spec",
+            "title": "SPEC_MASTER.md",
+            "url": "../COMMUNICATION/SPEC_MASTER.md",
+            "date": "2026-06-15T00:00:00Z"
+          }
+        ],
+        "source_refs": [
+          {
+            "path": "COMMUNICATION/TASK_QUEUE.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m1-t0-specs-contracts.html",
+        "health": "HEALTHY",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m1-t1-core-types": {
+      "id": "m1-t1-core-types",
+      "kind": "task",
+      "name": "M1-T1: Core Types (Rust)",
+      "summary": "Shared Rust types: OHLCV, Genome Capsule, Fitness Result, FSM trait",
+      "raw_data": {
+        "id": "m1-t1-core-types",
+        "name": "M1-T1: Core Types (Rust)",
+        "summary": "Shared Rust types: OHLCV, Genome Capsule, Fitness Result, FSM trait",
+        "milestone_id": "m1-foundational-backbone",
+        "status": "COMPLETED",
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m1-t0-specs-contracts"
+        ],
+        "blockers": [],
+        "updated_at": "2026-06-20T00:00:00Z",
+        "acceptance_criteria": [
+          "tr4d3rz-core crate v0.1.0 published",
+          "All types support no_std for embedded targets",
+          "CBOR serialization implemented",
+          "8/8 unit tests passing",
+          "Rustdoc documentation complete"
+        ],
+        "outputs": [
+          "tr4d3rz-core crate v0.1.0",
+          "OhlcvBar, OhlcvHistory, GenomeCapsule, FitnessResult, NodeStatus types",
+          "CBOR serialization support",
+          "Rustdoc documentation"
+        ],
+        "estimated_effort": "L",
+        "actual_completion_date": "2026-06-20",
+        "evidence": [
+          {
+            "type": "commit",
+            "title": "tr4d3rz-core v0.1.0",
+            "url": "https://github.com/simpego81/tr4d3rz-core",
+            "date": "2026-06-20T00:00:00Z"
+          }
+        ],
+        "source_refs": [
+          {
+            "path": "COMMUNICATION/TASK_QUEUE.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m1-t1-core-types.html",
+        "health": "HEALTHY",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m1-t2-mqtt-client": {
+      "id": "m1-t2-mqtt-client",
+      "kind": "task",
+      "name": "M1-T2: MQTT Client (Rust)",
+      "summary": "Rust MQTT client library with type-safe pub/sub and CBOR serialization",
+      "raw_data": {
+        "id": "m1-t2-mqtt-client",
+        "name": "M1-T2: MQTT Client (Rust)",
+        "summary": "Rust MQTT client library with type-safe pub/sub and CBOR serialization",
+        "milestone_id": "m1-foundational-backbone",
+        "status": "COMPLETED",
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m1-t0-specs-contracts",
+          "m1-t1-core-types"
+        ],
+        "blockers": [],
+        "updated_at": "2026-06-25T00:00:00Z",
+        "acceptance_criteria": [
+          "tr4d3rz_messaging crate v0.1.0 published",
+          "MQTT client wrapper (rumqttc) with topic validation",
+          "Automatic CBOR serialization for GenomeCapsule and FitnessResult",
+          "12/13 tests passing",
+          "3 working examples",
+          "Rustdoc complete"
+        ],
+        "outputs": [
+          "tr4d3rz_messaging crate v0.1.0",
+          "Topic builder with validation",
+          "Type-safe Publisher/Subscriber",
+          "CBOR encoding: 155B FitnessResult, 192B GenomeCapsule"
+        ],
+        "estimated_effort": "L",
+        "actual_completion_date": "2026-06-25",
+        "evidence": [
+          {
+            "type": "commit",
+            "title": "tr4d3rz_messaging v0.1.0",
+            "url": "https://github.com/simpego81/tr4d3rz-messaging",
+            "date": "2026-06-25T00:00:00Z"
+          }
+        ],
+        "source_refs": [
+          {
+            "path": "COMMUNICATION/TASK_QUEUE.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m1-t2-mqtt-client.html",
+        "health": "HEALTHY",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m1-t2-b-remote-validation": {
+      "id": "m1-t2-b-remote-validation",
+      "kind": "task",
+      "name": "M1-T2-B: Remote Validation Probe",
+      "summary": "PC-to-RPi2 validation tool (heartbeat probe) for MQTT connectivity",
+      "raw_data": {
+        "id": "m1-t2-b-remote-validation",
+        "name": "M1-T2-B: Remote Validation Probe",
+        "summary": "PC-to-RPi2 validation tool (heartbeat probe) for MQTT connectivity",
+        "milestone_id": "m1-foundational-backbone",
+        "status": "COMPLETED",
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m1-t2-mqtt-client"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-01T00:00:00Z",
+        "acceptance_criteria": [
+          "Heartbeat probe validates PC → RPi2 MQTT connectivity",
+          "Tool reports latency and packet loss",
+          "Documented as validation gate for M1-T5"
+        ],
+        "outputs": [
+          "remote_validation_probe.rs",
+          "Validation report"
+        ],
+        "estimated_effort": "S",
+        "actual_completion_date": "2026-07-01",
+        "evidence": [
+          {
+            "type": "test_result",
+            "title": "Remote validation probe test",
+            "url": "../tr4d3rz-messaging/tools/remote_validation_probe.rs",
+            "date": "2026-07-01T00:00:00Z"
+          }
+        ],
+        "source_refs": [
+          {
+            "path": "COMMUNICATION/TASK_QUEUE.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m1-t2-b-remote-validation.html",
+        "health": "HEALTHY",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m1-t3-event-persistence": {
+      "id": "m1-t3-event-persistence",
+      "kind": "task",
+      "name": "M1-T3: Event Persistence",
+      "summary": "SQLite append-only event logger with MQTT subscription",
+      "raw_data": {
+        "id": "m1-t3-event-persistence",
+        "name": "M1-T3: Event Persistence",
+        "summary": "SQLite append-only event logger with MQTT subscription",
+        "milestone_id": "m1-foundational-backbone",
+        "status": "READY",
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m1-t0-specs-contracts",
+          "m1-t1-core-types",
+          "m1-t2-mqtt-client"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "SQLite schema with append-only constraint",
+          "MQTT subscriber logs all MVP events",
+          "Query API for Observatory",
+          "Replay system MVP"
+        ],
+        "outputs": [
+          "Event logger SQLite implementation",
+          "MQTT subscriber",
+          "Query API"
+        ],
+        "estimated_effort": "L",
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "COMMUNICATION/TASK_QUEUE.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m1-t3-event-persistence.html",
+        "health": "HEALTHY",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m1-t4-evolution-cli": {
+      "id": "m1-t4-evolution-cli",
+      "kind": "task",
+      "name": "M1-T4: Evolution CLI",
+      "summary": "Linux CLI for genome generation, mutation, and fitness result consumption",
+      "raw_data": {
+        "id": "m1-t4-evolution-cli",
+        "name": "M1-T4: Evolution CLI",
+        "summary": "Linux CLI for genome generation, mutation, and fitness result consumption",
+        "milestone_id": "m1-foundational-backbone",
+        "status": "READY",
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m1-t1-core-types",
+          "m1-t2-mqtt-client"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "CLI generates and publishes GenomeCapsule via MQTT",
+          "Subscribes to FitnessResult",
+          "Mutation operator MVP implemented"
+        ],
+        "outputs": [
+          "Linux CLI tool",
+          "Capsule publisher",
+          "Fitness subscriber",
+          "Mutation operator"
+        ],
+        "estimated_effort": "M",
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "COMMUNICATION/TASK_QUEUE.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m1-t4-evolution-cli.html",
+        "health": "HEALTHY",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m1-t5-embedded-firmware": {
+      "id": "m1-t5-embedded-firmware",
+      "kind": "task",
+      "name": "M1-T5: Embedded Firmware",
+      "summary": "ESP8266/STM32 firmware or simulator for capsule processing",
+      "raw_data": {
+        "id": "m1-t5-embedded-firmware",
+        "name": "M1-T5: Embedded Firmware",
+        "summary": "ESP8266/STM32 firmware or simulator for capsule processing",
+        "milestone_id": "m1-foundational-backbone",
+        "status": "READY",
+        "owners": [
+          {
+            "role": "Embedded Developer",
+            "agent": "GitHub Copilot"
+          }
+        ],
+        "dependencies": [
+          "m1-t1-core-types",
+          "m1-t2-mqtt-client",
+          "m1-t2-b-remote-validation"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "Firmware or simulator receives GenomeCapsule via MQTT",
+          "Publishes FitnessResult",
+          "Validated with M1-T2-B probe"
+        ],
+        "outputs": [
+          "ESP8266/STM32 firmware or simulator",
+          "MQTT integration"
+        ],
+        "estimated_effort": "L",
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "COMMUNICATION/TASK_QUEUE.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m1-t5-embedded-firmware.html",
+        "health": "HEALTHY",
+        "freshness": "FRESH",
+        "critical_path": true
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m1-t6-observatory-ui": {
+      "id": "m1-t6-observatory-ui",
+      "kind": "task",
+      "name": "M1-T6: Observatory UI",
+      "summary": "Browser UI with real-time event timeline, node status, and fitness tracking",
+      "raw_data": {
+        "id": "m1-t6-observatory-ui",
+        "name": "M1-T6: Observatory UI",
+        "summary": "Browser UI with real-time event timeline, node status, and fitness tracking",
+        "milestone_id": "m1-foundational-backbone",
+        "status": "BLOCKED",
+        "owners": [
+          {
+            "role": "Visualization Agent",
+            "agent": "Antigravity"
+          }
+        ],
+        "dependencies": [
+          "m1-t2-mqtt-client",
+          "m1-t3-event-persistence"
+        ],
+        "blockers": [
+          {
+            "severity": "HIGH",
+            "description": "Blocked until M1-T3 (event persistence) is completed",
+            "ref": "state/roadmap.yaml#m1-t3-event-persistence"
+          }
+        ],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "Browser UI connects to event query API",
+          "Real-time timeline visualization",
+          "Node status display",
+          "Fitness result tracking"
+        ],
+        "outputs": [
+          "Observatory minimal UI",
+          "Event timeline component",
+          "Node status dashboard"
+        ],
+        "estimated_effort": "L",
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "COMMUNICATION/TASK_QUEUE.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m1-t6-observatory-ui.html",
+        "health": "BLOCKED",
+        "freshness": "FRESH",
+        "critical_path": true
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m1-t7-cross-repo-audit": {
+      "id": "m1-t7-cross-repo-audit",
+      "kind": "task",
+      "name": "M1-T7: Cross-Repository Audit",
+      "summary": "Architectural audit and integrity validation across all M1 repositories",
+      "raw_data": {
+        "id": "m1-t7-cross-repo-audit",
+        "name": "M1-T7: Cross-Repository Audit",
+        "summary": "Architectural audit and integrity validation across all M1 repositories",
+        "milestone_id": "m1-foundational-backbone",
+        "status": "BLOCKED",
+        "owners": [
+          {
+            "role": "Visualization Agent",
+            "agent": "Antigravity"
+          }
+        ],
+        "dependencies": [
+          "m1-t1-core-types",
+          "m1-t2-mqtt-client",
+          "m1-t3-event-persistence",
+          "m1-t4-evolution-cli",
+          "m1-t5-embedded-firmware",
+          "m1-t6-observatory-ui"
+        ],
+        "blockers": [
+          {
+            "severity": "CRITICAL",
+            "description": "Blocked until all M1 tasks (T1-T6) are completed",
+            "ref": "state/roadmap.yaml#m1-foundational-backbone"
+          }
+        ],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "ARCHITECTURAL_AUDIT.md completed",
+          "PROJECT_STATE.md updated",
+          "All contract violations identified",
+          "Integration testing validated"
+        ],
+        "outputs": [
+          "ARCHITECTURAL_AUDIT.md",
+          "Updated PROJECT_STATE.md"
+        ],
+        "estimated_effort": "M",
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "COMMUNICATION/TASK_QUEUE.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m1-t7-cross-repo-audit.html",
+        "health": "BLOCKED",
+        "freshness": "FRESH",
+        "critical_path": true
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m2-t1-mutation-operators": {
+      "id": "m2-t1-mutation-operators",
+      "kind": "task",
+      "name": "M2-T1: Mutation Operators",
+      "summary": "Structural and parametric mutation operators for genome evolution",
+      "raw_data": {
+        "id": "m2-t1-mutation-operators",
+        "name": "M2-T1: Mutation Operators",
+        "summary": "Structural and parametric mutation operators for genome evolution",
+        "milestone_id": "m2-basic-evolution",
+        "status": "PLANNED",
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m1-foundational-backbone"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "Structural mutation implemented",
+          "Parametric mutation implemented",
+          "Mutation rate controls"
+        ],
+        "outputs": [
+          "Mutation operator library"
+        ],
+        "estimated_effort": null,
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m2-t1-mutation-operators.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m2-t2-fitness-evaluation": {
+      "id": "m2-t2-fitness-evaluation",
+      "kind": "task",
+      "name": "M2-T2: Fitness Evaluation",
+      "summary": "Predictive power fitness evaluation for evolved genomes",
+      "raw_data": {
+        "id": "m2-t2-fitness-evaluation",
+        "name": "M2-T2: Fitness Evaluation",
+        "summary": "Predictive power fitness evaluation for evolved genomes",
+        "milestone_id": "m2-basic-evolution",
+        "status": "PLANNED",
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m1-foundational-backbone"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "Fitness function defined",
+          "Backtesting framework",
+          "Performance metrics"
+        ],
+        "outputs": [
+          "Fitness evaluator"
+        ],
+        "estimated_effort": null,
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m2-t2-fitness-evaluation.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m2-t3-lineage-tracking": {
+      "id": "m2-t3-lineage-tracking",
+      "kind": "task",
+      "name": "M2-T3: Lineage Tracking",
+      "summary": "Track evolutionary lineage and genealogy of successful genomes",
+      "raw_data": {
+        "id": "m2-t3-lineage-tracking",
+        "name": "M2-T3: Lineage Tracking",
+        "summary": "Track evolutionary lineage and genealogy of successful genomes",
+        "milestone_id": "m2-basic-evolution",
+        "status": "PLANNED",
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m2-t1-mutation-operators"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "Lineage graph storage",
+          "Genealogy queries",
+          "Ancestor/descendant tracking"
+        ],
+        "outputs": [
+          "Lineage tracker"
+        ],
+        "estimated_effort": null,
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m2-t3-lineage-tracking.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m2-t4-replay-system": {
+      "id": "m2-t4-replay-system",
+      "kind": "task",
+      "name": "M2-T4: Replay System",
+      "summary": "Event replay system for evolutionary run analysis and debugging",
+      "raw_data": {
+        "id": "m2-t4-replay-system",
+        "name": "M2-T4: Replay System",
+        "summary": "Event replay system for evolutionary run analysis and debugging",
+        "milestone_id": "m2-basic-evolution",
+        "status": "PLANNED",
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m1-t3-event-persistence"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "Event replay from SQLite log",
+          "Time-travel debugging",
+          "Deterministic replay"
+        ],
+        "outputs": [
+          "Replay engine"
+        ],
+        "estimated_effort": null,
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m2-t4-replay-system.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m3-t1-cooperative-signaling": {
+      "id": "m3-t1-cooperative-signaling",
+      "kind": "task",
+      "name": "M3-T1: Cooperative Signaling",
+      "summary": "Agent cooperative signaling protocols",
+      "raw_data": {
+        "id": "m3-t1-cooperative-signaling",
+        "name": "M3-T1: Cooperative Signaling",
+        "summary": "Agent cooperative signaling protocols",
+        "milestone_id": "m3-cooperative-ecology",
+        "status": "PLANNED",
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m2-basic-evolution"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "Signaling protocol defined",
+          "Signal propagation implemented"
+        ],
+        "outputs": [
+          "Signaling protocol"
+        ],
+        "estimated_effort": null,
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m3-t1-cooperative-signaling.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m3-t2-niche-detection": {
+      "id": "m3-t2-niche-detection",
+      "kind": "task",
+      "name": "M3-T2: Niche Detection",
+      "summary": "Algorithms for detecting and dominating predictive niches",
+      "raw_data": {
+        "id": "m3-t2-niche-detection",
+        "name": "M3-T2: Niche Detection",
+        "summary": "Algorithms for detecting and dominating predictive niches",
+        "milestone_id": "m3-cooperative-ecology",
+        "status": "PLANNED",
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m2-basic-evolution"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "Niche detection algorithm",
+          "Specialization metrics"
+        ],
+        "outputs": [
+          "Niche detector"
+        ],
+        "estimated_effort": null,
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m3-t2-niche-detection.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m3-t3-archetype-memory": {
+      "id": "m3-t3-archetype-memory",
+      "kind": "task",
+      "name": "M3-T3: Archetype Memory",
+      "summary": "Long-term memory of successful archetypes",
+      "raw_data": {
+        "id": "m3-t3-archetype-memory",
+        "name": "M3-T3: Archetype Memory",
+        "summary": "Long-term memory of successful archetypes",
+        "milestone_id": "m3-cooperative-ecology",
+        "status": "PLANNED",
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m2-t3-lineage-tracking"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "Archetype storage",
+          "Pattern recognition"
+        ],
+        "outputs": [
+          "Archetype memory system"
+        ],
+        "estimated_effort": null,
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m3-t3-archetype-memory.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m4-t1-galaxy-visualization": {
+      "id": "m4-t1-galaxy-visualization",
+      "kind": "task",
+      "name": "M4-T1: Galaxy Visualization",
+      "summary": "3D galaxy visualization using Three.js",
+      "raw_data": {
+        "id": "m4-t1-galaxy-visualization",
+        "name": "M4-T1: Galaxy Visualization",
+        "summary": "3D galaxy visualization using Three.js",
+        "milestone_id": "m4-full-observatory",
+        "status": "PLANNED",
+        "owners": [
+          {
+            "role": "Visualization Agent",
+            "agent": "Antigravity"
+          }
+        ],
+        "dependencies": [
+          "m2-basic-evolution"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "Three.js 3D rendering",
+          "Agent position visualization"
+        ],
+        "outputs": [
+          "Galaxy viewer"
+        ],
+        "estimated_effort": null,
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m4-t1-galaxy-visualization.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m4-t2-topology-analysis": {
+      "id": "m4-t2-topology-analysis",
+      "kind": "task",
+      "name": "M4-T2: Topology Analysis",
+      "summary": "Tools for analyzing ecosystem topology",
+      "raw_data": {
+        "id": "m4-t2-topology-analysis",
+        "name": "M4-T2: Topology Analysis",
+        "summary": "Tools for analyzing ecosystem topology",
+        "milestone_id": "m4-full-observatory",
+        "status": "PLANNED",
+        "owners": [
+          {
+            "role": "Visualization Agent",
+            "agent": "Antigravity"
+          }
+        ],
+        "dependencies": [
+          "m3-cooperative-ecology"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "Topology metrics",
+          "Network analysis"
+        ],
+        "outputs": [
+          "Topology analyzer"
+        ],
+        "estimated_effort": null,
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m4-t2-topology-analysis.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m4-t3-realtime-monitoring": {
+      "id": "m4-t3-realtime-monitoring",
+      "kind": "task",
+      "name": "M4-T3: Real-time Monitoring",
+      "summary": "Real-time ecosystem health and performance monitoring",
+      "raw_data": {
+        "id": "m4-t3-realtime-monitoring",
+        "name": "M4-T3: Real-time Monitoring",
+        "summary": "Real-time ecosystem health and performance monitoring",
+        "milestone_id": "m4-full-observatory",
+        "status": "PLANNED",
+        "owners": [
+          {
+            "role": "Visualization Agent",
+            "agent": "Antigravity"
+          }
+        ],
+        "dependencies": [
+          "m1-t6-observatory-ui"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "Live metrics dashboard",
+          "Alert system"
+        ],
+        "outputs": [
+          "Monitoring dashboard"
+        ],
+        "estimated_effort": null,
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m4-t3-realtime-monitoring.html",
+        "health": "AT_RISK",
+        "freshness": "FRESH",
+        "critical_path": true
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m5-t1-ensemble-logic": {
+      "id": "m5-t1-ensemble-logic",
+      "kind": "task",
+      "name": "M5-T1: Signal Ensemble Logic",
+      "summary": "Combine multiple agent signals into ensemble predictions",
+      "raw_data": {
+        "id": "m5-t1-ensemble-logic",
+        "name": "M5-T1: Signal Ensemble Logic",
+        "summary": "Combine multiple agent signals into ensemble predictions",
+        "milestone_id": "m5-production-signals",
+        "status": "PLANNED",
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m3-cooperative-ecology"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "Ensemble algorithm",
+          "Signal weighting"
+        ],
+        "outputs": [
+          "Ensemble engine"
+        ],
+        "estimated_effort": null,
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m5-t1-ensemble-logic.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m5-t2-confidence-scoring": {
+      "id": "m5-t2-confidence-scoring",
+      "kind": "task",
+      "name": "M5-T2: Confidence Scoring",
+      "summary": "Statistical confidence scoring for signal quality",
+      "raw_data": {
+        "id": "m5-t2-confidence-scoring",
+        "name": "M5-T2: Confidence Scoring",
+        "summary": "Statistical confidence scoring for signal quality",
+        "milestone_id": "m5-production-signals",
+        "status": "PLANNED",
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m5-t1-ensemble-logic"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "Confidence metrics",
+          "Quality assessment"
+        ],
+        "outputs": [
+          "Confidence scorer"
+        ],
+        "estimated_effort": null,
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m5-t2-confidence-scoring.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": true
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "m5-t3-validation-pipeline": {
+      "id": "m5-t3-validation-pipeline",
+      "kind": "task",
+      "name": "M5-T3: Automated Validation Pipeline",
+      "summary": "Automated validation and testing of signal quality",
+      "raw_data": {
+        "id": "m5-t3-validation-pipeline",
+        "name": "M5-T3: Automated Validation Pipeline",
+        "summary": "Automated validation and testing of signal quality",
+        "milestone_id": "m5-production-signals",
+        "status": "PLANNED",
+        "owners": [
+          {
+            "role": "Implementation Agent",
+            "agent": "Claude Code"
+          }
+        ],
+        "dependencies": [
+          "m5-t2-confidence-scoring"
+        ],
+        "blockers": [],
+        "updated_at": "2026-07-12T00:00:00Z",
+        "acceptance_criteria": [
+          "Validation suite",
+          "Automated testing"
+        ],
+        "outputs": [
+          "Validation pipeline"
+        ],
+        "estimated_effort": null,
+        "actual_completion_date": null,
+        "evidence": [],
+        "source_refs": [
+          {
+            "path": "state/roadmap.md",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "extracted_at": "2026-07-12T00:00:00Z"
+          }
+        ],
+        "detail_url": "details/roadmap/m5-t3-validation-pipeline.html",
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": true
+      },
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    "role-claude-code": {
+      "id": "role-claude-code",
+      "kind": "role",
+      "name": "Implementation Agent",
+      "summary": "Implementation Agent - claude-code",
+      "raw_data": {
+        "agent_id": "claude-code",
+        "role": "Implementation Agent",
+        "repositories": [
+          "tr4d3rz-core",
+          "tr4d3rz-messaging",
+          "tr4d3rz-evolution",
+          "tr4d3rz-persistence"
+        ],
+        "last_update": "2026-07-10T19:30:00+00:00",
+        "current_task": null,
+        "confidence_level": 90,
+        "blockers": [],
+        "vetos_issued_count": 1,
+        "vetos_received_count": 1,
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "features\\FEATURE-DOCS-PROJECT-MAP\\ecosystem-snapshot.json",
+          "hash": "65623f8413ffc9ddba1de2f0931d97bd9c803649e6645c05c404ce1987b28f69",
+          "extracted_at": "2026-07-12T16:39:52.124999Z"
+        }
+      ]
+    },
+    "role-github-copilot": {
+      "id": "role-github-copilot",
+      "kind": "role",
+      "name": "QA Validator",
+      "summary": "QA Validator - github-copilot",
+      "raw_data": {
+        "agent_id": "github-copilot",
+        "role": "QA Validator",
+        "repositories": [
+          "tr4d3rz-embedded"
+        ],
+        "last_update": "2026-07-12T15:52:14.504925Z",
+        "current_task": "M1-T5",
+        "confidence_level": 95,
+        "blockers": [],
+        "vetos_issued_count": 1,
+        "vetos_received_count": 1,
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "features\\FEATURE-DOCS-PROJECT-MAP\\ecosystem-snapshot.json",
+          "hash": "65623f8413ffc9ddba1de2f0931d97bd9c803649e6645c05c404ce1987b28f69",
+          "extracted_at": "2026-07-12T16:39:52.124999Z"
+        }
+      ]
+    },
+    "role-hra": {
+      "id": "role-hra",
+      "kind": "role",
+      "name": "Human Relation Agent",
+      "summary": "Human Relation Agent - hra",
+      "raw_data": {
+        "agent_id": "hra",
+        "role": "Human Relation Agent",
+        "repositories": [],
+        "last_update": "2026-07-12T15:52:14.504925Z",
+        "current_task": null,
+        "confidence_level": 85,
+        "blockers": [],
+        "vetos_issued_count": 1,
+        "vetos_received_count": 1,
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "features\\FEATURE-DOCS-PROJECT-MAP\\ecosystem-snapshot.json",
+          "hash": "65623f8413ffc9ddba1de2f0931d97bd9c803649e6645c05c404ce1987b28f69",
+          "extracted_at": "2026-07-12T16:39:52.124999Z"
+        }
+      ]
+    },
+    "role-manus": {
+      "id": "role-manus",
+      "kind": "role",
+      "name": "Chief Architect",
+      "summary": "Chief Architect - manus",
+      "raw_data": {
+        "agent_id": "manus",
+        "role": "Chief Architect",
+        "repositories": [
+          "tr4d3rz-docs"
+        ],
+        "last_update": "2026-07-12T15:52:14.505437Z",
+        "current_task": null,
+        "confidence_level": 90,
+        "blockers": [],
+        "vetos_issued_count": 1,
+        "vetos_received_count": 1,
+        "health": "UNKNOWN",
+        "freshness": "FRESH",
+        "critical_path": false
+      },
+      "source_refs": [
+        {
+          "path": "features\\FEATURE-DOCS-PROJECT-MAP\\ecosystem-snapshot.json",
+          "hash": "65623f8413ffc9ddba1de2f0931d97bd9c803649e6645c05c404ce1987b28f69",
+          "extracted_at": "2026-07-12T16:39:52.124999Z"
+        }
+      ]
+    }
+  },
+  "relations": [
+    {
+      "from_id": "m2-basic-evolution",
+      "to_id": "m1-foundational-backbone",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m3-cooperative-ecology",
+      "to_id": "m2-basic-evolution",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m4-full-observatory",
+      "to_id": "m2-basic-evolution",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m5-production-signals",
+      "to_id": "m3-cooperative-ecology",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t0-specs-contracts",
+      "to_id": "m1-foundational-backbone",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t1-core-types",
+      "to_id": "m1-t0-specs-contracts",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t1-core-types",
+      "to_id": "m1-foundational-backbone",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t2-mqtt-client",
+      "to_id": "m1-t0-specs-contracts",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t2-mqtt-client",
+      "to_id": "m1-t1-core-types",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t2-mqtt-client",
+      "to_id": "m1-foundational-backbone",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t2-b-remote-validation",
+      "to_id": "m1-t2-mqtt-client",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t2-b-remote-validation",
+      "to_id": "m1-foundational-backbone",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t3-event-persistence",
+      "to_id": "m1-t0-specs-contracts",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t3-event-persistence",
+      "to_id": "m1-t1-core-types",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t3-event-persistence",
+      "to_id": "m1-t2-mqtt-client",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t3-event-persistence",
+      "to_id": "m1-foundational-backbone",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t4-evolution-cli",
+      "to_id": "m1-t1-core-types",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t4-evolution-cli",
+      "to_id": "m1-t2-mqtt-client",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t4-evolution-cli",
+      "to_id": "m1-foundational-backbone",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t5-embedded-firmware",
+      "to_id": "m1-t1-core-types",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t5-embedded-firmware",
+      "to_id": "m1-t2-mqtt-client",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t5-embedded-firmware",
+      "to_id": "m1-t2-b-remote-validation",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t5-embedded-firmware",
+      "to_id": "m1-foundational-backbone",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t6-observatory-ui",
+      "to_id": "m1-t2-mqtt-client",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t6-observatory-ui",
+      "to_id": "m1-t3-event-persistence",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t6-observatory-ui",
+      "to_id": "m1-foundational-backbone",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t7-cross-repo-audit",
+      "to_id": "m1-t1-core-types",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t7-cross-repo-audit",
+      "to_id": "m1-t2-mqtt-client",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t7-cross-repo-audit",
+      "to_id": "m1-t3-event-persistence",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t7-cross-repo-audit",
+      "to_id": "m1-t4-evolution-cli",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t7-cross-repo-audit",
+      "to_id": "m1-t5-embedded-firmware",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t7-cross-repo-audit",
+      "to_id": "m1-t6-observatory-ui",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m1-t7-cross-repo-audit",
+      "to_id": "m1-foundational-backbone",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m2-t1-mutation-operators",
+      "to_id": "m1-foundational-backbone",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m2-t1-mutation-operators",
+      "to_id": "m2-basic-evolution",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m2-t2-fitness-evaluation",
+      "to_id": "m1-foundational-backbone",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m2-t2-fitness-evaluation",
+      "to_id": "m2-basic-evolution",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m2-t3-lineage-tracking",
+      "to_id": "m2-t1-mutation-operators",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m2-t3-lineage-tracking",
+      "to_id": "m2-basic-evolution",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m2-t4-replay-system",
+      "to_id": "m1-t3-event-persistence",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m2-t4-replay-system",
+      "to_id": "m2-basic-evolution",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m3-t1-cooperative-signaling",
+      "to_id": "m2-basic-evolution",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m3-t1-cooperative-signaling",
+      "to_id": "m3-cooperative-ecology",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m3-t2-niche-detection",
+      "to_id": "m2-basic-evolution",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m3-t2-niche-detection",
+      "to_id": "m3-cooperative-ecology",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m3-t3-archetype-memory",
+      "to_id": "m2-t3-lineage-tracking",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m3-t3-archetype-memory",
+      "to_id": "m3-cooperative-ecology",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m4-t1-galaxy-visualization",
+      "to_id": "m2-basic-evolution",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m4-t1-galaxy-visualization",
+      "to_id": "m4-full-observatory",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m4-t2-topology-analysis",
+      "to_id": "m3-cooperative-ecology",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m4-t2-topology-analysis",
+      "to_id": "m4-full-observatory",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m4-t3-realtime-monitoring",
+      "to_id": "m1-t6-observatory-ui",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m4-t3-realtime-monitoring",
+      "to_id": "m4-full-observatory",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m5-t1-ensemble-logic",
+      "to_id": "m3-cooperative-ecology",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m5-t1-ensemble-logic",
+      "to_id": "m5-production-signals",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m5-t2-confidence-scoring",
+      "to_id": "m5-t1-ensemble-logic",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m5-t2-confidence-scoring",
+      "to_id": "m5-production-signals",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m5-t3-validation-pipeline",
+      "to_id": "m5-t2-confidence-scoring",
+      "type": "depends_on",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "m5-t3-validation-pipeline",
+      "to_id": "m5-production-signals",
+      "type": "belongs_to_milestone",
+      "source_refs": [
+        {
+          "path": "tr4d3rz-docs\\state\\roadmap.yaml",
+          "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+          "extracted_at": "2026-07-12T16:39:52.117859Z"
+        }
+      ]
+    },
+    {
+      "from_id": "role-claude-code",
+      "to_id": "component-tr4d3rz-core",
+      "type": "owns",
+      "source_refs": [
+        {
+          "path": "features\\FEATURE-DOCS-PROJECT-MAP\\ecosystem-snapshot.json",
+          "hash": "65623f8413ffc9ddba1de2f0931d97bd9c803649e6645c05c404ce1987b28f69",
+          "extracted_at": "2026-07-12T16:39:52.124999Z"
+        }
+      ]
+    },
+    {
+      "from_id": "role-claude-code",
+      "to_id": "component-tr4d3rz-messaging",
+      "type": "owns",
+      "source_refs": [
+        {
+          "path": "features\\FEATURE-DOCS-PROJECT-MAP\\ecosystem-snapshot.json",
+          "hash": "65623f8413ffc9ddba1de2f0931d97bd9c803649e6645c05c404ce1987b28f69",
+          "extracted_at": "2026-07-12T16:39:52.124999Z"
+        }
+      ]
+    },
+    {
+      "from_id": "role-claude-code",
+      "to_id": "component-tr4d3rz-evolution",
+      "type": "owns",
+      "source_refs": [
+        {
+          "path": "features\\FEATURE-DOCS-PROJECT-MAP\\ecosystem-snapshot.json",
+          "hash": "65623f8413ffc9ddba1de2f0931d97bd9c803649e6645c05c404ce1987b28f69",
+          "extracted_at": "2026-07-12T16:39:52.124999Z"
+        }
+      ]
+    },
+    {
+      "from_id": "role-claude-code",
+      "to_id": "component-tr4d3rz-persistence",
+      "type": "owns",
+      "source_refs": [
+        {
+          "path": "features\\FEATURE-DOCS-PROJECT-MAP\\ecosystem-snapshot.json",
+          "hash": "65623f8413ffc9ddba1de2f0931d97bd9c803649e6645c05c404ce1987b28f69",
+          "extracted_at": "2026-07-12T16:39:52.124999Z"
+        }
+      ]
+    },
+    {
+      "from_id": "role-github-copilot",
+      "to_id": "component-tr4d3rz-embedded",
+      "type": "owns",
+      "source_refs": [
+        {
+          "path": "features\\FEATURE-DOCS-PROJECT-MAP\\ecosystem-snapshot.json",
+          "hash": "65623f8413ffc9ddba1de2f0931d97bd9c803649e6645c05c404ce1987b28f69",
+          "extracted_at": "2026-07-12T16:39:52.124999Z"
+        }
+      ]
+    },
+    {
+      "from_id": "role-manus",
+      "to_id": "component-tr4d3rz-docs",
+      "type": "owns",
+      "source_refs": [
+        {
+          "path": "features\\FEATURE-DOCS-PROJECT-MAP\\ecosystem-snapshot.json",
+          "hash": "65623f8413ffc9ddba1de2f0931d97bd9c803649e6645c05c404ce1987b28f69",
+          "extracted_at": "2026-07-12T16:39:52.124999Z"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-07-12T18:31:18.859864+00:00",
+  "generator_version": "1.0.0",
+  "git_commit": "unknown",
+  "sources": [
+    {
+      "path": "state\\roadmap.yaml",
+      "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
+      "read_at": "2026-07-12T18:31:18.662555Z",
+      "status": "ok"
+    },
+    {
+      "path": "docs\\archimate_data.json",
+      "hash": "2b75c7210b54a8c08426aec201ed4af5a1fcd8606d9bc2170dadacba5c5c11ea",
+      "read_at": "2026-07-12T18:31:18.666057Z",
+      "status": "ok"
+    },
+    {
+      "path": "COMMUNICATION\\TASK_QUEUE.md",
+      "hash": "db52b2fe235513f8de0cdff02e7af2a916cb192eabb13a7426542d9a40a79ff2",
+      "read_at": "2026-07-12T18:31:18.668551Z",
+      "status": "ok"
+    },
+    {
+      "path": "state\\project_state.md",
+      "hash": "36bc9fac944f22bf1179ce42dd55c8ab65f2f86aea04b92e6480c0222f7d5304",
+      "read_at": "2026-07-12T18:31:18.669559Z",
+      "status": "ok"
+    },
+    {
+      "path": "artifacts\\features\\FEATURE-DOCS-PROJECT-MAP\\ecosystem-snapshot.json",
+      "hash": "65623f8413ffc9ddba1de2f0931d97bd9c803649e6645c05c404ce1987b28f69",
+      "read_at": "2026-07-12T18:31:18.671570Z",
+      "status": "ok"
+    },
+    {
+      "path": ".git\\HEAD",
+      "hash": "28d25bf82af4c0e2b72f50959b2beb859e3e60b9630a5e8c603dad4ddb2b6e80",
+      "read_at": "2026-07-12T18:31:18.852876Z",
+      "status": "ok"
+    }
+  ],
+  "datasets": [
+    {
+      "filename": "roadmap.json",
+      "entity_count": 27,
+      "schema_version": "1.0.0"
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    {
+      "code": "MAP-W002",
+      "message": "20 entities have UNKNOWN health (>50% of total)",
+      "file": null
+    }
+  ],
+  "last_valid_snapshot": null,
+  "phase_durations": {
+    "collect": 0.232338,
+    "normalize": 0.000493,
+    "derive": 0.002004,
+    "validate": 0.0
+  },
+  "freshness_status": "FRESH"
+}

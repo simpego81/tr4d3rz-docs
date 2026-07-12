@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://simpego81.github.io/tr4d3rz-docs/schemas/project-map/common-entity.schema.json",
+  "title": "Common Entity Schema",
+  "description": "Base schema for all project map entities with health, status, provenance, and evidence tracking",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "name",
+    "summary",
+    "status",
+    "health",
+    "owners",
+    "dependencies",
+    "blockers",
+    "updated_at",
+    "evidence",
+    "source_refs",
+    "detail_url"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable identifier independent of display name (kebab-case recommended)",
+      "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$",
+      "minLength": 2,
+      "maxLength": 128,
+      "examples": ["mqtt-messaging", "m1-foundational-backbone", "claude-code-implementation"]
+    },
+    "kind": {
+      "type": "string",
+      "description": "Entity type (extensible enum)",
+      "enum": [
+        "concept",
+        "component",
+        "role",
+        "milestone",
+        "task",
+        "device",
+        "repository",
+        "protocol",
+        "adr",
+        "demo"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable display name",
+      "minLength": 1,
+      "maxLength": 256,
+      "examples": ["MQTT Messaging", "M1: Foundational Backbone", "Claude Code (Implementation Agent)"]
+    },
+    "summary": {
+      "type": "string",
+      "description": "Non-technical summary, brief, no unsafe markup",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "status": {
+      "type": "string",
+      "description": "Lifecycle status declared by SSOT",
+      "enum": [
+        "PLANNED",
+        "READY",
+        "IN_PROGRESS",
+        "BLOCKED",
+        "COMPLETED",
+        "DEPRECATED",
+        "UNKNOWN"
+      ]
+    },
+    "health": {
+      "type": "string",
+      "description": "Operational health derived from sources, dependencies, and freshness",
+      "enum": [
+        "HEALTHY",
+        "AT_RISK",
+        "BLOCKED",
+        "STALE",
+        "UNKNOWN"
+      ]
+    },
+    "owners": {
+      "type": "array",
+      "description": "Roles or agents responsible (may be empty only with warning)",
+      "items": {
+        "type": "object",
+        "required": ["role", "agent"],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "Chief Architect",
+              "Implementation Agent",
+              "Visualization Agent",
+              "QA Validator",
+              "Meta-Optimizer Agent",
+              "Debug Intelligence Agent",
+              "Embedded Developer"
+            ]
+          },
+          "agent": {
+            "type": "string",
+            "examples": ["Manus", "Claude Code", "Antigravity", "GitHub Copilot"]
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "description": "Array of entity IDs this entity depends on (must be resolvable)",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+      },
+      "uniqueItems": true
+    },
+    "blockers": {
+      "type": "array",
+      "description": "Active blockers with severity and reference",
+      "items": {
+        "type": "object",
+        "required": ["severity", "description", "ref"],
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "ref": {
+            "type": "string",
+            "description": "Link to issue, task, or documentation",
+            "format": "uri-reference"
+          }
+        }
+      }
+    },
+    "updated_at": {
+      "type": "string",
+      "description": "ISO 8601 timestamp of last authoritative source modification",
+      "format": "date-time",
+      "examples": ["2026-07-12T14:30:00Z"]
+    },
+    "evidence": {
+      "type": "array",
+      "description": "Links to demos, reports, commits, artifacts, or verifiable documents",
+      "items": {
+        "type": "object",
+        "required": ["type", "title", "url"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["demo", "commit", "qa_report", "adr", "spec", "implementation_log", "test_result", "artifact"]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "url": {
+            "type": "string",
+            "format": "uri-reference",
+            "description": "Relative or absolute URL to evidence"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When evidence was created/validated"
+          }
+        }
+      }
+    },
+    "source_refs": {
+      "type": "array",
+      "description": "Paths to SSOT files that produced this entity (for traceability)",
+      "items": {
+        "type": "object",
+        "required": ["path", "hash"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Repository-relative path to source file",
+            "examples": ["state/roadmap.yaml", "specs/core/genome-spec.md", ".ecosystem/snapshot.json"]
+          },
+          "hash": {
+            "type": "string",
+            "description": "SHA-256 hash of source file at extraction time",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "extracted_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this source was read"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "detail_url": {
+      "type": "string",
+      "description": "Relative URL to generated detail page",
+      "format": "uri-reference",
+      "pattern": "^details/[a-z]+/[a-z0-9-]+\\.html$",
+      "examples": ["details/concepts/mqtt-messaging.html", "details/roadmap/m1-foundational-backbone.html"]
+    },
+    "tags": {
+      "type": "array",
+      "description": "Optional tags for filtering/grouping",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$"
+      },
+      "uniqueItems": true
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional extended description (markdown allowed)",
+      "maxLength": 8192
+    }
+  },
+  "additionalProperties": false
+}

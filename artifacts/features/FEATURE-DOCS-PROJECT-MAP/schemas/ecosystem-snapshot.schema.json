@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://simpego81.github.io/tr4d3rz-docs/schemas/project-map/ecosystem-snapshot.schema.json",
+  "title": "Ecosystem Snapshot Schema",
+  "description": "Sanitized snapshot of .ecosystem directory for public project map (allowlist-based, excludes private content)",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_at",
+    "source_hash",
+    "agents",
+    "rules_summary"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0",
+      "description": "Version of this snapshot schema"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when snapshot was created"
+    },
+    "source_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hash of .ecosystem directory state"
+    },
+    "agents": {
+      "type": "array",
+      "description": "Sanitized agent boards (excludes free-text notes, private assumptions)",
+      "items": {
+        "type": "object",
+        "required": ["agent_id", "last_update", "current_task", "role"],
+        "properties": {
+          "agent_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "examples": ["claude-code", "manus", "antigravity", "github-copilot", "hra"]
+          },
+          "last_update": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this board was last updated"
+          },
+          "current_task": {
+            "type": ["string", "null"],
+            "description": "Current task ID or null if idle",
+            "maxLength": 256
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "Chief Architect",
+              "Implementation Agent",
+              "Visualization Agent",
+              "QA Validator",
+              "Embedded Developer",
+              "Meta-Optimizer Agent",
+              "Debug Intelligence Agent",
+              "Human Relation Agent"
+            ]
+          },
+          "repositories": {
+            "type": "array",
+            "description": "Repositories this agent owns",
+            "items": {
+              "type": "string",
+              "examples": ["tr4d3rz-core", "tr4d3rz-messaging", "tr4d3rz-docs"]
+            }
+          },
+          "confidence_level": {
+            "type": ["integer", "null"],
+            "description": "Overall task confidence (0-100) if available",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "blockers": {
+            "type": "array",
+            "description": "Active blockers (sanitized - no free text)",
+            "items": {
+              "type": "object",
+              "required": ["description", "owner", "status"],
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "maxLength": 256,
+                  "description": "Generic blocker description"
+                },
+                "owner": {
+                  "type": "string",
+                  "description": "Agent or entity that can unblock"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": ["pending", "in_progress", "resolved"]
+                }
+              }
+            }
+          },
+          "vetos_issued_count": {
+            "type": "integer",
+            "description": "Number of vetos this agent issued (count only, no details)",
+            "minimum": 0
+          },
+          "vetos_received_count": {
+            "type": "integer",
+            "description": "Number of vetos this agent received (count only)",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "rules_summary": {
+      "type": "object",
+      "description": "High-level summary of ecosystem rules (veto gates, handoff protocol)",
+      "required": ["veto_gates", "artifact_handoff", "hra_protocol"],
+      "properties": {
+        "veto_gates": {
+          "type": "array",
+          "description": "List of active veto gates",
+          "items": {
+            "type": "object",
+            "required": ["name", "enforcer", "trigger"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "examples": ["Pre-Commit Check", "Protocol Integrity", "Demo Validation"]
+              },
+              "enforcer": {
+                "type": "string",
+                "description": "Agent responsible for enforcing this gate"
+              },
+              "trigger": {
+                "type": "string",
+                "description": "When this gate activates",
+                "maxLength": 256
+              }
+            }
+          }
+        },
+        "artifact_handoff": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Whether artifact-based handoff is enforced"
+            },
+            "artifact_path": {
+              "type": "string",
+              "description": "Path to artifact directory template",
+              "examples": ["artifacts/features/FEATURE-XXX/"]
+            }
+          }
+        },
+        "hra_protocol": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Whether HRA synthesis is active"
+            },
+            "cadence": {
+              "type": "string",
+              "description": "HRA audit schedule",
+              "examples": ["daily morning + evening, weekly convergence"]
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "excluded_fields": {
+      "type": "array",
+      "description": "List of field names excluded from boards for privacy",
+      "items": {
+        "type": "string",
+        "examples": ["context_assumptions", "recent_decisions", "open_questions", "uncertainty_sources"]
+      }
+    }
+  },
+  "additionalProperties": false
+}

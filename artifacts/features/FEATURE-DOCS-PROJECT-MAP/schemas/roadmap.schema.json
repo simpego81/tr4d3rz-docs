@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://simpego81.github.io/tr4d3rz-docs/schemas/project-map/roadmap.schema.json",
+  "title": "Roadmap Dataset Schema",
+  "description": "Schema for roadmap.json containing milestones, tasks, dependencies, and timeline",
+  "version": "1.0.0",
+  "type": "object",
+  "required": ["schema_version", "milestones", "tasks"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "milestones": {
+      "type": "array",
+      "description": "Array of milestone entities",
+      "items": {
+        "allOf": [
+          { "$ref": "common-entity.schema.json" },
+          {
+            "type": "object",
+            "required": ["kind", "outcome", "start_date", "end_date", "tasks"],
+            "properties": {
+              "kind": {
+                "const": "milestone"
+              },
+              "outcome": {
+                "type": "string",
+                "description": "Expected deliverable or outcome",
+                "minLength": 1,
+                "maxLength": 1024
+              },
+              "start_date": {
+                "type": ["string", "null"],
+                "description": "ISO 8601 date or null if not scheduled",
+                "format": "date",
+                "examples": ["2026-07-15", null]
+              },
+              "end_date": {
+                "type": ["string", "null"],
+                "description": "ISO 8601 date or null if not scheduled",
+                "format": "date"
+              },
+              "tasks": {
+                "type": "array",
+                "description": "IDs of tasks in this milestone",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+                },
+                "uniqueItems": true
+              },
+              "critical_path": {
+                "type": "boolean",
+                "description": "True if this milestone is on the critical path",
+                "default": false
+              }
+            }
+          }
+        ]
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "description": "Array of task entities",
+      "items": {
+        "allOf": [
+          { "$ref": "common-entity.schema.json" },
+          {
+            "type": "object",
+            "required": ["kind", "milestone_id", "acceptance_criteria", "outputs"],
+            "properties": {
+              "kind": {
+                "const": "task"
+              },
+              "milestone_id": {
+                "type": "string",
+                "description": "ID of parent milestone",
+                "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+              },
+              "acceptance_criteria": {
+                "type": "array",
+                "description": "Verifiable acceptance criteria",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                },
+                "minItems": 1
+              },
+              "outputs": {
+                "type": "array",
+                "description": "Required outputs/deliverables",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "minItems": 1
+              },
+              "estimated_effort": {
+                "type": ["string", "null"],
+                "description": "T-shirt size estimate (optional)",
+                "enum": ["XS", "S", "M", "L", "XL", "XXL", null]
+              },
+              "actual_completion_date": {
+                "type": ["string", "null"],
+                "description": "ISO 8601 date when task was completed, null if not completed",
+                "format": "date"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "additionalProperties": false
+}
