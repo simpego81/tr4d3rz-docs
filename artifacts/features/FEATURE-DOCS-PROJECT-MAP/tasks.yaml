@@ -1,0 +1,364 @@
+feature: FEATURE-DOCS-PROJECT-MAP
+title: GitHub Pages progressive project map
+architect: Manus
+owner_role: Implementation Agent
+status: PENDING
+created_at: 2026-07-12
+status_flow:
+  - PENDING
+  - IN_PROGRESS
+  - COMPLETED
+
+milestones:
+  - id: PMAP-M0
+    title: Protocol and SSOT foundation
+    exit_gate: Contracts approved before dependent implementation
+  - id: PMAP-M1
+    title: Deterministic data pipeline
+    exit_gate: Validated atomic datasets with diagnostic failure injection
+  - id: PMAP-M2
+    title: Progressive UI and generated details
+    exit_gate: Homepage and all drill-down routes work with fixture data
+  - id: PMAP-M3
+    title: Four interactive maps
+    exit_gate: Semantic, physical, collaboration and roadmap acceptance tests pass
+  - id: PMAP-M4
+    title: Migration and publication
+    exit_gate: Legacy content preserved and Pages preview validated
+  - id: PMAP-M5
+    title: QA, demo and closure
+    exit_gate: Independent QA, registered demo, debugability and architectural audit approved
+
+tasks:
+  - id: PMAP-00
+    milestone: PMAP-M0
+    title: Register feature, resolve implementation ownership and establish an isolated baseline
+    owner_role: Chief Architect
+    suggested_agent: Manus
+    dependencies: []
+    status: COMPLETED
+    outputs:
+      - COMMUNICATION/TASKS/FEATURE-DOCS-PROJECT-MAP.md
+      - owner-approved repository permission decision
+      - isolated branch or worktree plan
+      - baseline link and generated-output inventory
+    acceptance:
+      - The user explicitly authorizes an implementation agent to modify code and generated pages in tr4d3rz-docs, or approves an alternative cross-repository publication design
+      - AGENTS.md and task assignments are updated before the authorized agent writes code
+      - Existing uncommitted changes of other agents are not staged or modified
+      - Task status is moved from PENDING to IN_PROGRESS before implementation
+
+  - id: PMAP-01
+    milestone: PMAP-M0
+    title: Approve data contracts and publication ADR
+    owner_role: Chief Architect
+    suggested_agent: Manus
+    dependencies: [PMAP-00]
+    status: PENDING
+    outputs:
+      - ADR for static project-map architecture
+      - JSON Schema for common entity and four datasets
+      - schema version and changelog
+      - migration and compatibility notes
+    acceptance:
+      - SSOT is updated before any consumer implementation
+      - Status and health vocabularies are unambiguous
+      - Local ecosystem snapshot policy is explicitly approved
+
+  - id: PMAP-02
+    milestone: PMAP-M0
+    title: Migrate roadmap to a machine-readable SSOT
+    owner_role: Implementation Agent
+    suggested_agent: Claude Code
+    dependencies: [PMAP-01]
+    status: PENDING
+    outputs:
+      - state/roadmap.yaml
+      - roadmap schema
+      - generator for state/roadmap.md
+      - equivalence report
+    acceptance:
+      - M1 through M5 are preserved
+      - M1 tasks and dependencies are reconciled with TASK_QUEUE.md
+      - Missing dates remain null and are never estimated
+      - Generated Markdown is deterministic
+
+  - id: PMAP-03
+    milestone: PMAP-M0
+    title: Define and implement the sanitized ecosystem snapshot
+    owner_role: Implementation Agent
+    suggested_agent: Claude Code
+    dependencies: [PMAP-01]
+    status: PENDING
+    outputs:
+      - ecosystem snapshot schema
+      - allowlist-based exporter from C:/projects/seq/.ecosystem
+      - privacy and validation report
+      - sample valid snapshot
+    acceptance:
+      - No secret, private free text or unsupported field is published
+      - Snapshot records generation time, source hashes and schema version
+      - Missing snapshot produces MAP-E003 and a stale fallback
+
+  - id: PMAP-04
+    milestone: PMAP-M1
+    title: Implement source collectors and canonical normalizer
+    owner_role: Implementation Agent
+    suggested_agent: Claude Code
+    dependencies: [PMAP-02, PMAP-03]
+    status: PENDING
+    outputs:
+      - collectors for roadmap YAML, ArchiMate data, Markdown state and Git metadata
+      - normalized entity and relation model
+      - unit test fixtures
+    acceptance:
+      - Parsers are pure and independently testable
+      - Every entity has a stable ID and source_refs
+      - Conflicting sources generate a diagnostic instead of silent precedence
+
+  - id: PMAP-05
+    milestone: PMAP-M1
+    title: Implement health, freshness and dependency derivation
+    owner_role: Implementation Agent
+    suggested_agent: Claude Code
+    dependencies: [PMAP-04]
+    status: PENDING
+    outputs:
+      - configurable freshness policy
+      - health derivation engine
+      - roadmap critical-path derivation
+      - rule test suite
+    acceptance:
+      - Health follows the priority table in spec.md
+      - Completed is never inferred without evidence
+      - Unknown and stale states remain visible
+
+  - id: PMAP-06
+    milestone: PMAP-M1
+    title: Build schema validation and atomic generation pipeline
+    owner_role: Implementation Agent
+    suggested_agent: Claude Code
+    dependencies: [PMAP-04, PMAP-05]
+    status: PENDING
+    outputs:
+      - build-project-map command
+      - docs/data/generated datasets
+      - build-manifest.json
+      - staging and rollback mechanism
+    acceptance:
+      - Invalid schema or unresolved mandatory reference blocks publication
+      - Partial output never replaces the last valid snapshot
+      - Logs include codes MAP-E001 through MAP-E008 and phase durations
+      - Unit and contract tests pass at 100 percent
+
+  - id: PMAP-07
+    milestone: PMAP-M2
+    title: Create the shared accessible static UI shell
+    owner_role: Visualization Agent
+    suggested_agent: Antigravity
+    dependencies: [PMAP-01]
+    status: PENDING
+    outputs:
+      - shared design tokens and navigation
+      - D3 interaction modules
+      - accessible tooltip, legend, filter and textual fallback components
+      - viewport policy for desktop-only detail views
+    acceptance:
+      - No framework or backend is required for GitHub Pages
+      - Keyboard focus, reduced motion and touch targets are supported
+      - Shared modules prevent copy-paste implementations among maps
+
+  - id: PMAP-08
+    milestone: PMAP-M2
+    title: Implement generated node detail pages
+    owner_role: Visualization Agent
+    suggested_agent: Antigravity
+    dependencies: [PMAP-06, PMAP-07]
+    status: PENDING
+    outputs:
+      - generic detail-page renderer
+      - concept, component, role, milestone and task templates
+      - stable route generator
+    acceptance:
+      - Every node exposes status, health, owners, dependencies, blockers, updated_at, evidence and sources
+      - Breadcrumbs and back-navigation preserve the selected context
+      - Missing optional values are explicit, not omitted silently
+
+  - id: PMAP-09
+    milestone: PMAP-M2
+    title: Implement the mobile-first project-map homepage
+    owner_role: Visualization Agent
+    suggested_agent: Antigravity
+    dependencies: [PMAP-06, PMAP-07]
+    status: PENDING
+    outputs:
+      - new homepage preview
+      - four lightweight interactive summaries
+      - global health and freshness strip
+      - static fallback content
+    acceptance:
+      - Usable at 360 px without critical horizontal overflow
+      - Each summary opens its dedicated area page
+      - Initial load does not fetch the full detail graphs
+      - Dataset failure leaves navigation and source links usable
+
+  - id: PMAP-10
+    milestone: PMAP-M3
+    title: Implement the conceptual ecosystem map
+    owner_role: Visualization Agent
+    suggested_agent: Antigravity
+    dependencies: [PMAP-08, PMAP-09]
+    status: PENDING
+    outputs:
+      - maps/conceptual.html
+      - logical-domain graph and textual fallback
+      - conceptual interaction tests
+    acceptance:
+      - No physical devices, hosts or repositories appear as logical nodes
+      - Search, filter, focus, pan, zoom and node drill-down work
+
+  - id: PMAP-11
+    milestone: PMAP-M3
+    title: Implement the physical ecosystem map
+    owner_role: Visualization Agent
+    suggested_agent: Antigravity
+    dependencies: [PMAP-08, PMAP-09]
+    status: PENDING
+    outputs:
+      - maps/physical.html
+      - physical topology graph and textual fallback
+      - component-to-concept cross-links
+    acceptance:
+      - Components, device nodes, runtimes and repositories are distinguishable
+      - Each physical component links to at least one implemented logical concept or an explicit UNKNOWN
+      - Existing device pages remain reachable
+
+  - id: PMAP-12
+    milestone: PMAP-M3
+    title: Implement the collaborative agent setup map
+    owner_role: Visualization Agent
+    suggested_agent: Antigravity
+    dependencies: [PMAP-03, PMAP-08, PMAP-09]
+    status: PENDING
+    outputs:
+      - maps/agents.html
+      - role and authority view
+      - handoff, HRA, board, veto and repository-flow view
+    acceptance:
+      - The two requested detail levels are independently selectable
+      - Roles and powers are sourced from authoritative rules
+      - Sanitized state never exposes excluded board content
+
+  - id: PMAP-13
+    milestone: PMAP-M3
+    title: Implement roadmap timeline and dependency graph
+    owner_role: Visualization Agent
+    suggested_agent: Antigravity
+    dependencies: [PMAP-02, PMAP-05, PMAP-08, PMAP-09]
+    status: PENDING
+    outputs:
+      - maps/roadmap.html
+      - synchronized timeline and dependency DAG
+      - critical-path and filter interactions
+    acceptance:
+      - Milestones and tasks show status, owner, blockers and evidence
+      - Undated work is shown as not planned, not positioned using invented dates
+      - Timeline selection highlights the corresponding dependency graph node
+
+  - id: PMAP-14
+    milestone: PMAP-M4
+    title: Preserve and contextualize the current homepage
+    owner_role: Implementation Agent
+    suggested_agent: Claude Code
+    dependencies: [PMAP-09, PMAP-10, PMAP-11, PMAP-12, PMAP-13]
+    status: PENDING
+    outputs:
+      - docs/device-matrix.html
+      - updated navigation and titles
+      - orphan-page and link report
+    acceptance:
+      - Current homepage functionality and content are preserved
+      - All device pages and holistic_view.html remain reachable
+      - New homepage replaces index only after preview approval
+
+  - id: PMAP-15
+    milestone: PMAP-M4
+    title: Add CI validation and GitHub Pages publication gates
+    owner_role: DevOps Agent
+    suggested_agent: Claude Code
+    dependencies: [PMAP-06, PMAP-14]
+    status: PENDING
+    outputs:
+      - CI workflow for schemas, generation, tests and link checks
+      - Pages preview and deploy gate
+      - retained build artifacts and reports
+    acceptance:
+      - The workflow runs without access to the unversioned ecosystem directory
+      - A stale but valid snapshot can deploy with an explicit warning
+      - Invalid or partial data cannot deploy
+
+  - id: PMAP-16
+    milestone: PMAP-M5
+    title: Complete observability, runbook and controlled failure scenarios
+    owner_role: Debug Intelligence Agent
+    suggested_agent: Claude Code
+    dependencies: [PMAP-06, PMAP-15]
+    status: PENDING
+    outputs:
+      - runbook.md
+      - structured diagnostic report
+      - failure injection command and scenarios
+    acceptance:
+      - MAP-E001 through MAP-E008 can be located from logs
+      - Schema error, missing ecosystem snapshot and interrupted generation are demonstrated
+      - An unfamiliar operator can identify cause and remediation within two minutes
+
+  - id: PMAP-17
+    milestone: PMAP-M5
+    title: Execute independent QA and accessibility validation
+    owner_role: QA Validator
+    suggested_agent: GitHub Copilot
+    dependencies: [PMAP-10, PMAP-11, PMAP-12, PMAP-13, PMAP-14, PMAP-15, PMAP-16]
+    status: PENDING
+    outputs:
+      - completed qa_report.md
+      - browser and viewport evidence
+      - keyboard and reduced-motion evidence
+      - broken-link and schema reports
+    acceptance:
+      - All acceptance criteria are evidenced
+      - No critical or high defect remains open
+      - QA agent is independent from primary implementation
+
+  - id: PMAP-18
+    milestone: PMAP-M5
+    title: Record and register the observable demo
+    owner_role: Demo Agent
+    suggested_agent: Antigravity
+    dependencies: [PMAP-17]
+    status: PENDING
+    outputs:
+      - scenario-based demo script
+      - video or reproducible recording evidence
+      - state/demo_registry.md entry
+    acceptance:
+      - Demo covers stakeholder navigation, four drill-downs, data regeneration and failure fallback
+      - Observable logs and health changes are visible
+      - Demo status is HEALTHY or READY
+
+  - id: PMAP-19
+    milestone: PMAP-M5
+    title: Perform architectural audit and close the feature
+    owner_role: Chief Architect
+    suggested_agent: Manus
+    dependencies: [PMAP-18]
+    status: PENDING
+    outputs:
+      - architectural audit
+      - implementation log and project state updates
+      - scoped Git commit references
+      - final board and task status updates
+    acceptance:
+      - Spec, tasks, risks and QA artifacts are complete and append-only
+      - Commit, demo, QA and debugability gates are all satisfied
+      - Feature transitions from IN_PROGRESS to COMPLETED only after all evidence is present
