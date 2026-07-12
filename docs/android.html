@@ -5,21 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TR4D3RZ — Device View: Android Powerful · (ARM64) — ArchiMate Architecture v2.0  |  2026-05-12</title>
 <style>
-/* ── Reset ── */
+/* â”€â”€ Reset â”€â”€ */
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
 
-/* ── Top bar ── */
+/* â”€â”€ Top bar â”€â”€ */
 .topbar{background:white;border-bottom:2px solid #e2e8f0;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20;box-shadow:0 1px 4px rgba(0,0,0,.07);}
 .topbar a{color:#475569;text-decoration:none;font-size:.8rem;font-weight:600;}
 .topbar a:hover{color:#0f172a;}
 
-/* ── Device header ── */
+/* â”€â”€ Device header â”€â”€ */
 .device-header{background:white;border-bottom:1px solid #e2e8f0;padding:14px 20px 12px;}
 .device-header h1{font-size:1.05rem;font-weight:800;color:#0f172a;letter-spacing:-.01em;}
 .device-header p{font-size:.73rem;color:#64748b;margin-top:3px;}
 
-/* ── Legend bar ── */
+/* â”€â”€ Legend bar â”€â”€ */
 .legend{background:#fafbfc;border-bottom:1px solid #e2e8f0;padding:7px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:.7rem;color:#475569;}
 .legend-label{font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;}
 .legend-item{display:flex;align-items:center;gap:4px;}
@@ -27,27 +27,27 @@ body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
 .l-line{width:22px;height:2px;border-radius:1px;display:inline-block;}
 .l-dash{width:22px;height:0;display:inline-block;}
 
-/* ── Diagram wrapper (scroll container + SVG anchor) ── */
+/* â”€â”€ Diagram wrapper (scroll container + SVG anchor) â”€â”€ */
 .diagram-wrapper{position:relative;overflow:auto;background:white;padding:10px;}
 #rel-svg{position:absolute;top:0;left:0;pointer-events:none;z-index:5;overflow:visible;}
 
-/* ── Grid table ── */
+/* â”€â”€ Grid table â”€â”€ */
 .arch-grid{border-collapse:separate;border-spacing:6px;min-width:900px;position:relative;z-index:1;}
 .arch-grid thead th{background:#f8fafc;padding:7px 12px;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#475569;border:1px solid #e2e8f0;border-radius:4px;text-align:center;white-space:nowrap;}
 
-/* ── Layer labels ── */
+/* â”€â”€ Layer labels â”€â”€ */
 .layer-label{width:82px;min-width:82px;max-width:82px;padding:6px 4px;font-size:.68rem;font-weight:700;text-align:center;border-radius:4px;vertical-align:middle;}
 .layer-Motivation{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd;}
 .layer-Business  {background:#fef9c3;color:#854d0e;border:1px solid #fde68a;}
 .layer-Application{background:#dbeafe;color:#1e3a8a;border:1px solid #93c5fd;}
 .layer-Technology{background:#dcfce7;color:#14532d;border:1px solid #86efac;}
 
-/* ── Grid cells ── */
+/* â”€â”€ Grid cells â”€â”€ */
 .grid-cell{border:1px dashed #cbd5e1;padding:8px 6px;min-height:90px;vertical-align:top;background:#fafbfc;border-radius:4px;width:22%;}
 
-/* ══════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    ARCHIMATE ELEMENT BOXES
-   ══════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .arch-box{
   border:1.5px solid #94a3b8;
   background:white;
@@ -83,16 +83,16 @@ body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
 .arch-box[data-layer="Application"].highlight{--hl-color:#1e40af;}
 .arch-box[data-layer="Technology"].highlight{--hl-color:#166534;}
 
-/* ── Type icon (top-right corner) ── */
+/* â”€â”€ Type icon (top-right corner) â”€â”€ */
 .type-icon{position:absolute;top:3px;right:3px;width:16px;height:16px;opacity:.65;pointer-events:none;}
 .type-icon svg{width:100%;height:100%;display:block;}
 
-/* ── Type rows: same-type elements sit side-by-side ── */
+/* â”€â”€ Type rows: same-type elements sit side-by-side â”€â”€ */
 .type-row{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:4px;}
 .type-row:last-child{margin-bottom:0;}
 .type-row .arch-box{flex:1 1 80px;min-width:70px;margin-bottom:0;}
 
-/* ── Modal overlay ── */
+/* â”€â”€ Modal overlay â”€â”€ */
 #overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:40;}
 #modal{
   display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
@@ -112,19 +112,19 @@ body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
 </head>
 <body>
 
-<!-- ── Top navigation ── -->
+<!-- â”€â”€ Top navigation â”€â”€ -->
 <div class="topbar">
-  <a href="index.html">← All Devices</a>
-  <span style="font-size:.72rem;color:#94a3b8;">TR4D3RZ · ArchiMate Architecture v2.0 · 2026-05-15</span>
+  <a href="index.html">â† All Devices</a>
+  <span style="font-size:.72rem;color:#94a3b8;">TR4D3RZ Â· ArchiMate Architecture v2.0 Â· 2026-05-15</span>
 </div>
 
-<!-- ── Device header ── -->
+<!-- â”€â”€ Device header â”€â”€ -->
 <div class="device-header">
   <h1>TR4D3RZ — Device View: Android Powerful · (ARM64) — ArchiMate Architecture v2.0  |  2026-05-12</h1>
-  <p>ArchiMate Device View · Click any element for details · Hover to highlight relationships</p>
+  <p>ArchiMate Device View Â· Click any element for details Â· Hover to highlight relationships</p>
 </div>
 
-<!-- ── Legend ── -->
+<!-- â”€â”€ Legend â”€â”€ -->
 <div class="legend">
   <span class="legend-label">Layers</span>
   <div class="legend-item"><span class="l-box" style="background:#7c3aed;border:1px solid #7c3aed;"></span>Motivation</div>
@@ -133,16 +133,16 @@ body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
   <div class="legend-item"><span class="l-box" style="background:#166534;border:1px solid #166534;"></span>Technology</div>
   <span class="legend-label" style="margin-left:10px;">Relations</span>
   <div class="legend-item"><span class="l-dash" style="border-top:2px dashed #3b82f6;"></span>Realization</div>
-  <div class="legend-item"><span class="l-line" style="background:#374151;"></span>Composition ◆</div>
+  <div class="legend-item"><span class="l-line" style="background:#374151;"></span>Composition â—†</div>
   <div class="legend-item"><span class="l-line" style="background:#7c3aed;"></span>Serving</div>
-  <div class="legend-item"><span class="l-line" style="background:#374151;"></span>Assignment ●</div>
+  <div class="legend-item"><span class="l-line" style="background:#374151;"></span>Assignment â—</div>
   <div class="legend-item"><span class="l-line" style="background:#f59e0b;"></span>Flow</div>
   <div class="legend-item"><span class="l-dash" style="border-top:2px dashed #10b981;"></span>Access</div>
   <div class="legend-item"><span class="l-dash" style="border-top:2px dashed #9ca3af;"></span>Influence</div>
   <div class="legend-item"><span class="l-line" style="background:#6b7280;"></span>Association</div>
 </div>
 
-<!-- ── Main diagram (SVG overlay + table) ── -->
+<!-- â”€â”€ Main diagram (SVG overlay + table) â”€â”€ -->
 <div class="diagram-wrapper" id="diagram-wrapper">
   <svg id="rel-svg" width="0" height="0" aria-hidden="true"></svg>
   <table class="arch-grid">
@@ -244,12 +244,12 @@ body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
   </table>
 </div>
 
-<!-- ── Element detail modal ── -->
+<!-- â”€â”€ Element detail modal â”€â”€ -->
 <div id="overlay" onclick="closeModal()"></div>
 <div id="modal">
   <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;">
     <h3 id="m-title" style="font-size:1rem;font-weight:800;color:#0f172a;padding-right:12px;line-height:1.3;"></h3>
-    <button onclick="closeModal()" style="font-size:1.3rem;color:#94a3b8;cursor:pointer;background:none;border:none;flex-shrink:0;line-height:1;">✕</button>
+    <button onclick="closeModal()" style="font-size:1.3rem;color:#94a3b8;cursor:pointer;background:none;border:none;flex-shrink:0;line-height:1;">âœ•</button>
   </div>
   <div style="margin-bottom:10px;">
     <span id="m-layer-badge" class="badge"></span>
@@ -263,14 +263,14 @@ body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════
-// 1. Knowledge Base  (element metadata — injected per device)
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// 1. Knowledge Base  (element metadata â€” injected per device)
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const KB = {"goal_evolve": {"title": "Evolve Trading Strategies Autonomously", "type": "Motivation_Goal", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Goal — a desired end-state.", "role": "The system must autonomously generate, evaluate, mutate, and select trading strategies without human intervention, using open-ended evolutionary dynamics.", "tech": "Implemented via the Genome Pipeline (L-System → Graph → FSM → Phenotype), Fitness Calculator, and Niche Discovery in tr4d3rz-evolution (Rust).", "relations": "Realized by the Evolutionary Computing Service. Supported by the Persistence Service for archetype memory."}, "goal_distribute": {"title": "Distributed Heterogeneous Computation", "type": "Motivation_Goal", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Goal — a desired end-state.", "role": "Computation must span heterogeneous hardware (ARMv7 Raspberry Pi 2, x86_64 Linux, ARM64 Android, Cortex-M, Xtensa) with no global synchronization, enabling true distributed evolutionary ecology.", "tech": "Achieved via MQTT-based asynchronous messaging (NanoMQ on RPi2), CBOR serialization for embedded nodes, and the Capsule System for offline nodes.", "relations": "Realized by all Application Services. Enabled by the Central Infrastructure & Persistence Node (RPi2 + NanoMQ)."}, "prin_openended": {"title": "Open-Ended Evolution", "type": "Motivation_Principle", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Principle — a fundamental architectural guideline.", "role": "No hard limits on genome complexity, FSM depth, or niche count. The system must be capable of discovering structures that were not anticipated at design time.", "tech": "Enforced by the L-System grammar (recursive production rules), the Graph Expansion module, and the absence of a fixed fitness function ceiling.", "relations": "Influences the Evolutionary Process goal. Constrains the Genome Pipeline design."}, "prin_async": {"title": "Asynchronous Distributed Ecology", "type": "Motivation_Principle", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Principle — a fundamental architectural guideline.", "role": "No global clock, no global synchronization. Each node publishes and subscribes independently. Offline nodes are treated as 'delayed evolutionary nodes', not failures.", "tech": "Implemented via MQTT QoS 0/1/2 topic hierarchy, NanoMQ broker on RPi2, and the Delayed Sync component in Gateway Nodes.", "relations": "Influences all Application Services. Realized by the MQTT messaging infrastructure."}, "driver_research": {"title": "Evolutionary Research Platform", "type": "Motivation_Driver", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Driver — an external or internal condition that motivates the architecture.", "role": "TR4D3RZ is designed as a research platform for studying open-ended evolution in financial markets, not just a trading system.", "tech": "Manifested in the Observatory's Theory Map, the Archetype Library, and the Niche Atlas.", "relations": "Motivates the Observability and Evolution goals."}, "proc_evolution": {"title": "Evolutionary Process", "type": "Business_Process", "layer": "Business", "aspect": "Behavior", "type_desc": "ArchiMate Business Process — a sequence of behaviors achieving a business outcome.", "role": "The core evolutionary loop: generate genomes via L-System, compile to FSM, evaluate fitness on OHLCV data, select survivors, mutate, repeat. Runs continuously on Evolution Nodes.", "tech": "Implemented in tr4d3rz-evolution (Rust). Uses L-System grammar for genome generation, petgraph for graph representation, and custom FSM compiler.", "relations": "Realized by Evolutionary Computing Service. Consumes OHLCV data. Produces Fitness Records and Cooperative Signals."}, "proc_signal": {"title": "Cooperative Signal Generation", "type": "Business_Process", "layer": "Business", "aspect": "Behavior", "type_desc": "ArchiMate Business Process — a sequence of behaviors achieving a business outcome.", "role": "Agents broadcast behavioral signals (entry/exit conditions, niche membership, fitness updates) to the ecosystem, enabling emergent cooperative behaviors without direct coupling.", "tech": "Published to ecosystem/signal/# MQTT topic in CBOR format, QoS 0. Consumed by other Evolution Nodes and the Observatory.", "relations": "Realized by the Signaling System. Produces Cooperative Signal data objects."}, "svc_prediction": {"title": "Prediction Service", "type": "Business_Service", "layer": "Business", "aspect": "Behavior", "type_desc": "ArchiMate Business Service — an explicitly defined exposed business behavior.", "role": "The external-facing output of the system: daily investment signals for Italian stocks, derived from the highest-fitness FSM archetypes currently active in the ecosystem.", "tech": "Signals are published to ecosystem/archetype/# MQTT topic (CBOR, QoS 2). The Observatory Market Overlay correlates signals with market events.", "relations": "Served by Core Infrastructure Service and Evolutionary Computing Service."}, "evo_svc": {"title": "Evolutionary Computing Service", "type": "Application_Service", "layer": "Application", "aspect": "Behavior", "type_desc": "ArchiMate Application Service — an explicitly defined exposed application behavior.", "role": "The main service of Evolution Nodes. Runs the full evolutionary loop: genome generation, FSM compilation, fitness evaluation, mutation, and cooperative signaling.", "tech": "Rust implementation across tr4d3rz-core, tr4d3rz-evolution, tr4d3rz-messaging. Deployed on Linux PCs, Android (ARM64), and MIMXRT1050 (Cortex-M7).", "relations": "Realizes Evolutionary Process. Consumes OHLCV data. Produces Fitness Records and Signals."}, "evo_mutation": {"title": "Mutation Engine (structural · parametric · crossover)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "evo_cluster": {"title": "Clustering System (niche discovery · GA)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "evo_niche": {"title": "Niche Discovery (market regime classification)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "evo_phenotype": {"title": "Phenotype Analyzer (FSM runtime evaluation)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "evo_mqtt": {"title": "MQTT Client (tr4d3rz-messaging · Rust)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "lsystem": {"title": "L-System Generator (topology · modularity · recursion)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "graph_exp": {"title": "Graph Expansion (normalized graph)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "fsm_gen": {"title": "FSM Generator (state/transition table)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "phenotype": {"title": "Phenotype Runtime (executes FSM · emits signals)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "cond_ohlcv": {"title": "OHLCV Condition", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — primitive condition evaluator.", "role": "Evaluates raw OHLCV conditions: price thresholds, volume spikes, candlestick patterns. The most basic building block of FSM transition conditions.", "tech": "Rust (tr4d3rz-core). Condition types: price_above, price_below, volume_spike, gap_up, gap_down, body_ratio.", "relations": "Used by FSM Compiler as primitive condition node."}, "cond_ind": {"title": "Indicator Primitives (EMA · SMA · IIR · volatility · range)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "cond_bucket": {"title": "Bucketization Engine", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — value discretization.", "role": "Discretizes continuous OHLCV values into categorical buckets (LOW/MEDIUM/HIGH/EXTREME) for FSM state matching. Enables the FSM to handle continuous market data.", "tech": "Rust (tr4d3rz-core). Bucket boundaries configurable per symbol. Adaptive bucketization based on historical distribution.", "relations": "Transforms OHLCV values. Used by OHLCV Condition and Indicator Primitives."}, "cond_temporal": {"title": "Temporal Conditions", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — time-based condition evaluator.", "role": "Evaluates time-based conditions: day of week, time of day, days since event, market session. Enables strategies that exploit temporal market patterns.", "tech": "Rust (tr4d3rz-core). Condition types: time_of_day, day_of_week, days_since_signal, market_session.", "relations": "Used by FSM Compiler as temporal condition node."}, "cond_coop": {"title": "Cooperative Conditions", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — inter-agent condition evaluator.", "role": "Evaluates conditions based on signals from other agents: niche membership, signal consensus, archetype presence. Enables emergent cooperative behaviors.", "tech": "Rust (tr4d3rz-core). Subscribes to ecosystem/signal/# MQTT topic. Condition types: niche_member, signal_consensus, archetype_active.", "relations": "Consumes Cooperative Signals from MQTT. Used by FSM Compiler."}, "fit_calc": {"title": "Fitness Calculator", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — multi-dimensional fitness evaluation.", "role": "Evaluates the fitness of each agent using a multi-dimensional formula: Base Metrics (trade_count, CAGR, profit_factor) + Advanced Metrics (signal_entropy, stat_confidence, computational_efficiency).", "tech": "Rust (tr4d3rz-evolution). Fitness formula: F = w1*CAGR + w2*profit_factor + w3*signal_entropy + w4*stat_confidence + w5*comp_efficiency. Weights configurable.", "relations": "Evaluates Phenotype trade log. Produces Fitness Record. Input to Niche Evaluator."}, "fit_niche": {"title": "Niche Evaluator", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — emergent niche discovery.", "role": "Clusters agents by behavioral similarity to discover emergent market niches. Uses fitness vector distance to identify agents that have specialized to similar market conditions.", "tech": "Rust (tr4d3rz-evolution). Clustering algorithm: k-means or DBSCAN on fitness vectors. Publishes niche assignments to ecosystem/niche/# MQTT topic.", "relations": "Consumes Fitness Records. Produces Market Niche objects. Publishes to MQTT."}, "fit_coop": {"title": "Open Event Emitter", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — cooperative signaling emitter.", "role": "Broadcasts the agent's current state (fitness, niche, active conditions) to the ecosystem as cooperative signals. Enables emergent cooperation without direct agent coupling.", "tech": "Rust (tr4d3rz-messaging). Publishes to ecosystem/signal/{agent_id} MQTT topic. CBOR payload, QoS 0.", "relations": "Produces Cooperative Signal objects. Publishes to MQTT ecosystem/signal/# topic."}, "fit_metrics": {"title": "Base Metrics (trade_count · success_rate · CAGR · profit_factor)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "fit_advanced": {"title": "Advanced Metrics (signal_entropy · stat_confidence · computational_efficiency)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "sig_broker": {"title": "Prediction Broker", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — signal aggregation and prediction.", "role": "Aggregates cooperative signals from multiple agents to produce the final daily investment signals. Uses ensemble voting weighted by agent fitness.", "tech": "Rust (tr4d3rz-messaging). Subscribes to ecosystem/signal/# and ecosystem/archetype/#. Produces daily signals via weighted ensemble.", "relations": "Consumes Cooperative Signals. Produces Investment Signals for Prediction Service."}, "sig_router": {"title": "Event Router (QoS-aware dispatch)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "sig_sub": {"title": "Subscription Manager (topic filters · wildcards)", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application_Component element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "data_genome": {"title": "Hybrid Graph Genome (CBOR · L-System generated)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business_Object element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "data_fsm": {"title": "FSM Definition (state · transition · condition)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business_Object element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "data_signal": {"title": "Cooperative Signal (CBOR · QoS 0)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business Object — inter-agent communication payload.", "role": "The cooperative signal broadcast by each agent to the ecosystem. Contains the agent's current state: fitness, niche, active conditions, and investment signals.", "tech": "CBOR format. Schema: {agent_id, niche_id, fitness_vector, active_conditions, signal_type, isin, action, confidence, timestamp_ms}. QoS 0 (fire-and-forget).", "relations": "Produced by Open Event Emitter. Consumed by Cooperative Conditions and Observatory."}, "data_fitness": {"title": "Fitness Record (CBOR · QoS 1)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business Object — fitness evaluation result.", "role": "The multi-dimensional fitness record for each agent after evaluation. Contains all fitness dimensions for niche discovery and archetype selection.", "tech": "CBOR format. Schema: {agent_id, timestamp_ms, trade_count, cagr, profit_factor, signal_entropy, stat_confidence, comp_efficiency, composite_fitness}. QoS 1.", "relations": "Produced by Fitness Calculator. Consumed by Niche Evaluator and Persistence Service."}, "data_event": {"title": "System Event (CBOR · QoS 1 · append-only)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business_Object element.", "role": "An architectural element within the TR4D3RZ distributed system.", "tech": "", "relations": ""}, "hw_android": {"title": "Android Powerful (ARM64)", "type": "Technology_Device", "layer": "Technology", "aspect": "Active Structure", "type_desc": "ArchiMate Technology Device — a physical IT resource.", "role": "Mobile Evolution Node. Runs the full evolutionary pipeline on ARM64 Android. Enables evolution on mobile devices, expanding the computational ecology.", "tech": "ARM64, Android. Rust runtime compiled for aarch64-linux-android. MQTT client via TCP:1883 or WS:8083.", "relations": "Hosts Evolutionary Computing Service (mobile). Connects to the central RPi2 endpoint via MQTT."}, "rt_rust": {"title": "Rust Runtime", "type": "Technology_SystemSoftware", "layer": "Technology", "aspect": "Active Structure", "type_desc": "ArchiMate Technology System Software — software environment for components.", "role": "The Rust runtime environment for all tr4d3rz components: tr4d3rz-core, tr4d3rz-evolution, tr4d3rz-messaging, tr4d3rz-persistence. Provides memory safety and zero-cost abstractions.", "tech": "Rust stable (2021 edition). Key crates: tokio (async), petgraph (graphs), serde/ciborium (CBOR), rumqttc (MQTT client), polars (dataframes).", "relations": "Realizes all Rust-based Application Components."}, "net_mqtt": {"title": "MQTT Service (TCP:1883 · WS:8083)", "type": "Technology_Service", "layer": "Technology", "aspect": "Behavior", "type_desc": "ArchiMate Technology Service — an explicitly defined exposed technology behavior.", "role": "The MQTT messaging service exposed by NanoMQ. TCP:1883 for embedded and server nodes; WS:8083 for browser-based Observatory. The backbone of all inter-node communication.", "tech": "MQTT 3.1.1 and 5.0. Topic hierarchy: data/ohlcv/#, ecosystem/signal/#, ecosystem/fitness/#, ecosystem/niche/#, ecosystem/archetype/#, embedded/capsule/#.", "relations": "Realized by NanoMQ Broker. Used by all nodes."}};
 
-// ════════════════════════════════════════════════════════
-// 2. Relationships   (from PUML — injected per device)
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// 2. Relationships   (from PUML â€” injected per device)
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const RELS = [
   { from: 'proc_evolution', to: 'goal_evolve', type: 'Realization', label: '' },
   { from: 'driver_research', to: 'goal_evolve', type: 'Influence', label: '' },
@@ -315,12 +315,12 @@ const RELS = [
   { from: 'evo_niche', to: 'phenotype', type: 'Flow', label: 'context awareness signal' }
 ];
 
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 3. ArchiMate Type Icons  (inline SVG pictograms)
-//    Standard ArchiMate 3.2 notation — small icon in top-right
-// ════════════════════════════════════════════════════════
+//    Standard ArchiMate 3.2 notation â€” small icon in top-right
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const ARCH_ICONS = {
-  // ── Motivation ──
+  // â”€â”€ Motivation â”€â”€
   Motivation_Goal:
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2L18 10L10 18L2 10Z"/></svg>',
   Motivation_Principle:
@@ -331,7 +331,7 @@ const ARCH_ICONS = {
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 2L18 10L10 18L2 10Z"/><circle cx="10" cy="10" r="3"/></svg>',
   Motivation_Constraint:
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 2L18 10L10 18L2 10Z"/><line x1="10" y1="6" x2="10" y2="10" stroke-width="2"/><circle cx="10" cy="13" r="1" fill="currentColor"/></svg>',
-  // ── Business ──
+  // â”€â”€ Business â”€â”€
   Business_Process:
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="5" width="13" height="10" rx="3"/><path d="M14 10L19 10M17 7L19 10L17 13" stroke-linecap="round"/></svg>',
   Business_Service:
@@ -344,7 +344,7 @@ const ARCH_ICONS = {
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="18" height="12" rx="1"/><circle cx="10" cy="10" r="3.5"/></svg>',
   Business_Actor:
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="6" r="3.5"/><path d="M3 18 Q3 12 10 12 Q17 12 17 18"/></svg>',
-  // ── Application ──
+  // â”€â”€ Application â”€â”€
   Application_Component:
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="1" width="14" height="18" rx="1"/><rect x="1" y="5" width="7" height="3" rx="1"/><rect x="1" y="11" width="7" height="3" rx="1"/></svg>',
   Application_Service:
@@ -355,7 +355,7 @@ const ARCH_ICONS = {
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="16" height="12" rx="1"/><circle cx="8" cy="10" r="2.5"/><line x1="1" y1="10" x2="5.5" y2="10"/></svg>',
   Application_DataObject:
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 2L13 2L17 6L17 18L3 18Z"/><path d="M13 2L13 6L17 6"/><line x1="6" y1="10" x2="14" y2="10"/><line x1="6" y1="13" x2="14" y2="13"/></svg>',
-  // ── Technology ──
+  // â”€â”€ Technology â”€â”€
   Technology_Device:
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="18" height="11" rx="1"/><rect x="6" y="16" width="8" height="2"/><rect x="4" y="7" width="12" height="5"/></svg>',
   Technology_SystemSoftware:
@@ -372,9 +372,9 @@ const ARCH_ICONS = {
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="16" height="12" rx="1"/><path d="M6 10 Q10 6 14 10" fill="none"/></svg>',
 };
 
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 4. Inject type icons + data-layer on all arch-boxes
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 (function injectIcons() {
   document.querySelectorAll('.arch-box').forEach(box => {
     const id = box.id;
@@ -392,9 +392,9 @@ const ARCH_ICONS = {
   });
 })();
 
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 5. Group same-type elements horizontally within each cell
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const TYPE_ORDER = {
   // Motivation aspect
   'Motivation_Driver':0,'Motivation_Assessment':1,'Motivation_Goal':2,
@@ -445,9 +445,9 @@ const TYPE_ORDER = {
   });
 })();
 
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 6. SVG Relationship Arrows
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const REL_STYLES = {
   Realization:    { stroke:'#3b82f6', dash:'6,3',  head:'open'     },
   Composition:    { stroke:'#374151', dash:'',      head:'diamond'  },
@@ -580,9 +580,9 @@ function drawRelations() {
   });
 }
 
-// ════════════════════════════════════════════════════════
-// 6. Hover interaction — highlight connected elements
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// 6. Hover interaction â€” highlight connected elements
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 document.querySelectorAll('.arch-box').forEach(box => {
   box.addEventListener('mouseenter', () => {
     const id = box.id; if (!id) return;
@@ -608,9 +608,9 @@ document.querySelectorAll('.arch-box').forEach(box => {
   });
 });
 
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 7. Element detail modal
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function showModal(id) {
   const d = KB[id]; if (!d) return;
   document.getElementById('m-title').textContent    = d.title;
@@ -633,9 +633,9 @@ function closeModal() {
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 8. Initial draw + redraw on resize / scroll
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const dw = document.getElementById('diagram-wrapper');
 window.addEventListener('load',   drawRelations);
 window.addEventListener('resize', drawRelations);

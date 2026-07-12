@@ -86,7 +86,7 @@ Gli agent comunicano tramite file Markdown dedicati nella directory `COMMUNICATI
 - **Output:** Test suite e file `VALIDATION_REPORT.md`.
 - **Focus:** Qualità del codice e copertura dei test.
 
-### **Gemini CLI (State Evaluator & QA)**
+### **Antigravity (State Evaluator & QA)**
 - **Responsabilità:** Valutazione dello stato globale, verifica della coerenza fra i repo, analisi dell'allineamento diagrammi-codice, ottimizzazione dei token.
 - **Output:** File `PROJECT_STATE.md` e `ARCHITECTURAL_AUDIT.md`.
 - **Focus:** Visione d'insieme e rispetto degli standard architetturali.
@@ -118,7 +118,7 @@ Per minimizzare il consumo di token e mantenere la persistenza del contesto:
 1.  **Handover:** Manus scrive un task in `COMMUNICATION/TASKS/current_task.md`.
 2.  **Esecuzione:** Claude legge il task, implementa e aggiorna `IMPLEMENTATION_LOG.md`.
 3.  **Validazione:** Copilot esegue i test e scrive l'esito in `VALIDATION_REPORT.md`.
-4.  **Chiusura:** Gemini CLI legge i log, verifica l'allineamento con l'architettura globale e aggiorna il `PROJECT_STATE.md` dichiarando il task "COMPLETED" o richiedendo correzioni.
+4.  **Chiusura:** Antigravity legge i log, verifica l'allineamento con l'architettura globale e aggiorna il `PROJECT_STATE.md` dichiarando il task "COMPLETED" o richiedendo correzioni.
 
 ---
 

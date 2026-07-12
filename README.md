@@ -20,7 +20,7 @@ TR4D3RZ is a **distributed evolutionary research platform** — not a simple tra
 | `tr4d3rz-core` | L-System genome, FSM runtime, data contracts | Rust (WASM-compatible) | Claude Code |
 | `tr4d3rz-messaging` | MQTT/NATS layer, Gateway Nodes | Rust / Python | Claude Code |
 | `tr4d3rz-evolution` | Mutation, fitness, niche discovery | Rust / Python | Claude Code |
-| `tr4d3rz-observatory` | Ecosystem Observatory UI, Replay System | TypeScript, WASM, Three.js | Gemini CLI |
+| `tr4d3rz-observatory` | Ecosystem Observatory UI, Replay System | TypeScript, WASM, Three.js | Antigravity |
 | `tr4d3rz-persistence` | Archetype memory, event sourcing, lineage | Rust / Python | Claude Code |
 | `tr4d3rz-embedded` | ESP8266, STM32 optimization nodes | C / C++ / Rust no_std | GitHub Copilot |
 
@@ -73,5 +73,47 @@ tr4d3rz-docs/
 ├── adr/                       # Architectural Decision Records
 ├── diagrams/                  # Architecture diagrams (D2/Mermaid)
 ├── protocols/                 # Protocol definitions and data contracts
-└── milestones/                # Milestone plans and tracking
+├── milestones/                # Milestone plans and tracking
+├── state/                     # Shared project state (project_state.md, meta_metrics.md)
+├── artifacts/                 # Agent deliverables (features/, meta/, debug/)
+└── COMMUNICATION/             # Multi-agent coordination and task tracking
 ```
+
+---
+
+## Documentation
+
+- **[AI_ROLES.md](./AI_ROLES.md)** — Specialized role definitions for all agents
+- **[AGENTS.md](./AGENTS.md)** — Agent responsibilities, repository ownership, and operational rules
+- **[AI_AGENT_DOCUMENTATION.md](./AI_AGENT_DOCUMENTATION.md)** — Instructions for AI agents working on TR4D3RZ
+- **[CLAUDE.md](./CLAUDE.md)** — Guidance for Claude Code when working in this repository
+- **[ANTIGRAVITY.md](./ANTIGRAVITY.md)** — Guidance for Antigravity (Frontend/Observatory agent)
+- **[META_LAYER_GUIDE.md](./META_LAYER_GUIDE.md)** — Meta-Optimizer and Debug Intelligence agents guide
+- **[ARCHITECTURE_WORKFLOW.md](./ARCHITECTURE_WORKFLOW.md)** — Documentation generation workflow
+- **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** — Quick reference card for all agents
+
+---
+
+## Meta-Layer Agents
+
+TR4D3RZ includes two meta-layer agents that operate orthogonally to feature development:
+
+### Meta-Optimizer Agent (Claude Code)
+**Purpose**: Optimize the AI ecosystem itself  
+**Methods**: TRIZ, De Bono lateral thinking, systems thinking  
+**Deliverables**: `artifacts/meta/`, `state/meta_metrics.md`
+
+### Debug Intelligence Agent (Claude Code)
+**Purpose**: Optimize human debugging experience  
+**Scope**: All layers (frontend, backend, APIs, cloud, embedded, DB)  
+**Deliverables**: `artifacts/debug/root_cause_summary.md`
+
+See **[META_LAYER_GUIDE.md](./META_LAYER_GUIDE.md)** for details.
+
+---
+
+## Recent Updates
+
+- **2026-06-19**: Gemini CLI roles migrated to Claude Code (Meta-Optimizer + Debug Intelligence agents)
+- **2026-06-05**: M1-T2 and M1-T2-B completed
+- **2026-05-23**: Initial repository setup

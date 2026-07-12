@@ -1,0 +1,93 @@
+@startuml TR4D3RZ_MVP_Demo_Network_Topology
+!theme plain
+
+title TR4D3RZ MVP Demo - Network Topology & Message Flow
+
+skinparam node {
+    BackgroundColor<<broker>> LightBlue
+    BackgroundColor<<simulator>> LightGreen
+    BackgroundColor<<ui>> LightYellow
+    BorderColor Black
+}
+
+cloud "localhost Network" {
+
+    node "MQTT Broker\n(Aedes)\nPort 1883 (MQTT)\nPort 9001 (WS)" <<broker>> as BROKER {
+        component "Topic Router" as ROUTER
+        component "WebSocket Bridge" as WS_BRIDGE
+        database "Retained Messages" as RETAINED
+    }
+
+    node "Backend Simulators\n(Node.js)" <<simulator>> as BACKEND {
+        component "Scraper\nSimulator" as SCRAPER
+        component "Evolution\nSimulator" as EVOLUTION
+        component "ESP8266-01\nSimulator" as ESP1
+        component "ESP8266-02\nSimulator" as ESP2
+        component "Logger\nSimulator" as LOGGER
+    }
+
+    node "Browser UI\n(Observatory)" <<ui>> as BROWSER {
+        component "MQTT.js\nClient" as MQTT_CLIENT
+        component "UI Components" as UI_COMP
+        database "Local State" as STATE
+    }
+
+    node "HTTP Server\n(Express)\nPort 3000" as HTTP {
+        component "Static File\nServer" as STATIC
+    }
+}
+
+' Connections
+SCRAPER -down-> BROKER : "PUBLISH\ntr4d3rz/data/ohlcv/history/{isin}\nQoS 0, Every 5s"
+EVOLUTION -down-> BROKER : "PUBLISH\ntr4d3rz/node/{esp_id}/capsule/in\nQoS 1, Every 10s"
+BROKER -down-> ESP1 : "FORWARD capsule"
+BROKER -down-> ESP2 : "FORWARD capsule"
+ESP1 -up-> BROKER : "PUBLISH\ntr4d3rz/ecosystem/fitness/{agent_id}\nQoS 1"
+ESP2 -up-> BROKER : "PUBLISH\ntr4d3rz/ecosystem/fitness/{agent_id}\nQoS 1"
+BROKER -up-> EVOLUTION : "FORWARD fitness"
+BROKER -down-> LOGGER : "FORWARD all messages\ntr4d3rz/#"
+
+BROWSER -up-> HTTP : "HTTP GET /\nLoad index.html"
+MQTT_CLIENT -up-> WS_BRIDGE : "WebSocket\nws://localhost:9001"
+WS_BRIDGE -up-> ROUTER : "Bridge to MQTT"
+ROUTER -down-> MQTT_CLIENT : "PUBLISH messages"
+
+UI_COMP -right-> STATE : "Update"
+
+' Legend
+legend right
+    **MQTT Topics (MVP)**
+    • tr4d3rz/data/ohlcv/history/{isin}
+    • tr4d3rz/data/ohlcv/intraday/{isin}
+    • tr4d3rz/node/{node_id}/capsule/in
+    • tr4d3rz/node/{node_id}/status
+    • tr4d3rz/ecosystem/fitness/{agent_id}
+
+    **QoS Levels**
+    • QoS 0: OHLCV data, node status
+    • QoS 1: Capsules, fitness results
+
+    **Message Rates**
+    • OHLCV: Every 5 seconds
+    • Capsule: Every 10 seconds
+    • Fitness: 500-2000ms after capsule
+    • Heartbeat: Every 5 seconds
+endlegend
+
+note top of BROKER
+    **Broker Statistics**
+    • Clients: 6 (5 simulators + 1 browser)
+    • Topics: ~10 active
+    • Messages/sec: ~2-5 (low volume demo)
+    • Memory: <50MB
+end note
+
+note bottom of BROWSER
+    **Browser Subscriptions**
+    • tr4d3rz/node/+/status
+    • tr4d3rz/ecosystem/fitness/+
+    • tr4d3rz/node/+/capsule/in
+    • tr4d3rz/data/ohlcv/+/+
+end note
+
+@enduml

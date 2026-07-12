@@ -1,0 +1,237 @@
+@startuml TR4D3RZ_MVP_Demo_Class_Diagram
+!theme plain
+skinparam linetype ortho
+
+title TR4D3RZ MVP Demo - Data Model Class Diagram
+
+package "MVP Interface Contracts v0.1" {
+
+    class OhlcvBar {
+        + ts: number
+        + o: number
+        + h: number
+        + l: number
+        + c: number
+        + v?: number
+        + t: number
+    }
+
+    class OhlcvHistory {
+        + v: number = 1
+        + type: string = "ohlcv_history"
+        + isin: string
+        + mic: string
+        + resolution: string
+        + data: OhlcvBar[]
+        --
+        + toJSON(): string
+    }
+
+    class GenomeCapsule {
+        + v: number = 1
+        + ts: number
+        + node: string
+        + type: string = "genome_capsule"
+        + agent_id: string
+        + generation: number
+        + genome_hash: string
+        + fsm: FsmMvp
+        + budget?: Budget
+        --
+        + toJSON(): string
+    }
+
+    class FsmMvp {
+        + states: string[]
+        + initial: string
+        + transitions: Transition[]
+    }
+
+    class Transition {
+        + from: string
+        + to: string
+        + when: string
+    }
+
+    class Budget {
+        + max_ticks?: number
+        + max_ms?: number
+    }
+
+    class FitnessResult {
+        + v: number = 1
+        + ts: number
+        + node: string
+        + type: string = "fitness_result"
+        + agent_id: string
+        + genome_hash: string
+        + fitness: number
+        + metrics?: object
+        + status: FitnessStatus
+        --
+        + toJSON(): string
+    }
+
+    enum FitnessStatus {
+        ok
+        error
+        timeout
+    }
+
+    class NodeStatus {
+        + v: number = 1
+        + ts: number
+        + node: string
+        + type: string = "node_status"
+        + role: NodeRole
+        + state: NodeState
+        + uptime_s?: number
+        --
+        + toJSON(): string
+    }
+
+    enum NodeRole {
+        broker
+        evolution
+        embedded
+        persistence
+        observatory
+    }
+
+    enum NodeState {
+        booting
+        ready
+        degraded
+        offline
+    }
+
+    ' Relationships
+    OhlcvHistory "1" *-- "many" OhlcvBar
+    GenomeCapsule "1" *-- "1" FsmMvp
+    GenomeCapsule "1" o-- "0..1" Budget
+    FsmMvp "1" *-- "many" Transition
+    FitnessResult "1" -- "1" FitnessStatus
+    NodeStatus "1" -- "1" NodeRole
+    NodeStatus "1" -- "1" NodeState
+}
+
+package "Demo Simulators" {
+
+    class MqttBrokerSimulator {
+        - aedes: Aedes
+        - httpServer: http.Server
+        - wsServer: WebSocket.Server
+        --
+        + start(): void
+        + stop(): void
+        + getStats(): object
+    }
+
+    class ScraperSimulator {
+        - publishInterval: Timer
+        - mqttClient: MqttClient
+        --
+        + start(): void
+        + stop(): void
+        + generateMockOhlcv(): OhlcvHistory
+        + publish(): void
+    }
+
+    class EvolutionSimulator {
+        - publishInterval: Timer
+        - mqttClient: MqttClient
+        - generation: number
+        --
+        + start(): void
+        + stop(): void
+        + generateMockCapsule(): GenomeCapsule
+        + onFitnessReceived(result: FitnessResult): void
+    }
+
+    class EmbeddedSimulator {
+        - nodeId: string
+        - mqttClient: MqttClient
+        --
+        + start(): void
+        + stop(): void
+        + onCapsuleReceived(capsule: GenomeCapsule): void
+        + evaluateMockFitness(capsule: GenomeCapsule): FitnessResult
+    }
+
+    class LoggerSimulator {
+        - mqttClient: MqttClient
+        - eventLog: MqttEvent[]
+        --
+        + start(): void
+        + stop(): void
+        + onMessageReceived(topic: string, payload: object): void
+        + getEventLog(): MqttEvent[]
+    }
+
+    class MqttEvent {
+        + timestamp: number
+        + topic: string
+        + payload: object
+        + qos: number
+    }
+
+    ' Simulator relationships
+    ScraperSimulator ..> OhlcvHistory : "creates"
+    EvolutionSimulator ..> GenomeCapsule : "creates"
+    EvolutionSimulator ..> FitnessResult : "consumes"
+    EmbeddedSimulator ..> GenomeCapsule : "consumes"
+    EmbeddedSimulator ..> FitnessResult : "creates"
+    LoggerSimulator "1" *-- "many" MqttEvent
+}
+
+package "Frontend UI" {
+
+    class ObservatoryUI {
+        - mqttClient: MqttClient
+        - chartEngine: ChartEngine
+        --
+        + connect(): void
+        + disconnect(): void
+        + updateNodeStatus(status: NodeStatus): void
+        + displayCapsule(capsule: GenomeCapsule): void
+        + updateFitnessChart(fitness: FitnessResult): void
+        + appendTimeline(event: MqttEvent): void
+    }
+
+    class ChartEngine {
+        - canvas: HTMLCanvasElement
+        - fitnessData: number[]
+        --
+        + addDataPoint(generation: number, fitness: number): void
+        + render(): void
+        + clear(): void
+    }
+
+    class TimelineView {
+        - container: HTMLElement
+        - maxEvents: number
+        --
+        + append(event: MqttEvent): void
+        + clear(): void
+    }
+
+    class CapsuleInspector {
+        - container: HTMLElement
+        --
+        + display(capsule: GenomeCapsule): void
+        + renderJson(obj: object): string
+    }
+
+    ObservatoryUI "1" *-- "1" ChartEngine
+    ObservatoryUI "1" *-- "1" TimelineView
+    ObservatoryUI "1" *-- "1" CapsuleInspector
+}
+
+' Cross-package relationships
+MqttBrokerSimulator ..> MqttEvent : "routes"
+ObservatoryUI ..> NodeStatus : "displays"
+ObservatoryUI ..> GenomeCapsule : "displays"
+ObservatoryUI ..> FitnessResult : "displays"
+ObservatoryUI ..> OhlcvHistory : "displays"
+
+@enduml

@@ -1,7 +1,7 @@
 # Specifica Tecnica: Holistic Concentric ArchiMate View
 
 **ID Task**: SPEC-OBS-001
-**Owner**: Claude (Implementation) / Gemini CLI (Review/Integration)
+**Owner**: Claude (Implementation) / Antigravity (Review/Integration)
 **Repository**: `tr4d3rz-docs`
 **Stato**: Proposto
 
@@ -79,4 +79,4 @@ I nodi devono essere vincolati a distanze radiali fisse dal centro in base al lo
 
 **Riferimenti**:
 - `pseudo-archimate-concentric-graph.md` (Requisiti Utente)
-- `GEMINI.md` (Workflow e ownership)
+- `ANTIGRAVITY.md` (Workflow e ownership)

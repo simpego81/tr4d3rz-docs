@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TR4D3RZ Real Distributed Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(30, 64, 175, 0.3);
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #cbd5e1;
+            font-size: 1.1em;
+        }
+
+        .warning {
+            background: #fbbf24;
+            color: #78350f;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h2 {
+            color: #60a5fa;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 10px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin: 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        button.danger {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-online { background: #10b981; }
+        .status-offline { background: #6b7280; }
+
+        .node-status {
+            padding: 10px;
+            margin: 10px 0;
+            background: #0f172a;
+            border-left: 4px solid #3b82f6;
+            border-radius: 6px;
+        }
+
+        .timeline {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .message {
+            padding: 15px;
+            margin: 10px 0;
+            background: #0f172a;
+            border-left: 4px solid;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .message.publish { border-left-color: #10b981; }
+        .message.subscribe { border-left-color: #3b82f6; }
+        .message.connect { border-left-color: #fbbf24; }
+        .message.disconnect { border-left-color: #ef4444; }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: #94a3b8;
+        }
+
+        .message-topic {
+            color: #60a5fa;
+            font-weight: bold;
+        }
+
+        .message-payload {
+            background: #020617;
+            padding: 10px;
+            border-radius: 4px;
+            color: #e2e8f0;
+            word-break: break-all;
+        }
+
+        .rust-output {
+            background: #020617;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .rust-output.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        .scenario-step {
+            padding: 15px;
+            margin: 10px 0;
+            background: #0f172a;
+            border-radius: 8px;
+        }
+
+        .scenario-step.active {
+            border: 2px solid #10b981;
+            background: #064e3b;
+        }
+
+        .scenario-step.pending {
+            opacity: 0.5;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        .scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 TR4D3RZ Real Distributed Demo</h1>
+            <p class="subtitle">Live orchestration of REAL Rust components via MQTT</p>
+        </header>
+
+        <div class="warning">
+            ⚠️ <strong>REAL COMPONENTS MODE</strong>: This demo uses actual tr4d3rz-messaging Rust binaries, not simulations. All MQTT messages are real CBOR-encoded data.
+        </div>
+
+        <div class="grid">
+            <!-- Control Panel -->
+            <div class="card">
+                <h2>🎮 Control Panel</h2>
+                <button id="btn-start" onclick="startScenario()">▶️ Start End-to-End Scenario</button>
+                <button id="btn-stop" class="danger" onclick="stopScenario()" disabled>⏹️ Stop All Nodes</button>
+
+                <h2 style="margin-top: 30px;">📊 System Status</h2>
+                <div id="system-status">
+                    <div class="node-status">
+                        <span class="status-indicator status-online"></span>
+                        <strong>MQTT Broker</strong> (Aedes) - localhost:1883
+                    </div>
+                    <div id="rust-nodes"></div>
+                </div>
+
+                <h2 style="margin-top: 30px;">📋 Scenario Steps</h2>
+                <div id="scenario-steps">
+                    <div class="scenario-step pending">
+                        <span class="step-number">1</span>
+                        Launch Rust Subscriber (fitness listener)
+                    </div>
+                    <div class="scenario-step pending">
+                        <span class="step-number">2</span>
+                        Launch Rust Publisher (capsule generator)
+                    </div>
+                    <div class="scenario-step pending">
+                        <span class="step-number">3</span>
+                        ESP8266 receives capsule
+                    </div>
+                    <div class="scenario-step pending">
+                        <span class="step-number">4</span>
+                        ESP8266 publishes fitness result
+                    </div>
+                    <div class="scenario-step pending">
+                        <span class="step-number">5</span>
+                        Subscriber receives fitness result
+                    </div>
+                </div>
+            </div>
+
+            <!-- MQTT Message Timeline -->
+            <div class="card">
+                <h2>📨 MQTT Message Timeline (Real-Time)</h2>
+                <div id="mqtt-timeline" class="timeline scrollbar"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🖥️ Rust Process Output (Live Stdout/Stderr)</h2>
+            <div id="rust-output" class="rust-output scrollbar"></div>
+        </div>
+    </div>
+
+    <script>
+        let ws;
+        const messages = [];
+        const rustOutputLines = [];
+
+        // Connect to WebSocket
+        function connectWebSocket() {
+            ws = new WebSocket('ws://localhost:3201');
+
+            ws.onopen = () => {
+                console.log('✅ WebSocket connected');
+            };
+
+            ws.onmessage = (event) => {
+                const message = JSON.parse(event.data);
+                handleWebSocketMessage(message);
+            };
+
+            ws.onclose = () => {
+                console.log('❌ WebSocket disconnected, reconnecting...');
+                setTimeout(connectWebSocket, 2000);
+            };
+        }
+
+        function handleWebSocketMessage(message) {
+            switch (message.type) {
+                case 'initial_state':
+                    messages.push(...message.data.messages);
+                    renderTimeline();
+                    updateSystemStatus(message.data.status);
+                    break;
+
+                case 'mqtt_message':
+                    messages.push(message.data);
+                    renderTimeline();
+                    updateScenarioProgress(message.data);
+                    break;
+
+                case 'client_connected':
+                case 'client_disconnected':
+                    renderConnectEvent(message);
+                    break;
+
+                case 'rust_output':
+                    addRustOutput(message.data.output, false);
+                    break;
+
+                case 'rust_error':
+                    addRustOutput(message.data.output, true);
+                    break;
+
+                case 'rust_exit':
+                    addRustOutput(`Process ${message.data.name} exited with code ${message.data.code}`, false);
+                    break;
+            }
+        }
+
+        function renderTimeline() {
+            const timeline = document.getElementById('mqtt-timeline');
+            timeline.innerHTML = messages.slice(-20).reverse().map(msg => `
+                <div class="message publish">
+                    <div class="message-header">
+                        <span class="message-topic">${msg.topic}</span>
+                        <span>${new Date(msg.timestamp).toLocaleTimeString()}</span>
+                    </div>
+                    <div class="message-payload">${msg.payloadPreview}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderConnectEvent(message) {
+            const timeline = document.getElementById('mqtt-timeline');
+            const isConnect = message.type === 'client_connected';
+            const div = document.createElement('div');
+            div.className = `message ${isConnect ? 'connect' : 'disconnect'}`;
+            div.innerHTML = `
+                <div class="message-header">
+                    <span>${isConnect ? '🔌 Client Connected' : '❌ Client Disconnected'}: ${message.data.clientId}</span>
+                    <span>${new Date(message.data.timestamp).toLocaleTimeString()}</span>
+                </div>
+            `;
+            timeline.prepend(div);
+        }
+
+        function updateScenarioProgress(mqttMessage) {
+            const steps = document.querySelectorAll('.scenario-step');
+
+            if (mqttMessage.topic.includes('capsule/in')) {
+                steps[1].classList.add('active');
+                steps[1].classList.remove('pending');
+                steps[2].classList.add('active');
+                steps[2].classList.remove('pending');
+            }
+
+            if (mqttMessage.topic.includes('fitness')) {
+                steps[3].classList.add('active');
+                steps[3].classList.remove('pending');
+                steps[4].classList.add('active');
+                steps[4].classList.remove('pending');
+            }
+        }
+
+        function updateSystemStatus(status) {
+            const container = document.getElementById('rust-nodes');
+            container.innerHTML = status.rustProcesses.map(proc => `
+                <div class="node-status">
+                    <span class="status-indicator ${proc.running ? 'status-online' : 'status-offline'}"></span>
+                    <strong>${proc.name}</strong> (PID: ${proc.pid})
+                </div>
+            `).join('');
+        }
+
+        function addRustOutput(line, isError) {
+            rustOutputLines.push({ line, isError, timestamp: new Date().toISOString() });
+            const output = document.getElementById('rust-output');
+            const div = document.createElement('div');
+            div.className = isError ? 'error' : '';
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${line}`;
+            output.appendChild(div);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        async function startScenario() {
+            try {
+                document.getElementById('btn-start').disabled = true;
+                document.getElementById('btn-stop').disabled = false;
+
+                // Reset scenario steps
+                document.querySelectorAll('.scenario-step').forEach(step => {
+                    step.classList.remove('active');
+                    step.classList.add('pending');
+                });
+                document.querySelectorAll('.scenario-step')[0].classList.add('active');
+                document.querySelectorAll('.scenario-step')[0].classList.remove('pending');
+
+                const response = await fetch('/api/scenario/start', { method: 'POST' });
+                const result = await response.json();
+
+                if (result.success) {
+                    addRustOutput('✅ Scenario started successfully', false);
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+                document.getElementById('btn-start').disabled = false;
+            }
+        }
+
+        async function stopScenario() {
+            try {
+                await fetch('/api/scenario/stop', { method: 'POST' });
+                document.getElementById('btn-start').disabled = false;
+                document.getElementById('btn-stop').disabled = true;
+                addRustOutput('⏹️ Scenario stopped', false);
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Initialize
+        window.onload = () => {
+            connectWebSocket();
+        };
+    </script>
+</body>
+</html>

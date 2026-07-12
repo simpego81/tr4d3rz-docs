@@ -24,9 +24,13 @@ TR4D3RZ is developed by a coordinated team of AI agents, each owning specific re
 | `tr4d3rz-core` | L-System genome, FSM runtime | Claude Code |
 | `tr4d3rz-messaging` | MQTT/NATS, Gateway Nodes | Claude Code |
 | `tr4d3rz-evolution` | Mutation, fitness, niche discovery | Claude Code |
-| `tr4d3rz-observatory` | UI, visualization, replay system | Gemini CLI |
+| `tr4d3rz-observatory` | UI, visualization, replay system | Antigravity |
 | `tr4d3rz-persistence` | Event sourcing, archetype memory | Claude Code |
 | `tr4d3rz-embedded` | ESP8266, STM32 optimization nodes | GitHub Copilot |
+
+**Meta-Layer Agents** (operate orthogonally to feature development):
+- **Meta-Optimizer Agent** (Claude Code): System optimization, convergence analysis, workflow improvement
+- **Debug Intelligence Agent** (Claude Code): Root cause analysis, observability optimization, failure diagnosis
 
 ## Building the Documentation Site
 
@@ -82,7 +86,7 @@ Each element is clickable and displays: Type, Role in TR4D3RZ, Technology detail
 tr4d3rz-docs/
 ├── README.md                  # Project overview and repository map
 ├── AI_AGENT_DOCUMENTATION.md  # Instructions for AI agents
-├── GEMINI.md                  # Specific guidance for Gemini CLI
+├── ANTIGRAVITY.md             # Specific guidance for Antigravity
 ├── CLAUDE.md                  # This file
 ├── generate_docs.ps1          # PowerShell script to regenerate docs
 ├── device_*.puml              # Per-device ArchiMate diagrams (14 devices)

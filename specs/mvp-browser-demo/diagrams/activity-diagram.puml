@@ -1,0 +1,121 @@
+@startuml TR4D3RZ_MVP_Demo_Activity_Diagram
+!theme plain
+|Backend|
+start
+:Start Node.js process;
+:Initialize Aedes MQTT broker;
+:Start HTTP server on port 3000;
+:Start WebSocket bridge on port 9001;
+
+fork
+    |Scraper Simulator|
+    :Connect to MQTT broker;
+    repeat
+        :Generate mock OHLCV data\n(30 bars);
+        :Publish to\ntr4d3rz/data/ohlcv/history/{isin};
+        :Wait 5 seconds;
+    repeat while (Running?)
+fork again
+    |Evolution Simulator|
+    :Connect to MQTT broker;
+    :Subscribe to\ntr4d3rz/ecosystem/fitness/+;
+    repeat
+        :Generate mock genome capsule;
+        :Publish to\ntr4d3rz/node/esp8266-01/capsule/in;
+        :Wait 10 seconds;
+    repeat while (Running?)
+fork again
+    |ESP8266-01 Simulator|
+    :Connect to MQTT broker;
+    :Subscribe to\ntr4d3rz/node/esp8266-01/capsule/in;
+    repeat
+        :Wait for capsule message;
+        if (Capsule received?) then (yes)
+            :Extract agent_id and genome_hash;
+            :Simulate FSM execution\n(random delay 500-2000ms);
+            :Calculate mock fitness\n(random 0.0-1.0);
+            :Create FitnessResult;
+            :Publish to\ntr4d3rz/ecosystem/fitness/{agent_id};
+        endif
+    repeat while (Running?)
+fork again
+    |ESP8266-02 Simulator|
+    :Connect to MQTT broker;
+    :Subscribe to\ntr4d3rz/node/esp8266-02/capsule/in;
+    repeat
+        :Wait for capsule message;
+        if (Capsule received?) then (yes)
+            :Simulate FSM execution;
+            :Publish FitnessResult;
+        endif
+    repeat while (Running?)
+fork again
+    |Logger Simulator|
+    :Connect to MQTT broker;
+    :Subscribe to tr4d3rz/#;
+    repeat
+        :Wait for any message;
+        if (Message received?) then (yes)
+            :Extract topic and payload;
+            :Log to in-memory array;
+            :Timestamp event;
+        endif
+    repeat while (Running?)
+fork again
+    |Heartbeat Scheduler|
+    repeat
+        :Wait 5 seconds;
+        :Each simulator publishes NodeStatus;
+        :{"state": "ready", "role": "...", "uptime_s": ...};
+    repeat while (Running?)
+end fork
+
+|Browser|
+:User opens http://localhost:3000;
+:Load index.html;
+:Initialize ObservatoryUI;
+:Connect MQTT.js client to\nws://localhost:9001;
+
+fork
+    :Subscribe to\ntr4d3rz/node/+/status;
+    repeat
+        :Wait for NodeStatus message;
+        if (Status received?) then (yes)
+            :Update Node Status Panel;
+            :Update uptime counter;
+        endif
+    repeat while (Connected?)
+fork again
+    :Subscribe to\ntr4d3rz/ecosystem/fitness/+;
+    repeat
+        :Wait for FitnessResult message;
+        if (Fitness received?) then (yes)
+            :Append to Event Timeline;
+            :Update Fitness Chart;
+            :Log to browser console;
+        endif
+    repeat while (Connected?)
+fork again
+    :Subscribe to\ntr4d3rz/node/+/capsule/in;
+    repeat
+        :Wait for GenomeCapsule message;
+        if (Capsule received?) then (yes)
+            :Display in Capsule Inspector;
+            :Append to Event Timeline;
+            :Highlight FSM structure;
+        endif
+    repeat while (Connected?)
+fork again
+    :Subscribe to\ntr4d3rz/data/ohlcv/+/+;
+    repeat
+        :Wait for OHLCV message;
+        if (OHLCV received?) then (yes)
+            :Append to Event Timeline;
+            :Update OHLCV bar count display;
+        endif
+    repeat while (Connected?)
+end fork
+
+stop
+
+@enduml

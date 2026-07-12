@@ -22,13 +22,13 @@
 | Task | Agent | Titolo | Milestone | Stato | Repo |
 |---|---|---|---|---|---|
 | M1-T0 | Manus | Organizzazione MVP, contratti e task queue | M1 | COMPLETED | `tr4d3rz-docs` |
-| M1-T1 | Claude Code | Core Rust types, capsule e FSM skeleton | M1 | PENDING | `tr4d3rz-core` |
-| M1-T2 | Claude Code | Broker MQTT e backbone consolidato RPi2 | M1 | PENDING | `tr4d3rz-messaging` |
+| M1-T1 | Claude Code | Core Rust types, capsule e FSM skeleton | M1 | COMPLETED | `tr4d3rz-core` |
+| M1-T2 | Claude Code | Broker MQTT e backbone consolidato RPi2 | M1 | COMPLETED | `tr4d3rz-messaging` |
 | M1-T3 | Claude Code | Event logger SQLite su RPi2 | M1 | PENDING | `tr4d3rz-persistence` |
 | M1-T4 | Claude Code | Evolution CLI publisher/listener | M1 | PENDING | `tr4d3rz-evolution` |
 | M1-T5 | GitHub Copilot | Edge node simulator/ESP fitness worker | M1 | PENDING | `tr4d3rz-embedded` |
-| M1-T6 | Gemini CLI | Observatory MVP dashboard | M1 | PENDING | `tr4d3rz-observatory` |
-| M1-T7 | Gemini CLI | Cross-repo architectural audit | M1 | PENDING | Cross-repo |
+| M1-T6 | Antigravity | Observatory MVP dashboard | M1 | PENDING | `tr4d3rz-observatory` |
+| M1-T7 | Antigravity | Cross-repo architectural audit | M1 | PENDING | Cross-repo |
 
 ---
 

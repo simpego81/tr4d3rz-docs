@@ -1,5 +1,5 @@
 # generate_holistic_data.ps1 — Generates archimate_data.json for holistic_view.html
-Set-Location "c:\projects\seq\tr4"
+Set-Location "$PSScriptRoot\.."
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 $deviceList = @(

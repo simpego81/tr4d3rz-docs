@@ -47,10 +47,10 @@ Stabilire le fondamenta architetturali e operative del progetto TR4D3RZ. Questa 
 
 ### Setup Multi-Agent
 
-- [x] Definizione ruoli AI (Manus, Claude Code, Gemini CLI, GitHub Copilot)
+- [x] Definizione ruoli AI (Manus, Claude Code, Antigravity, GitHub Copilot)
 - [x] Definizione regole operative multi-agent
 - [x] Template di task assignment per Claude Code
-- [x] Template di task assignment per Gemini CLI
+- [x] Template di task assignment per Antigravity
 
 ---
 

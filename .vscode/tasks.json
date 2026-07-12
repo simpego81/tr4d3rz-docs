@@ -23,6 +23,29 @@
         "reveal": "silent",
         "panel": "dedicated"
       }
+    },
+    {
+      "label": "Start MVP Demo Backend",
+      "type": "shell",
+      "command": "npm install ; node demo-backend.js",
+      "options": {
+        "cwd": "${workspaceFolder}/specs/mvp-browser-demo"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^(NEVER_MATCHES)$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "HTTP server listening"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
     }
   ]
 }

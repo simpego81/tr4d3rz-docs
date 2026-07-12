@@ -1,0 +1,58 @@
+feature: M1-T3-EVENT-LOGGER
+owner: Implementation Agent (Claude Code)
+status: IN_PROGRESS
+
+tasks:
+  - id: T3.1
+    description: Initialize Rust crate with SQLite dependency (rusqlite)
+    owner: Implementation Agent
+    dependencies: []
+    status: PENDING
+
+  - id: T3.2
+    description: Define SQLite schema with events table (WAL mode)
+    owner: Implementation Agent
+    dependencies: [T3.1]
+    status: PENDING
+
+  - id: T3.3
+    description: Implement EventLogger struct with insert_event method
+    owner: Implementation Agent
+    dependencies: [T3.2]
+    status: PENDING
+
+  - id: T3.4
+    description: Implement MQTT subscriber integration (tr4d3rz-messaging)
+    owner: Implementation Agent
+    dependencies: [T3.3, M1-T2]
+    status: PENDING
+
+  - id: T3.5
+    description: Implement query API (get_events with filters)
+    owner: Implementation Agent
+    dependencies: [T3.3]
+    status: PENDING
+
+  - id: T3.6
+    description: Implement replay API (iterator over time range)
+    owner: Implementation Agent
+    dependencies: [T3.5]
+    status: PENDING
+
+  - id: T3.7
+    description: Write integration test (pub 100 events → query → verify)
+    owner: Implementation Agent
+    dependencies: [T3.4, T3.5]
+    status: PENDING
+
+  - id: T3.8
+    description: Create demo CLI (event-logger-demo)
+    owner: Implementation Agent
+    dependencies: [T3.6]
+    status: PENDING
+
+  - id: T3.9
+    description: Write runbook for common failures (disk full, DB corruption)
+    owner: Implementation Agent
+    dependencies: []
+    status: PENDING

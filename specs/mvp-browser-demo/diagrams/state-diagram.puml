@@ -1,0 +1,69 @@
+@startuml TR4D3RZ_MVP_Demo_State_Diagram
+!theme plain
+
+title TR4D3RZ MVP Demo - Node State Machine
+
+[*] --> Disconnected
+
+state "Disconnected" as Disconnected {
+    Disconnected : No MQTT connection
+    Disconnected : Waiting for startup
+}
+
+state "Connecting" as Connecting {
+    Connecting : MQTT CONNECT sent
+    Connecting : Awaiting CONNACK
+}
+
+state "Booting" as Booting {
+    Booting : Connected to broker
+    Booting : Initializing subsystems
+    Booting : Publishing initial status
+}
+
+state "Ready" as Ready {
+    Ready : Fully operational
+    Ready : Processing messages
+    Ready : Publishing heartbeats
+}
+
+state "Degraded" as Degraded {
+    Degraded : Partial functionality
+    Degraded : Some subsystems offline
+    Degraded : Still connected to broker
+}
+
+state "Offline" as Offline {
+    Offline : Connection lost
+    Offline : Attempting reconnect
+}
+
+Disconnected --> Connecting : start()
+Connecting --> Booting : CONNACK received
+Connecting --> Offline : Connection timeout
+Booting --> Ready : Initialization complete
+Booting --> Degraded : Subsystem failure
+Ready --> Degraded : Error detected
+Ready --> Offline : Connection lost
+Degraded --> Ready : Recovery complete
+Degraded --> Offline : Connection lost
+Offline --> Connecting : Reconnect attempt
+Offline --> [*] : stop()
+
+note right of Ready
+  **Ready State Activities**:
+  • Publish heartbeat every 5s
+  • Process incoming messages
+  • Generate events (simulators)
+  • Update UI (observatory)
+end note
+
+note right of Degraded
+  **Degraded Triggers**:
+  • Message publish failure
+  • Subscription loss
+  • Simulator error
+  • High message latency
+end note
+
+@enduml

@@ -1,0 +1,124 @@
+@startuml TR4D3RZ_MVP_Demo_Sequence_Diagram
+!theme plain
+skinparam sequenceMessageAlign center
+
+title TR4D3RZ MVP Demo - Evolution Cycle Sequence
+
+participant "Evolution Node\n(linux-evolution-01)" as EVO
+participant "MQTT Broker\n(rpi2-broker)" as BROKER
+participant "Embedded Node\n(esp8266-01)" as ESP
+participant "Logger\n(rpi2-logger)" as LOG
+participant "Observatory UI\n(browser)" as UI
+
+== Startup Phase ==
+
+group Node Initialization
+    EVO -> BROKER: CONNECT
+    activate BROKER
+    BROKER --> EVO: CONNACK
+
+    ESP -> BROKER: CONNECT
+    BROKER --> ESP: CONNACK
+
+    LOG -> BROKER: CONNECT
+    BROKER --> LOG: CONNACK
+
+    UI -> BROKER: CONNECT (WebSocket)
+    BROKER --> UI: CONNACK
+end
+
+group Subscriptions
+    ESP -> BROKER: SUBSCRIBE\ntr4d3rz/node/esp8266-01/capsule/in
+    BROKER --> ESP: SUBACK
+
+    EVO -> BROKER: SUBSCRIBE\ntr4d3rz/ecosystem/fitness/+
+    BROKER --> EVO: SUBACK
+
+    LOG -> BROKER: SUBSCRIBE\ntr4d3rz/#
+    BROKER --> LOG: SUBACK
+
+    UI -> BROKER: SUBSCRIBE\ntr4d3rz/ecosystem/fitness/+\ntr4d3rz/node/+/status
+    BROKER --> UI: SUBACK
+end
+
+group Heartbeats
+    EVO -> BROKER: PUBLISH\ntr4d3rz/node/linux-evolution-01/status\n{"state": "ready", "role": "evolution"}
+    BROKER --> LOG: Forward (status)
+    BROKER --> UI: Forward (status)
+    note right of UI: Update Node\nStatus Panel
+
+    ESP -> BROKER: PUBLISH\ntr4d3rz/node/esp8266-01/status\n{"state": "ready", "role": "embedded"}
+    BROKER --> LOG: Forward (status)
+    BROKER --> UI: Forward (status)
+end
+
+== Evolution Cycle ==
+
+group Genome Capsule Creation
+    EVO -> EVO: Generate Mock\nGenome Capsule
+    note right of EVO
+        {
+          "v": 1,
+          "agent_id": "agent-demo-001",
+          "generation": 5,
+          "genome_hash": "sha256:...",
+          "fsm": {...}
+        }
+    end note
+
+    EVO -> BROKER: PUBLISH\ntr4d3rz/node/esp8266-01/capsule/in\n[GenomeCapsule]
+    BROKER --> ESP: Forward (capsule)
+    BROKER --> LOG: Forward (capsule)
+    BROKER --> UI: Forward (capsule)
+    note right of UI: Display in\nCapsule Inspector
+end
+
+group Fitness Evaluation
+    ESP -> ESP: Simulate FSM\nExecution\n(delay 500-2000ms)
+
+    ESP -> ESP: Calculate Mock\nFitness
+    note right of ESP
+        {
+          "fitness": 0.8234,
+          "status": "ok",
+          "metrics": {
+            "trades": 12,
+            "drawdown": 0.15
+          }
+        }
+    end note
+
+    ESP -> BROKER: PUBLISH\ntr4d3rz/ecosystem/fitness/agent-demo-001\n[FitnessResult]
+    BROKER --> EVO: Forward (fitness)
+    note right of EVO: Log fitness\n(would trigger\nmutation in\nreal system)
+    BROKER --> LOG: Forward (fitness)
+    BROKER --> UI: Forward (fitness)
+    note right of UI: Update Fitness\nChart
+end
+
+== OHLCV Data Feed (Parallel) ==
+
+group Scraper Publishes Data
+    participant "Scraper\n(rpi2-scraper)" as SCRAPER
+
+    SCRAPER -> SCRAPER: Generate Mock\nOHLCV Data
+
+    SCRAPER -> BROKER: PUBLISH\ntr4d3rz/data/ohlcv/history/IT0001233417\n[OhlcvHistory]
+    BROKER --> LOG: Forward (OHLCV)
+    BROKER --> UI: Forward (OHLCV)
+    note right of UI: Display in\nEvent Timeline
+end
+
+== Continuous Heartbeats (Every 5s) ==
+
+loop Every 5 seconds
+    EVO -> BROKER: PUBLISH status
+    ESP -> BROKER: PUBLISH status
+    SCRAPER -> BROKER: PUBLISH status
+    LOG -> BROKER: PUBLISH status
+
+    BROKER --> UI: Forward all statuses
+    note right of UI: Update uptime\ncounters
+end
+
+@enduml

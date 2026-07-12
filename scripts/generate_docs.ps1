@@ -1,5 +1,5 @@
-﻿# generate_docs.ps1 — Regenerates docs/*.html with proper ArchiMate entity boxes + SVG relation arrows
-Set-Location "c:\projects\seq\tr4"
+# generate_docs.ps1 — Regenerates docs/*.html with proper ArchiMate entity boxes + SVG relation arrows
+Set-Location "$PSScriptRoot\.."
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 $deviceList = @(

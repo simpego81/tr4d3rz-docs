@@ -1,0 +1,61 @@
+@startuml TR4D3RZ_MVP_Demo_Deployment_Diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+
+title TR4D3RZ MVP Browser Demo - Deployment Diagram
+
+Deployment_Node(localhost, "localhost", "Developer Machine") {
+
+    Deployment_Node(nodejs_process, "Node.js Process", "Node.js v18+") {
+        Deployment_Node(mqtt_broker_node, "MQTT Broker", "Aedes") {
+            Container(broker, "MQTT Broker", "Aedes", "Port 1883 (MQTT)\nPort 9001 (WebSocket)")
+        }
+
+        Deployment_Node(http_server_node, "HTTP Server", "Express") {
+            Container(express, "Web Server", "Express", "Port 3000 (HTTP)")
+            ContainerDb(static_files, "Static Files", "public/", "HTML/CSS/JS")
+        }
+
+        Deployment_Node(simulators_node, "Simulator Threads", "setTimeout/setInterval") {
+            Container(sim_scraper, "Scraper Simulator", "Node.js", "Publishes OHLCV\nevery 5s")
+            Container(sim_evolution, "Evolution Simulator", "Node.js", "Creates capsules\nevery 10s")
+            Container(sim_esp1, "ESP8266-01 Simulator", "Node.js", "Subscribes to\ncapsule/in")
+            Container(sim_esp2, "ESP8266-02 Simulator", "Node.js", "Subscribes to\ncapsule/in")
+            Container(sim_logger, "Logger Simulator", "Node.js", "Logs to memory")
+        }
+
+        ContainerDb(event_log, "Event Log", "Array", "In-memory\nMQTT events")
+    }
+
+    Deployment_Node(browser, "Web Browser", "Chrome/Firefox/Edge") {
+        Deployment_Node(browser_tab, "Browser Tab", "http://localhost:3000") {
+            Container(ui, "Observatory UI", "HTML/CSS/JS", "Real-time\nvisualization")
+            Container(mqtt_client, "MQTT.js Client", "MQTT.js", "WebSocket\nconnection")
+        }
+    }
+}
+
+' Relationships
+Rel(ui, mqtt_client, "Uses", "JS API")
+Rel(mqtt_client, broker, "Connects", "WebSocket :9001")
+
+Rel(sim_scraper, broker, "Publishes", "MQTT :1883")
+Rel(sim_evolution, broker, "Publishes/Subscribes", "MQTT :1883")
+Rel(sim_esp1, broker, "Publishes/Subscribes", "MQTT :1883")
+Rel(sim_esp2, broker, "Publishes/Subscribes", "MQTT :1883")
+Rel(sim_logger, broker, "Subscribes", "MQTT :1883")
+
+Rel(sim_logger, event_log, "Writes", "Array.push()")
+
+Rel(browser, express, "HTTP GET", "HTTP :3000")
+Rel(express, static_files, "Serves", "File I/O")
+
+' Network Protocols
+Deployment_Node(network_legend, "Network Protocols", "") {
+    Container(mqtt_proto, "MQTT", "TCP :1883", "")
+    Container(ws_proto, "WebSocket", "WS :9001", "")
+    Container(http_proto, "HTTP", "HTTP :3000", "")
+}
+
+SHOW_LEGEND()
+
+@enduml

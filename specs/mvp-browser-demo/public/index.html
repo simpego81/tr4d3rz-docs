@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TR4D3RZ MVP Browser Demo</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- MQTT.js library from CDN -->
+    <script src="https://unpkg.com/mqtt@5.3.0/dist/mqtt.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🧬 TR4D3RZ MVP Browser Demo</h1>
+            <p class="subtitle">M1 Simulation Preview - Distributed Evolutionary Signal Ecology</p>
+            <div class="connection-status">
+                <span id="mqtt-status" class="status-indicator disconnected">●</span>
+                <span id="mqtt-status-text">Disconnected</span>
+            </div>
+        </header>
+
+        <!-- Main Grid Layout -->
+        <div class="main-grid">
+            <!-- Left Column: Node Status + Capsule Inspector -->
+            <div class="left-column">
+                <!-- Node Status Panel -->
+                <div class="panel node-status-panel">
+                    <h2>Node Status</h2>
+                    <div class="node-list">
+                        <div class="node-item" id="node-rpi2-broker">
+                            <div class="node-icon">🖥️</div>
+                            <div class="node-info">
+                                <div class="node-name">rpi2-broker</div>
+                                <div class="node-meta">
+                                    <span class="node-role">broker</span>
+                                    <span class="node-state">booting</span>
+                                </div>
+                                <div class="node-uptime">Uptime: <span class="uptime">0s</span></div>
+                            </div>
+                        </div>
+
+                        <div class="node-item" id="node-rpi2-scraper">
+                            <div class="node-icon">📊</div>
+                            <div class="node-info">
+                                <div class="node-name">rpi2-scraper</div>
+                                <div class="node-meta">
+                                    <span class="node-role">broker</span>
+                                    <span class="node-state">booting</span>
+                                </div>
+                                <div class="node-uptime">Uptime: <span class="uptime">0s</span></div>
+                            </div>
+                        </div>
+
+                        <div class="node-item" id="node-rpi2-logger">
+                            <div class="node-icon">📝</div>
+                            <div class="node-info">
+                                <div class="node-name">rpi2-logger</div>
+                                <div class="node-meta">
+                                    <span class="node-role">persistence</span>
+                                    <span class="node-state">booting</span>
+                                </div>
+                                <div class="node-uptime">Uptime: <span class="uptime">0s</span></div>
+                            </div>
+                        </div>
+
+                        <div class="node-item" id="node-linux-evolution-01">
+                            <div class="node-icon">🧬</div>
+                            <div class="node-info">
+                                <div class="node-name">linux-evolution-01</div>
+                                <div class="node-meta">
+                                    <span class="node-role">evolution</span>
+                                    <span class="node-state">booting</span>
+                                </div>
+                                <div class="node-uptime">Uptime: <span class="uptime">0s</span></div>
+                            </div>
+                        </div>
+
+                        <div class="node-item" id="node-esp8266-01">
+                            <div class="node-icon">🔌</div>
+                            <div class="node-info">
+                                <div class="node-name">esp8266-01</div>
+                                <div class="node-meta">
+                                    <span class="node-role">embedded</span>
+                                    <span class="node-state">booting</span>
+                                </div>
+                                <div class="node-uptime">Uptime: <span class="uptime">0s</span></div>
+                            </div>
+                        </div>
+
+                        <div class="node-item" id="node-esp8266-02">
+                            <div class="node-icon">🔌</div>
+                            <div class="node-info">
+                                <div class="node-name">esp8266-02</div>
+                                <div class="node-meta">
+                                    <span class="node-role">embedded</span>
+                                    <span class="node-state">booting</span>
+                                </div>
+                                <div class="node-uptime">Uptime: <span class="uptime">0s</span></div>
+                            </div>
+                        </div>
+
+                        <div class="node-item" id="node-browser-observatory">
+                            <div class="node-icon">🌐</div>
+                            <div class="node-info">
+                                <div class="node-name">browser-observatory</div>
+                                <div class="node-meta">
+                                    <span class="node-role">observatory</span>
+                                    <span class="node-state" id="browser-state">connecting</span>
+                                </div>
+                                <div class="node-uptime">Uptime: <span class="uptime" id="browser-uptime">0s</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Genome Capsule Inspector -->
+                <div class="panel capsule-inspector">
+                    <h2>Genome Capsule Inspector</h2>
+                    <div id="capsule-display" class="capsule-display">
+                        <div class="empty-state">Waiting for genome capsule...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center Column: System Topology + Event Timeline -->
+            <div class="center-column">
+                <!-- System Topology Diagram -->
+                <div class="panel topology-panel">
+                    <h2>System Topology</h2>
+                    <svg class="topology-diagram" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+                        <!-- RPi2 Broker -->
+                        <g id="rpi2-broker-node">
+                            <rect x="250" y="20" width="100" height="60" rx="5" fill="#4A90E2" stroke="#2E5C8A" stroke-width="2"/>
+                            <text x="300" y="45" text-anchor="middle" fill="white" font-size="12" font-weight="bold">RPi2</text>
+                            <text x="300" y="60" text-anchor="middle" fill="white" font-size="10">Broker</text>
+                        </g>
+
+                        <!-- Evolution Node -->
+                        <g id="evolution-node">
+                            <rect x="20" y="130" width="100" height="60" rx="5" fill="#7ED321" stroke="#5A9918" stroke-width="2"/>
+                            <text x="70" y="155" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Linux</text>
+                            <text x="70" y="170" text-anchor="middle" fill="white" font-size="10">Evolution</text>
+                        </g>
+
+                        <!-- ESP8266-01 -->
+                        <g id="esp01-node">
+                            <rect x="250" y="220" width="80" height="50" rx="5" fill="#F5A623" stroke="#C78419" stroke-width="2"/>
+                            <text x="290" y="240" text-anchor="middle" fill="white" font-size="11" font-weight="bold">ESP8266</text>
+                            <text x="290" y="255" text-anchor="middle" fill="white" font-size="9">01</text>
+                        </g>
+
+                        <!-- ESP8266-02 -->
+                        <g id="esp02-node">
+                            <rect x="370" y="220" width="80" height="50" rx="5" fill="#F5A623" stroke="#C78419" stroke-width="2"/>
+                            <text x="410" y="240" text-anchor="middle" fill="white" font-size="11" font-weight="bold">ESP8266</text>
+                            <text x="410" y="255" text-anchor="middle" fill="white" font-size="9">02</text>
+                        </g>
+
+                        <!-- Observatory (Browser) -->
+                        <g id="observatory-node">
+                            <rect x="480" y="130" width="100" height="60" rx="5" fill="#BD10E0" stroke="#8B0CA8" stroke-width="2"/>
+                            <text x="530" y="155" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Browser</text>
+                            <text x="530" y="170" text-anchor="middle" fill="white" font-size="10">Observatory</text>
+                        </g>
+
+                        <!-- Arrows / Connections -->
+                        <!-- Evolution -> Broker -->
+                        <path d="M 120 160 L 250 60" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                        <!-- Broker -> ESP01 -->
+                        <path d="M 300 80 L 290 220" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                        <!-- Broker -> ESP02 -->
+                        <path d="M 300 80 L 410 220" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                        <!-- Broker -> Observatory -->
+                        <path d="M 350 60 L 480 160" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                        <!-- Arrow marker definition -->
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <polygon points="0 0, 10 3, 0 6" fill="#333"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <!-- Event Timeline -->
+                <div class="panel timeline-panel">
+                    <div class="timeline-header">
+                        <h2>Event Timeline</h2>
+                        <button id="clear-timeline" class="btn-clear">Clear</button>
+                    </div>
+                    <div id="timeline" class="timeline-container">
+                        <div class="empty-state">Waiting for MQTT events...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Fitness Chart -->
+            <div class="right-column">
+                <div class="panel chart-panel">
+                    <h2>Fitness Over Time</h2>
+                    <canvas id="fitness-chart" width="400" height="300"></canvas>
+                    <div id="chart-stats" class="chart-stats">
+                        <div>Generation: <span id="current-gen">0</span></div>
+                        <div>Best Fitness: <span id="best-fitness">0.0000</span></div>
+                        <div>Avg Fitness: <span id="avg-fitness">0.0000</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div>TR4D3RZ M1 MVP Demo | Connected Nodes: <span id="connected-nodes">0/7</span></div>
+            <div>Messages: <span id="message-count">0</span></div>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

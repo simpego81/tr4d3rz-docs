@@ -1,0 +1,55 @@
+@startuml TR4D3RZ_MVP_Demo_Component_Diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title TR4D3RZ MVP Browser Demo - Component Diagram
+
+Container_Boundary(browser, "Browser Environment") {
+    Component(ui, "Observatory UI", "HTML/CSS/JS", "Real-time visualization dashboard")
+    Component(mqtt_client, "MQTT Client", "MQTT.js", "WebSocket connection to broker")
+    Component(chart, "Chart Engine", "Chart.js", "Fitness timeline visualization")
+    Component(timeline, "Event Timeline", "DOM", "Scrolling message log")
+    Component(inspector, "Capsule Inspector", "JSON Viewer", "Genome capsule details")
+}
+
+Container_Boundary(nodejs, "Node.js Backend") {
+    Component(http_server, "HTTP Server", "Express", "Serves static files + WebSocket")
+    Component(mqtt_broker, "MQTT Broker", "Aedes", "In-process MQTT broker")
+    Component(ws_bridge, "WebSocket Bridge", "ws", "MQTT-over-WebSocket gateway")
+
+    ComponentDb(event_log, "Event Log", "In-Memory Array", "All MQTT messages")
+
+    Component_Boundary(simulators, "Simulators") {
+        Component(sim_scraper, "Scraper Simulator", "Node.js", "Publishes mock OHLCV")
+        Component(sim_evolution, "Evolution Simulator", "Node.js", "Creates genome capsules")
+        Component(sim_embedded1, "ESP8266-01 Simulator", "Node.js", "Evaluates capsules")
+        Component(sim_embedded2, "ESP8266-02 Simulator", "Node.js", "Evaluates capsules")
+        Component(sim_logger, "Logger Simulator", "Node.js", "Logs all events")
+    }
+}
+
+' Relationships
+Rel(ui, mqtt_client, "Subscribes to topics", "MQTT")
+Rel(mqtt_client, ws_bridge, "Connects via", "WebSocket")
+Rel(ws_bridge, mqtt_broker, "Bridges to", "MQTT")
+
+Rel(sim_scraper, mqtt_broker, "Publishes OHLCV", "MQTT")
+Rel(sim_evolution, mqtt_broker, "Publishes capsules", "MQTT")
+Rel(sim_embedded1, mqtt_broker, "Publishes fitness", "MQTT")
+Rel(sim_embedded2, mqtt_broker, "Publishes fitness", "MQTT")
+Rel(sim_logger, mqtt_broker, "Subscribes to #", "MQTT")
+
+Rel(mqtt_broker, sim_embedded1, "Routes capsules", "MQTT")
+Rel(mqtt_broker, sim_embedded2, "Routes capsules", "MQTT")
+Rel(mqtt_broker, sim_evolution, "Routes fitness", "MQTT")
+
+Rel(sim_logger, event_log, "Writes", "Array.push()")
+
+Rel(ui, chart, "Updates", "Data")
+Rel(ui, timeline, "Appends", "Events")
+Rel(ui, inspector, "Displays", "Capsule JSON")
+
+Rel(http_server, ui, "Serves", "HTTP")
+
+SHOW_LEGEND()
+
+@enduml

@@ -19,6 +19,24 @@
       "url": "http://localhost:8080/index.html",
       "webRoot": "${workspaceFolder}/docs",
       "preLaunchTask": "Serve docs/ (HTTP 8080)"
+    },
+    {
+      "name": "MVP Demo - Backend (Node.js)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/specs/mvp-browser-demo/demo-backend.js",
+      "cwd": "${workspaceFolder}/specs/mvp-browser-demo",
+      "console": "integratedTerminal",
+      "restart": true,
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "MVP Demo - Full (Backend + Browser)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/specs/mvp-browser-demo/public",
+      "preLaunchTask": "Start MVP Demo Backend"
     }
   ]
 }

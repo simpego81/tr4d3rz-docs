@@ -5,21 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TR4D3RZ — Device View: Android Tablet — ArchiMate Architecture v2.0  |  2026-05-12</title>
 <style>
-/* ── Reset ── */
+/* â”€â”€ Reset â”€â”€ */
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
 
-/* ── Top bar ── */
+/* â”€â”€ Top bar â”€â”€ */
 .topbar{background:white;border-bottom:2px solid #e2e8f0;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20;box-shadow:0 1px 4px rgba(0,0,0,.07);}
 .topbar a{color:#475569;text-decoration:none;font-size:.8rem;font-weight:600;}
 .topbar a:hover{color:#0f172a;}
 
-/* ── Device header ── */
+/* â”€â”€ Device header â”€â”€ */
 .device-header{background:white;border-bottom:1px solid #e2e8f0;padding:14px 20px 12px;}
 .device-header h1{font-size:1.05rem;font-weight:800;color:#0f172a;letter-spacing:-.01em;}
 .device-header p{font-size:.73rem;color:#64748b;margin-top:3px;}
 
-/* ── Legend bar ── */
+/* â”€â”€ Legend bar â”€â”€ */
 .legend{background:#fafbfc;border-bottom:1px solid #e2e8f0;padding:7px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:.7rem;color:#475569;}
 .legend-label{font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;}
 .legend-item{display:flex;align-items:center;gap:4px;}
@@ -27,27 +27,27 @@ body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
 .l-line{width:22px;height:2px;border-radius:1px;display:inline-block;}
 .l-dash{width:22px;height:0;display:inline-block;}
 
-/* ── Diagram wrapper (scroll container + SVG anchor) ── */
+/* â”€â”€ Diagram wrapper (scroll container + SVG anchor) â”€â”€ */
 .diagram-wrapper{position:relative;overflow:auto;background:white;padding:10px;}
 #rel-svg{position:absolute;top:0;left:0;pointer-events:none;z-index:5;overflow:visible;}
 
-/* ── Grid table ── */
+/* â”€â”€ Grid table â”€â”€ */
 .arch-grid{border-collapse:separate;border-spacing:6px;min-width:900px;position:relative;z-index:1;}
 .arch-grid thead th{background:#f8fafc;padding:7px 12px;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#475569;border:1px solid #e2e8f0;border-radius:4px;text-align:center;white-space:nowrap;}
 
-/* ── Layer labels ── */
+/* â”€â”€ Layer labels â”€â”€ */
 .layer-label{width:82px;min-width:82px;max-width:82px;padding:6px 4px;font-size:.68rem;font-weight:700;text-align:center;border-radius:4px;vertical-align:middle;}
 .layer-Motivation{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd;}
 .layer-Business  {background:#fef9c3;color:#854d0e;border:1px solid #fde68a;}
 .layer-Application{background:#dbeafe;color:#1e3a8a;border:1px solid #93c5fd;}
 .layer-Technology{background:#dcfce7;color:#14532d;border:1px solid #86efac;}
 
-/* ── Grid cells ── */
+/* â”€â”€ Grid cells â”€â”€ */
 .grid-cell{border:1px dashed #cbd5e1;padding:8px 6px;min-height:90px;vertical-align:top;background:#fafbfc;border-radius:4px;width:22%;}
 
-/* ══════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    ARCHIMATE ELEMENT BOXES
-   ══════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .arch-box{
   border:1.5px solid #94a3b8;
   background:white;
@@ -83,16 +83,16 @@ body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
 .arch-box[data-layer="Application"].highlight{--hl-color:#1e40af;}
 .arch-box[data-layer="Technology"].highlight{--hl-color:#166534;}
 
-/* ── Type icon (top-right corner) ── */
+/* â”€â”€ Type icon (top-right corner) â”€â”€ */
 .type-icon{position:absolute;top:3px;right:3px;width:16px;height:16px;opacity:.65;pointer-events:none;}
 .type-icon svg{width:100%;height:100%;display:block;}
 
-/* ── Type rows: same-type elements sit side-by-side ── */
+/* â”€â”€ Type rows: same-type elements sit side-by-side â”€â”€ */
 .type-row{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:4px;}
 .type-row:last-child{margin-bottom:0;}
 .type-row .arch-box{flex:1 1 80px;min-width:70px;margin-bottom:0;}
 
-/* ── Modal overlay ── */
+/* â”€â”€ Modal overlay â”€â”€ */
 #overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:40;}
 #modal{
   display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
@@ -112,19 +112,19 @@ body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
 </head>
 <body>
 
-<!-- ── Top navigation ── -->
+<!-- â”€â”€ Top navigation â”€â”€ -->
 <div class="topbar">
-  <a href="index.html">← All Devices</a>
-  <span style="font-size:.72rem;color:#94a3b8;">TR4D3RZ · ArchiMate Architecture v2.0 · 2026-05-15</span>
+  <a href="index.html">â† All Devices</a>
+  <span style="font-size:.72rem;color:#94a3b8;">TR4D3RZ Â· ArchiMate Architecture v2.0 Â· 2026-05-15</span>
 </div>
 
-<!-- ── Device header ── -->
+<!-- â”€â”€ Device header â”€â”€ -->
 <div class="device-header">
   <h1>TR4D3RZ — Device View: Android Tablet — ArchiMate Architecture v2.0  |  2026-05-12</h1>
-  <p>ArchiMate Device View · Click any element for details · Hover to highlight relationships</p>
+  <p>ArchiMate Device View Â· Click any element for details Â· Hover to highlight relationships</p>
 </div>
 
-<!-- ── Legend ── -->
+<!-- â”€â”€ Legend â”€â”€ -->
 <div class="legend">
   <span class="legend-label">Layers</span>
   <div class="legend-item"><span class="l-box" style="background:#7c3aed;border:1px solid #7c3aed;"></span>Motivation</div>
@@ -133,16 +133,16 @@ body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
   <div class="legend-item"><span class="l-box" style="background:#166534;border:1px solid #166534;"></span>Technology</div>
   <span class="legend-label" style="margin-left:10px;">Relations</span>
   <div class="legend-item"><span class="l-dash" style="border-top:2px dashed #3b82f6;"></span>Realization</div>
-  <div class="legend-item"><span class="l-line" style="background:#374151;"></span>Composition ◆</div>
+  <div class="legend-item"><span class="l-line" style="background:#374151;"></span>Composition â—†</div>
   <div class="legend-item"><span class="l-line" style="background:#7c3aed;"></span>Serving</div>
-  <div class="legend-item"><span class="l-line" style="background:#374151;"></span>Assignment ●</div>
+  <div class="legend-item"><span class="l-line" style="background:#374151;"></span>Assignment â—</div>
   <div class="legend-item"><span class="l-line" style="background:#f59e0b;"></span>Flow</div>
   <div class="legend-item"><span class="l-dash" style="border-top:2px dashed #10b981;"></span>Access</div>
   <div class="legend-item"><span class="l-dash" style="border-top:2px dashed #9ca3af;"></span>Influence</div>
   <div class="legend-item"><span class="l-line" style="background:#6b7280;"></span>Association</div>
 </div>
 
-<!-- ── Main diagram (SVG overlay + table) ── -->
+<!-- â”€â”€ Main diagram (SVG overlay + table) â”€â”€ -->
 <div class="diagram-wrapper" id="diagram-wrapper">
   <svg id="rel-svg" width="0" height="0" aria-hidden="true"></svg>
   <table class="arch-grid">
@@ -224,12 +224,12 @@ body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
   </table>
 </div>
 
-<!-- ── Element detail modal ── -->
+<!-- â”€â”€ Element detail modal â”€â”€ -->
 <div id="overlay" onclick="closeModal()"></div>
 <div id="modal">
   <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;">
     <h3 id="m-title" style="font-size:1rem;font-weight:800;color:#0f172a;padding-right:12px;line-height:1.3;"></h3>
-    <button onclick="closeModal()" style="font-size:1.3rem;color:#94a3b8;cursor:pointer;background:none;border:none;flex-shrink:0;line-height:1;">✕</button>
+    <button onclick="closeModal()" style="font-size:1.3rem;color:#94a3b8;cursor:pointer;background:none;border:none;flex-shrink:0;line-height:1;">âœ•</button>
   </div>
   <div style="margin-bottom:10px;">
     <span id="m-layer-badge" class="badge"></span>
@@ -243,14 +243,14 @@ body{font-family:'Courier New',monospace;background:#f1f5f9;color:#1e293b;}
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════
-// 1. Knowledge Base  (element metadata — injected per device)
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// 1. Knowledge Base  (element metadata â€” injected per device)
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const KB = {"goal_observe": {"title": "Full Ecosystem Observability", "type": "Motivation_Goal", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Goal — a desired end-state.", "role": "Every evolutionary event must be observable, replayable, and visualizable in real-time. The system must be transparent enough for human researchers to understand emergent behaviors.", "tech": "Implemented via the Observatory Service (TypeScript/Three.js), WASM FSM Replay, event sourcing in SQLite/Parquet, and MQTT WebSocket streaming.", "relations": "Realized by the Observatory Service. Supported by the Persistence Service event store."}, "prin_replay": {"title": "Distributed Observability", "type": "Motivation_Principle", "layer": "Motivation", "aspect": "Motivation", "type_desc": "ArchiMate Principle — a fundamental architectural guideline.", "role": "All evolutionary events must be serializable and replayable. The system must support temporal replay of any past ecosystem state for research and debugging.", "tech": "Implemented via append-only SQLite event log, Parquet historical archive, WASM FSM Replay in the browser, and the Replay System in the Observatory.", "relations": "Influences the Observatory Service. Realized by the Persistence Service and Event Logger."}, "proc_observe": {"title": "Ecosystem Observation & Replay", "type": "Business_Process", "layer": "Business", "aspect": "Behavior", "type_desc": "ArchiMate Business Process — a sequence of behaviors achieving a business outcome.", "role": "Provides real-time and historical views of the ecosystem: node deployment map, theory map, 3D galaxy visualization, signal ecology heatmap, and temporal replay.", "tech": "Implemented by Observatory Service (TypeScript/Vite/Three.js) in tr4d3rz-observatory. Connects to NanoMQ via MQTT WebSocket (WS:8083).", "relations": "Realized by Observatory Service. Consumes all MQTT topics."}, "svc_monitoring": {"title": "Monitoring Service", "type": "Business_Service", "layer": "Business", "aspect": "Behavior", "type_desc": "ArchiMate Business Service — an explicitly defined exposed business behavior.", "role": "Real-time health monitoring of all ecosystem nodes: MQTT connectivity, evolution rate, fitness distribution, niche count, and archetype stability.", "tech": "Implemented via the Deploy Architecture Map in the Observatory. Subscribes to all MQTT topics and tracks last-seen timestamps for each node.", "relations": "Served by Observatory Service."}, "obs_svc": {"title": "Observatory Service", "type": "Application_Service", "layer": "Application", "aspect": "Behavior", "type_desc": "ArchiMate Application Service — ecosystem visualization and monitoring.", "role": "The main service of Observatory Nodes (Browser, Tablet, Smartphone). Provides real-time and historical views of the ecosystem via a web-based dashboard.", "tech": "TypeScript/Vite/React (tr4d3rz-observatory). Connects to NanoMQ via MQTT WebSocket (WS:8083). Three.js for 3D visualization. WASM for FSM replay.", "relations": "Realizes Ecosystem Observation process. Serves Monitoring Service."}, "obs_deploymap": {"title": "Deploy Architecture Map", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — node deployment visualization.", "role": "Shows the real-time status of all ecosystem nodes: connectivity, evolution rate, last-seen timestamp, MQTT topic activity. The operational dashboard of TR4D3RZ.", "tech": "TypeScript/D3.js. Subscribes to all MQTT topics. Updates node status in real-time via WebSocket.", "relations": "Consumes all MQTT topics. Visualizes node connectivity."}, "obs_theorymap": {"title": "Theory Map", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — archetype and FSM browser.", "role": "Provides a browsable library of discovered archetypes (proven FSM motifs). Allows researchers to inspect FSM graphs, fitness histories, and market conditions where each archetype excels.", "tech": "TypeScript/React. Fetches archetypes from Persistence Service. Renders FSM graphs using D3.js force layout.", "relations": "Consumes Archetype data from Persistence Service."}, "obs_galaxy": {"title": "Evolution Galaxy [3D]", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — 3D ecosystem visualization.", "role": "Renders the entire ecosystem as a 3D galaxy: each agent is a star, niches are clusters, fitness is brightness, cooperative signals are particle streams. The flagship visualization of TR4D3RZ.", "tech": "Three.js/WebGL. Each agent mapped to 3D coordinates via fitness vector PCA. Real-time updates via MQTT WebSocket. Supports up to 10,000 simultaneous agents.", "relations": "Consumes Fitness Records and Niche data from MQTT."}, "obs_ecology": {"title": "Signal Ecology View", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — cooperative signal heatmap.", "role": "Visualizes the cooperative signaling patterns across the ecosystem as a heatmap: which agents are signaling to which, signal frequency, and emergent communication clusters.", "tech": "TypeScript/D3.js heatmap. Subscribes to ecosystem/signal/# MQTT topic. Aggregates signal frequency by agent pair.", "relations": "Consumes Cooperative Signals from MQTT."}, "obs_market": {"title": "Market Overlay", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — market-ecosystem correlation view.", "role": "Correlates ecosystem events (archetype activations, niche shifts, fitness spikes) with market events (earnings, volatility, sector rotations). Enables research into market-ecology relationships.", "tech": "TypeScript/React. Overlays OHLCV data with ecosystem event timeline. Subscribes to data/ohlcv/# and ecosystem/# MQTT topics.", "relations": "Consumes OHLCV data and ecosystem events from MQTT."}, "obs_replay": {"title": "Replay System", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — temporal ecosystem replay.", "role": "Allows researchers to replay any past ecosystem state: scrub through time, rewind to specific events, and observe how the ecosystem evolved. Essential for research and debugging.", "tech": "TypeScript/React. Reads from Persistence Service event store. Supports temporal scrubbing, event filtering, and speed control.", "relations": "Reads from Persistence Service event store."}, "obs_wasm": {"title": "WASM FSM Replay", "type": "Application_Component", "layer": "Application", "aspect": "Active Structure", "type_desc": "ArchiMate Application Component — browser-side FSM execution.", "role": "Executes FSM agents directly in the browser using WebAssembly, enabling researchers to replay individual agent decisions against historical OHLCV data without server-side computation.", "tech": "Rust compiled to WASM (wasm-pack). Runs the same FSM Runtime as Evolution Nodes. Accepts FSM CBOR + OHLCV CSV as input.", "relations": "Executes FSM Capsules in browser. Consumes OHLCV data."}, "data_signal": {"title": "Cooperative Signal (CBOR · QoS 0)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business Object — inter-agent communication payload.", "role": "The cooperative signal broadcast by each agent to the ecosystem. Contains the agent's current state: fitness, niche, active conditions, and investment signals.", "tech": "CBOR format. Schema: {agent_id, niche_id, fitness_vector, active_conditions, signal_type, isin, action, confidence, timestamp_ms}. QoS 0 (fire-and-forget).", "relations": "Produced by Open Event Emitter. Consumed by Cooperative Conditions and Observatory."}, "data_fitness": {"title": "Fitness Record (CBOR · QoS 1)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business Object — fitness evaluation result.", "role": "The multi-dimensional fitness record for each agent after evaluation. Contains all fitness dimensions for niche discovery and archetype selection.", "tech": "CBOR format. Schema: {agent_id, timestamp_ms, trade_count, cagr, profit_factor, signal_entropy, stat_confidence, comp_efficiency, composite_fitness}. QoS 1.", "relations": "Produced by Fitness Calculator. Consumed by Niche Evaluator and Persistence Service."}, "data_archetype": {"title": "Archetype (CBOR · QoS 2)", "type": "Business_Object", "layer": "Business", "aspect": "Passive Structure", "type_desc": "ArchiMate Business Object — proven FSM motif.", "role": "A proven high-fitness FSM pattern broadcast to all nodes for seeding new genomes. QoS 2 ensures exactly-once delivery for this critical knowledge transfer.", "tech": "CBOR format. Schema: {archetype_id, fsm_cbor, fitness_vector, discovery_timestamp, niche_id, usage_count}. QoS 2 (exactly once). Published to ecosystem/archetype/#.", "relations": "Produced by Persistence Service. Consumed by Evolution Nodes and Observatory Theory Map."}, "hw_tablet": {"title": "Android Tablet", "type": "Technology_Device", "layer": "Technology", "aspect": "Active Structure", "type_desc": "ArchiMate Technology Device — a physical IT resource.", "role": "Mobile Observatory Node. Runs the full Observatory Service on a larger screen, suitable for research sessions and presentations.", "tech": "Android tablet with Chrome browser. Same Observatory Service as desktop browser. Optimized for touch interaction.", "relations": "Hosts Observatory Service (mobile full). Connects via MQTT WebSocket."}, "rt_wasm": {"title": "WebAssembly Runtime", "type": "Technology_SystemSoftware", "layer": "Technology", "aspect": "Active Structure", "type_desc": "ArchiMate Technology System Software — browser-side execution environment.", "role": "The WebAssembly runtime in the browser for FSM replay. Enables the same Rust FSM code used in Evolution Nodes to run directly in the browser without server-side computation.", "tech": "wasm-pack compiled Rust. WASM module size: ~200KB. Runs FSM state machine against OHLCV CSV input. Supported in all modern browsers.", "relations": "Realizes WASM FSM Replay component."}, "rt_threejs": {"title": "Three.js / WebGL", "type": "Technology_SystemSoftware", "layer": "Technology", "aspect": "Active Structure", "type_desc": "ArchiMate Technology System Software — 3D rendering environment.", "role": "The 3D rendering engine for the Evolution Galaxy visualization. Renders up to 10,000 agent-stars with real-time updates via MQTT WebSocket.", "tech": "Three.js r160+. WebGL 2.0. InstancedMesh for performance (10K+ agents). Custom shader for fitness-based star brightness. Orbit controls for navigation.", "relations": "Realizes Evolution Galaxy 3D component."}, "net_mqtt": {"title": "MQTT Service (TCP:1883 · WS:8083)", "type": "Technology_Service", "layer": "Technology", "aspect": "Behavior", "type_desc": "ArchiMate Technology Service — an explicitly defined exposed technology behavior.", "role": "The MQTT messaging service exposed by NanoMQ. TCP:1883 for embedded and server nodes; WS:8083 for browser-based Observatory. The backbone of all inter-node communication.", "tech": "MQTT 3.1.1 and 5.0. Topic hierarchy: data/ohlcv/#, ecosystem/signal/#, ecosystem/fitness/#, ecosystem/niche/#, ecosystem/archetype/#, embedded/capsule/#.", "relations": "Realized by NanoMQ Broker. Used by all nodes."}};
 
-// ════════════════════════════════════════════════════════
-// 2. Relationships   (from PUML — injected per device)
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// 2. Relationships   (from PUML â€” injected per device)
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const RELS = [
   { from: 'proc_observe', to: 'goal_observe', type: 'Realization', label: '' },
   { from: 'prin_replay', to: 'goal_observe', type: 'Influence', label: '' },
@@ -268,12 +268,12 @@ const RELS = [
   { from: 'rt_threejs', to: 'obs_galaxy', type: 'Realization', label: '' }
 ];
 
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 3. ArchiMate Type Icons  (inline SVG pictograms)
-//    Standard ArchiMate 3.2 notation — small icon in top-right
-// ════════════════════════════════════════════════════════
+//    Standard ArchiMate 3.2 notation â€” small icon in top-right
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const ARCH_ICONS = {
-  // ── Motivation ──
+  // â”€â”€ Motivation â”€â”€
   Motivation_Goal:
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2L18 10L10 18L2 10Z"/></svg>',
   Motivation_Principle:
@@ -284,7 +284,7 @@ const ARCH_ICONS = {
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 2L18 10L10 18L2 10Z"/><circle cx="10" cy="10" r="3"/></svg>',
   Motivation_Constraint:
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 2L18 10L10 18L2 10Z"/><line x1="10" y1="6" x2="10" y2="10" stroke-width="2"/><circle cx="10" cy="13" r="1" fill="currentColor"/></svg>',
-  // ── Business ──
+  // â”€â”€ Business â”€â”€
   Business_Process:
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="5" width="13" height="10" rx="3"/><path d="M14 10L19 10M17 7L19 10L17 13" stroke-linecap="round"/></svg>',
   Business_Service:
@@ -297,7 +297,7 @@ const ARCH_ICONS = {
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="18" height="12" rx="1"/><circle cx="10" cy="10" r="3.5"/></svg>',
   Business_Actor:
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="6" r="3.5"/><path d="M3 18 Q3 12 10 12 Q17 12 17 18"/></svg>',
-  // ── Application ──
+  // â”€â”€ Application â”€â”€
   Application_Component:
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="1" width="14" height="18" rx="1"/><rect x="1" y="5" width="7" height="3" rx="1"/><rect x="1" y="11" width="7" height="3" rx="1"/></svg>',
   Application_Service:
@@ -308,7 +308,7 @@ const ARCH_ICONS = {
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="16" height="12" rx="1"/><circle cx="8" cy="10" r="2.5"/><line x1="1" y1="10" x2="5.5" y2="10"/></svg>',
   Application_DataObject:
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 2L13 2L17 6L17 18L3 18Z"/><path d="M13 2L13 6L17 6"/><line x1="6" y1="10" x2="14" y2="10"/><line x1="6" y1="13" x2="14" y2="13"/></svg>',
-  // ── Technology ──
+  // â”€â”€ Technology â”€â”€
   Technology_Device:
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="18" height="11" rx="1"/><rect x="6" y="16" width="8" height="2"/><rect x="4" y="7" width="12" height="5"/></svg>',
   Technology_SystemSoftware:
@@ -325,9 +325,9 @@ const ARCH_ICONS = {
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="16" height="12" rx="1"/><path d="M6 10 Q10 6 14 10" fill="none"/></svg>',
 };
 
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 4. Inject type icons + data-layer on all arch-boxes
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 (function injectIcons() {
   document.querySelectorAll('.arch-box').forEach(box => {
     const id = box.id;
@@ -345,9 +345,9 @@ const ARCH_ICONS = {
   });
 })();
 
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 5. Group same-type elements horizontally within each cell
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const TYPE_ORDER = {
   // Motivation aspect
   'Motivation_Driver':0,'Motivation_Assessment':1,'Motivation_Goal':2,
@@ -398,9 +398,9 @@ const TYPE_ORDER = {
   });
 })();
 
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 6. SVG Relationship Arrows
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const REL_STYLES = {
   Realization:    { stroke:'#3b82f6', dash:'6,3',  head:'open'     },
   Composition:    { stroke:'#374151', dash:'',      head:'diamond'  },
@@ -533,9 +533,9 @@ function drawRelations() {
   });
 }
 
-// ════════════════════════════════════════════════════════
-// 6. Hover interaction — highlight connected elements
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// 6. Hover interaction â€” highlight connected elements
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 document.querySelectorAll('.arch-box').forEach(box => {
   box.addEventListener('mouseenter', () => {
     const id = box.id; if (!id) return;
@@ -561,9 +561,9 @@ document.querySelectorAll('.arch-box').forEach(box => {
   });
 });
 
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 7. Element detail modal
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function showModal(id) {
   const d = KB[id]; if (!d) return;
   document.getElementById('m-title').textContent    = d.title;
@@ -586,9 +586,9 @@ function closeModal() {
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 8. Initial draw + redraw on resize / scroll
-// ════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const dw = document.getElementById('diagram-wrapper');
 window.addEventListener('load',   drawRelations);
 window.addEventListener('resize', drawRelations);
