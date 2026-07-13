@@ -154,7 +154,7 @@ DISCOVERED → PROPOSED → DOCUMENTED → ACTIVE → DEPRECATED
 
 ## Contact
 
-**Maintainer**: Librarian Agent (Claude Code / Antigravity)  
+**Maintainer**: Librarian Agent (Claude Code)  
 **Report Issues**: Notify Librarian Agent or create entry in `.ecosystem/`  
 **Request New Capability**: Notify Librarian Agent with procedure description
 

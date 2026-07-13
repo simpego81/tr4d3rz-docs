@@ -1,7 +1,7 @@
 # TR4D3RZ — PROJECT_STATE
 
-**Maintainer**: Meta-Optimizer Agent (Claude Code) + Chief AI Architect (Antigravity)  
-**Last update**: 2026-07-10  
+**Maintainer**: Meta-Optimizer Agent (Claude Code) + Manus  
+**Last update**: 2026-07-13  
 **Current status**: AUTOPOIETIC_TRANSITION  
 **Architecture baseline**: Single Raspberry Pi 2 backbone (NanoMQ/Mosquitto)
 
@@ -122,7 +122,7 @@
 | Hardware unavailable for M1-T2-B/M1-T5 | Medium | High | Simulator fallback for M1-T5 |
 | Agents ignore cognitive boards | Low | Medium | Meta-Optimizer periodic audit |
 | Convergence velocity slows | Medium | Medium | Weekly audits, bottleneck analysis |
-| Human (Antigravity) unavailable >4 weeks | High | Medium | Autopoietic model designed for this |
+| Risorse frontend insufficienti dopo uscita Antigravity | Bassa | Media | Claude Code ha assunto Frontend + QA (2026-07-13) |
 
 ---
 

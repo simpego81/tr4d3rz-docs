@@ -9,14 +9,15 @@
 | Agente | Ruolo | Repository di competenza | Può scrivere codice? |
 |---|---|---|---|
 | **Manus** | Chief Architect & Coordinator | `tr4d3rz-docs` (solo file di coordinamento e documentazione) | **NO** |
-| **Claude Code** | Backend Developer + Meta-Optimizer + Debug Intelligence | `tr4d3rz-core`, `tr4d3rz-messaging`, `tr4d3rz-evolution`, `tr4d3rz-persistence` + ecosystem optimization + debug analysis; `tr4d3rz-docs` limitatamente alla pipeline dati/CI di `FEATURE-DOCS-PROJECT-MAP` | Sì |
-| **Antigravity** | Frontend & QA | `tr4d3rz-observatory`, audit cross-repo; `tr4d3rz-docs` limitatamente a UI/D3 e demo di `FEATURE-DOCS-PROJECT-MAP` | Sì |
+| **Claude Code** | Backend + Frontend Developer + Meta-Optimizer + Debug Intelligence + QA | `tr4d3rz-core`, `tr4d3rz-messaging`, `tr4d3rz-evolution`, `tr4d3rz-persistence`, `tr4d3rz-observatory` + ecosystem optimization + debug analysis; `tr4d3rz-docs` limitatamente a pipeline dati/CI, UI/D3 e demo di `FEATURE-DOCS-PROJECT-MAP` | Sì |
 | **GitHub Copilot** | Embedded Developer & Validator | `tr4d3rz-embedded`, validazione tool | Sì |
+
+> **Nota**: Antigravity ha lasciato il team il 2026-07-13. Le responsabilità frontend, QA e Observatory sono state trasferite a Claude Code. Vedere `COMMUNICATION/ANTIGRAVITY_DEPARTURE.md`.
 
 **Meta-Layer Agents** (operate orthogonally to feature development):
 - **Meta-Optimizer Agent** (Claude Code): System optimization, workflow improvement, convergence analysis
 - **Debug Intelligence Agent** (Claude Code): Root cause analysis, observability optimization, failure pattern detection
-- **Librarian Agent** (Claude Code / Antigravity): Knowledge Base maintenance, capability registry, project dashboard, documentation consolidation
+- **Librarian Agent** (Claude Code): Knowledge Base maintenance, capability registry, project dashboard, documentation consolidation
 
 ### 1.1 Autorizzazione scoped — FEATURE-DOCS-PROJECT-MAP
 
@@ -27,9 +28,10 @@
 
 | Agente | Ambito autorizzato in `tr4d3rz-docs` | Esclusioni | Termine |
 |---|---|---|---|
-| Claude Code | Roadmap strutturata, exporter snapshot, collector/normalizer, health engine, generatori, schemi, test, CI, diagnostica e migrazione legacy previsti dai task PMAP-02..06, PMAP-14..16 | UI/D3; protocolli non previamente aggiornati nella SSOT; file fuori feature | Chiusura PMAP-19 o revoca owner |
-| Antigravity | Design system, shell UI, pagine di dettaglio, homepage, quattro mappe D3, test interazione/accessibilità e demo previsti dai task PMAP-07..13 e PMAP-18 | Pipeline dati/CI; protocolli; file fuori feature | Chiusura PMAP-19 o revoca owner |
+| Claude Code | Roadmap strutturata, exporter snapshot, collector/normalizer, health engine, generatori, schemi, test, CI, diagnostica, migrazione legacy **e** design system, shell UI, pagine di dettaglio, homepage, quattro mappe D3, test interazione/accessibilità e demo (PMAP-02..16, PMAP-18) | Protocolli non previamente aggiornati nella SSOT; file fuori feature | Chiusura PMAP-19 o revoca owner |
 | GitHub Copilot | Validazione indipendente, report QA e verifica dei tool della feature PMAP-17 | Implementazione primaria della pipeline o della UI | Chiusura PMAP-19 o revoca owner |
+
+> **Nota**: Antigravity ha lasciato il team il 2026-07-13. L’autorizzazione scoped originariamente assegnata ad Antigravity (PMAP-07..13, PMAP-18) è stata trasferita a Claude Code con la stessa versione `1.0.0` dell’autorizzazione. Vedere `COMMUNICATION/ANTIGRAVITY_DEPARTURE.md`.
 
 Ogni agente deve operare su branch o worktree isolato, aggiornare lo stato `PENDING → IN_PROGRESS → COMPLETED`, rispettare l’allowlist dei file del task e non includere modifiche concorrenti. **Manus non acquisisce alcuna autorizzazione a scrivere codice** e mantiene i gate architetturali, di veto e di chiusura.
 
@@ -38,6 +40,7 @@ Ogni agente deve operare su branch o worktree isolato, aggiornare lo stato `PEND
 | Versione | Data | Modifica | Approvazione |
 |---|---|---|---|
 | 1.0.0 | 2026-07-12 | Autorizzazione scoped dell’opzione A per `FEATURE-DOCS-PROJECT-MAP` | Owner del progetto |
+| 1.1.0 | 2026-07-13 | Trasferimento autorizzazione Antigravity (PMAP-07..13, PMAP-18) a Claude Code a seguito dipartita | Owner del progetto |
 
 ---
 
@@ -93,22 +96,15 @@ Claude Code è il **Backend Developer** del progetto. Implementa i crate Rust, i
 
 ---
 
-## 4. Ruolo di Antigravity
+## 4. Ruolo di Antigravity — STORICO (uscita dal team: 2026-07-13)
 
-Antigravity è il **Frontend Developer e QA** del progetto.
+> **Antigravity ha lasciato il team il 2026-07-13.** Le responsabilità e i task sono stati trasferiti a Claude Code. Vedere `COMMUNICATION/ANTIGRAVITY_DEPARTURE.md`.
 
-### Azioni consentite a Antigravity
-
-- Implementare la dashboard Observatory (`tr4d3rz-observatory`).
-- Per `FEATURE-DOCS-PROJECT-MAP`, implementare in `tr4d3rz-docs` esclusivamente UI, visualizzazioni D3, pagine progressive, test di interazione/accessibilità e demo assegnati in `tasks.yaml`.
-- Eseguire audit architetturali cross-repo e produrre `ARCHITECTURAL_AUDIT.md`.
-- Proporre spec e validation report in `tr4d3rz-docs/COMMUNICATION/`.
-- Aggiornare `COMMUNICATION/PROJECT_STATE.md` dopo audit completati.
-
-### Vincoli di Antigravity
-
-- Non modificare repository Rust senza coordinamento con Claude Code.
-- Audit e validation report devono essere approvati da Manus prima di aggiornare `PROJECT_STATE.md`.
+Le responsabilità un tempo di Antigravity ora assegnate a Claude Code:
+- Dashboard Observatory (`tr4d3rz-observatory`)
+- UI/D3, design system, pagine progressive, accessibilità e demo di `FEATURE-DOCS-PROJECT-MAP`
+- Audit architetturali cross-repo e `ARCHITECTURAL_AUDIT.md`
+- `COMMUNICATION/PROJECT_STATE.md` dopo audit
 
 ---
 
@@ -192,7 +188,7 @@ Se no, migliorare l'esperienza di debug.
 
 ---
 
-## 8. Librarian Agent — Ruolo di Claude Code / Antigravity
+## 8. Librarian Agent — Ruolo di Claude Code
 
 Il **Librarian Agent** è un componente architetturale di prima classe responsabile della manutenzione del Knowledge Base come prodotto primario dell'ecosistema.
 
@@ -293,4 +289,4 @@ Il Meta-Optimizer Agent traccia queste metriche in `state/meta_metrics.md`:
 
 ---
 
-*Maintainer: Manus (Chief Architect) — Ultimo aggiornamento: 2026-07-12*
+*Maintainer: Manus (Chief Architect) — Ultimo aggiornamento: 2026-07-13*

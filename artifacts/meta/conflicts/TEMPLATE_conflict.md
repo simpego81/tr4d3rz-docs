@@ -57,7 +57,7 @@
 **Owner**: {agent-name}
 
 **Option 3** (Escalate): {Description}  
-**Requires**: Human arbitration by Antigravity
+**Requires**: Human arbitration by Owner del progetto
 
 ---
 

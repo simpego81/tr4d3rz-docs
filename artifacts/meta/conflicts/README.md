@@ -68,11 +68,11 @@
 2. Review evidence and recommended resolution
 3. Choose resolution path:
    - **Fix**: Address violation, update artifact with "Resolution: Fixed by {agent} on {date}"
-   - **Override Request**: Add rationale to artifact, tag Antigravity for approval
+   - **Override Request**: Add rationale to artifact, tag Owner del progetto for approval
    - **Revert**: Abandon approach, document in artifact
 4. Update your cognitive board (`{agent}_board.md`) with veto received and resolution status
 
-### For Human (Antigravity)
+### For Human (Owner del progetto)
 
 1. Review conflict artifact
 2. Decide:

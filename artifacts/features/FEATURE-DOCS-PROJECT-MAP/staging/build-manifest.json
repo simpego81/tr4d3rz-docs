@@ -1,43 +1,43 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-07-12T18:31:18.859864+00:00",
+  "generated_at": "2026-07-13T12:59:31.894598+00:00",
   "generator_version": "1.0.0",
   "git_commit": "unknown",
   "sources": [
     {
       "path": "state\\roadmap.yaml",
-      "hash": "c5a53a3f2795431376b30e11d2b6fb4b307e068ac460974b278d970fdb0b2767",
-      "read_at": "2026-07-12T18:31:18.662555Z",
+      "hash": "2b2a13f30727cf963e6b9b0d13b939b3d9573ab62f00ce65b4c926278ad0e90d",
+      "read_at": "2026-07-13T12:59:31.646435Z",
       "status": "ok"
     },
     {
       "path": "docs\\archimate_data.json",
       "hash": "2b75c7210b54a8c08426aec201ed4af5a1fcd8606d9bc2170dadacba5c5c11ea",
-      "read_at": "2026-07-12T18:31:18.666057Z",
+      "read_at": "2026-07-13T12:59:31.652432Z",
       "status": "ok"
     },
     {
       "path": "COMMUNICATION\\TASK_QUEUE.md",
-      "hash": "db52b2fe235513f8de0cdff02e7af2a916cb192eabb13a7426542d9a40a79ff2",
-      "read_at": "2026-07-12T18:31:18.668551Z",
+      "hash": "58f7c711f1a48274d4fbef47162b0dff48ca9f9ae0f67f8c3ea388b732a5edbb",
+      "read_at": "2026-07-13T12:59:31.655433Z",
       "status": "ok"
     },
     {
       "path": "state\\project_state.md",
-      "hash": "36bc9fac944f22bf1179ce42dd55c8ab65f2f86aea04b92e6480c0222f7d5304",
-      "read_at": "2026-07-12T18:31:18.669559Z",
+      "hash": "fcb6241b965e5816bc1505d72a1c7e82602b250a158fe4da1393f81e2df0a64c",
+      "read_at": "2026-07-13T12:59:31.656436Z",
       "status": "ok"
     },
     {
       "path": "artifacts\\features\\FEATURE-DOCS-PROJECT-MAP\\ecosystem-snapshot.json",
       "hash": "65623f8413ffc9ddba1de2f0931d97bd9c803649e6645c05c404ce1987b28f69",
-      "read_at": "2026-07-12T18:31:18.671570Z",
+      "read_at": "2026-07-13T12:59:31.660433Z",
       "status": "ok"
     },
     {
       "path": ".git\\HEAD",
       "hash": "28d25bf82af4c0e2b72f50959b2beb859e3e60b9630a5e8c603dad4ddb2b6e80",
-      "read_at": "2026-07-12T18:31:18.852876Z",
+      "read_at": "2026-07-13T12:59:31.886099Z",
       "status": "ok"
     }
   ],
@@ -58,9 +58,9 @@
   ],
   "last_valid_snapshot": null,
   "phase_durations": {
-    "collect": 0.232338,
-    "normalize": 0.000493,
-    "derive": 0.002004,
+    "collect": 0.296728,
+    "normalize": 0.000499,
+    "derive": 0.002499,
     "validate": 0.0
   },
   "freshness_status": "FRESH"

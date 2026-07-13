@@ -1,7 +1,7 @@
 # Specifica Tecnica: Holistic Concentric ArchiMate View
 
 **ID Task**: SPEC-OBS-001
-**Owner**: Claude (Implementation) / Antigravity (Review/Integration)
+**Owner**: Claude Code (Implementation + Review/Integration)
 **Repository**: `tr4d3rz-docs`
 **Stato**: Proposto
 

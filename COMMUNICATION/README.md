@@ -80,7 +80,7 @@
 | **Manus** | tr4d3rz-docs | ✅ M1-T0 Complete |
 | **Claude Code** | tr4d3rz-core, tr4d3rz-messaging, tr4d3rz-evolution, tr4d3rz-persistence | 🔲 M1-T2 Ready |
 | **GitHub Copilot** | tr4d3rz-embedded | ⏸️ M1-T5 Blocked |
-| **Antigravity** | tr4d3rz-observatory | ⏸️ M1-T6 Blocked |
+| **Claude Code** | tr4d3rz-core, tr4d3rz-messaging, tr4d3rz-evolution, tr4d3rz-persistence, tr4d3rz-observatory | 🔲 M1-T3/T4 Ready |
 
 ### Handoff Protocol
 
@@ -161,8 +161,8 @@ TASK_QUEUE.md (update status)
 ⏸️ M1-T3  tr4d3rz-persistence (Claude Code)
 ⏸️ M1-T4  tr4d3rz-evolution (Claude Code)
 ⏸️ M1-T5  tr4d3rz-embedded (GitHub Copilot)
-⏸️ M1-T6  tr4d3rz-observatory (Antigravity)
-⏸️ M1-T7  Cross-repo audit (Antigravity)
+⏸️ M1-T6  tr4d3rz-observatory (Claude Code)
+⏸️ M1-T7  Cross-repo audit (Claude Code)
 ```
 
 **Progress**: 2/8 tasks complete (25%)  

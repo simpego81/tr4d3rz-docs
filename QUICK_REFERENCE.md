@@ -9,8 +9,7 @@
 | Agent | Role | Repositories | Can Write Code? |
 |---|---|---|---|
 | **Manus** | Chief Architect & Orchestrator | `tr4d3rz-docs` (coordination only) | ❌ NO |
-| **Claude Code** | Backend Developer + Meta-Optimizer + Debug Intelligence | `tr4d3rz-core`, `tr4d3rz-messaging`, `tr4d3rz-evolution`, `tr4d3rz-persistence` | ✅ Yes |
-| **Antigravity** | Frontend Developer & QA | `tr4d3rz-observatory` | ✅ Yes |
+| **Claude Code** | Backend + Frontend Developer + Meta-Optimizer + Debug Intelligence + QA | `tr4d3rz-core`, `tr4d3rz-messaging`, `tr4d3rz-evolution`, `tr4d3rz-persistence`, `tr4d3rz-observatory` | ✅ Yes |
 | **GitHub Copilot** | Embedded Developer & Validator | `tr4d3rz-embedded` | ✅ Yes |
 
 ---

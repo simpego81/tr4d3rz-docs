@@ -24,7 +24,7 @@ TR4D3RZ is developed by a coordinated team of AI agents, each owning specific re
 | `tr4d3rz-core` | L-System genome, FSM runtime | Claude Code |
 | `tr4d3rz-messaging` | MQTT/NATS, Gateway Nodes | Claude Code |
 | `tr4d3rz-evolution` | Mutation, fitness, niche discovery | Claude Code |
-| `tr4d3rz-observatory` | UI, visualization, replay system | Antigravity |
+| `tr4d3rz-observatory` | UI, visualization, replay system | Claude Code |
 | `tr4d3rz-persistence` | Event sourcing, archetype memory | Claude Code |
 | `tr4d3rz-embedded` | ESP8266, STM32 optimization nodes | GitHub Copilot |
 

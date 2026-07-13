@@ -20,7 +20,7 @@ TR4D3RZ is a **distributed evolutionary research platform** — not a simple tra
 | `tr4d3rz-core` | L-System genome, FSM runtime, data contracts | Rust (WASM-compatible) | Claude Code |
 | `tr4d3rz-messaging` | MQTT/NATS layer, Gateway Nodes | Rust / Python | Claude Code |
 | `tr4d3rz-evolution` | Mutation, fitness, niche discovery | Rust / Python | Claude Code |
-| `tr4d3rz-observatory` | Ecosystem Observatory UI, Replay System | TypeScript, WASM, Three.js | Antigravity |
+| `tr4d3rz-observatory` | Ecosystem Observatory UI, Replay System | TypeScript, WASM, Three.js | Claude Code |
 | `tr4d3rz-persistence` | Archetype memory, event sourcing, lineage | Rust / Python | Claude Code |
 | `tr4d3rz-embedded` | ESP8266, STM32 optimization nodes | C / C++ / Rust no_std | GitHub Copilot |
 

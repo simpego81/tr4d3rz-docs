@@ -1,7 +1,10 @@
 # TR4D3RZ — PROJECT_STATE
 
-**Maintainer**: Manus / Antigravity  
-**Last update**: 2026-06-14 (M1-T2-B avviato)  
+> ⚠️ **Deprecato.** Il SSOT per lo stato del progetto è [`state/project_state.md`](../../state/project_state.md).  
+> Questo file è mantenuto solo per compatibilità con vecchi handover. Non aggiornare qui.
+
+**Maintainer**: Manus / Claude Code  
+**Last update**: 2026-07-13 (Antigravity uscita dal team; responsabilità trasferite a Claude Code)  
 **Current milestone**: M1 — Foundational Backbone  
 **Architecture baseline**: Single Raspberry Pi 1/2 backbone (Mosquitto/NanoMQ)
 

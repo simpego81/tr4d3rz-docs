@@ -2,7 +2,7 @@
 
 **Titolo**: Homepage GitHub Pages con mappa progressiva dell’ecosistema TR4D3RZ
 **Architect**: Manus
-**Owner implementativi approvati**: Claude Code per pipeline dati/CI; Antigravity per UI/D3 e demo; GitHub Copilot per validazione indipendente
+**Owner implementativi approvati**: Claude Code per pipeline dati/CI, UI/D3 e demo (Antigravity uscita dal team 2026-07-13); GitHub Copilot per validazione indipendente
 **Stato**: PENDING
 **Ultimo aggiornamento**: 2026-07-12
 **Repository**: `tr4d3rz-docs`

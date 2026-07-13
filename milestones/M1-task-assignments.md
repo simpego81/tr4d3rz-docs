@@ -22,8 +22,8 @@ La Milestone 1 deve consegnare un walking skeleton dell'ecosistema TR4D3RZ, dimo
 | M1-T3 | Claude Code | `tr4d3rz-persistence` | Persistenza eventi append-only su SQLite. | Subscriber MQTT e database schema v0.1. |
 | M1-T4 | Claude Code | `tr4d3rz-evolution` | Generatore minimo capsule e listener fitness. | CLI Linux per demo end-to-end. |
 | M1-T5 | GitHub Copilot | `tr4d3rz-embedded` | Nodo edge MVP per valutazione fitness fittizia. | Simulatore o firmware ESP8266 con capsule in/fitness out. |
-| M1-T6 | Antigravity | `tr4d3rz-observatory` | Dashboard browser MVP. | Timeline eventi, stato nodi, ultimo fitness e feed OHLCV. |
-| M1-T7 | Antigravity | Cross-repo | Audit di coerenza architetturale. | `ARCHITECTURAL_AUDIT.md` e aggiornamento `PROJECT_STATE.md`. |
+| M1-T6 | Claude Code | `tr4d3rz-observatory` | Dashboard browser MVP. | Timeline eventi, stato nodi, ultimo fitness e feed OHLCV. |
+| M1-T7 | Claude Code | Cross-repo | Audit di coerenza architetturale. | `ARCHITECTURAL_AUDIT.md` e aggiornamento `PROJECT_STATE.md`. |
 
 ---
 
@@ -42,4 +42,4 @@ Il primo task immediatamente consegnabile è `COMMUNICATION/TASKS/current_task.m
 | Capsule consegnata | Evolution CLI pubblica capsule e edge node la riceve. |
 | Fitness pubblicato | Edge node pubblica result e persistence lo registra. |
 | Observatory funzionante | Browser mostra timeline e stato nodi. |
-| Audit completato | Antigravity dichiara M1 `COMPLETED` oppure `BLOCKED` con motivazione. |
+| Audit completato | Claude Code dichiara M1 `COMPLETED` oppure `BLOCKED` con motivazione. |

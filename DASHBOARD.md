@@ -215,7 +215,7 @@
 2. Read [COMMUNICATION/TASKS/](COMMUNICATION/TASKS/) for M1-T3 spec
 3. Update current_task.md with IN_PROGRESS
 
-**For Librarian Agent** (Claude Code / Antigravity):
+**For Librarian Agent** (Claude Code):
 1. Create [capabilities/](capabilities/) directory structure
 2. Extract first 5 capabilities from completed work
 3. Document operational procedures
@@ -237,9 +237,9 @@
 | Question | Contact |
 |---|---|
 | Architecture decisions | Manus (Chief Architect) |
-| Implementation blockers | Claude Code (Backend) / Antigravity (Frontend) |
+| Implementation blockers | Claude Code |
 | Validation questions | QA Agent (GitHub Copilot) |
-| Documentation issues | Librarian Agent (Claude Code / Antigravity) |
+| Documentation issues | Librarian Agent (Claude Code) |
 | Ecosystem inefficiencies | Meta-Optimizer Agent (Claude Code) |
 | Debugging help | Debug Intelligence Agent (Claude Code) |
 

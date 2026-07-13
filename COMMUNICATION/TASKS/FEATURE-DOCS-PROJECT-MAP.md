@@ -25,10 +25,11 @@ L’owner ha approvato l’**opzione A** il 2026-07-12. L’implementazione avvi
 
 | Agente | Responsabilità scoped | Task principali |
 |---|---|---|
-| Claude Code | Roadmap strutturata, snapshot sanificato, pipeline dati, schemi, generatori, test, CI, diagnostica e migrazione legacy | `PMAP-02..06`, `PMAP-14..16` |
-| Antigravity | Design system, shell UI, homepage, pagine progressive, quattro mappe D3, accessibilità, test interattivi e demo | `PMAP-07..13`, `PMAP-18` |
+| Claude Code | Roadmap strutturata, snapshot sanificato, pipeline dati, schemi, generatori, test, CI, diagnostica, migrazione legacy **e** design system, shell UI, homepage, pagine progressive, quattro mappe D3, accessibilità, test interattivi e demo | `PMAP-02..16`, `PMAP-18` |
 | GitHub Copilot | Validazione indipendente, verifica dei tool, report QA e controllo diagnostico | `PMAP-17` |
 | Manus | Architettura, coordinamento, ADR, autorizzazioni, veti, audit degli artefatti e chiusura | `PMAP-00`, `PMAP-01`, `PMAP-19` |
+
+> **Nota**: Antigravity ha lasciato il team il 2026-07-13. I task `PMAP-07..13` e `PMAP-18` sono stati trasferiti a Claude Code. Autorizzazione aggiornata in `AGENTS.md` v1.1.0.
 
 Ogni agente deve usare un branch o worktree isolato e rispettare l’allowlist dei file del task. Nessuna autorizzazione si estende ad altre feature. Manus non scrive codice.
 

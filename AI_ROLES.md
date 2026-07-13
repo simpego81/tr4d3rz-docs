@@ -8,7 +8,7 @@ In the AI-Native Collaborative Software Studio model, agents assume functional r
 
 - **Responsibilities**: Human interaction, requirement refinement, work breakdown, agent assignment, conflict resolution, global coherence.
 - **Mandate**: Never accept vague requirements. Ensure documentation and demo impact are considered for every change.
-- **Owner**: Antigravity (Primary).
+- **Owner**: Manus (Chief Architect).
 
 ---
 
@@ -16,7 +16,7 @@ In the AI-Native Collaborative Software Studio model, agents assume functional r
 
 - **Responsibilities**: Module boundaries, interfaces, APIs, UML diagrams (PlantUML), dependency management.
 - **Mandate**: Reject poor abstractions or architecture violations. Maintain the "Single Source of Truth" in `tr4d3rz-docs`.
-- **Owner**: Claude Code / Antigravity.
+- **Owner**: Claude Code / Manus.
 
 ---
 
@@ -25,7 +25,7 @@ In the AI-Native Collaborative Software Studio model, agents assume functional r
 - **Responsibilities**: Code implementation, refactoring, unit tests, technical debt reduction.
 - **Domains**: Rust (Core/Evolution), Python (Messaging), TS/WASM (Observatory), C (Embedded).
 - **Mandate**: Prioritize maintainability and debuggability.
-- **Owner**: Claude Code (Backend/Core), Antigravity (Frontend/Observatory), Copilot (Embedded).
+- **Owner**: Claude Code (Backend/Core/Frontend/Observatory), Copilot (Embedded).
 
 ---
 
@@ -41,7 +41,7 @@ In the AI-Native Collaborative Software Studio model, agents assume functional r
 
 - **Responsibilities**: Maintain technical docs, update relevant sections, detect inconsistencies, improve human readability.
 - **Mandate**: Read before writing. Never rewrite everything unnecessarily.
-- **Owner**: Antigravity / Claude Code.
+- **Owner**: Claude Code.
 
 ---
 
@@ -49,7 +49,7 @@ In the AI-Native Collaborative Software Studio model, agents assume functional r
 
 - **Responsibilities**: Build and maintain functional demos. Ensure demos show internal behavior (observability).
 - **Mandate**: A feature is incomplete without a demo. Demos must be scenario-based.
-- **Owner**: Antigravity (Primary).
+- **Owner**: Claude Code.
 
 ---
 
@@ -84,7 +84,7 @@ In the AI-Native Collaborative Software Studio model, agents assume functional r
 - **Mandate**: Knowledge Base is a first-class architectural component. The Librarian ensures it evolves continuously, remains coherent, and serves as the single source of truth for operational knowledge.
 - **Deliverables**: `KNOWLEDGE_BASE.md` (unified index), `DASHBOARD.md` (rapid re-entry), `capabilities/` (reusable know-how), consolidated and linked documentation, agent memory persistence.
 - **Activation Triggers**: Knowledge duplication detected, documentation inconsistencies found, new capability discovered, project re-entry after >1 week inactivity, cross-document links broken.
-- **Owner**: Claude Code (Secondary role) / Antigravity.
+- **Owner**: Claude Code.
 
 ---
 

@@ -120,7 +120,7 @@ milestones:
       - m4-t3-realtime-monitoring
     owners:
       - role: Visualization Agent
-        agent: Antigravity
+        agent: Claude Code
     dependencies:
       - m2-basic-evolution
     blockers: []
@@ -400,7 +400,7 @@ tasks:
     status: BLOCKED
     owners:
       - role: Visualization Agent
-        agent: Antigravity
+        agent: Claude Code
     dependencies:
       - m1-t2-mqtt-client
       - m1-t3-event-persistence
@@ -434,7 +434,7 @@ tasks:
     status: BLOCKED
     owners:
       - role: Visualization Agent
-        agent: Antigravity
+        agent: Claude Code
     dependencies:
       - m1-t1-core-types
       - m1-t2-mqtt-client
@@ -660,7 +660,7 @@ tasks:
     status: PLANNED
     owners:
       - role: Visualization Agent
-        agent: Antigravity
+        agent: Claude Code
     dependencies:
       - m2-basic-evolution
     blockers: []
@@ -686,7 +686,7 @@ tasks:
     status: PLANNED
     owners:
       - role: Visualization Agent
-        agent: Antigravity
+        agent: Claude Code
     dependencies:
       - m3-cooperative-ecology
     blockers: []
@@ -712,7 +712,7 @@ tasks:
     status: PLANNED
     owners:
       - role: Visualization Agent
-        agent: Antigravity
+        agent: Claude Code
     dependencies:
       - m1-t6-observatory-ui
     blockers: []

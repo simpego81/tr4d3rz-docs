@@ -169,10 +169,13 @@ tasks:
   - id: PMAP-07
     milestone: PMAP-M2
     title: Create the shared accessible static UI shell
-    owner_role: Visualization Agent
-    suggested_agent: Antigravity
+    owner_role: Implementation Agent
+    suggested_agent: Claude Code
+    note: Reassigned from Antigravity (departed 2026-07-13)
     dependencies: [PMAP-01]
-    status: PENDING
+    status: COMPLETED
+    completed_at: 2026-07-13
+    completed_by: Claude Code (Implementation Agent)
     outputs:
       - shared design tokens and navigation
       - D3 interaction modules
@@ -186,10 +189,13 @@ tasks:
   - id: PMAP-08
     milestone: PMAP-M2
     title: Implement generated node detail pages
-    owner_role: Visualization Agent
-    suggested_agent: Antigravity
+    owner_role: Implementation Agent
+    suggested_agent: Claude Code
+    note: Reassigned from Antigravity (departed 2026-07-13)
     dependencies: [PMAP-06, PMAP-07]
-    status: PENDING
+    status: COMPLETED
+    completed_at: 2026-07-13
+    completed_by: Claude Code (Implementation Agent)
     outputs:
       - generic detail-page renderer
       - concept, component, role, milestone and task templates
@@ -202,10 +208,13 @@ tasks:
   - id: PMAP-09
     milestone: PMAP-M2
     title: Implement the mobile-first project-map homepage
-    owner_role: Visualization Agent
-    suggested_agent: Antigravity
+    owner_role: Implementation Agent
+    suggested_agent: Claude Code
+    note: Reassigned from Antigravity (departed 2026-07-13)
     dependencies: [PMAP-06, PMAP-07]
-    status: PENDING
+    status: COMPLETED
+    completed_at: 2026-07-13
+    completed_by: Claude Code (Implementation Agent)
     outputs:
       - new homepage preview
       - four lightweight interactive summaries
@@ -220,8 +229,9 @@ tasks:
   - id: PMAP-10
     milestone: PMAP-M3
     title: Implement the conceptual ecosystem map
-    owner_role: Visualization Agent
-    suggested_agent: Antigravity
+    owner_role: Implementation Agent
+    suggested_agent: Claude Code
+    note: Reassigned from Antigravity (departed 2026-07-13)
     dependencies: [PMAP-08, PMAP-09]
     status: PENDING
     outputs:
@@ -235,8 +245,9 @@ tasks:
   - id: PMAP-11
     milestone: PMAP-M3
     title: Implement the physical ecosystem map
-    owner_role: Visualization Agent
-    suggested_agent: Antigravity
+    owner_role: Implementation Agent
+    suggested_agent: Claude Code
+    note: Reassigned from Antigravity (departed 2026-07-13)
     dependencies: [PMAP-08, PMAP-09]
     status: PENDING
     outputs:
@@ -251,8 +262,9 @@ tasks:
   - id: PMAP-12
     milestone: PMAP-M3
     title: Implement the collaborative agent setup map
-    owner_role: Visualization Agent
-    suggested_agent: Antigravity
+    owner_role: Implementation Agent
+    suggested_agent: Claude Code
+    note: Reassigned from Antigravity (departed 2026-07-13)
     dependencies: [PMAP-03, PMAP-08, PMAP-09]
     status: PENDING
     outputs:
@@ -267,8 +279,9 @@ tasks:
   - id: PMAP-13
     milestone: PMAP-M3
     title: Implement roadmap timeline and dependency graph
-    owner_role: Visualization Agent
-    suggested_agent: Antigravity
+    owner_role: Implementation Agent
+    suggested_agent: Claude Code
+    note: Reassigned from Antigravity (departed 2026-07-13)
     dependencies: [PMAP-02, PMAP-05, PMAP-08, PMAP-09]
     status: PENDING
     outputs:
@@ -348,8 +361,9 @@ tasks:
   - id: PMAP-18
     milestone: PMAP-M5
     title: Record and register the observable demo
-    owner_role: Demo Agent
-    suggested_agent: Antigravity
+    owner_role: Implementation Agent
+    suggested_agent: Claude Code
+    note: Reassigned from Antigravity (departed 2026-07-13)
     dependencies: [PMAP-17]
     status: PENDING
     outputs:

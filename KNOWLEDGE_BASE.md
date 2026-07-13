@@ -1,6 +1,6 @@
 # TR4D3RZ Knowledge Base — Unified Index
 
-**Maintainer**: Librarian Agent (Claude Code / Antigravity)  
+**Maintainer**: Librarian Agent (Claude Code)  
 **Purpose**: Single entry point to all ecosystem knowledge  
 **Last Updated**: 2026-07-11  
 **Status**: ACTIVE
@@ -321,6 +321,6 @@ The Knowledge Base is a **primary product** of the TR4D3RZ AI-Native Collaborati
 ---
 
 **Maintained by**: Librarian Agent  
-**Contact**: Claude Code / Antigravity  
+**Contact**: Claude Code  
 **Improvement Suggestions**: Report to Meta-Optimizer Agent or create issue in `.ecosystem/`
 

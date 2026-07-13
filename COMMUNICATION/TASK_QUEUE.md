@@ -18,14 +18,14 @@
 | M1-T3 | `tr4d3rz-persistence` | Claude Code | 🔲 READY | M1-T0, M1-T1, M1-T2 | Event logger SQLite, schema append-only, subscriber MQTT. |
 | M1-T4 | `tr4d3rz-evolution` | Claude Code | 🔲 READY | M1-T1, M1-T2 | CLI Linux che pubblica capsule MVP e ascolta fitness result. |
 | M1-T5 | `tr4d3rz-embedded` | GitHub Copilot | 🔲 READY | M1-T1, M1-T2, **M1-T2-B** | Simulatore o firmware ESP8266 per capsule in/fitness out. |
-| M1-T6 | `tr4d3rz-observatory` | Antigravity | ⏸️ BLOCKED | M1-T2, M1-T3 | UI browser con timeline eventi, stato nodi e fitness. |
-| M1-T7 | Cross-repo | Antigravity | ⏸️ BLOCKED | M1-T1..M1-T6 | `ARCHITECTURAL_AUDIT.md` e `PROJECT_STATE.md` aggiornato. |
+| M1-T6 | `tr4d3rz-observatory` | Claude Code | ⏸️ BLOCKED | M1-T2, M1-T3 | UI browser con timeline eventi, stato nodi e fitness. |
+| M1-T7 | Cross-repo | Claude Code | ⏸️ BLOCKED | M1-T1..M1-T6 | `ARCHITECTURAL_AUDIT.md` e `PROJECT_STATE.md` aggiornato. |
 
 ### 1.1 Iniziativa documentale parallela
 
 | ID | Repo | Agent | Stato | Dipendenze | Output richiesto |
 |---|---|---|---|---|---|
-| FEATURE-DOCS-PROJECT-MAP | `tr4d3rz-docs` | Claude Code + Antigravity; validazione GitHub Copilot; coordinamento Manus | 🔲 PENDING | `PMAP-00` completato; esecuzione interna secondo `tasks.yaml` | Nuova homepage Project Map, quattro mappe interattive, pagine di dettaglio, pipeline SSOT, migrazione legacy, QA e demo. |
+| FEATURE-DOCS-PROJECT-MAP | `tr4d3rz-docs` | Claude Code; validazione GitHub Copilot; coordinamento Manus | 🔲 PENDING | `PMAP-00` completato; esecuzione interna secondo `tasks.yaml` | Nuova homepage Project Map, quattro mappe interattive, pagine di dettaglio, pipeline SSOT, migrazione legacy, QA e demo. |
 
 **Task master**: `COMMUNICATION/TASKS/FEATURE-DOCS-PROJECT-MAP.md`  
 **Backlog**: `artifacts/features/FEATURE-DOCS-PROJECT-MAP/tasks.yaml`  
@@ -40,16 +40,16 @@ Ogni agent deve leggere `SPEC_MASTER.md`, `protocols/MVP_INTERFACE_CONTRACTS.md`
 | Evento | File da aggiornare | Responsabile |
 |---|---|---|
 | Avvio task | `COMMUNICATION/TASKS/current_task.md` nel repo target | Agent assegnato. |
-| Fine implementazione | `COMMUNICATION/IMPLEMENTATION_LOG.md` | Claude/Antigravity/Copilot secondo ruolo. |
+| Fine implementazione | `COMMUNICATION/IMPLEMENTATION_LOG.md` | Claude Code/Copilot secondo ruolo. |
 | Validazione | `COMMUNICATION/VALIDATION_REPORT.md` | GitHub Copilot o agent validator. |
-| Audit | `COMMUNICATION/ARCHITECTURAL_AUDIT.md` | Antigravity. |
-| Chiusura | `COMMUNICATION/PROJECT_STATE.md` e `docs/project-tasks.md` | Manus o Antigravity dopo audit. |
+| Audit | `COMMUNICATION/ARCHITECTURAL_AUDIT.md` | Claude Code. |
+| Chiusura | `COMMUNICATION/PROJECT_STATE.md` e `state/project_state.md` | Manus o Claude Code dopo audit. |
 
 ---
 
 ## 3. Stato attuale e prossimi passi
 
-**Ultimo aggiornamento**: 2026-07-12
+**Ultimo aggiornamento**: 2026-07-13
 
 ### Task Completati
 

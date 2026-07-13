@@ -27,8 +27,8 @@ edit the YAML file and run `python scripts/generate_roadmap_md.py`.
 | T3 | Event Persistence | Claude Code | READY 🔲 | Event logger SQLite implementation, MQTT subscriber, ... |
 | T4 | Evolution CLI | Claude Code | READY 🔲 | Linux CLI tool, Capsule publisher, ... |
 | T5 | Embedded Firmware | GitHub Copilot | READY 🔲 | ESP8266/STM32 firmware or simulator, MQTT integration |
-| T6 | Observatory UI | Antigravity | BLOCKED ⏸️ | Observatory minimal UI, Event timeline component, ... |
-| T7 | Cross-Repository Audit | Antigravity | BLOCKED ⏸️ | ARCHITECTURAL_AUDIT.md, Updated PROJECT_STATE.md |
+| T6 | Observatory UI | Claude Code | BLOCKED ⏸️ | Observatory minimal UI, Event timeline component, ... |
+| T7 | Cross-Repository Audit | Claude Code | BLOCKED ⏸️ | ARCHITECTURAL_AUDIT.md, Updated PROJECT_STATE.md |
 
 ---
 
@@ -72,9 +72,9 @@ edit the YAML file and run `python scripts/generate_roadmap_md.py`.
 
 | ID | Feature | Owner | Status | Outcome |
 |---|---|---|---|---|
-| T1 | Galaxy Visualization | Antigravity | PLANNED 📋 | Galaxy viewer |
-| T2 | Topology Analysis | Antigravity | PLANNED 📋 | Topology analyzer |
-| T3 | Real-time Monitoring | Antigravity | PLANNED 📋 | Monitoring dashboard |
+| T1 | Galaxy Visualization | Claude Code | PLANNED 📋 | Galaxy viewer |
+| T2 | Topology Analysis | Claude Code | PLANNED 📋 | Topology analyzer |
+| T3 | Real-time Monitoring | Claude Code | PLANNED 📋 | Monitoring dashboard |
 
 ---
 
@@ -95,5 +95,5 @@ edit the YAML file and run `python scripts/generate_roadmap_md.py`.
 
 ---
 
-*Auto-generated from `state/roadmap.yaml` on 2026-07-12 15:45:49 UTC*  
+*Auto-generated from `state/roadmap.yaml` on 2026-07-13 07:53:02 UTC*  
 *Edit the YAML source, not this file*

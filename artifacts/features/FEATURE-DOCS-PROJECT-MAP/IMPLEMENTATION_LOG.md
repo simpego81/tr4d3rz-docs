@@ -182,16 +182,16 @@
 
 ### Next Steps
 
-**PMAP-M2** (Progressive UI) — Assigned to Antigravity:
-- PMAP-07: Design system and UI shell
-- PMAP-08: Generated detail pages
-- PMAP-09: Mobile-first homepage
+**PMAP-M2** (Progressive UI) — Claude Code:
+- PMAP-07: ✅ COMPLETED 2026-07-13
+- PMAP-08: ✅ COMPLETED 2026-07-13
+- PMAP-09: ✅ COMPLETED 2026-07-13
 
-**PMAP-M3** (Four Interactive Maps) — Assigned to Antigravity:
-- PMAP-10: Conceptual ecosystem map (D3)
-- PMAP-11: Physical ecosystem map (D3)
-- PMAP-12: Agent collaboration map (D3)
-- PMAP-13: Roadmap timeline + DAG (D3)
+**PMAP-M3** (Four Interactive Maps) — Claude Code:
+- PMAP-10: PENDING
+- PMAP-11: PENDING
+- PMAP-12: PENDING
+- PMAP-13: PENDING
 
 ---
 
@@ -201,7 +201,33 @@ Milestones **PMAP-M0** (Protocol and SSOT foundation) and **PMAP-M1** (Determini
 
 The data pipeline successfully transforms 6 SSOT sources into validated, health-enriched JSON datasets with full provenance in **0.25 seconds**. All acceptance criteria satisfied. System is debuggable within <2 minutes.
 
-**Status**: Ready for PMAP-M2 frontend implementation.
+**Aggiornamento 2026-07-13**: Antigravity ha lasciato il team. Claude Code ha assunto PMAP-M2 e PMAP-M3.
+
+**PMAP-07 COMPLETED** — UI shell condivisa:
+- `docs/shared/graph-interactions.js` — D3 zoom/pan, tooltip accessibile (ARIA live), focus/highlight, keyboard navigation (frecce), deep-link (hash URL), search/filter
+- `docs/shared/components.js` — legend, filter panel, textual fallback table, viewport warning, freshness strip, status/health badge helpers
+- `docs/shared/base.css` — stili per graph container, tooltip, legend, filter panel, textual fallback, viewport warning, freshness strip, map layout, viewport policy mobile/desktop
+- Tutti i criteri PMAP-07 soddisfatti: nessun framework, keyboard focus, reduced motion, touch targets, shared modules
+
+**PMAP-09 COMPLETED** — Homepage mobile-first:
+- `docs/index-new.html` riscritta completamente
+- Metrics bar con contatori live (milestones, M1 attiva, task completati, bloccati, agenti)
+- 4 card con dati live: roadmap (progress M1 dal JSON), conceptual (statico), physical (statico), agents (da ecosystem-snapshot.json)
+- Freshness strip da `Components.renderFreshnessStrip(manifest)`
+- Fallback statico `<noscript>` con tutti i link navigabili
+- Mobile-first a 360px: `clamp()` per font-size hero, griglia 1→2→4 colonne, nessun overflow
+- Dati live caricati solo da `roadmap.json` + `build-manifest.json` (nessun grafo pesante)
+- Dataset failure: contenuto statico con valori di default rimane visibile
+
+**PMAP-08 COMPLETED** — Detail pages renderer e generator:
+- `docs/shared/detail-renderer.js` — renderer universale per milestone e task: header con badges, meta strip (updated_at, freshness, date, critical path), summary, sezioni owners/dependencies/blockers/tasks/acceptance_criteria/outputs/evidence/source_refs, breadcrumb, back link
+- `docs/shared/base.css` — stili detail: `.detail-header`, `.meta-grid`, `.detail-section`, `.detail-list`, `.blocker-severity`, `.evidence-*`, `.source-refs`, `.freshness-tag`
+- `scripts/generate_detail_pages.py` — generator Python: legge roadmap.json, genera 27 HTML in `docs/details/roadmap/`, ogni pagina con entity JSON embedded + cross-links index per risoluzione link
+- `docs/details/roadmap/` — 27 pagine generate (5 milestone + 22 task), tutte con `<noscript>` fallback tabellare
+
+Criteri PMAP-08 soddisfatti: status, health, owners, dependencies, blockers, updated_at, evidence, source_refs esposti; breadcrumb e back link; missing values espliciti come "—".
+
+**Status**: PMAP-M2 completato (07, 08, 09) — prossimo: PMAP-10..13 (le 4 mappe interattive).
 
 ---
 
