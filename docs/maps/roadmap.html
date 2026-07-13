@@ -7,139 +7,107 @@
   <link rel="stylesheet" href="../shared/design-tokens.css">
   <link rel="stylesheet" href="../shared/base.css">
   <style>
-    .milestone-section {
-      margin-bottom: var(--space-2xl);
-    }
-
-    .milestone-header {
+    /* ---- Two-panel layout ------------------------------------------ */
+    .roadmap-layout {
       display: flex;
-      justify-content: space-between;
+      gap: var(--space-lg);
       align-items: flex-start;
-      flex-wrap: wrap;
-      gap: var(--space-md);
-      padding: var(--space-lg);
-      background: linear-gradient(135deg, var(--color-background-alt) 0%, var(--color-surface) 100%);
-      border-left: 4px solid var(--color-primary);
-      border-radius: var(--radius-lg);
-      margin-bottom: var(--space-lg);
+    }
+    @media (max-width: 899px) {
+      .roadmap-layout { flex-direction: column; }
     }
 
-    .milestone-info h2 {
-      margin: 0 0 var(--space-sm) 0;
-    }
-
-    .milestone-meta {
-      display: flex;
-      gap: var(--space-sm);
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .task-list {
-      list-style: none;
-      padding: 0;
-      display: grid;
-      gap: var(--space-md);
-    }
-
-    .task-item {
-      display: flex;
-      align-items: flex-start;
-      gap: var(--space-md);
-      padding: var(--space-md);
-      background-color: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      transition: border-color var(--transition-base);
-    }
-
-    .task-item:hover {
-      border-color: var(--color-primary);
-    }
-
-    .task-status-indicator {
+    /* ---- LEFT: Milestone panel ------------------------------------- */
+    .milestone-panel {
+      width: 264px;
       flex-shrink: 0;
-      width: 24px;
-      height: 24px;
-      border-radius: var(--radius-full);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    }
+    @media (max-width: 899px) {
+      .milestone-panel { width: 100%; }
+    }
+
+    .milestone-panel-heading {
       font-size: var(--font-size-xs);
-      margin-top: 2px;
-    }
-
-    .task-status-indicator.completed {
-      background-color: var(--color-status-completed);
-      color: white;
-    }
-
-    .task-status-indicator.in-progress {
-      background-color: var(--color-status-in-progress);
-      color: white;
-    }
-
-    .task-status-indicator.ready {
-      background-color: var(--color-status-ready);
-      color: white;
-    }
-
-    .task-status-indicator.blocked {
-      background-color: var(--color-status-blocked);
-      color: white;
-    }
-
-    .task-status-indicator.planned {
-      background-color: var(--color-status-planned);
-      color: white;
-    }
-
-    .task-content {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .task-title {
       font-weight: var(--font-weight-semibold);
-      margin-bottom: var(--space-xs);
-    }
-
-    .task-summary {
-      font-size: var(--font-size-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
       color: var(--color-text-muted);
       margin-bottom: var(--space-sm);
     }
 
-    .task-badges {
-      display: flex;
-      gap: var(--space-sm);
-      flex-wrap: wrap;
+    .milestone-card {
+      padding: var(--space-sm) var(--space-md);
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-left: 4px solid transparent;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: border-color 150ms, background-color 150ms, box-shadow 150ms;
+      margin-bottom: var(--space-sm);
+      user-select: none;
     }
-
-    .critical-path-badge {
-      background-color: #dc2626;
-      color: white;
-      padding: 0.125rem 0.375rem;
-      border-radius: var(--radius-sm);
-      font-size: var(--font-size-xs);
+    .milestone-card:hover {
+      border-left-color: var(--color-secondary);
+      box-shadow: var(--shadow-sm);
+    }
+    .milestone-card.active {
+      border-left-color: var(--color-primary);
+      background-color: #eff6ff;
+    }
+    .milestone-card-name {
+      font-size: var(--font-size-sm);
       font-weight: var(--font-weight-semibold);
+      color: var(--color-text);
+      margin-bottom: var(--space-xs);
     }
-
-    .dependency-count {
+    .milestone-card-badges {
+      display: flex;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-xs);
+    }
+    .milestone-card-count {
       font-size: var(--font-size-xs);
       color: var(--color-text-muted);
     }
 
-    @media (max-width: 640px) {
-      .milestone-header {
-        flex-direction: column;
-      }
-
-      .task-item {
-        flex-direction: column;
-        gap: var(--space-sm);
-      }
+    /* ---- RIGHT: DAG panel ------------------------------------------ */
+    .dag-panel {
+      flex: 1;
+      min-width: 0;
     }
+
+    /* SVG text labels */
+    .node-label {
+      font-family: var(--font-family-sans);
+      font-size: 9px;
+      fill: #334155;
+      text-anchor: middle;
+      pointer-events: none;
+      dominant-baseline: auto;
+    }
+    .node-label-milestone {
+      font-size: 10px;
+      font-weight: 600;
+      fill: #0f172a;
+    }
+
+    /* Section heading above fallback table */
+    .section-heading {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-muted);
+      border-top: 1px solid var(--color-border);
+      padding-top: var(--space-xl);
+      margin-top: var(--space-xl);
+      margin-bottom: var(--space-md);
+    }
+
+    /* Clear focus button — hidden until a node is focused */
+    #clear-focus-btn { display: none; }
+    #clear-focus-btn.visible { display: inline-flex; }
   </style>
 </head>
 <body>
@@ -147,156 +115,716 @@
 
   <header class="header">
     <div class="container header-content">
-      <h1 class="header-title"><a href="../index-new.html" style="color: inherit;">TR4D3RZ</a></h1>
-      <nav class="header-nav" role="navigation">
-        <a href="../index-new.html">← Project Map</a>
+      <h1 class="header-title">
+        <a href="../index.html" style="color:inherit;">TR4D3RZ</a>
+      </h1>
+      <nav class="header-nav" role="navigation" aria-label="Map navigation">
+        <a href="../index.html">&#8592; Project Map</a>
+        <a href="roadmap.html" aria-current="page">Roadmap</a>
         <a href="conceptual.html">Conceptual</a>
         <a href="physical.html">Physical</a>
         <a href="agents.html">Agents</a>
+        <a href="../device-matrix.html">Device Matrix</a>
       </nav>
     </div>
   </header>
 
   <main class="main" id="main-content">
     <div class="container">
+
       <div class="breadcrumb">
-        <a href="../index-new.html">Project Map</a>
+        <a href="../index.html">Project Map</a>
         <span class="breadcrumb-separator">/</span>
-        <span>Roadmap</span>
+        <span aria-current="page">Roadmap</span>
       </div>
 
       <h1>Roadmap Timeline</h1>
-      <p class="text-muted mb-xl">
-        Project milestones, tasks, dependencies, and critical path analysis.
+      <p class="text-muted mb-md">
+        Project milestones M1&#8211;M5 and tasks with dependency graph and critical path analysis.
       </p>
 
-      <div id="roadmap-content">
-        <div class="loading" role="status">
-          <span>Loading roadmap data...</span>
-        </div>
+      <!-- Freshness strip -->
+      <div id="freshness-container" class="mb-md"></div>
+
+      <!-- Filter panel -->
+      <div id="filter-container" class="mb-md"></div>
+
+      <!-- Loading -->
+      <div id="loading-state">
+        <div class="loading" role="status"><span>Loading roadmap data&#8230;</span></div>
       </div>
-    </div>
+
+      <!-- Error (hidden) -->
+      <div id="error-state" style="display:none;"></div>
+
+      <!-- Main content (hidden until loaded) -->
+      <div id="roadmap-content" style="display:none;">
+
+        <div class="roadmap-layout mb-xl">
+
+          <!-- LEFT PANEL: Milestone Timeline -->
+          <aside class="milestone-panel" aria-label="Milestone timeline">
+            <p class="milestone-panel-heading">Milestones</p>
+            <div id="milestone-cards"></div>
+          </aside>
+
+          <!-- RIGHT PANEL: Dependency DAG -->
+          <div class="dag-panel">
+
+            <div class="graph-toolbar">
+              <span class="text-sm text-muted" aria-hidden="true">Dependency Graph</span>
+              <button id="reset-zoom-btn" class="graph-toolbar-btn" type="button" title="Reset zoom to fit">
+                &#8635; Reset view
+              </button>
+              <button id="clear-focus-btn" class="graph-toolbar-btn" type="button" title="Clear node focus">
+                &#10005; Clear focus
+              </button>
+            </div>
+
+            <div class="graph-wrapper" id="dag-wrapper">
+              <div class="desktop-only-notice" role="note" aria-label="Desktop recommended">
+                &#128241; The interactive graph is optimised for larger screens. Browse the table below for full data.
+              </div>
+              <svg
+                id="dag-svg"
+                class="graph-svg desktop-only-graph"
+                tabindex="0"
+                role="img"
+                aria-label="Dependency DAG showing TR4D3RZ milestones M1 through M5 and their tasks with dependency edges"
+              >
+                <defs>
+                  <marker id="dag-arrow" viewBox="0 -5 10 10" refX="8" refY="0"
+                          markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M0,-4L9,0L0,4Z" fill="#94a3b8"/>
+                  </marker>
+                </defs>
+                <g id="dag-group"></g>
+              </svg>
+            </div>
+
+            <div id="legend-container" class="mt-md"></div>
+
+          </div><!-- /.dag-panel -->
+        </div><!-- /.roadmap-layout -->
+
+        <!-- Textual fallback -->
+        <section aria-labelledby="fallback-heading">
+          <h2 id="fallback-heading" class="section-heading">All Milestones &amp; Tasks</h2>
+          <div id="fallback-table-container"></div>
+        </section>
+
+      </div><!-- /#roadmap-content -->
+    </div><!-- /.container -->
   </main>
+
+  <noscript>
+    <div style="padding:2rem;text-align:center;color:#64748b;">
+      <p>This page shows an interactive roadmap timeline with milestones M1&#8211;M5 and their tasks,
+         a D3 dependency graph, and a full data table. JavaScript is required for the interactive experience.</p>
+    </div>
+  </noscript>
 
   <footer class="footer">
     <div class="container">
-      <p>
-        TR4D3RZ Documentation &mdash;
-        <span id="build-timestamp">Loading...</span>
-      </p>
+      <p>TR4D3RZ Documentation</p>
     </div>
   </footer>
 
   <script src="../shared/data-loader.js"></script>
+  <script src="../shared/components.js"></script>
+  <script src="../shared/graph-interactions.js"></script>
+  <script src="https://unpkg.com/d3@7/dist/d3.min.js"></script>
   <script>
-    (async function() {
-      try {
-        const roadmap = await DataLoader.loadRoadmap();
-        const manifest = await DataLoader.loadManifest();
+  /* ====================================================================
+     PMAP-13 — Roadmap Timeline + Dependency DAG
+     ==================================================================== */
+  (async function () {
+    'use strict';
 
-        renderRoadmap(roadmap);
+    /* ------------------------------------------------------------------ */
+    /* Constants                                                           */
+    /* ------------------------------------------------------------------ */
+    const STATUS_COLOR = {
+      COMPLETED:   '#10b981',
+      IN_PROGRESS: '#f59e0b',
+      READY:       '#3b82f6',
+      PLANNED:     '#94a3b8',
+      BLOCKED:     '#ef4444',
+      UNKNOWN:     '#9ca3af',
+    };
 
-        document.getElementById('build-timestamp').textContent =
-          `Generated ${DataLoader.formatTimestamp(manifest.generated_at)}`;
+    /* ------------------------------------------------------------------ */
+    /* Helpers                                                             */
+    /* ------------------------------------------------------------------ */
+    function esc(s) { return DataLoader.escapeHtml(String(s ?? '')); }
 
-      } catch (error) {
-        console.error('[Roadmap] Failed to load data:', error);
-        DataLoader.renderError(document.getElementById('roadmap-content'), error);
+    function nodeColor(status) {
+      return STATUS_COLOR[(status || 'UNKNOWN').toUpperCase()] || STATUS_COLOR.UNKNOWN;
+    }
+
+    /**
+     * Derive a short display label from a node id.
+     * milestone: "m1-foundational-backbone"  -> "M1"
+     * task:      "m1-t0-specs-contracts"     -> "M1-T0"
+     * task:      "m1-t2-b-remote-validation" -> "M1-T2-B"
+     */
+    function shortLabel(id, kind) {
+      if (kind === 'milestone') {
+        const m = id.match(/^m(\d+)/i);
+        return m ? 'M' + m[1] : id.slice(0, 3).toUpperCase();
       }
-    })();
+      // Match m-part, t-part, and optional single-letter sub-id
+      const t = id.match(/^(m\d+)-(t\d+)(?:-([a-z])(?=-|$))?/i);
+      if (t) {
+        const base = t[1].toUpperCase() + '-' + t[2].toUpperCase();
+        return t[3] ? base + '-' + t[3].toUpperCase() : base;
+      }
+      return id.slice(0, 6).toUpperCase();
+    }
 
-    function renderRoadmap(roadmap) {
-      const milestones = roadmap.milestones || [];
-      const tasks = roadmap.tasks || [];
+    function firstOwner(owners) {
+      if (!Array.isArray(owners) || owners.length === 0) return '—';
+      return owners[0].agent || owners[0].role || '—';
+    }
 
-      // Build task lookup
-      const tasksById = {};
-      tasks.forEach(task => {
-        tasksById[task.id] = task;
+    function linkSourceId(d) {
+      return typeof d.source === 'object' ? d.source.id : d.source;
+    }
+    function linkTargetId(d) {
+      return typeof d.target === 'object' ? d.target.id : d.target;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* DOM refs & mobile warning                                           */
+    /* ------------------------------------------------------------------ */
+    const loadingEl  = document.getElementById('loading-state');
+    const contentEl  = document.getElementById('roadmap-content');
+    const errorEl    = document.getElementById('error-state');
+    const mainEl     = document.querySelector('main');
+
+    Components.renderViewportWarning(mainEl);
+
+    /* ------------------------------------------------------------------ */
+    /* Load data                                                           */
+    /* ------------------------------------------------------------------ */
+    let roadmapData, manifestData;
+    try {
+      [roadmapData, manifestData] = await Promise.all([
+        DataLoader.loadRoadmap(),
+        DataLoader.loadManifest(),
+      ]);
+    } catch (err) {
+      loadingEl.style.display = 'none';
+      errorEl.style.display   = 'block';
+      DataLoader.renderError(errorEl, err);
+      return;
+    }
+
+    loadingEl.style.display = 'none';
+    contentEl.style.display = 'block';
+
+    /* ------------------------------------------------------------------ */
+    /* Freshness strip                                                     */
+    /* ------------------------------------------------------------------ */
+    Components.renderFreshnessStrip(
+      document.getElementById('freshness-container'),
+      manifestData
+    );
+
+    const milestones = roadmapData.milestones || [];
+    const tasks      = roadmapData.tasks      || [];
+
+    /* ------------------------------------------------------------------ */
+    /* Build lookup tables                                                 */
+    /* ------------------------------------------------------------------ */
+    const nodeById = new Map();
+    milestones.forEach(m => nodeById.set(m.id, m));
+    tasks.forEach(t      => nodeById.set(t.id, t));
+
+    // milestone id -> task objects array
+    const tasksByMilestone = new Map();
+    tasks.forEach(t => {
+      const mid = t.raw_data?.milestone_id;
+      if (!mid) return;
+      if (!tasksByMilestone.has(mid)) tasksByMilestone.set(mid, []);
+      tasksByMilestone.get(mid).push(t);
+    });
+
+    // milestone id -> Set of task ids (for highlight)
+    const milestoneTaskSet = new Map();
+    milestones.forEach(m => {
+      milestoneTaskSet.set(m.id, new Set(m.raw_data?.tasks || []));
+    });
+
+    /* ------------------------------------------------------------------ */
+    /* Shared mutable state (set after D3 init)                           */
+    /* ------------------------------------------------------------------ */
+    let gNodes = null, gLinks = null, focusMgr = null;
+    let pinnedNode = null, activeMilestoneId = null;
+    const clearFocusBtn = document.getElementById('clear-focus-btn');
+
+    function resetAllState() {
+      pinnedNode = null;
+      activeMilestoneId = null;
+      clearFocusBtn.classList.remove('visible');
+      if (focusMgr) focusMgr.clear();
+      document.querySelectorAll('.milestone-card').forEach(c => {
+        c.classList.remove('active');
+        c.setAttribute('aria-pressed', 'false');
+      });
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* LEFT PANEL — Milestone Cards                                        */
+    /* ------------------------------------------------------------------ */
+    const cardsContainer = document.getElementById('milestone-cards');
+
+    milestones.forEach(m => {
+      const raw    = m.raw_data || {};
+      const mTasks = tasksByMilestone.get(m.id) || [];
+      const total  = mTasks.length;
+      const done   = mTasks.filter(
+        t => (t.raw_data?.status || '').toUpperCase() === 'COMPLETED'
+      ).length;
+
+      const card = document.createElement('div');
+      card.className = 'milestone-card';
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-pressed', 'false');
+      card.setAttribute('aria-label', `${m.name} — click to highlight in graph`);
+      card.dataset.milestoneId = m.id;
+      card.innerHTML = `
+        <div class="milestone-card-name">${esc(m.name)}</div>
+        <div class="milestone-card-badges">
+          ${Components.renderStatusBadge(raw.status)}
+          ${Components.renderHealthBadge(raw.health)}
+        </div>
+        <div class="milestone-card-count">${done}/${total} tasks done</div>
+      `;
+
+      card.addEventListener('click', () => onMilestoneCardClick(m.id, card));
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onMilestoneCardClick(m.id, card);
+        }
+      });
+      cardsContainer.appendChild(card);
+    });
+
+    function onMilestoneCardClick(mid, card) {
+      const wasActive = activeMilestoneId === mid;
+      resetAllState();
+      if (wasActive) {
+        // toggle off — resetAllState already cleared everything
+        return;
+      }
+      activeMilestoneId = mid;
+      card.classList.add('active');
+      card.setAttribute('aria-pressed', 'true');
+      highlightMilestoneNodes(mid);
+    }
+
+    function highlightMilestoneNodes(mid) {
+      if (!gNodes || !gLinks) return;
+      const tSet = milestoneTaskSet.get(mid) || new Set();
+      gNodes
+        .classed('dim',         d => d.id !== mid && !tSet.has(d.id))
+        .classed('highlighted', d => d.id === mid);
+      gLinks.classed('dim', d => {
+        const s = linkSourceId(d), t = linkTargetId(d);
+        return s !== mid && !tSet.has(s) && t !== mid && !tSet.has(t);
+      });
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* FILTER PANEL                                                        */
+    /* ------------------------------------------------------------------ */
+    const filterCtrl = Components.renderFilterPanel(
+      document.getElementById('filter-container'),
+      {
+        searchPlaceholder: 'Search milestones and tasks…',
+        categories: [
+          { value: 'COMPLETED',   label: 'Completed'  },
+          { value: 'IN_PROGRESS', label: 'In Progress' },
+          { value: 'READY',       label: 'Ready'       },
+          { value: 'PLANNED',     label: 'Planned'     },
+          { value: 'BLOCKED',     label: 'Blocked'     },
+        ],
+        onChange: ({ term, category }) => runFilter(term, category),
+      }
+    );
+
+    /* ------------------------------------------------------------------ */
+    /* D3 FORCE DAG                                                        */
+    /* ------------------------------------------------------------------ */
+    const svgEl     = document.getElementById('dag-svg');
+    const wrapperEl = document.getElementById('dag-wrapper');
+    const groupEl   = document.getElementById('dag-group');
+
+    const W = wrapperEl.offsetWidth || 800;
+    const H = 520;
+    svgEl.setAttribute('width',   '100%');
+    svgEl.setAttribute('height',  H);
+    svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+    const svg   = d3.select(svgEl);
+    const group = d3.select(groupEl);
+
+    /* -- Build nodes -------------------------------------------------- */
+    const MILESTONE_Y = 60;
+    const TASK_Y_BASE = 230;
+    const mCount = milestones.length || 1;
+    const graphNodes = [];
+
+    milestones.forEach((m, i) => {
+      graphNodes.push({
+        id:          m.id,
+        kind:        'milestone',
+        name:        m.name,
+        label:       shortLabel(m.id, 'milestone'),
+        status:      m.raw_data?.status     || 'UNKNOWN',
+        health:      m.raw_data?.health     || 'UNKNOWN',
+        owners:      m.raw_data?.owners     || [],
+        detailUrl:   m.raw_data?.detail_url || '',
+        startDate:   m.raw_data?.start_date || null,
+        endDate:     m.raw_data?.end_date   || null,
+        milestoneId: m.id,
+        mIdx:        i,
+        r:           20,
+        x:           ((i + 0.5) / mCount) * W,
+        y:           MILESTONE_Y,
+      });
+    });
+
+    tasks.forEach(t => {
+      const raw  = t.raw_data || {};
+      const mid  = raw.milestone_id || '';
+      const mIdx = milestones.findIndex(m => m.id === mid);
+      const mi   = mIdx >= 0 ? mIdx : 0;
+      graphNodes.push({
+        id:          t.id,
+        kind:        'task',
+        name:        t.name,
+        label:       shortLabel(t.id, 'task'),
+        status:      raw.status     || 'UNKNOWN',
+        health:      raw.health     || 'UNKNOWN',
+        owners:      raw.owners     || [],
+        detailUrl:   raw.detail_url || '',
+        startDate:   null,
+        endDate:     null,
+        milestoneId: mid,
+        mIdx:        mi,
+        r:           10,
+        x:           ((mi + 0.5) / mCount) * W + (Math.random() - 0.5) * 90,
+        y:           TASK_Y_BASE + mi * 20 + Math.random() * 110,
+      });
+    });
+
+    const nodeIdSet = new Set(graphNodes.map(n => n.id));
+
+    /* -- Build links -------------------------------------------------- */
+    const graphLinks = [];
+    graphNodes.forEach(n => {
+      const entity = nodeById.get(n.id);
+      if (!entity) return;
+      (entity.raw_data?.dependencies || []).forEach(depId => {
+        if (nodeIdSet.has(depId)) {
+          graphLinks.push({ source: depId, target: n.id });
+        }
+      });
+    });
+
+    /* -- Draw links --------------------------------------------------- */
+    const linkLayer = group.append('g').attr('class', 'link-layer');
+    gLinks = linkLayer.selectAll('line.graph-link')
+      .data(graphLinks)
+      .join('line')
+        .attr('class', 'graph-link')
+        .attr('stroke', '#cbd5e1')
+        .attr('stroke-width', 1.5)
+        .attr('marker-end', 'url(#dag-arrow)');
+
+    /* -- Draw nodes --------------------------------------------------- */
+    const nodeLayer = group.append('g').attr('class', 'node-layer');
+    gNodes = nodeLayer.selectAll('g.graph-node')
+      .data(graphNodes)
+      .join('g')
+        .attr('class', 'graph-node')
+        .attr('tabindex', '0')
+        .attr('role', 'button')
+        .attr('data-node-id', d => d.id)
+        .attr('aria-label', d => `${d.name}, status: ${d.status}`);
+
+    gNodes.append('circle')
+      .attr('r',            d => d.r)
+      .attr('fill',         d => nodeColor(d.status))
+      .attr('stroke',       '#ffffff')
+      .attr('stroke-width', d => d.kind === 'milestone' ? 3 : 2);
+
+    gNodes.append('text')
+      .attr('class', d => 'node-label' + (d.kind === 'milestone' ? ' node-label-milestone' : ''))
+      .attr('y',     d => d.r + 12)
+      .text(d => d.label);
+
+    /* -- Tooltip ------------------------------------------------------ */
+    const tooltip = GraphInteractions.createTooltip(document.body);
+
+    function tooltipHtml(d) {
+      const owner = firstOwner(d.owners);
+      const href  = d.detailUrl ? `../${esc(d.detailUrl)}` : null;
+      const schedule = (d.startDate || d.endDate)
+        ? `${d.startDate || '?'}${d.endDate ? ' → ' + d.endDate : ''}`
+        : 'Not scheduled';
+      return `
+        <strong>${esc(d.name)}</strong>
+        <div class="tooltip-meta">
+          ${Components.renderStatusBadge(d.status)}
+          ${Components.renderHealthBadge(d.health)}
+        </div>
+        <div style="margin-top:4px;font-size:0.75rem;opacity:0.85;">
+          Owner: ${esc(owner)}<br>
+          Schedule: ${esc(schedule)}
+        </div>
+        ${href ? `<div style="margin-top:6px;"><a href="${href}" style="color:#93c5fd;font-size:0.75rem;">detail &#8594;</a></div>` : ''}
+      `;
+    }
+
+    /* -- Focus manager ------------------------------------------------ */
+    focusMgr = GraphInteractions.createFocusManager({
+      nodeSelection: gNodes,
+      linkSelection: gLinks,
+      getNodeId:   d => d.id,
+      getSourceId: linkSourceId,
+      getTargetId: linkTargetId,
+    });
+
+    /* -- Deep link ---------------------------------------------------- */
+    const deepLink = GraphInteractions.bindDeepLink({
+      getSelectedId: () => pinnedNode?.id ?? null,
+      selectById: id => {
+        const d = graphNodes.find(n => n.id === id);
+        if (!d) return;
+        pinnedNode = d;
+        focusMgr.focus(d);
+        clearFocusBtn.classList.add('visible');
+      },
+      clearSelection: () => {
+        resetAllState();
+      },
+    });
+
+    /* -- Clear focus button ------------------------------------------ */
+    clearFocusBtn.addEventListener('click', () => {
+      resetAllState();
+      tooltip.hide();
+      deepLink.update();
+    });
+
+    /* -- Node events -------------------------------------------------- */
+    gNodes
+      .on('mouseover', (event, d) => {
+        if (!pinnedNode) tooltip.show(tooltipHtml(d), event.clientX, event.clientY);
+      })
+      .on('mousemove', event => {
+        if (!pinnedNode) tooltip.move(event.clientX, event.clientY);
+      })
+      .on('mouseout', () => {
+        if (!pinnedNode) tooltip.hide();
+      })
+      .on('click', (event, d) => {
+        event.stopPropagation();
+        // clear milestone card highlight
+        document.querySelectorAll('.milestone-card').forEach(c => {
+          c.classList.remove('active');
+          c.setAttribute('aria-pressed', 'false');
+        });
+        activeMilestoneId = null;
+        pinnedNode = d;
+        focusMgr.focus(d);
+        tooltip.show(tooltipHtml(d), event.clientX, event.clientY);
+        clearFocusBtn.classList.add('visible');
+        deepLink.update();
+      })
+      .on('dblclick', (event, d) => {
+        event.stopPropagation();
+        if (d.detailUrl) window.location.href = `../${d.detailUrl}`;
+      })
+      .on('keydown', (event, d) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          pinnedNode = d;
+          focusMgr.focus(d);
+          tooltip.show(tooltipHtml(d), 200, 200);
+          clearFocusBtn.classList.add('visible');
+          deepLink.update();
+        } else if (event.key === ' ') {
+          event.preventDefault();
+          if (d.detailUrl) window.location.href = `../${d.detailUrl}`;
+        }
       });
 
-      const content = document.getElementById('roadmap-content');
-      const milestonesHtml = milestones.map(milestone => renderMilestone(milestone, tasksById)).join('');
+    // Click SVG background = clear
+    svg.on('click', () => {
+      if (pinnedNode || activeMilestoneId) {
+        resetAllState();
+        tooltip.hide();
+        deepLink.update();
+      }
+    });
 
-      content.innerHTML = milestonesHtml || '<p class="text-muted">No milestones found.</p>';
+    /* -- Zoom --------------------------------------------------------- */
+    GraphInteractions.setupZoom(svg, group, {
+      scaleMin:    0.2,
+      scaleMax:    5,
+      resetButton: document.getElementById('reset-zoom-btn'),
+    });
+
+    /* -- Search filter ----------------------------------------------- */
+    const searchFilter = GraphInteractions.applySearchFilter({
+      nodeSelection: gNodes,
+      linkSelection: gLinks,
+      getNodeText:  d => `${d.name} ${d.label} ${d.id}`,
+      getNodeCat:   d => (d.status || 'UNKNOWN').toUpperCase(),
+      getSourceId:  linkSourceId,
+      getTargetId:  linkTargetId,
+      getNodeId:    d => d.id,
+    });
+
+    function runFilter(term, category) {
+      const visible = searchFilter.apply(term, category);
+      filterCtrl.setCount(visible, graphNodes.length);
     }
 
-    function renderMilestone(milestone, tasksById) {
-      const rawData = milestone.raw_data || {};
-      const status = rawData.status || 'UNKNOWN';
-      const health = rawData.health || 'UNKNOWN';
-      const taskIds = rawData.tasks || [];
+    filterCtrl.setCount(graphNodes.length, graphNodes.length);
 
-      // Filter tasks for this milestone
-      const milestoneTasks = taskIds
-        .map(id => tasksById[id])
-        .filter(Boolean);
+    /* -- Drag --------------------------------------------------------- */
+    gNodes.call(
+      d3.drag()
+        .on('start', (event, d) => {
+          if (!event.active) sim.alphaTarget(0.3).restart();
+          d.fx = d.x; d.fy = d.y;
+        })
+        .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y; })
+        .on('end', (event, d) => {
+          if (!event.active) sim.alphaTarget(0);
+          d.fx = null; d.fy = null;
+        })
+    );
 
-      const tasksHtml = milestoneTasks.map(task => renderTask(task)).join('');
+    /* -- Force simulation -------------------------------------------- */
+    const sim = d3.forceSimulation(graphNodes)
+      .force('link', d3.forceLink(graphLinks)
+        .id(d => d.id)
+        .distance(d => {
+          const s = typeof d.source === 'object' ? d.source : graphNodes.find(n => n.id === d.source);
+          const t = typeof d.target === 'object' ? d.target : graphNodes.find(n => n.id === d.target);
+          if (!s || !t) return 80;
+          return (s.kind === 'milestone' || t.kind === 'milestone') ? 150 : 70;
+        })
+        .strength(0.4)
+      )
+      .force('charge', d3.forceManyBody().strength(d => d.kind === 'milestone' ? -450 : -100))
+      .force('x', d3.forceX(d => ((d.mIdx + 0.5) / mCount) * W)
+        .strength(d => d.kind === 'milestone' ? 0.9 : 0.35))
+      .force('y', d3.forceY(d => d.kind === 'milestone' ? MILESTONE_Y : TASK_Y_BASE + d.mIdx * 22)
+        .strength(d => d.kind === 'milestone' ? 1.2 : 0.22))
+      .force('collide', d3.forceCollide(d => d.r + 18))
+      .on('tick', ticked);
 
-      return `
-        <section class="milestone-section">
-          <div class="milestone-header">
-            <div class="milestone-info">
-              <h2>${DataLoader.escapeHtml(milestone.name)}</h2>
-              <p class="text-muted">${DataLoader.escapeHtml(milestone.summary || '')}</p>
-            </div>
-            <div class="milestone-meta">
-              <span class="${DataLoader.getStatusBadgeClass(status)}">${status}</span>
-              <span class="${DataLoader.getHealthBadgeClass(health)}">${health}</span>
-              ${rawData.critical_path ? '<span class="critical-path-badge">CRITICAL PATH</span>' : ''}
-            </div>
-          </div>
+    function ticked() {
+      gLinks
+        .attr('x1', d => d.source.x)
+        .attr('y1', d => d.source.y)
+        .attr('x2', d => {
+          const dx = d.target.x - d.source.x;
+          const dy = d.target.y - d.source.y;
+          const dist = Math.hypot(dx, dy) || 1;
+          return d.target.x - (d.target.r + 7) * dx / dist;
+        })
+        .attr('y2', d => {
+          const dx = d.target.x - d.source.x;
+          const dy = d.target.y - d.source.y;
+          const dist = Math.hypot(dx, dy) || 1;
+          return d.target.y - (d.target.r + 7) * dy / dist;
+        });
 
-          ${milestoneTasks.length > 0 ? `
-            <ul class="task-list">
-              ${tasksHtml}
-            </ul>
-          ` : '<p class="text-muted text-sm">No tasks assigned to this milestone.</p>'}
-        </section>
-      `;
+      gNodes.attr('transform', d => `translate(${d.x ?? 0},${d.y ?? 0})`);
     }
 
-    function renderTask(task) {
-      const rawData = task.raw_data || {};
-      const status = rawData.status || 'UNKNOWN';
-      const health = rawData.health || 'UNKNOWN';
-      const deps = rawData.dependencies || [];
-      const isCritical = rawData.critical_path || false;
+    // Restore deep link after simulation stabilizes
+    sim.on('end', () => deepLink.restore());
 
-      const statusIcon = getStatusIcon(status);
-      const statusClass = status.toLowerCase().replace(/_/g, '-');
+    /* ------------------------------------------------------------------ */
+    /* LEGEND                                                              */
+    /* ------------------------------------------------------------------ */
+    Components.renderLegend(
+      document.getElementById('legend-container'),
+      [
+        { label: 'Completed',   cssClass: 'badge-status-completed',   description: 'Work fully delivered' },
+        { label: 'In Progress', cssClass: 'badge-status-in-progress', description: 'Currently active' },
+        { label: 'Ready',       cssClass: 'badge-status-ready',       description: 'Dependencies met, ready to start' },
+        { label: 'Planned',     cssClass: 'badge-status-planned',     description: 'Planned, not yet started' },
+        { label: 'Blocked',     cssClass: 'badge-status-blocked',     description: 'Blocked by dependency or issue' },
+        { label: 'Unknown',     cssClass: 'badge-status-unknown',     description: 'Status undetermined' },
+      ]
+    );
 
-      return `
-        <li class="task-item">
-          <div class="task-status-indicator ${statusClass}" title="Status: ${status}">
-            ${statusIcon}
-          </div>
-          <div class="task-content">
-            <div class="task-title">${DataLoader.escapeHtml(task.name)}</div>
-            <div class="task-summary">${DataLoader.escapeHtml(task.summary || '')}</div>
-            <div class="task-badges">
-              <span class="${DataLoader.getStatusBadgeClass(status)}">${status}</span>
-              <span class="${DataLoader.getHealthBadgeClass(health)}">${health}</span>
-              ${isCritical ? '<span class="critical-path-badge">CRITICAL</span>' : ''}
-              ${deps.length > 0 ? `<span class="dependency-count">📎 ${deps.length} dep${deps.length > 1 ? 's' : ''}</span>` : ''}
-            </div>
-          </div>
-        </li>
-      `;
-    }
+    /* ------------------------------------------------------------------ */
+    /* TEXTUAL FALLBACK TABLE                                              */
+    /* ------------------------------------------------------------------ */
+    const allEntities = [
+      ...milestones.map(m => ({
+        id:          m.id,
+        name:        m.name,
+        kind:        'Milestone',
+        status:      m.raw_data?.status     || 'UNKNOWN',
+        health:      m.raw_data?.health     || 'UNKNOWN',
+        owner:       firstOwner(m.raw_data?.owners),
+        milestoneId: '—',
+        detailUrl:   m.raw_data?.detail_url || '',
+      })),
+      ...tasks.map(t => ({
+        id:          t.id,
+        name:        t.name,
+        kind:        'Task',
+        status:      t.raw_data?.status     || 'UNKNOWN',
+        health:      t.raw_data?.health     || 'UNKNOWN',
+        owner:       firstOwner(t.raw_data?.owners),
+        milestoneId: t.raw_data?.milestone_id || '—',
+        detailUrl:   t.raw_data?.detail_url   || '',
+      })),
+    ];
 
-    function getStatusIcon(status) {
-      const icons = {
-        'COMPLETED': '✓',
-        'IN_PROGRESS': '⟳',
-        'READY': '○',
-        'BLOCKED': '✕',
-        'PLANNED': '·',
-        'UNKNOWN': '?'
-      };
-      return icons[status] || '?';
-    }
+    Components.renderTextualFallback(
+      document.getElementById('fallback-table-container'),
+      allEntities,
+      [
+        {
+          key: 'name',
+          label: 'Name',
+          render: (v, row) => row.detailUrl
+            ? `<a href="../${esc(row.detailUrl)}">${esc(v)}</a>`
+            : esc(v),
+        },
+        { key: 'kind',        label: 'Kind',      render: v => esc(v) },
+        { key: 'status',      label: 'Status',    render: v => Components.renderStatusBadge(v) },
+        { key: 'health',      label: 'Health',    render: v => Components.renderHealthBadge(v) },
+        { key: 'owner',       label: 'Owner',     render: v => esc(v) },
+        {
+          key: 'milestoneId',
+          label: 'Milestone',
+          render: (v, row) => row.kind === 'Milestone' ? '—' : esc(v),
+        },
+      ],
+      {
+        caption: 'All milestones and tasks in the TR4D3RZ roadmap',
+        getRowLink: row => row.detailUrl ? `../${row.detailUrl}` : null,
+      }
+    );
+
+  }());
   </script>
 </body>
 </html>

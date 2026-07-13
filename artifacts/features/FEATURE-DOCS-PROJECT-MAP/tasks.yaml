@@ -233,7 +233,9 @@ tasks:
     suggested_agent: Claude Code
     note: Reassigned from Antigravity (departed 2026-07-13)
     dependencies: [PMAP-08, PMAP-09]
-    status: PENDING
+    status: COMPLETED
+    completed_at: 2026-07-13
+    completed_by: Claude Code (Implementation Agent)
     outputs:
       - maps/conceptual.html
       - logical-domain graph and textual fallback
@@ -249,7 +251,9 @@ tasks:
     suggested_agent: Claude Code
     note: Reassigned from Antigravity (departed 2026-07-13)
     dependencies: [PMAP-08, PMAP-09]
-    status: PENDING
+    status: COMPLETED
+    completed_at: 2026-07-13
+    completed_by: Claude Code (Implementation Agent)
     outputs:
       - maps/physical.html
       - physical topology graph and textual fallback
@@ -266,7 +270,9 @@ tasks:
     suggested_agent: Claude Code
     note: Reassigned from Antigravity (departed 2026-07-13)
     dependencies: [PMAP-03, PMAP-08, PMAP-09]
-    status: PENDING
+    status: COMPLETED
+    completed_at: 2026-07-13
+    completed_by: Claude Code (Implementation Agent)
     outputs:
       - maps/agents.html
       - role and authority view
@@ -283,7 +289,9 @@ tasks:
     suggested_agent: Claude Code
     note: Reassigned from Antigravity (departed 2026-07-13)
     dependencies: [PMAP-02, PMAP-05, PMAP-08, PMAP-09]
-    status: PENDING
+    status: COMPLETED
+    completed_at: 2026-07-13
+    completed_by: Claude Code (Implementation Agent)
     outputs:
       - maps/roadmap.html
       - synchronized timeline and dependency DAG
@@ -299,7 +307,9 @@ tasks:
     owner_role: Implementation Agent
     suggested_agent: Claude Code
     dependencies: [PMAP-09, PMAP-10, PMAP-11, PMAP-12, PMAP-13]
-    status: PENDING
+    status: COMPLETED
+    completed_at: 2026-07-13
+    completed_by: Claude Code (Implementation Agent)
     outputs:
       - docs/device-matrix.html
       - updated navigation and titles

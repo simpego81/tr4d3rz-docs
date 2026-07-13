@@ -6,58 +6,846 @@
   <title>Conceptual Ecosystem — TR4D3RZ Project Map</title>
   <link rel="stylesheet" href="../shared/design-tokens.css">
   <link rel="stylesheet" href="../shared/base.css">
+  <style>
+    /* ------------------------------------------------------------------ */
+    /* Page-specific layout                                                 */
+    /* ------------------------------------------------------------------ */
+    .map-page-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: var(--space-lg);
+      margin-bottom: var(--space-lg);
+    }
+
+    .map-page-header-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* Legend layout: two groups side by side */
+    .legend-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xl);
+      padding: var(--space-md) var(--space-lg);
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--space-md);
+    }
+
+    .legend-group {
+      min-width: 0;
+    }
+
+    .legend-group-title {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-sm);
+    }
+
+    /* Custom node-radius legend swatches */
+    .legend-radius-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      padding-top: var(--space-xs);
+    }
+
+    .legend-radius-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: var(--font-size-sm);
+      color: var(--color-text-muted);
+    }
+
+    .legend-radius-circle {
+      border-radius: 50%;
+      background-color: var(--color-text-muted);
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+
+    /* Custom coloured swatches for node layers and link types */
+    .swatch-motivation  { background-color: #7c3aed !important; }
+    .swatch-business    { background-color: #2563eb !important; }
+    .swatch-application { background-color: #0891b2 !important; }
+
+    .swatch-realization  { background-color: #10b981 !important; }
+    .swatch-serving      { background-color: #f59e0b !important; }
+    .swatch-influence    { background-color: #94a3b8 !important; }
+    .swatch-composition  { background-color: #7c3aed !important; }
+    .swatch-link-other   {
+      background-color: #e2e8f0 !important;
+      border: 1px solid #94a3b8;
+    }
+
+    /* Graph wrapper with fixed height */
+    .graph-wrapper {
+      margin-bottom: var(--space-md);
+    }
+
+    #graph-svg {
+      height: 600px;
+    }
+
+    /* Toolbar overrides for wrapping */
+    .graph-toolbar {
+      align-items: flex-start;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: var(--space-sm);
+      flex-shrink: 0;
+      margin-left: auto;
+      padding-top: 2px;
+    }
+
+    /* Fallback section */
+    .fallback-section {
+      margin-top: var(--space-2xl);
+    }
+
+    .fallback-section-header {
+      margin-bottom: var(--space-sm);
+      padding-bottom: var(--space-sm);
+      border-bottom: 2px solid var(--color-border);
+    }
+
+    /* Node text labels in SVG */
+    .node-label {
+      font-family: var(--font-family-sans);
+      font-size: 9px;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Node focus ring */
+    .graph-node:focus-visible circle {
+      stroke: var(--color-primary);
+      stroke-width: 3px;
+    }
+
+    /* Link label (hidden by default, shown in tooltip) */
+    .link-label {
+      display: none;
+    }
+  </style>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <header class="header">
     <div class="container header-content">
-      <h1 class="header-title"><a href="../index-new.html" style="color: inherit;">TR4D3RZ</a></h1>
-      <nav class="header-nav">
-        <a href="../index-new.html">← Project Map</a>
+      <h1 class="header-title">
+        <a href="../index.html" style="color:inherit;text-decoration:none">TR4D3RZ</a>
+      </h1>
+      <nav class="header-nav" role="navigation" aria-label="Site navigation">
+        <a href="../index.html">Project Map</a>
         <a href="roadmap.html">Roadmap</a>
+        <a href="conceptual.html" aria-current="page">Conceptual</a>
         <a href="physical.html">Physical</a>
         <a href="agents.html">Agents</a>
+        <a href="../device-matrix.html">Device Matrix</a>
       </nav>
     </div>
   </header>
 
   <main class="main" id="main-content">
     <div class="container">
-      <div class="breadcrumb">
-        <a href="../index-new.html">Project Map</a>
-        <span class="breadcrumb-separator">/</span>
-        <span>Conceptual Ecosystem</span>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Project Map</a>
+        <span class="breadcrumb-separator" aria-hidden="true">/</span>
+        <span aria-current="page">Conceptual Ecosystem</span>
+      </nav>
+
+      <!-- Page heading -->
+      <div class="map-page-header">
+        <div class="map-page-header-text">
+          <h1>Conceptual Ecosystem Map</h1>
+          <p class="text-muted mb-md">
+            Logical domains and architectural concepts — Motivation, Business, and Application layers.
+            70 nodes, excluding physical devices and technology infrastructure.
+          </p>
+        </div>
       </div>
 
-      <h1>Conceptual Ecosystem Map</h1>
-      <p class="text-muted mb-xl">
-        Logical domains and architectural concepts without physical implementation details.
-      </p>
+      <!-- Status: loading / error (replaced by JS) -->
+      <div id="graph-status"></div>
 
-      <div class="card">
-        <h2 class="card-title">🚧 Coming Soon</h2>
-        <p class="card-description">
-          This page will display an interactive D3.js graph of the conceptual architecture:
-        </p>
-        <ul class="text-sm text-muted" style="margin-left: 1.5rem; margin-top: var(--space-md);">
-          <li>Logical domains (Application, Business, Technology, Motivation layers)</li>
-          <li>ArchiMate concepts from tr4d3rz-docs</li>
-          <li>Semantic relationships between concepts</li>
-          <li>Drill-down to concept detail pages</li>
-        </ul>
-        <p class="mt-lg text-sm">
-          <strong>Data Source:</strong> <code>docs/archimate_data.json</code><br>
-          <strong>Task:</strong> PMAP-10 (assigned to Antigravity)
-        </p>
-      </div>
-    </div>
+      <!-- Main graph area (shown after data loads) -->
+      <div id="graph-content" style="display:none">
+
+        <!-- Legend -->
+        <div class="legend-section" aria-label="Map legend">
+          <div class="legend-group">
+            <p class="legend-group-title">Node Layer</p>
+            <div id="legend-nodes"></div>
+          </div>
+          <div class="legend-group">
+            <p class="legend-group-title">Relationship Type</p>
+            <div id="legend-links"></div>
+          </div>
+          <div class="legend-group">
+            <p class="legend-group-title">Node Size</p>
+            <ul class="legend-radius-group" aria-label="Node size legend">
+              <li class="legend-radius-item">
+                <span class="legend-radius-circle" style="width:28px;height:28px"></span>
+                <span>Goal / Driver / Principle</span>
+              </li>
+              <li class="legend-radius-item">
+                <span class="legend-radius-circle" style="width:22px;height:22px"></span>
+                <span>Process / Service / Function</span>
+              </li>
+              <li class="legend-radius-item">
+                <span class="legend-radius-circle" style="width:18px;height:18px"></span>
+                <span>Other</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Graph wrapper -->
+        <div class="graph-wrapper" id="graph-wrapper">
+          <div class="graph-toolbar">
+            <div id="filter-panel-container" style="flex:1;min-width:0"></div>
+            <div class="toolbar-actions">
+              <button id="reset-view-btn" class="graph-toolbar-btn" type="button" aria-label="Reset zoom and pan">
+                Reset View
+              </button>
+              <button id="clear-focus-btn" class="graph-toolbar-btn" type="button" aria-label="Clear focused node">
+                Clear Focus
+              </button>
+            </div>
+          </div>
+
+          <svg
+            id="graph-svg"
+            class="graph-svg desktop-only-graph"
+            tabindex="0"
+            role="img"
+            aria-label="Conceptual Ecosystem force-directed graph with 70 nodes across Motivation, Business, and Application layers. Use keyboard arrows to navigate nodes, Enter or Space to focus a node."
+          >
+            <defs>
+              <!-- Arrow markers for directed relationships -->
+              <marker id="arrow-realization" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0,8 3,0 6" fill="#10b981" opacity="0.8"/>
+              </marker>
+              <marker id="arrow-serving" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0,8 3,0 6" fill="#f59e0b" opacity="0.8"/>
+              </marker>
+              <marker id="arrow-influence" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0,8 3,0 6" fill="#94a3b8" opacity="0.8"/>
+              </marker>
+              <marker id="arrow-composition" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0,8 3,0 6" fill="#7c3aed" opacity="0.8"/>
+              </marker>
+              <marker id="arrow-default" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0,8 3,0 6" fill="#94a3b8" opacity="0.5"/>
+              </marker>
+            </defs>
+            <!-- Graph content rendered by D3 -->
+          </svg>
+        </div>
+
+        <!-- Mobile notice (shown by CSS on small screens) -->
+        <div class="desktop-only-notice" role="note" aria-label="Screen size notice">
+          For the full interactive graph, please open this page on a desktop browser (viewport &ge; 768 px).
+        </div>
+
+      </div><!-- /#graph-content -->
+
+      <!-- Textual fallback — always rendered after data loads -->
+      <section class="fallback-section" id="fallback-section" style="display:none">
+        <div class="fallback-section-header">
+          <h2 class="text-lg">Element Reference Table</h2>
+          <p class="text-muted text-sm">
+            All 70 conceptual elements — accessible on all screen sizes.
+          </p>
+        </div>
+        <div id="fallback-container"></div>
+      </section>
+
+    </div><!-- /.container -->
   </main>
 
   <footer class="footer">
     <div class="container">
-      <p>TR4D3RZ Documentation</p>
+      <p>TR4D3RZ Documentation &mdash; Conceptual Ecosystem Map</p>
     </div>
   </footer>
+
+  <noscript>
+    <style>
+      #graph-content { display: none !important; }
+      #graph-status { display: none !important; }
+    </style>
+    <div style="padding:1rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:0.5rem;margin:1rem">
+      <strong>JavaScript required.</strong>
+      This interactive map uses D3.js to render a force-directed graph of the TR4D3RZ Conceptual Ecosystem.
+      It displays 70 architectural elements (Motivation Goals, Principles, Drivers; Business Processes, Services, Objects;
+      Application Components and Services) and the relationships between them.
+      Please enable JavaScript to explore the graph, or view the
+      <a href="../archimate_data.json">raw JSON data source</a>.
+    </div>
+  </noscript>
+
+  <!-- Script load order per spec: data-loader, components, graph-interactions, D3 v7, then inline -->
+  <script src="../shared/data-loader.js"></script>
+  <script src="../shared/components.js"></script>
+  <script src="../shared/graph-interactions.js"></script>
+  <script src="https://unpkg.com/d3@7/dist/d3.min.js"></script>
+  <script>
+    /* ------------------------------------------------------------------ */
+    /* TR4D3RZ — Conceptual Ecosystem Map (PMAP-10)                        */
+    /* ------------------------------------------------------------------ */
+    (function () {
+      'use strict';
+
+      /* -- Config -------------------------------------------------------- */
+
+      const CONCEPTUAL_LAYERS = ['Motivation', 'Business', 'Application'];
+
+      const LAYER_COLORS = {
+        Motivation:   '#7c3aed',
+        Business:     '#2563eb',
+        Application:  '#0891b2',
+      };
+
+      const LINK_COLORS = {
+        Realization: '#10b981',
+        Serving:     '#f59e0b',
+        Influence:   '#94a3b8',
+        Composition: '#7c3aed',
+      };
+      const LINK_COLOR_DEFAULT = '#94a3b8';
+
+      const LINK_MARKERS = {
+        Realization: 'url(#arrow-realization)',
+        Serving:     'url(#arrow-serving)',
+        Influence:   'url(#arrow-influence)',
+        Composition: 'url(#arrow-composition)',
+      };
+      const LINK_MARKER_DEFAULT = 'url(#arrow-default)';
+
+      /* -- Helpers ------------------------------------------------------- */
+
+      function getLinkColor(type) {
+        return LINK_COLORS[type] || LINK_COLOR_DEFAULT;
+      }
+
+      function getLinkMarker(type) {
+        return LINK_MARKERS[type] || LINK_MARKER_DEFAULT;
+      }
+
+      function getNodeRadius(type) {
+        if (/_Goal|_Driver|_Principle/.test(type)) return 14;
+        if (/_Process|_Service|_Function/.test(type)) return 11;
+        return 9;
+      }
+
+      /**
+       * Convert element id to a short human-readable label.
+       * Strips known prefixes, replaces underscores with spaces,
+       * capitalises first letter, truncates to 18 characters.
+       */
+      function makeLabel(id) {
+        // Strip known single-segment prefix (e.g. "proc_", "evo_")
+        let label = id.replace(
+          /^(?:proc|svc|goal|prin|driver|evo|gw|obs|fit|sig|data|graph|fsm|cond|opt|per|capsule)_/,
+          ''
+        );
+        // Replace remaining underscores with spaces
+        label = label.replace(/_/g, ' ');
+        // Capitalise first letter
+        label = label.charAt(0).toUpperCase() + label.slice(1);
+        // Truncate
+        if (label.length > 18) label = label.slice(0, 18);
+        return label;
+      }
+
+      /* -- DOM refs ------------------------------------------------------ */
+
+      const mainEl       = document.getElementById('main-content');
+      const statusEl     = document.getElementById('graph-status');
+      const contentEl    = document.getElementById('graph-content');
+      const fallbackSec  = document.getElementById('fallback-section');
+      const fallbackCtr  = document.getElementById('fallback-container');
+      const legendNodes  = document.getElementById('legend-nodes');
+      const legendLinks  = document.getElementById('legend-links');
+      const filterCtr    = document.getElementById('filter-panel-container');
+      const resetBtn     = document.getElementById('reset-view-btn');
+      const clearBtn     = document.getElementById('clear-focus-btn');
+      const svgEl        = document.getElementById('graph-svg');
+
+      /* -- Bootstrap ----------------------------------------------------- */
+
+      Components.renderViewportWarning(mainEl);
+      DataLoader.renderLoading(statusEl);
+
+      // Global reference so filter-change handler can reach it
+      let searchFilter = null;
+      let filterPanelCtrl = null;
+
+      fetch('../archimate_data.json')
+        .then(function (res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status + ' loading archimate_data.json');
+          return res.json();
+        })
+        .then(function (data) {
+          statusEl.innerHTML = '';
+          statusEl.style.display = 'none';
+          init(data);
+        })
+        .catch(function (err) {
+          console.error('[Conceptual Map]', err);
+          DataLoader.renderError(statusEl, err);
+        });
+
+      /* -- Init ---------------------------------------------------------- */
+
+      function init(data) {
+        var allElements     = data.elements     || {};
+        var allRelationships = data.relationships || [];
+
+        /* Build conceptual node list */
+        var nodes = [];
+        Object.keys(allElements).forEach(function (id) {
+          var el = allElements[id];
+          if (CONCEPTUAL_LAYERS.indexOf(el.layer) === -1) return;
+          nodes.push({
+            id:       id,
+            layer:    el.layer,
+            type:     el.type,
+            role:     el.role     || '',
+            relations: el.relations || '',
+            label:    makeLabel(id),
+            radius:   getNodeRadius(el.type),
+            color:    LAYER_COLORS[el.layer] || '#64748b',
+          });
+        });
+
+        var nodeIdSet = {};
+        nodes.forEach(function (n) { nodeIdSet[n.id] = true; });
+
+        /* Build conceptual link list */
+        var links = allRelationships
+          .filter(function (r) {
+            return nodeIdSet[r.from] && nodeIdSet[r.to];
+          })
+          .map(function (r) {
+            return {
+              source: r.from,
+              target: r.to,
+              type:   r.type  || 'Other',
+              label:  r.label || '',
+              color:  getLinkColor(r.type),
+              marker: getLinkMarker(r.type),
+            };
+          });
+
+        /* Render static components */
+        renderNodeLegend();
+        renderLinkLegend();
+        renderFallbackTable(nodes);
+
+        /* Render filter panel */
+        filterPanelCtrl = Components.renderFilterPanel(filterCtr, {
+          searchPlaceholder: 'Search by id or type…',
+          categories: CONCEPTUAL_LAYERS.map(function (l) {
+            return { value: l, label: l };
+          }),
+          onChange: function (opts) {
+            if (searchFilter) {
+              var count = searchFilter.apply(opts.term, opts.category);
+              filterPanelCtrl.setCount(count, nodes.length);
+            }
+          },
+        });
+        filterPanelCtrl.setCount(nodes.length, nodes.length);
+
+        /* Show content area */
+        contentEl.style.display = 'block';
+        fallbackSec.style.display = 'block';
+
+        /* Build D3 graph */
+        buildGraph(nodes, links);
+      }
+
+      /* -- Legends ------------------------------------------------------- */
+
+      function renderNodeLegend() {
+        Components.renderLegend(legendNodes, [
+          {
+            label:       'Motivation',
+            cssClass:    'swatch-motivation',
+            description: 'Goals, Drivers, Principles',
+          },
+          {
+            label:       'Business',
+            cssClass:    'swatch-business',
+            description: 'Processes, Services, Objects',
+          },
+          {
+            label:       'Application',
+            cssClass:    'swatch-application',
+            description: 'Components, Services',
+          },
+        ]);
+      }
+
+      function renderLinkLegend() {
+        Components.renderLegend(legendLinks, [
+          {
+            label:       'Realization',
+            cssClass:    'swatch-realization',
+            description: 'Implements or makes real',
+          },
+          {
+            label:       'Serving',
+            cssClass:    'swatch-serving',
+            description: 'Provides capability to',
+          },
+          {
+            label:       'Influence',
+            cssClass:    'swatch-influence',
+            description: 'Affects or shapes',
+          },
+          {
+            label:       'Composition',
+            cssClass:    'swatch-composition',
+            description: 'Composed of parts',
+          },
+          {
+            label:       'Access / Flow / Other',
+            cssClass:    'swatch-link-other',
+            description: 'Access, Association, Flow, Assignment',
+          },
+        ]);
+      }
+
+      /* -- Textual fallback --------------------------------------------- */
+
+      function renderFallbackTable(nodes) {
+        var entities = nodes.map(function (n) {
+          return {
+            id:          n.id,
+            layer:       n.layer,
+            type:        n.type,
+            description: (n.relations || '').slice(0, 80),
+          };
+        });
+        // Sort by layer then id for readability
+        entities.sort(function (a, b) {
+          if (a.layer < b.layer) return -1;
+          if (a.layer > b.layer) return 1;
+          if (a.id < b.id) return -1;
+          if (a.id > b.id) return 1;
+          return 0;
+        });
+
+        Components.renderTextualFallback(
+          fallbackCtr,
+          entities,
+          [
+            { key: 'id',          label: 'ID' },
+            { key: 'layer',       label: 'Layer' },
+            { key: 'type',        label: 'Type' },
+            { key: 'description', label: 'Description (first 80 chars)' },
+          ],
+          { caption: 'Conceptual Ecosystem — 70 elements' }
+        );
+      }
+
+      /* -- Graph --------------------------------------------------------- */
+
+      function buildGraph(nodes, links) {
+        /* Get SVG container width */
+        var wrapper = document.getElementById('graph-wrapper');
+        var width   = (wrapper && wrapper.clientWidth > 0) ? wrapper.clientWidth : 900;
+        var height  = 600;
+
+        /* Set SVG dimensions */
+        svgEl.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+
+        var svg = d3.select(svgEl);
+
+        /* Inner group that zoom will transform */
+        var g = svg.append('g').attr('id', 'graph-root');
+
+        /* Force simulation */
+        var simulation = d3.forceSimulation(nodes)
+          .force('link', d3.forceLink(links)
+            .id(function (d) { return d.id; })
+            .distance(90)
+            .strength(0.4)
+          )
+          .force('charge', d3.forceManyBody().strength(-220))
+          .force('center',  d3.forceCenter(width / 2, height / 2))
+          .force('collide', d3.forceCollide(function (d) { return d.radius + 10; }))
+          .alphaDecay(0.025);
+
+        /* Links */
+        var linkGroup = g.append('g')
+          .attr('class', 'links')
+          .attr('aria-hidden', 'true');
+
+        var linkLines = linkGroup.selectAll('line')
+          .data(links)
+          .enter()
+          .append('line')
+          .attr('class', 'graph-link')
+          .attr('stroke', function (d) { return d.color; })
+          .attr('stroke-width', 1.5)
+          .attr('stroke-opacity', 0.65)
+          .attr('marker-end', function (d) { return d.marker; });
+
+        /* Nodes */
+        var nodeGroup = g.append('g').attr('class', 'nodes');
+
+        var nodeGroups = nodeGroup.selectAll('g')
+          .data(nodes)
+          .enter()
+          .append('g')
+          .attr('class', 'graph-node')
+          .attr('tabindex', '0')
+          .attr('data-node-id', function (d) { return d.id; })
+          .attr('role', 'button')
+          .attr('aria-label', function (d) {
+            return d.label + ', ' + d.layer + ', ' + d.type;
+          });
+
+        /* Circles */
+        nodeGroups.append('circle')
+          .attr('r', function (d) { return d.radius; })
+          .attr('fill', function (d) { return d.color; })
+          .attr('stroke', '#ffffff')
+          .attr('stroke-width', 1.5);
+
+        /* Labels */
+        nodeGroups.append('text')
+          .attr('class', 'node-label')
+          .attr('text-anchor', 'middle')
+          .attr('dy', function (d) { return d.radius + 11; })
+          .attr('fill', '#1e293b')
+          .text(function (d) { return d.label; });
+
+        /* Tick handler: update positions (shorten link endpoints by target radius) */
+        simulation.on('tick', function () {
+          linkLines
+            .attr('x1', function (d) { return d.source.x; })
+            .attr('y1', function (d) { return d.source.y; })
+            .attr('x2', function (d) {
+              var dx   = d.target.x - d.source.x;
+              var dy   = d.target.y - d.source.y;
+              var dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist === 0) return d.target.x;
+              return d.target.x - (dx / dist) * (d.target.radius + 6);
+            })
+            .attr('y2', function (d) {
+              var dx   = d.target.x - d.source.x;
+              var dy   = d.target.y - d.source.y;
+              var dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist === 0) return d.target.y;
+              return d.target.y - (dy / dist) * (d.target.radius + 6);
+            });
+
+          nodeGroups.attr('transform', function (d) {
+            return 'translate(' + d.x + ',' + d.y + ')';
+          });
+        });
+
+        /* Drag behaviour */
+        var drag = d3.drag()
+          .on('start', function (event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+          })
+          .on('drag', function (event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+          })
+          .on('end', function (event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+          });
+
+        nodeGroups.call(drag);
+
+        /* Zoom / pan */
+        var zoomCtrl = GraphInteractions.setupZoom(svg, g, {
+          scaleMin:    0.15,
+          scaleMax:    6,
+          resetButton: resetBtn,
+        });
+
+        /* Tooltip */
+        var tooltip = GraphInteractions.createTooltip(document.body);
+
+        /* Focus manager */
+        var focusManager = GraphInteractions.createFocusManager({
+          nodeSelection: nodeGroups,
+          linkSelection: linkLines,
+          getNodeId:   function (d) { return d.id; },
+          getSourceId: function (d) {
+            return typeof d.source === 'object' ? d.source.id : d.source;
+          },
+          getTargetId: function (d) {
+            return typeof d.target === 'object' ? d.target.id : d.target;
+          },
+        });
+
+        /* Deep link */
+        var deepLink = GraphInteractions.bindDeepLink({
+          getSelectedId: function () {
+            return focusManager.focusedId();
+          },
+          selectById: function (id) {
+            var d = nodes.find(function (n) { return n.id === id; });
+            if (d) {
+              focusManager.focus(d);
+              deepLink.update();
+            }
+          },
+          clearSelection: function () {
+            focusManager.clear();
+            deepLink.update();
+          },
+        });
+
+        /* Search / layer filter */
+        searchFilter = GraphInteractions.applySearchFilter({
+          nodeSelection: nodeGroups,
+          linkSelection: linkLines,
+          getNodeText: function (d) {
+            return (d.id + ' ' + d.type + ' ' + d.layer).toLowerCase();
+          },
+          getNodeCat: function (d) {
+            return d.layer;
+          },
+          getSourceId: function (d) {
+            return typeof d.source === 'object' ? d.source.id : d.source;
+          },
+          getTargetId: function (d) {
+            return typeof d.target === 'object' ? d.target.id : d.target;
+          },
+          getNodeId: function (d) {
+            return d.id;
+          },
+        });
+
+        /* Keyboard navigation */
+        GraphInteractions.setupKeyboardNav({
+          svgElement: svgEl,
+          getNodes:   function () { return nodes; },
+          getNodeId:  function (d) { return d.id; },
+          getNodePos: function (d) { return { x: d.x || 0, y: d.y || 0 }; },
+          onActivate: function (d) {
+            if (focusManager.focusedId() === d.id) {
+              focusManager.clear();
+            } else {
+              focusManager.focus(d);
+            }
+            deepLink.update();
+          },
+        });
+
+        /* -- Node interactions ------------------------------------------ */
+
+        nodeGroups
+          .on('mouseenter', function (event, d) {
+            var relText = (d.relations || '').slice(0, 120);
+            var html =
+              '<strong>' + DataLoader.escapeHtml(d.id) + '</strong>' +
+              '<div class="tooltip-meta">' +
+                '<span>' + DataLoader.escapeHtml(d.layer) + '</span>' +
+                '<span aria-hidden="true"> · </span>' +
+                '<span>' + DataLoader.escapeHtml(d.type) + '</span>' +
+              '</div>' +
+              (d.role
+                ? '<div style="margin-top:4px;font-size:0.8em;opacity:0.9">' +
+                  DataLoader.escapeHtml(d.role.slice(0, 80)) +
+                  (d.role.length > 80 ? '…' : '') +
+                  '</div>'
+                : '') +
+              (relText
+                ? '<div style="margin-top:3px;font-size:0.75em;opacity:0.75">' +
+                  DataLoader.escapeHtml(relText) +
+                  (d.relations.length > 120 ? '…' : '') +
+                  '</div>'
+                : '');
+            tooltip.show(html, event.clientX, event.clientY);
+          })
+          .on('mousemove', function (event) {
+            tooltip.move(event.clientX, event.clientY);
+          })
+          .on('mouseleave', function () {
+            tooltip.hide();
+          })
+          .on('click', function (event, d) {
+            event.stopPropagation();
+            if (focusManager.focusedId() === d.id) {
+              focusManager.clear();
+            } else {
+              focusManager.focus(d);
+            }
+            deepLink.update();
+          })
+          .on('keydown', function (event, d) {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              if (focusManager.focusedId() === d.id) {
+                focusManager.clear();
+              } else {
+                focusManager.focus(d);
+              }
+              deepLink.update();
+            }
+          });
+
+        /* Click on SVG background clears focus */
+        svg.on('click', function () {
+          focusManager.clear();
+          deepLink.update();
+        });
+
+        /* Clear focus button */
+        clearBtn.addEventListener('click', function () {
+          focusManager.clear();
+          deepLink.update();
+        });
+
+        /* Restore URL hash selection after simulation settles */
+        simulation.on('end', function () {
+          deepLink.restore();
+        });
+
+        /* Handle window resize: recentre force */
+        window.addEventListener('resize', function () {
+          var newWidth = wrapper.clientWidth || 900;
+          if (newWidth !== width) {
+            width = newWidth;
+            svgEl.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+            simulation.force('center', d3.forceCenter(width / 2, height / 2));
+            simulation.alpha(0.3).restart();
+          }
+        });
+      }
+
+    })();
+  </script>
 </body>
 </html>

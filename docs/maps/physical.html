@@ -6,60 +6,787 @@
   <title>Physical Ecosystem — TR4D3RZ Project Map</title>
   <link rel="stylesheet" href="../shared/design-tokens.css">
   <link rel="stylesheet" href="../shared/base.css">
+  <style>
+    /* ── Desktop / mobile graph visibility ─────────────────────────── */
+    .desktop-only-graph  { display: block; }
+    .desktop-only-notice { display: none;  }
+
+    @media (max-width: 767px) {
+      .desktop-only-graph  { display: none !important; }
+      .desktop-only-notice { display: block; }
+    }
+
+    /* ── Allow pointer events on tooltip so device links are clickable */
+    .graph-tooltip {
+      pointer-events: auto !important;
+      max-width: 300px;
+    }
+
+    /* ── SVG height ─────────────────────────────────────────────────── */
+    #physical-svg {
+      height: 650px;
+      display: block;
+      width: 100%;
+    }
+
+    /* ── Link line style ────────────────────────────────────────────── */
+    .link-line {
+      fill: none;
+      stroke: #94a3b8;
+      stroke-width: 1.5;
+      stroke-opacity: 0.55;
+      transition: opacity 0.2s;
+    }
+
+    .link-line.dim        { opacity: 0.08; }
+    .link-line.filtered-out { display: none; }
+
+    /* ── Arrow marker fill ──────────────────────────────────────────── */
+    .link-arrow { fill: #94a3b8; }
+
+    /* ── Node label ─────────────────────────────────────────────────── */
+    .node-label {
+      font-size: 10px;
+      fill: var(--color-text, #1e293b);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ── Extra filter row (device dropdown) ─────────────────────────── */
+    .extra-filter-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm, 0.5rem);
+      flex-wrap: wrap;
+      padding: 0.25rem var(--space-md, 1rem);
+      border-bottom: 1px solid var(--color-border, #e2e8f0);
+      background-color: var(--color-surface, #fff);
+    }
+
+    .extra-filter-label {
+      font-size: var(--font-size-sm, 0.875rem);
+      color: var(--color-text-muted, #64748b);
+      white-space: nowrap;
+    }
+
+    /* ── Toolbar node-count span ────────────────────────────────────── */
+    #node-count-display {
+      margin-left: auto;
+    }
+
+    /* ── Fallback section ───────────────────────────────────────────── */
+    .fallback-section {
+      margin-top: var(--space-2xl, 3rem);
+    }
+
+    .fallback-section h2 {
+      margin-bottom: var(--space-md, 1rem);
+    }
+
+    /* ── Legend inline color swatches ───────────────────────────────── */
+    .legend-swatch[data-color] {
+      background-color: attr(data-color color);
+    }
+
+    /* Override: legend swatches use inline style for custom colors */
+    #legend-mount .legend-swatch {
+      border-radius: 3px;
+    }
+
+    /* ── Info strip below graph ─────────────────────────────────────── */
+    .graph-info-strip {
+      padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
+      font-size: var(--font-size-xs, 0.75rem);
+      color: var(--color-text-muted, #64748b);
+      border-top: 1px solid var(--color-border, #e2e8f0);
+      display: flex;
+      gap: var(--space-md, 1rem);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+  </style>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
+  <!-- ── Header ──────────────────────────────────────────────────────── -->
   <header class="header">
     <div class="container header-content">
-      <h1 class="header-title"><a href="../index-new.html" style="color: inherit;">TR4D3RZ</a></h1>
-      <nav class="header-nav">
-        <a href="../index-new.html">← Project Map</a>
+      <h1 class="header-title">
+        <a href="../index.html" style="color:inherit;">TR4D3RZ</a>
+      </h1>
+      <nav class="header-nav" role="navigation" aria-label="Site navigation">
+        <a href="../index.html">← Project Map</a>
         <a href="roadmap.html">Roadmap</a>
         <a href="conceptual.html">Conceptual</a>
+        <a href="physical.html" aria-current="page">Physical</a>
         <a href="agents.html">Agents</a>
+        <a href="../device-matrix.html">Device Matrix</a>
       </nav>
     </div>
   </header>
 
+  <!-- ── Main ────────────────────────────────────────────────────────── -->
   <main class="main" id="main-content">
     <div class="container">
-      <div class="breadcrumb">
-        <a href="../index-new.html">Project Map</a>
-        <span class="breadcrumb-separator">/</span>
-        <span>Physical Ecosystem</span>
-      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Project Map</a>
+        <span class="breadcrumb-separator" aria-hidden="true">/</span>
+        <span aria-current="page">Physical Ecosystem</span>
+      </nav>
 
       <h1>Physical Ecosystem Map</h1>
       <p class="text-muted mb-xl">
-        Devices, repositories, runtimes, and physical topology with cross-links to implemented concepts.
+        Technology devices, runtimes, artifacts, services, and Application Component bridges
+        across the distributed TR4D3RZ system. Hover nodes to see device cross-links.
       </p>
 
-      <div class="card">
-        <h2 class="card-title">🚧 Coming Soon</h2>
-        <p class="card-description">
-          This page will display an interactive topology map of the physical infrastructure:
-        </p>
-        <ul class="text-sm text-muted" style="margin-left: 1.5rem; margin-top: var(--space-md);">
-          <li>14 physical devices (RPi2, ESP8266, STM32, Linux PC, Android, Browser, etc.)</li>
-          <li>7 Git repositories (tr4d3rz-core, tr4d3rz-messaging, etc.)</li>
-          <li>Runtime environments and dependencies</li>
-          <li>Cross-links showing which components implement which concepts</li>
-          <li>Drill-down to component detail pages</li>
-        </ul>
-        <p class="mt-lg text-sm">
-          <strong>Data Source:</strong> <code>docs/archimate_data.json</code>, <code>specs/node-software-map.md</code><br>
-          <strong>Task:</strong> PMAP-11 (assigned to Antigravity)<br>
-          <strong>Legacy:</strong> <a href="../device-matrix.html">Current device matrix</a> will be preserved here
-        </p>
-      </div>
-    </div>
+      <!-- Viewport warning mount (shown only on &lt;768 px) -->
+      <div id="viewport-warning-mount"></div>
+
+      <!-- ── Graph card ─────────────────────────────────────────────── -->
+      <div class="card" style="padding:0;overflow:hidden;" id="graph-card">
+
+        <!-- Toolbar -->
+        <div class="graph-toolbar" id="graph-toolbar" role="toolbar" aria-label="Graph controls">
+          <button class="graph-toolbar-btn" id="btn-reset-zoom" title="Reset zoom to fit">
+            &#8635; Reset
+          </button>
+          <button class="graph-toolbar-btn" id="btn-clear-focus" title="Clear selection highlight">
+            &#10005; Clear
+          </button>
+          <span id="node-count-display" class="text-sm text-muted"></span>
+        </div>
+
+        <!-- Filter panel (search + type dropdown) -->
+        <div id="filter-panel-mount"></div>
+
+        <!-- Extra: device filter -->
+        <div class="extra-filter-row" id="extra-filter-row">
+          <label class="extra-filter-label" for="device-filter">Device:</label>
+          <select id="device-filter" class="filter-select" aria-label="Filter by device">
+            <option value="">All devices</option>
+            <option value="rasp2">rasp2 — Raspberry Pi 2</option>
+            <option value="esp">esp — ESP8266</option>
+            <option value="linux">linux — Linux PC</option>
+            <option value="android">android — Android</option>
+            <option value="browser">browser — Browser</option>
+            <option value="phone">phone — Phone</option>
+            <option value="tablet">tablet — Tablet</option>
+            <option value="ra8">ra8 — RA8 Cortex-M85</option>
+            <option value="stm32f1">stm32f1 — STM32F1</option>
+            <option value="stm32f3">stm32f3 — STM32F3</option>
+            <option value="mimx">mimx — i.MX RT</option>
+            <option value="m24lr">m24lr — M24LR NFC</option>
+            <option value="str">str — STR gateway</option>
+          </select>
+        </div>
+
+        <!-- Mobile fallback notice -->
+        <div class="desktop-only-notice" style="padding:var(--space-lg);color:var(--color-text-muted);">
+          <p>The interactive force-directed graph requires a screen wider than 768 px.
+             Browse the reference table below instead.</p>
+        </div>
+
+        <!-- SVG wrapper -->
+        <div class="graph-wrapper desktop-only-graph" id="graph-wrapper" style="border:none;border-radius:0;">
+          <svg
+            id="physical-svg"
+            class="graph-svg desktop-only-graph"
+            tabindex="0"
+            role="img"
+            aria-label="Physical Ecosystem force-directed graph showing Technology and Application Component nodes with their relationships"
+          ></svg>
+        </div>
+
+        <!-- Info strip -->
+        <div class="graph-info-strip" id="graph-info-strip">
+          <span id="link-count-display"></span>
+          <span>
+            Full comparison:
+            <a href="../device-matrix.html">Device Matrix</a>
+          </span>
+        </div>
+
+        <!-- Legend -->
+        <div style="padding:var(--space-md) var(--space-lg);border-top:1px solid var(--color-border);">
+          <div id="legend-mount"></div>
+        </div>
+
+      </div><!-- /.card -->
+
+      <!-- ── Textual fallback table ─────────────────────────────────── -->
+      <section class="fallback-section" id="fallback-section" aria-label="Node reference table">
+        <h2>Node Reference Table</h2>
+        <p class="text-muted text-sm mb-md">All physical ecosystem elements extracted from archimate_data.json.</p>
+        <div id="fallback-mount"></div>
+      </section>
+
+    </div><!-- /.container -->
   </main>
 
+  <!-- ── Footer ──────────────────────────────────────────────────────── -->
   <footer class="footer">
     <div class="container">
-      <p>TR4D3RZ Documentation</p>
+      <p>TR4D3RZ Documentation &mdash; Physical Ecosystem Map (PMAP-11)</p>
     </div>
   </footer>
+
+  <!-- ── No-JS notice ────────────────────────────────────────────────── -->
+  <noscript>
+    <div style="margin:2rem;padding:1.5rem;background:#fef2f2;border:1px solid #ef4444;border-radius:8px;color:#991b1b;">
+      <strong>JavaScript Required</strong>
+      <p style="margin-top:0.5rem;">
+        This page renders an interactive force-directed graph of the TR4D3RZ physical ecosystem,
+        including Technology Devices (RPi2, ESP8266, STM32, Android, …), SystemSoftware runtimes
+        (Rust, CBOR, WASM, Three.js), Artifacts (SQLite, Parquet, event logs), Technology Services
+        (MQTT, NFC, UART, …), and Application Components that bridge the physical and application
+        layers. Enable JavaScript to see the interactive map and use the search/filter controls.
+      </p>
+    </div>
+  </noscript>
+
+  <!-- ── Script load order (required) ───────────────────────────────── -->
+  <script src="../shared/data-loader.js"></script>
+  <script src="../shared/components.js"></script>
+  <script src="../shared/graph-interactions.js"></script>
+  <script src="https://unpkg.com/d3@7/dist/d3.min.js"></script>
+
+  <!-- ── Main script ─────────────────────────────────────────────────── -->
+  <script>
+  (async function () {
+    'use strict';
+
+    /* ── Constants ─────────────────────────────────────────────────── */
+
+    const KNOWN_DEVICES = [
+      'android', 'browser', 'esp', 'linux', 'm24lr',
+      'mimx', 'phone', 'ra8', 'rasp2', 'stm32f1',
+      'stm32f3', 'str', 'tablet'
+    ];
+
+    const NODE_COLORS = {
+      'Technology_Device':        '#dc2626',
+      'Technology_SystemSoftware':'#d97706',
+      'Technology_Artifact':      '#059669',
+      'Technology_Service':       '#2563eb',
+      'Application_Component':    '#0891b2',
+    };
+
+    const DEFAULT_COLOR = '#64748b';
+
+    const LEGEND_ITEMS = [
+      { label: 'Technology_Device',         color: '#dc2626' },
+      { label: 'Technology_SystemSoftware',  color: '#d97706' },
+      { label: 'Technology_Artifact',        color: '#059669' },
+      { label: 'Technology_Service',         color: '#2563eb' },
+      { label: 'Application_Component',      color: '#0891b2' },
+      { label: 'Other (Node / unknown)',      color: '#64748b' },
+    ];
+
+    /* ── Helpers ───────────────────────────────────────────────────── */
+
+    function getNodeColor(type) {
+      return NODE_COLORS[type] || DEFAULT_COLOR;
+    }
+
+    function getNodeRadius(type) {
+      if (type === 'Technology_Device')      return 16;
+      if (type === 'Application_Component')  return 12;
+      return 10;
+    }
+
+    /** Short category key used by the type dropdown. */
+    function getTypeShort(type) {
+      if (type === 'Technology_Device')        return 'Device';
+      if (type === 'Technology_SystemSoftware') return 'SystemSoftware';
+      if (type === 'Technology_Artifact')       return 'Artifact';
+      if (type === 'Technology_Service')        return 'Service';
+      if (type === 'Application_Component')     return 'Component';
+      return 'Other';
+    }
+
+    /**
+     * Strip the leading prefix segment (up to first '_'),
+     * replace remaining underscores with spaces, title-case,
+     * truncate to 16 chars.
+     */
+    function cleanLabel(id) {
+      const parts = id.split('_');
+      let label = parts.length >= 2 ? parts.slice(1).join(' ') : id;
+      label = label.charAt(0).toUpperCase() + label.slice(1);
+      if (label.length > 16) label = label.slice(0, 15) + '…';
+      return label;
+    }
+
+    /** Always return an array of device strings. */
+    function toDevicesArray(raw) {
+      if (!raw) return [];
+      if (Array.isArray(raw)) return raw.map(String);
+      if (typeof raw === 'string') return [raw];
+      return [];
+    }
+
+    /* ── Mount viewport warning ─────────────────────────────────────── */
+    Components.renderViewportWarning(
+      document.getElementById('viewport-warning-mount')
+    );
+
+    /* ── Load archimate data ────────────────────────────────────────── */
+    let rawData;
+    try {
+      const resp = await fetch('../archimate_data.json');
+      if (!resp.ok) throw new Error('HTTP ' + resp.status + ' fetching archimate_data.json');
+      rawData = await resp.json();
+    } catch (err) {
+      DataLoader.renderError(document.getElementById('graph-card'), err);
+      return;
+    }
+
+    const allElements      = rawData.elements      || {};
+    const allRelationships = rawData.relationships  || [];
+
+    /* ── Filter: Technology_* | Application_Component, exclude Motivation/Business ── */
+    const nodeData = [];
+
+    for (const [id, el] of Object.entries(allElements)) {
+      const type  = el.type  || '';
+      const layer = el.layer || '';
+      if (
+        (type.startsWith('Technology_') || type === 'Application_Component') &&
+        layer !== 'Motivation' && layer !== 'Business'
+      ) {
+        nodeData.push({
+          id,
+          type,
+          layer,
+          role:      el.role      || '',
+          relations: el.relations || '',
+          devices:   el.devices,
+          devArray:  toDevicesArray(el.devices),
+          label:     cleanLabel(id),
+          color:     getNodeColor(type),
+          radius:    getNodeRadius(type),
+          typeShort: getTypeShort(type),
+        });
+      }
+    }
+
+    const physicalIds = new Set(nodeData.map(n => n.id));
+
+    /* ── Filter relationships (both ends must be in physical set) ───── */
+    const linkData = [];
+    for (const rel of allRelationships) {
+      if (physicalIds.has(rel.from) && physicalIds.has(rel.to)) {
+        linkData.push({
+          source:  rel.from,
+          target:  rel.to,
+          relType: rel.type  || '',
+          label:   rel.label || '',
+          devices: rel.devices,
+        });
+      }
+    }
+
+    /* ── Update toolbar counts ──────────────────────────────────────── */
+    document.getElementById('node-count-display').textContent =
+      nodeData.length + ' nodes';
+    document.getElementById('link-count-display').textContent =
+      linkData.length + ' links';
+
+    /* ── Build legend ───────────────────────────────────────────────── */
+    (function buildLegend() {
+      const container = document.getElementById('legend-mount');
+      const ul = document.createElement('ul');
+      ul.className = 'legend';
+      ul.setAttribute('role', 'list');
+      ul.setAttribute('aria-label', 'Node type legend');
+
+      for (const item of LEGEND_ITEMS) {
+        const li = document.createElement('li');
+        li.className = 'legend-item';
+
+        const swatch = document.createElement('span');
+        swatch.className = 'legend-swatch';
+        swatch.style.backgroundColor = item.color;
+        swatch.setAttribute('aria-hidden', 'true');
+
+        const text = document.createElement('span');
+        text.className = 'legend-label';
+        text.textContent = item.label;
+
+        li.appendChild(swatch);
+        li.appendChild(text);
+        ul.appendChild(li);
+      }
+      container.appendChild(ul);
+    })();
+
+    /* ── Filter state ───────────────────────────────────────────────── */
+    let currentSearch = '';
+    let currentType   = '';
+    let currentDevice = '';
+
+    /* ── Render filter panel ────────────────────────────────────────── */
+    const filterCtrl = Components.renderFilterPanel(
+      document.getElementById('filter-panel-mount'),
+      {
+        searchPlaceholder: 'Search nodes…',
+        categories: [
+          { value: 'Device',        label: 'Device' },
+          { value: 'SystemSoftware', label: 'System Software' },
+          { value: 'Artifact',      label: 'Artifact' },
+          { value: 'Service',       label: 'Service' },
+          { value: 'Component',     label: 'App Component' },
+        ],
+        onChange: function (params) {
+          currentSearch = params.term;
+          currentType   = params.category;
+          applyFilters();
+        },
+      }
+    );
+
+    /* Device dropdown */
+    const deviceFilterEl = document.getElementById('device-filter');
+    deviceFilterEl.addEventListener('change', function () {
+      currentDevice = deviceFilterEl.value;
+      applyFilters();
+    });
+
+    /* ── Textual fallback table ─────────────────────────────────────── */
+    Components.renderTextualFallback(
+      document.getElementById('fallback-mount'),
+      nodeData.map(function (n) {
+        return {
+          id:          n.id,
+          type:        n.type,
+          devices:     n.devArray.join(', ') || '—',
+          description: n.role ? n.role.slice(0, 240) : '—',
+        };
+      }),
+      [
+        { key: 'id',          label: 'ID' },
+        { key: 'type',        label: 'Type' },
+        { key: 'devices',     label: 'Devices' },
+        { key: 'description', label: 'Description' },
+      ],
+      { caption: 'Physical Ecosystem — ' + nodeData.length + ' nodes' }
+    );
+
+    /* ── D3 Force Graph ─────────────────────────────────────────────── */
+
+    const svgEl  = document.getElementById('physical-svg');
+    const wrapper = document.getElementById('graph-wrapper');
+
+    /* Width from container; height fixed */
+    const W = wrapper.clientWidth || 800;
+    const H = 650;
+
+    svgEl.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    svgEl.setAttribute('width',   W);
+    svgEl.setAttribute('height',  H);
+
+    const svg = d3.select(svgEl);
+
+    /* Arrow marker */
+    svg.append('defs')
+      .append('marker')
+        .attr('id',         'arrow')
+        .attr('viewBox',    '0 -5 10 10')
+        .attr('refX',       22)
+        .attr('refY',       0)
+        .attr('markerWidth',  6)
+        .attr('markerHeight', 6)
+        .attr('orient',     'auto')
+      .append('path')
+        .attr('d',     'M0,-5L10,0L0,5')
+        .attr('class', 'link-arrow');
+
+    const g = svg.append('g').attr('class', 'graph-root');
+
+    /* Zoom */
+    const { resetView } = GraphInteractions.setupZoom(svg, g, {
+      scaleMin:    0.15,
+      scaleMax:    5,
+      resetButton: document.getElementById('btn-reset-zoom'),
+    });
+
+    /* Tooltip */
+    const tooltip = GraphInteractions.createTooltip(document.body);
+
+    /* ── Simulation ─────────────────────────────────────────────────── */
+    const simulation = d3.forceSimulation(nodeData)
+      .force('link',
+        d3.forceLink(linkData)
+          .id(function (d) { return d.id; })
+          .distance(85)
+          .strength(0.45)
+      )
+      .force('charge', d3.forceManyBody().strength(-220).distanceMax(350))
+      .force('center', d3.forceCenter(W / 2, H / 2))
+      .force('collide', d3.forceCollide(function (d) { return d.radius + 10; }))
+      .force('x', d3.forceX(W / 2).strength(0.04))
+      .force('y', d3.forceY(H / 2).strength(0.04))
+      .alphaDecay(0.025);
+
+    /* ── Links ──────────────────────────────────────────────────────── */
+    const linkGroup = g.append('g').attr('class', 'link-group');
+    const linkSel = linkGroup.selectAll('line')
+      .data(linkData)
+      .join('line')
+        .attr('class', 'graph-link link-line')
+        .attr('marker-end', 'url(#arrow)');
+
+    /* ── Nodes ──────────────────────────────────────────────────────── */
+    const nodeGroup = g.append('g').attr('class', 'node-group');
+    const nodeSel = nodeGroup.selectAll('g')
+      .data(nodeData, function (d) { return d.id; })
+      .join('g')
+        .attr('class',       'graph-node')
+        .attr('tabindex',    '0')
+        .attr('data-node-id', function (d) { return d.id; })
+        .attr('role',        'button')
+        .attr('aria-label',  function (d) { return d.id + ' (' + d.type + ')'; });
+
+    /* Circles */
+    nodeSel.append('circle')
+      .attr('r',            function (d) { return d.radius; })
+      .attr('fill',         function (d) { return d.color; })
+      .attr('stroke',       '#ffffff')
+      .attr('stroke-width', 2);
+
+    /* Labels */
+    nodeSel.append('text')
+      .attr('class',        'node-label')
+      .attr('text-anchor',  'middle')
+      .attr('dy',           function (d) { return d.radius + 12; })
+      .text(function (d) { return d.label; });
+
+    /* ── Focus manager ──────────────────────────────────────────────── */
+    const focusMgr = GraphInteractions.createFocusManager({
+      nodeSelection: nodeSel,
+      linkSelection: linkSel,
+      getNodeId:    function (d) { return d.id; },
+      getSourceId:  function (d) {
+        return (d.source && d.source.id) ? d.source.id : d.source;
+      },
+      getTargetId:  function (d) {
+        return (d.target && d.target.id) ? d.target.id : d.target;
+      },
+    });
+
+    /* ── Drag ───────────────────────────────────────────────────────── */
+    const drag = d3.drag()
+      .on('start', function (event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      })
+      .on('drag', function (event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+      })
+      .on('end', function (event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+      });
+
+    nodeSel.call(drag);
+
+    /* ── Tooltip builder ────────────────────────────────────────────── */
+    function buildTooltipHtml(d) {
+      var devLinks = d.devArray
+        .filter(function (dv) { return KNOWN_DEVICES.includes(dv); })
+        .map(function (dv) {
+          return '<a href="../' + DataLoader.escapeHtml(dv) + '.html"'
+               + ' style="color:#93c5fd">'
+               + DataLoader.escapeHtml(dv) + '</a>';
+        })
+        .join(', ');
+
+      var roleSnippet = '';
+      if (d.role) {
+        var r = d.role.length > 160 ? d.role.slice(0, 157) + '…' : d.role;
+        roleSnippet = '<div style="margin-top:4px;font-size:0.75em;opacity:0.8;line-height:1.35">'
+                    + DataLoader.escapeHtml(r) + '</div>';
+      }
+
+      var devSection = devLinks
+        ? '<div style="margin-top:6px;font-size:0.75em">View device: ' + devLinks + '</div>'
+        : '';
+
+      return '<strong>' + DataLoader.escapeHtml(d.id) + '</strong>'
+           + '<div class="tooltip-meta">'
+           + '<span>' + DataLoader.escapeHtml(d.type) + '</span>'
+           + (d.layer ? '<span style="opacity:0.65">' + DataLoader.escapeHtml(d.layer) + '</span>' : '')
+           + '</div>'
+           + roleSnippet
+           + devSection;
+    }
+
+    /* ── Tooltip hover: sticky pattern ─────────────────────────────── */
+    var hideTimer = null;
+
+    function scheduleHide() {
+      hideTimer = setTimeout(function () { tooltip.hide(); }, 250);
+    }
+    function cancelHide() {
+      if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+    }
+
+    /* Keep tooltip open while cursor is over it */
+    (function attachTooltipHover() {
+      var el = document.querySelector('.graph-tooltip');
+      if (!el) return;
+      el.addEventListener('mouseenter', cancelHide);
+      el.addEventListener('mouseleave', scheduleHide);
+    })();
+    /* Re-attach after first show (createTooltip appends once) */
+    var _tooltipAttached = false;
+
+    /* ── Node interactions ──────────────────────────────────────────── */
+    nodeSel
+      .on('mouseover', function (event, d) {
+        cancelHide();
+        tooltip.show(buildTooltipHtml(d), event.clientX, event.clientY);
+        if (!_tooltipAttached) {
+          var el = document.querySelector('.graph-tooltip');
+          if (el) {
+            el.addEventListener('mouseenter', cancelHide);
+            el.addEventListener('mouseleave', scheduleHide);
+            _tooltipAttached = true;
+          }
+        }
+      })
+      .on('mousemove', function (event) {
+        tooltip.move(event.clientX, event.clientY);
+      })
+      .on('mouseout', scheduleHide)
+      .on('click', function (event, d) {
+        event.stopPropagation();
+        focusMgr.focus(d);
+        deepLink.update();
+      })
+      .on('keydown', function (event, d) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          focusMgr.focus(d);
+          tooltip.show(buildTooltipHtml(d), W / 2, H / 3);
+          deepLink.update();
+        }
+      });
+
+    /* Click background to clear */
+    svg.on('click', function () {
+      focusMgr.clear();
+      tooltip.hide();
+      deepLink.update();
+    });
+
+    /* Clear button */
+    document.getElementById('btn-clear-focus').addEventListener('click', function () {
+      focusMgr.clear();
+      tooltip.hide();
+      deepLink.update();
+    });
+
+    /* ── Deep link ──────────────────────────────────────────────────── */
+    var deepLink = GraphInteractions.bindDeepLink({
+      getSelectedId: function () { return focusMgr.focusedId(); },
+      selectById: function (id) {
+        var datum = nodeData.find(function (n) { return n.id === id; });
+        if (datum) {
+          focusMgr.focus(datum);
+          tooltip.show(buildTooltipHtml(datum), W / 2, H / 3);
+        }
+      },
+      clearSelection: function () {
+        focusMgr.clear();
+        tooltip.hide();
+      },
+    });
+
+    /* ── Keyboard navigation ────────────────────────────────────────── */
+    GraphInteractions.setupKeyboardNav({
+      svgElement:  svgEl,
+      getNodes:    function () { return nodeData; },
+      getNodeId:   function (d) { return d.id; },
+      getNodePos:  function (d) { return { x: d.x || 0, y: d.y || 0 }; },
+      onSelect:    function (d) { focusMgr.focus(d); },
+      onActivate:  function (d) {
+        focusMgr.focus(d);
+        deepLink.update();
+      },
+    });
+
+    /* ── Simulation tick ────────────────────────────────────────────── */
+    simulation.on('tick', function () {
+      linkSel
+        .attr('x1', function (d) { return d.source.x; })
+        .attr('y1', function (d) { return d.source.y; })
+        .attr('x2', function (d) { return d.target.x; })
+        .attr('y2', function (d) { return d.target.y; });
+
+      nodeSel.attr('transform', function (d) {
+        return 'translate(' + d.x + ',' + d.y + ')';
+      });
+    });
+
+    /* ── Resize handler ─────────────────────────────────────────────── */
+    window.addEventListener('resize', function () {
+      var nw = wrapper.clientWidth || 800;
+      svgEl.setAttribute('viewBox', '0 0 ' + nw + ' ' + H);
+      svgEl.setAttribute('width',   nw);
+      simulation
+        .force('center', d3.forceCenter(nw / 2, H / 2))
+        .force('x', d3.forceX(nw / 2).strength(0.04))
+        .alpha(0.1)
+        .restart();
+    });
+
+    /* ── Filter logic ───────────────────────────────────────────────── */
+    function applyFilters() {
+      var q = currentSearch.trim().toLowerCase();
+      var visibleIds = new Set();
+
+      nodeData.forEach(function (d) {
+        var matchText   = !q
+          || d.id.toLowerCase().includes(q)
+          || d.label.toLowerCase().includes(q)
+          || d.type.toLowerCase().includes(q)
+          || d.role.toLowerCase().includes(q);
+        var matchType   = !currentType   || d.typeShort === currentType;
+        var matchDevice = !currentDevice || d.devArray.includes(currentDevice);
+
+        if (matchText && matchType && matchDevice) {
+          visibleIds.add(d.id);
+        }
+      });
+
+      nodeSel.classed('filtered-out', function (d) {
+        return !visibleIds.has(d.id);
+      });
+
+      linkSel.classed('filtered-out', function (d) {
+        var src = (d.source && d.source.id) ? d.source.id : d.source;
+        var tgt = (d.target && d.target.id) ? d.target.id : d.target;
+        return !visibleIds.has(src) || !visibleIds.has(tgt);
+      });
+
+      filterCtrl.setCount(visibleIds.size, nodeData.length);
+    }
+
+    /* Initial filter pass */
+    applyFilters();
+
+    /* Restore deep link from URL hash */
+    deepLink.restore();
+
+  })(); // end IIFE
+  </script>
 </body>
 </html>

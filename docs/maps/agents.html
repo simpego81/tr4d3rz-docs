@@ -6,61 +6,208 @@
   <title>Agent Collaboration — TR4D3RZ Project Map</title>
   <link rel="stylesheet" href="../shared/design-tokens.css">
   <link rel="stylesheet" href="../shared/base.css">
+  <style>
+    /* ---- Mode toggle ---- */
+    .mode-toggle {
+      display: flex;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+      flex-wrap: wrap;
+    }
+
+    .mode-toggle .graph-toolbar-btn.active {
+      background-color: var(--color-primary);
+      color: var(--color-text-inverse);
+      border-color: var(--color-primary);
+    }
+
+    .mode-toggle .graph-toolbar-btn.active:hover {
+      background-color: var(--color-primary-hover);
+      border-color: var(--color-primary-hover);
+    }
+
+    /* ---- Legend custom swatches ---- */
+    .legend-swatch-manus       { background-color: #7c3aed; }
+    .legend-swatch-claude      { background-color: #2563eb; }
+    .legend-swatch-copilot     { background-color: #059669; }
+    .legend-swatch-repo        { background-color: #64748b; }
+    .legend-swatch-edge-default { background-color: #94a3b8; }
+    .legend-swatch-assignment  { background-color: #2563eb; }
+    .legend-swatch-validation  { background-color: #f59e0b; }
+    .legend-swatch-report      { background-color: #059669; }
+    .legend-swatch-gate        { background-color: #dc2626; }
+
+    /* ---- Graph wrapper height ---- */
+    #graph-wrapper .graph-svg {
+      height: 560px;
+    }
+
+    /* ---- Legend placement inside wrapper ---- */
+    #legend-container {
+      padding: var(--space-sm) var(--space-md);
+      border-top: 1px solid var(--color-border);
+      background-color: var(--color-surface);
+    }
+
+    /* ---- Fallback section ---- */
+    #fallback-section {
+      margin-top: var(--space-xl);
+    }
+
+    #fallback-section h2 {
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--space-sm);
+    }
+
+    /* ---- Edge label stroke for readability ---- */
+    .edge-label {
+      paint-order: stroke;
+      stroke: white;
+      stroke-width: 3px;
+      stroke-linejoin: round;
+    }
+
+    /* ---- Toolbar layout ---- */
+    #graph-toolbar-inner {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+      flex: 1;
+    }
+  </style>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <header class="header">
     <div class="container header-content">
-      <h1 class="header-title"><a href="../index-new.html" style="color: inherit;">TR4D3RZ</a></h1>
-      <nav class="header-nav">
-        <a href="../index-new.html">← Project Map</a>
+      <h1 class="header-title">
+        <a href="../index.html" style="color: inherit;">TR4D3RZ</a>
+      </h1>
+      <nav class="header-nav" role="navigation" aria-label="Site navigation">
+        <a href="../index.html">Project Map</a>
         <a href="roadmap.html">Roadmap</a>
         <a href="conceptual.html">Conceptual</a>
         <a href="physical.html">Physical</a>
+        <a href="agents.html" aria-current="page">Agents</a>
+        <a href="../device-matrix.html">Device Matrix</a>
       </nav>
     </div>
   </header>
 
   <main class="main" id="main-content">
     <div class="container">
-      <div class="breadcrumb">
-        <a href="../index-new.html">Project Map</a>
-        <span class="breadcrumb-separator">/</span>
-        <span>Agent Collaboration</span>
-      </div>
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Project Map</a>
+        <span class="breadcrumb-separator" aria-hidden="true">/</span>
+        <span aria-current="page">Agent Collaboration Map</span>
+      </nav>
 
       <h1>Agent Collaboration Map</h1>
       <p class="text-muted mb-xl">
-        Multi-agent ecosystem: roles, authorities, handoff protocols, and veto gates.
+        Multi-agent ecosystem: roles, repository ownership, handoff protocols, and veto gates.
       </p>
 
-      <div class="card">
-        <h2 class="card-title">🚧 Coming Soon</h2>
-        <p class="card-description">
-          This page will display two synchronized views of the agent collaboration setup:
-        </p>
-
-        <h3 class="mt-lg mb-sm">Level 1: Roles & Authorities</h3>
-        <ul class="text-sm text-muted" style="margin-left: 1.5rem;">
-          <li>4 active agents (Manus, Claude Code, Antigravity, GitHub Copilot)</li>
-          <li>Role definitions and repository ownership</li>
-          <li>Authorities and powers (veto rights, approval gates)</li>
-        </ul>
-
-        <h3 class="mt-lg mb-sm">Level 2: Handoff & Workflow</h3>
-        <ul class="text-sm text-muted" style="margin-left: 1.5rem;">
-          <li>Artifact handoff protocol (SSOT → spec → implementation → QA → audit)</li>
-          <li>HRA (Human Relation Agent) synthesis workflow</li>
-          <li>Veto gates (7 gates: Pre-Commit, Protocol Integrity, Demo Validation, etc.)</li>
-          <li>Repository flow and task assignment</li>
-        </ul>
-
-        <p class="mt-lg text-sm">
-          <strong>Data Source:</strong> <code>ecosystem-snapshot.json</code>, <code>AGENTS.md</code>, <code>.ecosystem/rules/</code><br>
-          <strong>Task:</strong> PMAP-12 (assigned to Antigravity)
-        </p>
+      <!-- Mode toggle -->
+      <div class="mode-toggle" role="group" aria-label="Select map view">
+        <button id="btn-mode-roles"
+                class="graph-toolbar-btn active"
+                aria-pressed="true"
+                type="button">
+          Roles &amp; Repositories
+        </button>
+        <button id="btn-mode-handoffs"
+                class="graph-toolbar-btn"
+                aria-pressed="false"
+                type="button">
+          Handoff Flow
+        </button>
       </div>
+
+      <!-- Graph wrapper -->
+      <div class="graph-wrapper" id="graph-wrapper">
+
+        <!-- Toolbar: filter + reset -->
+        <div class="graph-toolbar">
+          <div id="filter-container" id-toolbar-inner></div>
+          <button id="btn-reset-zoom"
+                  class="graph-toolbar-btn"
+                  type="button"
+                  aria-label="Reset graph zoom and pan">
+            Reset view
+          </button>
+        </div>
+
+        <!-- Mobile notice -->
+        <div class="desktop-only-notice" aria-hidden="true">
+          Interactive graph requires a larger screen (768 px+). Use the table below for full data.
+        </div>
+
+        <!-- D3 Graph -->
+        <svg id="agents-svg"
+             class="graph-svg desktop-only-graph"
+             tabindex="0"
+             role="img"
+             aria-label="Agent Roles and Repository Ownership Graph">
+          <defs>
+            <!-- Default arrow (mode 1, gray) -->
+            <marker id="arrow-default"
+                    viewBox="0 0 10 10" refX="10" refY="5"
+                    markerUnits="userSpaceOnUse"
+                    markerWidth="8" markerHeight="8"
+                    orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+            </marker>
+            <!-- Assignment arrow (#2563eb) -->
+            <marker id="arrow-assignment"
+                    viewBox="0 0 10 10" refX="10" refY="5"
+                    markerUnits="userSpaceOnUse"
+                    markerWidth="8" markerHeight="8"
+                    orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+            </marker>
+            <!-- Validation arrow (#f59e0b) -->
+            <marker id="arrow-validation"
+                    viewBox="0 0 10 10" refX="10" refY="5"
+                    markerUnits="userSpaceOnUse"
+                    markerWidth="8" markerHeight="8"
+                    orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b"/>
+            </marker>
+            <!-- Report arrow (#059669) -->
+            <marker id="arrow-report"
+                    viewBox="0 0 10 10" refX="10" refY="5"
+                    markerUnits="userSpaceOnUse"
+                    markerWidth="8" markerHeight="8"
+                    orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#059669"/>
+            </marker>
+            <!-- Gate arrow (#dc2626) -->
+            <marker id="arrow-gate"
+                    viewBox="0 0 10 10" refX="10" refY="5"
+                    markerUnits="userSpaceOnUse"
+                    markerWidth="8" markerHeight="8"
+                    orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/>
+            </marker>
+          </defs>
+          <g id="graph-group"></g>
+        </svg>
+
+        <!-- Legend -->
+        <div id="legend-container" aria-label="Legend"></div>
+      </div>
+
+      <!-- Textual fallback table -->
+      <section id="fallback-section" aria-labelledby="fallback-heading">
+        <h2 id="fallback-heading" class="text-muted" style="font-size:var(--font-size-base);text-transform:uppercase;letter-spacing:0.05em;">
+          Agent Summary
+        </h2>
+        <div id="fallback-container"></div>
+      </section>
+
     </div>
   </main>
 
@@ -69,5 +216,652 @@
       <p>TR4D3RZ Documentation</p>
     </div>
   </footer>
+
+  <noscript>
+    <div style="padding:1rem;background:#fef2f2;border:1px solid #ef4444;border-radius:4px;margin:1rem;">
+      <strong>JavaScript required.</strong>
+      This page displays an interactive D3 force graph of the TR4D3RZ agent collaboration model.
+      Two views are available: <em>Roles &amp; Repositories</em> (agents own repositories) and
+      <em>Handoff Flow</em> (directional task-assignment, validation, report, and veto-gate edges between agents).
+      Agents: Manus (Chief Architect), Claude Code (Backend/Frontend/QA), GitHub Copilot (Embedded Developer).
+      Enable JavaScript to interact with the graph.
+    </div>
+  </noscript>
+
+  <!-- Script load order per spec -->
+  <script src="../shared/data-loader.js"></script>
+  <script src="../shared/components.js"></script>
+  <script src="../shared/graph-interactions.js"></script>
+  <script src="https://unpkg.com/d3@7/dist/d3.min.js"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    /* ================================================================
+       STATIC DATA
+    ================================================================ */
+    const AGENTS = [
+      { id: 'manus', label: 'Manus', role: 'Chief Architect & Coordinator', color: '#7c3aed', canCode: false,
+        repos: ['tr4d3rz-docs (coordination only)'],
+        responsibilities: ['Architecture', 'ADRs', 'Task assignment', 'Veto gates', 'Closure approval'] },
+      { id: 'claude-code', label: 'Claude Code', role: 'Backend + Frontend + Meta-Optimizer + Debug Intelligence + QA', color: '#2563eb', canCode: true,
+        repos: ['tr4d3rz-core', 'tr4d3rz-messaging', 'tr4d3rz-evolution', 'tr4d3rz-persistence', 'tr4d3rz-observatory', 'tr4d3rz-docs (scoped)'],
+        responsibilities: ['Rust backend', 'D3 frontend', 'Pipeline', 'QA', 'Meta-optimization', 'Debug analysis'] },
+      { id: 'github-copilot', label: 'GitHub Copilot', role: 'Embedded Developer & Validator', color: '#059669', canCode: true,
+        repos: ['tr4d3rz-embedded'],
+        responsibilities: ['ESP8266 firmware', 'MQTT validation probe', 'Independent QA reports'] }
+    ];
+
+    const REPOS = [
+      { id: 'tr4d3rz-docs',        owner: 'manus'         },
+      { id: 'tr4d3rz-core',        owner: 'claude-code'   },
+      { id: 'tr4d3rz-messaging',   owner: 'claude-code'   },
+      { id: 'tr4d3rz-evolution',   owner: 'claude-code'   },
+      { id: 'tr4d3rz-persistence', owner: 'claude-code'   },
+      { id: 'tr4d3rz-observatory', owner: 'claude-code'   },
+      { id: 'tr4d3rz-embedded',    owner: 'github-copilot'}
+    ];
+
+    const HANDOFFS = [
+      { id: 'h1', from: 'manus',         to: 'claude-code',    label: 'Task assignment',    type: 'assignment' },
+      { id: 'h2', from: 'claude-code',   to: 'github-copilot', label: 'Validation request', type: 'validation' },
+      { id: 'h3', from: 'github-copilot',to: 'manus',          label: 'QA report',          type: 'report'     },
+      { id: 'h4', from: 'claude-code',   to: 'manus',          label: 'Implementation log', type: 'report'     },
+      { id: 'h5', from: 'manus',         to: 'claude-code',    label: 'Approval / veto gate', type: 'gate'     }
+    ];
+
+    const EDGE_COLORS = {
+      assignment: '#2563eb',
+      validation: '#f59e0b',
+      report:     '#059669',
+      gate:       '#dc2626'
+    };
+
+    /* ================================================================
+       MUTABLE GRAPH STATE
+    ================================================================ */
+    let currentMode       = 'roles';
+    let simulation        = null;
+    let focusManager      = null;
+    let searchFilter      = null;
+    let filterControl     = null;
+    let tooltip           = null;
+    let deepLink          = null;
+    let currentNodes      = [];
+    let selectedId        = null;
+
+    /* ================================================================
+       INIT
+    ================================================================ */
+    function init() {
+      // Mobile banner
+      Components.renderViewportWarning(document.getElementById('main-content'));
+
+      // Tooltip (shared across modes)
+      tooltip = GraphInteractions.createTooltip(document.body);
+
+      // Filter panel (shared across modes; reused)
+      const filterEl = document.getElementById('filter-container');
+      filterControl = Components.renderFilterPanel(filterEl, {
+        searchPlaceholder: 'Search agents & repos…',
+        onChange: function (opts) {
+          var term = opts.term;
+          if (searchFilter) {
+            var count = searchFilter.apply(term, '');
+            filterControl.setCount(count, currentNodes.length);
+          }
+        }
+      });
+
+      // Deep link (created once; callbacks close over mutable state)
+      deepLink = GraphInteractions.bindDeepLink({
+        getSelectedId: function () { return selectedId; },
+        selectById: function (id) {
+          var datum = currentNodes.find(function (n) { return n.id === id; });
+          if (datum && focusManager) {
+            selectedId = id;
+            focusManager.focus(datum);
+          }
+        },
+        clearSelection: function () {
+          selectedId = null;
+          if (focusManager) focusManager.clear();
+        }
+      });
+
+      // Mode toggle buttons
+      document.getElementById('btn-mode-roles').addEventListener('click', function () {
+        setMode('roles');
+      });
+      document.getElementById('btn-mode-handoffs').addEventListener('click', function () {
+        setMode('handoffs');
+      });
+
+      // Textual fallback table
+      renderFallbackTable();
+
+      // Initial render
+      setMode('roles');
+
+      // Restore deep link after first render
+      setTimeout(function () { deepLink.restore(); }, 150);
+    }
+
+    /* ================================================================
+       MODE SWITCHING
+    ================================================================ */
+    function setMode(mode) {
+      currentMode = mode;
+
+      var btnRoles    = document.getElementById('btn-mode-roles');
+      var btnHandoffs = document.getElementById('btn-mode-handoffs');
+
+      btnRoles.classList.toggle('active',    mode === 'roles');
+      btnHandoffs.classList.toggle('active', mode === 'handoffs');
+      btnRoles.setAttribute('aria-pressed',    String(mode === 'roles'));
+      btnHandoffs.setAttribute('aria-pressed', String(mode === 'handoffs'));
+
+      document.getElementById('agents-svg').setAttribute(
+        'aria-label',
+        mode === 'roles'
+          ? 'Agent Roles and Repository Ownership Graph'
+          : 'Agent Handoff Flow Graph'
+      );
+
+      // Reset filter UI (but keep panel alive)
+      if (filterControl) filterControl.reset();
+
+      // Build graph for the mode
+      renderGraph(mode);
+
+      // Update legend
+      renderLegend(mode);
+
+      // Re-apply deep link for new node set
+      setTimeout(function () { if (deepLink) deepLink.restore(); }, 150);
+    }
+
+    /* ================================================================
+       GRAPH RENDERING
+    ================================================================ */
+    function renderGraph(mode) {
+      if (simulation) {
+        simulation.stop();
+        simulation = null;
+      }
+
+      var svgEl    = document.getElementById('agents-svg');
+      var wrapper  = document.getElementById('graph-wrapper');
+      var width    = (wrapper.clientWidth || 800);
+      var height   = 560;
+
+      var svg = d3.select(svgEl);
+      svg.attr('width', width).attr('height', height);
+
+      var g = svg.select('#graph-group');
+      g.selectAll('*').remove();
+
+      // Zoom / pan
+      GraphInteractions.setupZoom(svg, g, {
+        scaleMin: 0.25,
+        scaleMax: 4,
+        resetButton: document.getElementById('btn-reset-zoom')
+      });
+
+      if (mode === 'roles') {
+        buildRolesGraph(svg, g, width, height);
+      } else {
+        buildHandoffsGraph(svg, g, width, height);
+      }
+    }
+
+    /* ---- Mode 1: Roles & Repositories ---- */
+    function buildRolesGraph(svg, g, width, height) {
+      // Build node array: agents + repos
+      var nodes = [].concat(
+        AGENTS.map(function (a) {
+          return Object.assign({}, a, { nodeType: 'agent' });
+        }),
+        REPOS.map(function (r) {
+          return { id: r.id, label: r.id, nodeType: 'repo', owner: r.owner, color: '#64748b' };
+        })
+      );
+
+      // Build link array: agent owns repo
+      var links = REPOS.map(function (r) {
+        return { source: r.owner, target: r.id, _from: r.owner, _to: r.id, id: 'link-' + r.owner + '-' + r.id };
+      });
+
+      currentNodes = nodes;
+
+      // ---- Links (lines) ----
+      var linkSel = g.selectAll('.graph-link')
+        .data(links)
+        .join('line')
+        .attr('class', 'graph-link')
+        .attr('stroke', '#94a3b8')
+        .attr('stroke-width', 1.5)
+        .attr('marker-end', 'url(#arrow-default)');
+
+      // ---- Nodes (<g>) ----
+      var nodeSel = g.selectAll('.graph-node')
+        .data(nodes)
+        .join('g')
+        .attr('class', 'graph-node')
+        .attr('tabindex', '0')
+        .attr('data-node-id', function (d) { return d.id; })
+        .attr('role', 'button')
+        .attr('aria-label', function (d) {
+          return d.nodeType === 'agent'
+            ? 'Agent: ' + d.label + ', ' + d.role
+            : 'Repository: ' + d.id;
+        });
+
+      // Agent circles
+      nodeSel.filter(function (d) { return d.nodeType === 'agent'; })
+        .append('circle')
+        .attr('r', 30)
+        .attr('fill', function (d) { return d.color; })
+        .attr('stroke', 'white')
+        .attr('stroke-width', 2);
+
+      // Repo circles
+      nodeSel.filter(function (d) { return d.nodeType === 'repo'; })
+        .append('circle')
+        .attr('r', 12)
+        .attr('fill', '#64748b')
+        .attr('stroke', 'white')
+        .attr('stroke-width', 1.5);
+
+      // Agent labels (inside circle, multi-line)
+      nodeSel.filter(function (d) { return d.nodeType === 'agent'; })
+        .append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .attr('fill', 'white')
+        .attr('font-size', '10')
+        .attr('font-weight', '600')
+        .attr('pointer-events', 'none')
+        .each(function (d) {
+          var words = d.label.split(' ');
+          var el = d3.select(this);
+          if (words.length === 1) {
+            el.append('tspan').attr('x', 0).attr('dy', '0').text(words[0]);
+          } else {
+            var lineH = 1.15;
+            var startDy = -((words.length - 1) * lineH / 2) + 'em';
+            el.append('tspan').attr('x', 0).attr('dy', startDy).text(words[0]);
+            for (var i = 1; i < words.length; i++) {
+              el.append('tspan').attr('x', 0).attr('dy', lineH + 'em').text(words[i]);
+            }
+          }
+        });
+
+      // Repo labels (below circle)
+      nodeSel.filter(function (d) { return d.nodeType === 'repo'; })
+        .append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dy', '24')
+        .attr('fill', '#64748b')
+        .attr('font-size', '8')
+        .attr('pointer-events', 'none')
+        .text(function (d) { return d.id.replace('tr4d3rz-', ''); });
+
+      // ---- Interactions ----
+      setupSharedInteractions(nodeSel, linkSel, nodes, links);
+
+      // ---- Search filter ----
+      searchFilter = GraphInteractions.applySearchFilter({
+        nodeSelection: nodeSel,
+        linkSelection: linkSel,
+        getNodeText: function (d) { return (d.label || d.id || '').toLowerCase(); },
+        getNodeCat:  function (d) { return d.nodeType; },
+        getSourceId: function (d) { return d._from; },
+        getTargetId: function (d) { return d._to; },
+        getNodeId:   function (d) { return d.id; }
+      });
+
+      filterControl.setCount(nodes.length, nodes.length);
+
+      // ---- Force simulation ----
+      simulation = d3.forceSimulation(nodes)
+        .force('link', d3.forceLink(links).id(function (d) { return d.id; }).distance(120))
+        .force('charge', d3.forceManyBody().strength(-350))
+        .force('center', d3.forceCenter(width / 2, height / 2))
+        .force('collide', d3.forceCollide().radius(function (d) {
+          return d.nodeType === 'agent' ? 48 : 28;
+        }))
+        .on('tick', function () {
+          linkSel
+            .attr('x1', function (d) { return d.source.x; })
+            .attr('y1', function (d) { return d.source.y; })
+            .attr('x2', function (d) {
+              return offsetEdgeEnd(d.source, d.target, d.target.nodeType === 'agent' ? 32 : 14).x;
+            })
+            .attr('y2', function (d) {
+              return offsetEdgeEnd(d.source, d.target, d.target.nodeType === 'agent' ? 32 : 14).y;
+            });
+          nodeSel.attr('transform', function (d) {
+            return 'translate(' + d.x + ',' + d.y + ')';
+          });
+        });
+    }
+
+    /* ---- Mode 2: Handoff Flow ---- */
+    function buildHandoffsGraph(svg, g, width, height) {
+      var nodes = AGENTS.map(function (a) {
+        return Object.assign({}, a, { nodeType: 'agent' });
+      });
+
+      var links = HANDOFFS.map(function (h) {
+        return Object.assign({}, h, { source: h.from, target: h.to, _from: h.from, _to: h.to });
+      });
+
+      currentNodes = nodes;
+
+      // ---- Links (<g> containing line + label) ----
+      var linkSel = g.selectAll('.graph-link')
+        .data(links)
+        .join('g')
+        .attr('class', 'graph-link')
+        .style('cursor', 'default');
+
+      linkSel.append('line')
+        .attr('stroke', function (d) { return EDGE_COLORS[d.type]; })
+        .attr('stroke-width', 2)
+        .attr('marker-end', function (d) { return 'url(#arrow-' + d.type + ')'; });
+
+      linkSel.append('text')
+        .attr('class', 'edge-label')
+        .attr('text-anchor', 'middle')
+        .attr('fill', function (d) { return EDGE_COLORS[d.type]; })
+        .attr('font-size', '10')
+        .attr('font-weight', '500')
+        .attr('pointer-events', 'none')
+        .text(function (d) { return d.label; });
+
+      // Edge tooltip
+      linkSel
+        .on('mouseenter', function (event, d) {
+          tooltip.show(
+            '<strong>' + esc(d.label) + '</strong>' +
+            '<br>Type: ' + esc(d.type) +
+            '<br>From: ' + esc(d.from) + ' &rarr; ' + esc(d.to),
+            event.clientX, event.clientY
+          );
+        })
+        .on('mousemove', function (event) { tooltip.move(event.clientX, event.clientY); })
+        .on('mouseleave', function () { tooltip.hide(); });
+
+      // ---- Nodes (<g>) ----
+      var nodeSel = g.selectAll('.graph-node')
+        .data(nodes)
+        .join('g')
+        .attr('class', 'graph-node')
+        .attr('tabindex', '0')
+        .attr('data-node-id', function (d) { return d.id; })
+        .attr('role', 'button')
+        .attr('aria-label', function (d) { return 'Agent: ' + d.label + ', ' + d.role; });
+
+      nodeSel.append('circle')
+        .attr('r', 30)
+        .attr('fill', function (d) { return d.color; })
+        .attr('stroke', 'white')
+        .attr('stroke-width', 2);
+
+      nodeSel.append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .attr('fill', 'white')
+        .attr('font-size', '10')
+        .attr('font-weight', '600')
+        .attr('pointer-events', 'none')
+        .each(function (d) {
+          var words = d.label.split(' ');
+          var el = d3.select(this);
+          if (words.length === 1) {
+            el.append('tspan').attr('x', 0).attr('dy', '0').text(words[0]);
+          } else {
+            var lineH = 1.15;
+            var startDy = -((words.length - 1) * lineH / 2) + 'em';
+            el.append('tspan').attr('x', 0).attr('dy', startDy).text(words[0]);
+            for (var i = 1; i < words.length; i++) {
+              el.append('tspan').attr('x', 0).attr('dy', lineH + 'em').text(words[i]);
+            }
+          }
+        });
+
+      // ---- Interactions ----
+      setupSharedInteractions(nodeSel, linkSel, nodes, links);
+
+      // ---- Search filter ----
+      searchFilter = GraphInteractions.applySearchFilter({
+        nodeSelection: nodeSel,
+        linkSelection: linkSel,
+        getNodeText: function (d) { return (d.label || '').toLowerCase(); },
+        getNodeCat:  function (d) { return d.id; },
+        getSourceId: function (d) { return d._from; },
+        getTargetId: function (d) { return d._to; },
+        getNodeId:   function (d) { return d.id; }
+      });
+
+      filterControl.setCount(nodes.length, nodes.length);
+
+      // ---- Force simulation ----
+      simulation = d3.forceSimulation(nodes)
+        .force('link', d3.forceLink(links).id(function (d) { return d.id; }).distance(220))
+        .force('charge', d3.forceManyBody().strength(-600))
+        .force('center', d3.forceCenter(width / 2, height / 2))
+        .force('collide', d3.forceCollide().radius(55))
+        .on('tick', function () {
+          var R = 32; // agent radius + 2px gap
+
+          linkSel.select('line')
+            .attr('x1', function (d) {
+              return offsetEdgeStart(d.source, d.target, R).x;
+            })
+            .attr('y1', function (d) {
+              return offsetEdgeStart(d.source, d.target, R).y;
+            })
+            .attr('x2', function (d) {
+              return offsetEdgeEnd(d.source, d.target, R).x;
+            })
+            .attr('y2', function (d) {
+              return offsetEdgeEnd(d.source, d.target, R).y;
+            });
+
+          linkSel.select('text')
+            .attr('x', function (d) { return (d.source.x + d.target.x) / 2; })
+            .attr('y', function (d) { return (d.source.y + d.target.y) / 2 - 7; });
+
+          nodeSel.attr('transform', function (d) {
+            return 'translate(' + d.x + ',' + d.y + ')';
+          });
+        });
+    }
+
+    /* ================================================================
+       SHARED INTERACTION SETUP
+    ================================================================ */
+    function setupSharedInteractions(nodeSel, linkSel, nodes, links) {
+      // Focus manager
+      focusManager = GraphInteractions.createFocusManager({
+        nodeSelection: nodeSel,
+        linkSelection: linkSel,
+        getNodeId:   function (d) { return d.id; },
+        getSourceId: function (d) { return d._from; },
+        getTargetId: function (d) { return d._to; }
+      });
+
+      // Node hover / click / keyboard
+      nodeSel
+        .on('mouseenter', function (event, d) {
+          tooltip.show(buildNodeTooltip(d), event.clientX, event.clientY);
+          focusManager.focus(d);
+          selectedId = d.id;
+          if (deepLink) deepLink.update();
+        })
+        .on('mousemove', function (event) { tooltip.move(event.clientX, event.clientY); })
+        .on('mouseleave', function () {
+          tooltip.hide();
+          focusManager.clear();
+          selectedId = null;
+          if (deepLink) deepLink.update();
+        })
+        .on('click', function (event, d) {
+          focusManager.focus(d);
+          selectedId = d.id;
+          if (deepLink) deepLink.update();
+        })
+        .on('keydown', function (event, d) {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            focusManager.focus(d);
+            selectedId = d.id;
+            if (deepLink) deepLink.update();
+          } else if (event.key === 'Escape') {
+            focusManager.clear();
+            selectedId = null;
+            if (deepLink) deepLink.update();
+          }
+        });
+
+      // Keyboard navigation
+      GraphInteractions.setupKeyboardNav({
+        svgElement:  document.getElementById('agents-svg'),
+        getNodes:    function () { return nodes; },
+        getNodeId:   function (d) { return d.id; },
+        getNodePos:  function (d) { return { x: d.x || 0, y: d.y || 0 }; },
+        onSelect: function (d) {
+          focusManager.focus(d);
+          selectedId = d.id;
+          if (deepLink) deepLink.update();
+        },
+        onActivate: function (d) {
+          focusManager.focus(d);
+          selectedId = d.id;
+          if (deepLink) deepLink.update();
+        }
+      });
+    }
+
+    /* ================================================================
+       TOOLTIP CONTENT
+    ================================================================ */
+    function buildNodeTooltip(d) {
+      if (d.nodeType === 'repo') {
+        var owner = AGENTS.find(function (a) { return a.id === d.owner; });
+        return '<strong>' + esc(d.id) + '</strong>' +
+               '<br><span style="opacity:.8">Owner: ' + esc(owner ? owner.label : d.owner) + '</span>';
+      }
+      // Agent
+      var respItems = (d.responsibilities || [])
+        .map(function (r) { return '<li>' + esc(r) + '</li>'; })
+        .join('');
+      return '<strong>' + esc(d.label) + '</strong>' +
+             '<div style="font-size:11px;margin:3px 0;opacity:.85">' + esc(d.role) + '</div>' +
+             '<ul style="margin:4px 0 0 12px;padding:0;font-size:10px;line-height:1.4">' + respItems + '</ul>' +
+             '<div style="margin-top:4px;font-size:10px">Can write code: ' + (d.canCode ? 'Yes' : 'No') + '</div>';
+    }
+
+    /* ================================================================
+       LEGEND
+    ================================================================ */
+    function renderLegend(mode) {
+      var container = document.getElementById('legend-container');
+      if (mode === 'roles') {
+        Components.renderLegend(container, [
+          { label: 'Manus',          cssClass: 'legend-swatch-manus',        description: 'Chief Architect & Coordinator' },
+          { label: 'Claude Code',    cssClass: 'legend-swatch-claude',       description: 'Backend + Frontend + QA' },
+          { label: 'GitHub Copilot', cssClass: 'legend-swatch-copilot',      description: 'Embedded Developer & Validator' },
+          { label: 'Repository',     cssClass: 'legend-swatch-repo',         description: 'Git repository node' },
+          { label: 'Owns / writes',  cssClass: 'legend-swatch-edge-default', description: 'Agent owns this repository' }
+        ]);
+      } else {
+        Components.renderLegend(container, [
+          { label: 'Task assignment',          cssClass: 'legend-swatch-assignment', description: 'Manus assigns tasks to Claude Code' },
+          { label: 'Validation request',       cssClass: 'legend-swatch-validation', description: 'Claude Code requests QA from GitHub Copilot' },
+          { label: 'QA / Implementation log',  cssClass: 'legend-swatch-report',     description: 'Report sent back to coordinator' },
+          { label: 'Approval / veto gate',     cssClass: 'legend-swatch-gate',       description: 'Manus approves or vetoes implementation' }
+        ]);
+      }
+    }
+
+    /* ================================================================
+       TEXTUAL FALLBACK TABLE
+    ================================================================ */
+    function renderFallbackTable() {
+      var container = document.getElementById('fallback-container');
+      Components.renderTextualFallback(
+        container,
+        AGENTS,
+        [
+          { key: 'label', label: 'Agent' },
+          { key: 'role',  label: 'Role' },
+          {
+            key: 'repos',
+            label: 'Repositories',
+            render: function (val) {
+              return val.map(function (r) { return esc(r); }).join(', ');
+            }
+          },
+          {
+            key: 'canCode',
+            label: 'Can Write Code',
+            render: function (val) { return val ? 'Yes' : 'No'; }
+          }
+        ],
+        { caption: 'Agent summary — roles, repositories, and coding authority' }
+      );
+    }
+
+    /* ================================================================
+       GEOMETRY HELPERS
+    ================================================================ */
+    function offsetEdgeEnd(source, target, r) {
+      var dx   = target.x - source.x;
+      var dy   = target.y - source.y;
+      var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      return { x: target.x - dx / dist * r, y: target.y - dy / dist * r };
+    }
+
+    function offsetEdgeStart(source, target, r) {
+      var dx   = target.x - source.x;
+      var dy   = target.y - source.y;
+      var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      return { x: source.x + dx / dist * r, y: source.y + dy / dist * r };
+    }
+
+    /* ================================================================
+       ESCAPE HELPER
+    ================================================================ */
+    function esc(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    /* ================================================================
+       BOOT
+    ================================================================ */
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    // Handle window resize: re-render active mode
+    var _resizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(_resizeTimer);
+      _resizeTimer = setTimeout(function () {
+        renderGraph(currentMode);
+      }, 250);
+    });
+
+  })();
+  </script>
 </body>
 </html>
