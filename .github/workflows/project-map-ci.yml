@@ -1,0 +1,213 @@
+name: Project Map CI/CD
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'state/**'
+      - 'scripts/**'
+      - 'config/**'
+      - 'artifacts/features/FEATURE-DOCS-PROJECT-MAP/schemas/**'
+      - 'artifacts/features/FEATURE-DOCS-PROJECT-MAP/ecosystem-snapshot.json'
+      - 'docs/**'
+      - 'requirements-ci.txt'
+      - '.github/workflows/project-map-ci.yml'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: project-map-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Job 1: Validate JSON schemas and generated datasets ──────────────────
+  validate-schemas:
+    name: Validate Schemas
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-ci.txt
+
+      - name: Validate JSON schemas and generated datasets
+        run: python scripts/ci/validate_schemas.py
+
+  # ── Job 2: Run data pipeline tests ───────────────────────────────────────
+  test-pipeline:
+    name: Test Data Pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-ci.txt
+
+      - name: Run pipeline tests
+        run: python scripts/test_pipeline.py
+
+  # ── Job 3: Build project map data (pipeline gate) ────────────────────────
+  build:
+    name: Build Project Map
+    runs-on: ubuntu-latest
+    needs: [validate-schemas, test-pipeline]
+    outputs:
+      build_status: ${{ steps.run-build.outputs.status }}
+      has_warnings: ${{ steps.run-build.outputs.has_warnings }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-ci.txt
+
+      - name: Build project map data
+        id: run-build
+        run: |
+          python scripts/build_project_map.py --verbose
+          EXIT=$?
+          if [ $EXIT -eq 0 ]; then
+            echo "status=success" >> "$GITHUB_OUTPUT"
+            echo "has_warnings=false" >> "$GITHUB_OUTPUT"
+          elif [ $EXIT -eq 2 ]; then
+            echo "status=success_with_warnings" >> "$GITHUB_OUTPUT"
+            echo "has_warnings=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "status=failed" >> "$GITHUB_OUTPUT"
+            echo "Build failed with exit code $EXIT — invalid or partial data. Deploy blocked."
+            exit 1
+          fi
+
+      - name: Build views data (stakeholder + roadmap JSON)
+        run: python scripts/build_views.py
+
+      - name: Annotate stale data warning
+        if: steps.run-build.outputs.has_warnings == 'true'
+        run: |
+          echo "::warning title=Stale or Incomplete Data::Pipeline completed with warnings. Check docs/data/generated/build-manifest.json for MAP-W codes. Deploy will proceed."
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: project-map-data-${{ github.sha }}
+          path: |
+            docs/data/generated/
+            artifacts/features/FEATURE-DOCS-PROJECT-MAP/staging/
+            artifacts/features/FEATURE-DOCS-PROJECT-MAP/pipeline-test-output.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  # ── Job 4: Check internal links in docs/ ─────────────────────────────────
+  link-check:
+    name: Link Check
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: project-map-data-${{ github.sha }}
+          path: docs/data/generated/
+
+      - name: Check internal links (file-based only)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >
+            --no-progress
+            --offline
+            --include-fragments
+            --accept 200,206,429
+            'docs/**/*.html'
+          fail: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ── Job 5: Publish generated data and deploy Pages (main only) ───────────
+  deploy:
+    name: Publish to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: [build, link-check]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: github-pages
+      url: https://simpego81.github.io/tr4d3rz-docs/
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-ci.txt
+
+      - name: Regenerate project map data
+        id: regen
+        run: |
+          python scripts/build_project_map.py --verbose
+          EXIT=$?
+          if [ $EXIT -eq 2 ]; then
+            echo "::warning title=Stale Data::Deploying with stale or missing optional sources. See build-manifest.json."
+          elif [ $EXIT -ne 0 ]; then
+            echo "Build failed (exit $EXIT). Deploy blocked — invalid or partial data cannot be published."
+            exit 1
+          fi
+
+      - name: Regenerate views data (stakeholder + roadmap JSON)
+        run: python scripts/build_views.py
+
+      - name: Commit regenerated data if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/data/generated/ docs/data/stakeholder_data.json docs/data/roadmap_data.json
+          if ! git diff --cached --quiet; then
+            git commit -m "ci: regenerate project map + views data [skip ci]"
+            git push
+            echo "Generated data updated and pushed."
+          else
+            echo "Generated data is up to date — no commit needed."
+          fi
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/
+
+      - name: Deploy to GitHub Pages
+        id: deploy-pages
+        uses: actions/deploy-pages@v4

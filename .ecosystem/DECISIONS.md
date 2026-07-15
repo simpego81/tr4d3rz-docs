@@ -68,4 +68,32 @@
 
 ---
 
-*Decisions logged by HRA for auditability and continuity*
+---
+
+## Decision 6: Migrazione modello agenti — single primary + subagent interni
+
+**Data**: 2026-07-15  
+**Decision Maker**: Owner (utente U422756)
+
+**Contesto**: Gli agenti esterni (Manus, GitHub Copilot, Antigravity, HRA) sono stati rimossi dal progetto.
+
+**Decisione**: **Adozione modello single primary agent con subagent interni**
+
+- **Claude Code** = unico agente primario, assorbe tutti i ruoli operativi
+- **User (Owner)** = approva proposte architetturali e decisioni di priorità
+- **Subagent interni** = spawned da Claude Code via Agent tool per parallelismo e QA avversariale
+
+**Rationale**: eliminare overhead di coordinamento tra agenti esterni; mantenere la specializzazione tramite subagent tipizzati (research, plan, implement, review).
+
+**Impatto**: 
+- AGENTS.md riscritto (rimossi Manus, Copilot, HRA)
+- SUBAGENT_PROTOCOL.md creato
+- DASHBOARD.md, project_state.md, meta_metrics.md aggiornati
+- CLAUDE.md (workspace) aggiornato
+- current_task.md files corretti
+
+**Documentazione**: `AGENTS.md`, `SUBAGENT_PROTOCOL.md`
+
+---
+
+*Decisions log — TR4D3RZ .ecosystem*

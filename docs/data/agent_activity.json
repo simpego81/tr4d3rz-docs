@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-07-15",
+  "activities": [
+    {
+      "id": "act-001",
+      "timestamp": "2026-06-05T10:00:00Z",
+      "task_id": "M1-T1",
+      "task_title": "Core Rust types",
+      "agent_role": "developer",
+      "verdict": "PASS",
+      "summary": "OhlcvBar, GenomeCapsule, FitnessResult, NodeStatus implementati — 8/8 test passing",
+      "duration_estimate": "long",
+      "findings_count": 0
+    },
+    {
+      "id": "act-002",
+      "timestamp": "2026-06-05T10:30:00Z",
+      "task_id": "M1-T1",
+      "task_title": "Core Rust types",
+      "agent_role": "reviewer",
+      "verdict": "PASS",
+      "summary": "CBOR serialization corretta, compatibilità no_std verificata, rustdoc completa",
+      "duration_estimate": "medium",
+      "findings_count": 0
+    },
+    {
+      "id": "act-003",
+      "timestamp": "2026-06-05T14:00:00Z",
+      "task_id": "M1-T2",
+      "task_title": "MQTT library Rust",
+      "agent_role": "developer",
+      "verdict": "PASS",
+      "summary": "rumqttc wrapper, topic builder, CBOR serialization automatica — 12/13 test passing",
+      "duration_estimate": "long",
+      "findings_count": 0
+    },
+    {
+      "id": "act-004",
+      "timestamp": "2026-06-14T09:00:00Z",
+      "task_id": "M1-T2-B",
+      "task_title": "Heartbeat Probe (validazione remota)",
+      "agent_role": "developer",
+      "verdict": "PASS",
+      "summary": "remote_validation_probe.rs implementato e validato su RPi2 hardware",
+      "duration_estimate": "medium",
+      "findings_count": 0
+    },
+    {
+      "id": "act-005",
+      "timestamp": "2026-07-12T09:00:00Z",
+      "task_id": "FEATURE-DOCS-PROJECT-MAP",
+      "task_title": "Project Map GitHub Pages",
+      "agent_role": "architect",
+      "verdict": "PASS",
+      "summary": "Pipeline 6 fasi, schema JSON, 4 mappe D3, CI/CD progettati",
+      "duration_estimate": "medium",
+      "findings_count": 0
+    },
+    {
+      "id": "act-006",
+      "timestamp": "2026-07-13T11:00:00Z",
+      "task_id": "FEATURE-DOCS-PROJECT-MAP",
+      "task_title": "Project Map GitHub Pages",
+      "agent_role": "developer",
+      "verdict": "PASS",
+      "summary": "19/20 task completati — pipeline dati, 4 mappe D3, 27 pagine dettaglio, CI/CD",
+      "duration_estimate": "long",
+      "findings_count": 0
+    },
+    {
+      "id": "act-007",
+      "timestamp": "2026-07-14T10:00:00Z",
+      "task_id": "FEATURE-DOCS-PROJECT-MAP",
+      "task_title": "Project Map GitHub Pages",
+      "agent_role": "reviewer",
+      "verdict": "PARTIAL",
+      "summary": "FUNCTIONALLY COMPLETE — browser gate PENDING_HUMAN (viewport 360px, keyboard nav)",
+      "duration_estimate": "medium",
+      "findings_count": 3
+    },
+    {
+      "id": "act-008",
+      "timestamp": "2026-07-15T09:00:00Z",
+      "task_id": "COLLAB-SETUP",
+      "task_title": "Ristrutturazione setup collaborativo",
+      "agent_role": "architect",
+      "verdict": "PASS",
+      "summary": "AGENTS.md, SUBAGENT_PROTOCOL.md, DASHBOARD.md aggiornati — modello single primary + subagent interni",
+      "duration_estimate": "medium",
+      "findings_count": 0
+    }
+  ]
+}

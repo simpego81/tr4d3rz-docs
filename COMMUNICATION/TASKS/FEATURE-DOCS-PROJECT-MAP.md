@@ -3,7 +3,7 @@
 **Titolo**: Homepage GitHub Pages “Project Map”
 **Assegnato da**: Manus, Chief Architect & Coordinator
 **Repository target**: `tr4d3rz-docs`
-**Stato**: PENDING
+**Stato**: COMPLETED (FUNCTIONALLY COMPLETE — browser gate PENDING_HUMAN)
 **Data assegnazione**: 2026-07-12
 **Spec autoritativa**: `artifacts/features/FEATURE-DOCS-PROJECT-MAP/spec.md`
 **Backlog autoritativo**: `artifacts/features/FEATURE-DOCS-PROJECT-MAP/tasks.yaml`

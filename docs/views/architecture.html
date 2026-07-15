@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TR4D3RZ — Architecture View</title>
+  <meta name="description" content="Architettura distribuita TR4D3RZ — repository map, nodi hardware, layer ArchiMate.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    /* ── Page Header ── */
+    .page-header { margin-bottom: 2rem; }
+    .page-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6366f1;
+      margin-bottom: 0.25rem;
+    }
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 0.25rem;
+      line-height: 1.2;
+    }
+    .page-subtitle {
+      font-size: 0.9375rem;
+      color: #64748b;
+      margin: 0 0 0.25rem;
+    }
+    .page-meta {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin: 0;
+    }
+
+    /* ── Nav ── */
+    .nav-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #6366f1;
+      text-decoration: none;
+      padding: 0.25rem 0.75rem;
+      border: 1px solid #e0e7ff;
+      border-radius: 9999px;
+      background: #f0f2ff;
+      transition: background 0.15s;
+    }
+    .nav-link:hover { background: #e0e7ff; }
+    .nav-link.active { background: #6366f1; color: #fff; border-color: #6366f1; }
+
+    /* ── Section headings ── */
+    .section-heading {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #475569;
+      margin: 0 0 0.875rem;
+    }
+    .section-gap { margin-top: 2.5rem; }
+
+    /* ── ArchiMate Layer Stats ── */
+    .layer-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+    .layer-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+      border-top: 3px solid transparent;
+      text-align: center;
+    }
+    .layer-card.motivation { border-color: #8b5cf6; }
+    .layer-card.business   { border-color: #f59e0b; }
+    .layer-card.application{ border-color: #3b82f6; }
+    .layer-card.technology { border-color: #10b981; }
+
+    .layer-name {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+      margin-bottom: 0.4rem;
+    }
+    .layer-count {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #1e293b;
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+    .layer-unit {
+      font-size: 0.7rem;
+      color: #64748b;
+    }
+
+    /* ── Repo Table ── */
+    .repo-table-wrap {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      overflow: hidden;
+      margin-bottom: 2.5rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+    }
+    thead tr {
+      background: #f8fafc;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #64748b;
+    }
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: top;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: #fafafa; }
+
+    .repo-name {
+      font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #4f46e5;
+    }
+    .repo-role { color: #1e293b; font-weight: 500; }
+    .repo-tech { color: #64748b; }
+    .owner-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+    .owner-manus       { background: #ede9fe; color: #5b21b6; }
+    .owner-claude      { background: #dbeafe; color: #1d4ed8; }
+    .owner-copilot     { background: #fef9c3; color: #92400e; }
+    .ssot-badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      margin-left: 0.4rem;
+    }
+
+    /* ── Device Cards Grid ── */
+    .device-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+    .device-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      transition: box-shadow 0.15s, transform 0.15s;
+      border: 1px solid transparent;
+    }
+    .device-card:hover {
+      box-shadow: 0 4px 12px rgba(99,102,241,0.15);
+      border-color: #a5b4fc;
+      transform: translateY(-1px);
+    }
+    .device-card.special {
+      border-style: dashed;
+      border-color: #e2e8f0;
+    }
+    .device-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+    .device-name {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .device-subtitle {
+      font-size: 0.65rem;
+      color: #94a3b8;
+      line-height: 1.3;
+    }
+    .device-layer-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-right: 0.3rem;
+      vertical-align: middle;
+    }
+    .dot-embedded  { background: #10b981; }
+    .dot-rpi       { background: #3b82f6; }
+    .dot-software  { background: #8b5cf6; }
+    .dot-special   { background: #f59e0b; }
+
+    /* ── Tech Stack ── */
+    .tech-stack {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    .tech-group {
+      background: #fff;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+    }
+    .tech-group-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+      margin-bottom: 0.6rem;
+    }
+    .tech-chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .tech-chip {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: #334155;
+    }
+    .tech-chip.primary { background: #eef2ff; color: #4338ca; }
+    .tech-chip.accent  { background: #f0fdf4; color: #15803d; }
+    .tech-chip.warn    { background: #fffbeb; color: #92400e; }
+
+    @media (max-width: 700px) {
+      .layer-stats { grid-template-columns: repeat(2, 1fr); }
+      .device-grid { grid-template-columns: repeat(2, 1fr); }
+      table { font-size: 0.75rem; }
+      th, td { padding: 0.5rem 0.75rem; }
+    }
+    @media (max-width: 480px) {
+      .layer-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <header class="page-header">
+    <p class="page-eyebrow">TR4D3RZ — Architecture View</p>
+    <h1 class="page-title">System Architecture</h1>
+    <p class="page-subtitle">Ecosistema distribuito evolutivo — repository, nodi hardware, layer ArchiMate.</p>
+    <p class="page-meta" id="page-meta">Caricamento dati ArchiMate…</p>
+  </header>
+
+  <!-- Nav -->
+  <nav class="nav-bar" aria-label="View navigation">
+    <a href="../index.html" class="nav-link">Home</a>
+    <a href="roadmap.html" class="nav-link">Roadmap</a>
+    <a href="process.html" class="nav-link">Process</a>
+    <a href="stakeholders.html" class="nav-link">Stakeholders</a>
+    <a href="architecture.html" class="nav-link active" aria-current="page">Architecture</a>
+  </nav>
+
+  <!-- ArchiMate Layer Summary -->
+  <p class="section-heading">ArchiMate 3.2 — Elementi per Layer</p>
+  <div class="layer-stats" id="layer-stats">
+    <div class="layer-card motivation">
+      <p class="layer-name">Motivation</p>
+      <p class="layer-count" id="cnt-motivation">—</p>
+      <p class="layer-unit">Goals, Principles, Drivers</p>
+    </div>
+    <div class="layer-card business">
+      <p class="layer-name">Business</p>
+      <p class="layer-count" id="cnt-business">—</p>
+      <p class="layer-unit">Services, Processes, Objects</p>
+    </div>
+    <div class="layer-card application">
+      <p class="layer-name">Application</p>
+      <p class="layer-count" id="cnt-application">—</p>
+      <p class="layer-unit">Components, Services, Data</p>
+    </div>
+    <div class="layer-card technology">
+      <p class="layer-name">Technology</p>
+      <p class="layer-count" id="cnt-technology">—</p>
+      <p class="layer-unit">Devices, Runtimes, Infra</p>
+    </div>
+  </div>
+
+  <!-- Repository Map -->
+  <p class="section-heading section-gap">Repository Map — Single Source of Truth</p>
+  <div class="repo-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Repository</th>
+          <th>Ruolo</th>
+          <th>Tecnologia</th>
+          <th>Owner</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <span class="repo-name">tr4d3rz-docs</span>
+            <span class="ssot-badge">SSOT</span>
+          </td>
+          <td class="repo-role">Architecture, Specs, ADRs, Protocolli, State</td>
+          <td class="repo-tech">Markdown, PlantUML</td>
+          <td><span class="owner-badge owner-manus">Manus</span></td>
+        </tr>
+        <tr>
+          <td><span class="repo-name">tr4d3rz-core</span></td>
+          <td class="repo-role">L-System genome, FSM runtime, tipi condivisi</td>
+          <td class="repo-tech">Rust (no_std, CBOR)</td>
+          <td><span class="owner-badge owner-claude">Claude Code</span></td>
+        </tr>
+        <tr>
+          <td><span class="repo-name">tr4d3rz-messaging</span></td>
+          <td class="repo-role">MQTT client, Gateway Nodes, pub/sub type-safe</td>
+          <td class="repo-tech">Rust (rumqttc)</td>
+          <td><span class="owner-badge owner-claude">Claude Code</span></td>
+        </tr>
+        <tr>
+          <td><span class="repo-name">tr4d3rz-evolution</span></td>
+          <td class="repo-role">Mutation operators, fitness eval, niche discovery</td>
+          <td class="repo-tech">Rust / Python</td>
+          <td><span class="owner-badge owner-claude">Claude Code</span></td>
+        </tr>
+        <tr>
+          <td><span class="repo-name">tr4d3rz-observatory</span></td>
+          <td class="repo-role">UI, visualization 3D, replay system</td>
+          <td class="repo-tech">TypeScript, Three.js, WASM</td>
+          <td><span class="owner-badge owner-claude">Claude Code</span></td>
+        </tr>
+        <tr>
+          <td><span class="repo-name">tr4d3rz-persistence</span></td>
+          <td class="repo-role">Event sourcing (SQLite), archetype memory</td>
+          <td class="repo-tech">Rust / Python, Parquet</td>
+          <td><span class="owner-badge owner-claude">Claude Code</span></td>
+        </tr>
+        <tr>
+          <td><span class="repo-name">tr4d3rz-embedded</span></td>
+          <td class="repo-role">Firmware ESP8266 / STM32, optimization nodes</td>
+          <td class="repo-tech">C / C++, Rust no_std</td>
+          <td><span class="owner-badge owner-copilot">GitHub Copilot</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Device / Node Views -->
+  <p class="section-heading section-gap">Viste per Nodo Hardware</p>
+  <div class="device-grid">
+
+    <a href="../holistic_view.html" class="device-card special" title="Holistic ArchiMate view">
+      <span class="device-icon">🌐</span>
+      <span class="device-name">Holistic View</span>
+      <span class="device-subtitle">
+        <span class="device-layer-dot dot-special"></span>Tutti i nodi — vista unificata
+      </span>
+    </a>
+
+    <a href="../device-matrix.html" class="device-card special" title="Device capability matrix">
+      <span class="device-icon">⊞</span>
+      <span class="device-name">Device Matrix</span>
+      <span class="device-subtitle">
+        <span class="device-layer-dot dot-special"></span>Matrice capacità per dispositivo
+      </span>
+    </a>
+
+    <a href="../rasp2.html" class="device-card" title="Raspberry Pi 2 — nodo centrale M1">
+      <span class="device-icon">🍓</span>
+      <span class="device-name">Raspberry Pi 2</span>
+      <span class="device-subtitle">
+        <span class="device-layer-dot dot-rpi"></span>ARMv7 · NanoMQ · SQLite · M1 hub
+      </span>
+    </a>
+
+    <a href="../esp.html" class="device-card" title="ESP8266 — optimization node">
+      <span class="device-icon">📡</span>
+      <span class="device-name">ESP8266</span>
+      <span class="device-subtitle">
+        <span class="device-layer-dot dot-embedded"></span>80MHz · 80KB RAM · MQTT · Tensilica
+      </span>
+    </a>
+
+    <a href="../stm32f1.html" class="device-card" title="STM32F1 — Cortex-M3">
+      <span class="device-icon">🔲</span>
+      <span class="device-name">STM32F1</span>
+      <span class="device-subtitle">
+        <span class="device-layer-dot dot-embedded"></span>Cortex-M3 · no_std · no heap
+      </span>
+    </a>
+
+    <a href="../stm32f3.html" class="device-card" title="STM32F3 — Cortex-M4F">
+      <span class="device-icon">🔲</span>
+      <span class="device-name">STM32F3</span>
+      <span class="device-subtitle">
+        <span class="device-layer-dot dot-embedded"></span>Cortex-M4F · FPU · no_std
+      </span>
+    </a>
+
+    <a href="../str.html" class="device-card" title="STR-E912 — via gateway UART">
+      <span class="device-icon">🔌</span>
+      <span class="device-name">STR-E912</span>
+      <span class="device-subtitle">
+        <span class="device-layer-dot dot-embedded"></span>ARM9 · UART bridge · gateway
+      </span>
+    </a>
+
+    <a href="../ra8.html" class="device-card" title="Renesas RA8 — Cortex-M85">
+      <span class="device-icon">💎</span>
+      <span class="device-name">Renesas RA8</span>
+      <span class="device-subtitle">
+        <span class="device-layer-dot dot-embedded"></span>Cortex-M85 · Helium · high-perf
+      </span>
+    </a>
+
+    <a href="../mimx.html" class="device-card" title="NXP iMX RT">
+      <span class="device-icon">⚡</span>
+      <span class="device-name">NXP iMX RT</span>
+      <span class="device-subtitle">
+        <span class="device-layer-dot dot-embedded"></span>Cortex-M7 · crossover MCU
+      </span>
+    </a>
+
+    <a href="../m24lr.html" class="device-card" title="ST M24LR — RFID/NFC energy harvesting">
+      <span class="device-icon">📶</span>
+      <span class="device-name">ST M24LR</span>
+      <span class="device-subtitle">
+        <span class="device-layer-dot dot-embedded"></span>RFID/NFC · energy harvesting
+      </span>
+    </a>
+
+    <a href="../linux.html" class="device-card" title="Linux PC — development / evolution CLI">
+      <span class="device-icon">🐧</span>
+      <span class="device-name">Linux</span>
+      <span class="device-subtitle">
+        <span class="device-layer-dot dot-rpi"></span>x86-64 · Rust toolchain · evolution CLI
+      </span>
+    </a>
+
+    <a href="../browser.html" class="device-card" title="Browser — Observatory UI WASM">
+      <span class="device-icon">🌍</span>
+      <span class="device-name">Browser</span>
+      <span class="device-subtitle">
+        <span class="device-layer-dot dot-software"></span>WebAssembly · Three.js · Observatory
+      </span>
+    </a>
+
+    <a href="../android.html" class="device-card" title="Android — mobile monitoring">
+      <span class="device-icon">📱</span>
+      <span class="device-name">Android</span>
+      <span class="device-subtitle">
+        <span class="device-layer-dot dot-software"></span>ARM64 · mobile monitoring
+      </span>
+    </a>
+
+    <a href="../tablet.html" class="device-card" title="Tablet">
+      <span class="device-icon">📟</span>
+      <span class="device-name">Tablet</span>
+      <span class="device-subtitle">
+        <span class="device-layer-dot dot-software"></span>Observatory extended view
+      </span>
+    </a>
+
+    <a href="../phone.html" class="device-card" title="Phone">
+      <span class="device-icon">📲</span>
+      <span class="device-name">Phone</span>
+      <span class="device-subtitle">
+        <span class="device-layer-dot dot-software"></span>Compact monitoring UI
+      </span>
+    </a>
+
+  </div>
+
+  <!-- Tech Stack -->
+  <p class="section-heading section-gap">Stack Tecnologico</p>
+  <div class="tech-stack">
+
+    <div class="tech-group">
+      <p class="tech-group-label">Core / Runtime</p>
+      <div class="tech-chip-list">
+        <span class="tech-chip primary">Rust</span>
+        <span class="tech-chip primary">no_std</span>
+        <span class="tech-chip">CBOR</span>
+        <span class="tech-chip">WebAssembly</span>
+      </div>
+    </div>
+
+    <div class="tech-group">
+      <p class="tech-group-label">Messaggistica</p>
+      <div class="tech-chip-list">
+        <span class="tech-chip primary">MQTT</span>
+        <span class="tech-chip">NanoMQ</span>
+        <span class="tech-chip">NATS</span>
+        <span class="tech-chip">rumqttc</span>
+      </div>
+    </div>
+
+    <div class="tech-group">
+      <p class="tech-group-label">Persistenza</p>
+      <div class="tech-chip-list">
+        <span class="tech-chip accent">SQLite</span>
+        <span class="tech-chip accent">Parquet</span>
+        <span class="tech-chip">Event Sourcing</span>
+      </div>
+    </div>
+
+    <div class="tech-group">
+      <p class="tech-group-label">Visualizzazione</p>
+      <div class="tech-chip-list">
+        <span class="tech-chip primary">TypeScript</span>
+        <span class="tech-chip primary">Three.js</span>
+        <span class="tech-chip">D3.js</span>
+        <span class="tech-chip">WebGL</span>
+      </div>
+    </div>
+
+    <div class="tech-group">
+      <p class="tech-group-label">Embedded</p>
+      <div class="tech-chip-list">
+        <span class="tech-chip warn">C / C++</span>
+        <span class="tech-chip warn">Rust no_std</span>
+        <span class="tech-chip">ESP8266</span>
+        <span class="tech-chip">STM32</span>
+        <span class="tech-chip">Cortex-M</span>
+      </div>
+    </div>
+
+    <div class="tech-group">
+      <p class="tech-group-label">Architettura</p>
+      <div class="tech-chip-list">
+        <span class="tech-chip">ArchiMate 3.2</span>
+        <span class="tech-chip">PlantUML</span>
+        <span class="tech-chip">ADR</span>
+        <span class="tech-chip">SSOT</span>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  async function loadLayerStats() {
+    try {
+      const resp = await fetch('../archimate_data.json');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      const elements = data.elements || {};
+      const meta = data.metadata || {};
+
+      const counts = { Motivation: 0, Business: 0, Application: 0, Technology: 0 };
+      for (const [, el] of Object.entries(elements)) {
+        if (typeof el === 'object' && el !== null) {
+          const layer = (el.layer || '').trim();
+          if (layer in counts) counts[layer]++;
+          else if (layer === '' && el.type) {
+            // assign unknowns to Technology by type prefix
+            const t = el.type || '';
+            if (t.startsWith('Technology') || t.startsWith('Infra')) counts.Technology++;
+            else if (t.startsWith('Business')) counts.Business++;
+            else if (t.startsWith('Application')) counts.Application++;
+          }
+        }
+      }
+
+      document.getElementById('cnt-motivation').textContent  = counts.Motivation;
+      document.getElementById('cnt-business').textContent    = counts.Business;
+      document.getElementById('cnt-application').textContent = counts.Application;
+      document.getElementById('cnt-technology').textContent  = counts.Technology;
+
+      const total = meta.total_elements || Object.keys(elements).length;
+      const rel   = meta.total_relationships || 0;
+      const gen   = meta.generated ? ` · generato il ${meta.generated.split(' ')[0]}` : '';
+      document.getElementById('page-meta').textContent =
+        `${total} elementi · ${rel} relazioni ArchiMate${gen}`;
+    } catch (err) {
+      document.getElementById('page-meta').textContent =
+        `Dati ArchiMate non disponibili (${err.message})`;
+      ['motivation','business','application','technology'].forEach(l => {
+        const el = document.getElementById(`cnt-${l}`);
+        if (el) el.textContent = '—';
+      });
+    }
+  }
+
+  loadLayerStats();
+</script>
+</body>
+</html>

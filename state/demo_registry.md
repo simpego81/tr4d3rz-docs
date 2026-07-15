@@ -48,10 +48,32 @@ This registry tracks all functional demos, their purpose, and health status.
 
 ---
 
+### DEMO-003-PMAP: Project Map — GitHub Pages Progressive Project Map
+
+- **Goal**: Dimostrare navigazione stakeholder, drill-down tecnico, aggiornamento SSOT, e failure injection controllata.
+- **Technology**: Static HTML + D3.js, Python pipeline, GitHub Pages.
+- **Status**: ✅ READY (scenari CLI verificati; scenari browser pending validazione umana)
+- **Location**: `tr4d3rz-docs/docs/` (GitHub Pages) + `artifacts/features/FEATURE-DOCS-PROJECT-MAP/demo_script.md`
+- **Feature**: FEATURE-DOCS-PROJECT-MAP (PMAP-18)
+- **Scenari**:
+    1. D-PMAP-01: Navigazione stakeholder mobile (390px) — homepage con metrics e 4 card
+    2. D-PMAP-02: Drill-down tecnico — 4 mappe interattive + detail pages
+    3. D-PMAP-03: Aggiornamento SSOT — modifica roadmap.yaml → rigenera → manifest aggiornato
+    4. D-PMAP-04: Roadmap senza date — milestone non pianificate in corsia esplicita
+    5. D-PMAP-05: Snapshot assente → MAP-E003 + badge STALE (CLI riproducibile)
+    6. D-PMAP-06: Schema invalido → MAP-E001, publish bloccato (CLI riproducibile)
+    7. D-PMAP-07: Generazione parziale → MAP-E007, no output parziale (CLI riproducibile)
+    8. D-PMAP-08: Navigazione legacy — device-matrix.html e holistic_view.html accessibili
+- **Observability**: `docs/data/generated/build-manifest.json` — errors, warnings, freshness, durations
+- **Access**: `python scripts/build_project_map.py --verbose` + aprire `docs/index.html`
+- **Failure injection**: `python scripts/ci/failure_injection.py --list`
+
+---
+
 ## Future Demos (Planned)
 
 | ID | Title | Milestone |
 |---|---|---|
-| DEMO-003 | Real MQTT Backbone | M1 |
-| DEMO-004 | Evolution Loop | M2 |
-| DEMO-005 | Galaxy Viewer | M4 |
+| DEMO-004 | Real MQTT Backbone | M1 |
+| DEMO-005 | Evolution Loop | M2 |
+| DEMO-006 | Galaxy Viewer | M4 |

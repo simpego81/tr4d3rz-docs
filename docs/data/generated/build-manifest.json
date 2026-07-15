@@ -1,43 +1,43 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-07-13T12:59:31.894598+00:00",
+  "generated_at": "2026-07-14T09:36:11.391549+00:00",
   "generator_version": "1.0.0",
-  "git_commit": "unknown",
+  "git_commit": "da82a28c1d571a27ca51e33f6073a3e7baeff385",
   "sources": [
     {
       "path": "state\\roadmap.yaml",
       "hash": "2b2a13f30727cf963e6b9b0d13b939b3d9573ab62f00ce65b4c926278ad0e90d",
-      "read_at": "2026-07-13T12:59:31.646435Z",
+      "read_at": "2026-07-14T09:36:10.814819Z",
       "status": "ok"
     },
     {
       "path": "docs\\archimate_data.json",
       "hash": "2b75c7210b54a8c08426aec201ed4af5a1fcd8606d9bc2170dadacba5c5c11ea",
-      "read_at": "2026-07-13T12:59:31.652432Z",
+      "read_at": "2026-07-14T09:36:10.824845Z",
       "status": "ok"
     },
     {
       "path": "COMMUNICATION\\TASK_QUEUE.md",
       "hash": "58f7c711f1a48274d4fbef47162b0dff48ca9f9ae0f67f8c3ea388b732a5edbb",
-      "read_at": "2026-07-13T12:59:31.655433Z",
+      "read_at": "2026-07-14T09:36:10.829858Z",
       "status": "ok"
     },
     {
       "path": "state\\project_state.md",
       "hash": "fcb6241b965e5816bc1505d72a1c7e82602b250a158fe4da1393f81e2df0a64c",
-      "read_at": "2026-07-13T12:59:31.656436Z",
+      "read_at": "2026-07-14T09:36:10.836869Z",
       "status": "ok"
     },
     {
       "path": "artifacts\\features\\FEATURE-DOCS-PROJECT-MAP\\ecosystem-snapshot.json",
       "hash": "65623f8413ffc9ddba1de2f0931d97bd9c803649e6645c05c404ce1987b28f69",
-      "read_at": "2026-07-13T12:59:31.660433Z",
+      "read_at": "2026-07-14T09:36:10.840869Z",
       "status": "ok"
     },
     {
       "path": ".git\\HEAD",
       "hash": "28d25bf82af4c0e2b72f50959b2beb859e3e60b9630a5e8c603dad4ddb2b6e80",
-      "read_at": "2026-07-13T12:59:31.886099Z",
+      "read_at": "2026-07-14T09:36:11.374949Z",
       "status": "ok"
     }
   ],
@@ -51,17 +51,21 @@
   "errors": [],
   "warnings": [
     {
+      "code": "MAP-E008",
+      "message": "Source 'ecosystem_snapshot' is stale: last modified 42h ago (threshold: 24h). Dataset freshness badge will show STALE.",
+      "file": "C:\\projects\\seq\\tr4d3rz-docs\\artifacts\\features\\FEATURE-DOCS-PROJECT-MAP\\ecosystem-snapshot.json"
+    },
+    {
       "code": "MAP-W002",
-      "message": "20 entities have UNKNOWN health (>50% of total)",
-      "file": null
+      "message": "20 entities have UNKNOWN health (>50% of total)"
     }
   ],
   "last_valid_snapshot": null,
   "phase_durations": {
-    "collect": 0.296728,
-    "normalize": 0.000499,
-    "derive": 0.002499,
+    "collect": 0.677152,
+    "normalize": 0.000998,
+    "derive": 0.003518,
     "validate": 0.0
   },
-  "freshness_status": "FRESH"
+  "freshness_status": "STALE"
 }

@@ -125,8 +125,17 @@ class ProjectMapBuilder:
                         file=str(results[req].source_path) if req in results else "unknown"
                     )
 
-            # Warn about optional missing sources
-            optional = ['archimate', 'ecosystem_snapshot', 'project_state']
+            # Ecosystem snapshot: emit MAP-E003 specifically (collaborative system data)
+            snap = results.get('ecosystem_snapshot')
+            if snap and not snap.data.get('exists', True):
+                self.warnings.append(BuildWarning(
+                    code="MAP-E003",
+                    message="Ecosystem snapshot absent — collaborative system data unavailable. Freshness badge will show STALE.",
+                    file=str(snap.source_path)
+                ))
+
+            # Warn about other optional missing sources
+            optional = ['archimate', 'project_state']
             for opt in optional:
                 if opt in results and not results[opt].data.get('exists', True):
                     self.warnings.append(BuildWarning(
@@ -135,7 +144,53 @@ class ProjectMapBuilder:
                         file=str(results[opt].source_path)
                     ))
 
+            # Check source freshness (MAP-E008)
+            self._check_source_freshness(results)
+
             return results
+
+    def _check_source_freshness(self, results: Dict[str, Any]):
+        """Emit MAP-E008 if any source file exceeds its configured staleness threshold."""
+        import os
+        from datetime import datetime, timezone, timedelta
+
+        policy_path = self.repo_root / 'config' / 'freshness_policy.yaml'
+        if not policy_path.exists():
+            return
+
+        try:
+            import yaml
+            with open(policy_path, encoding='utf-8') as f:
+                policy = yaml.safe_load(f) or {}
+        except Exception:
+            return
+
+        thresholds = {
+            'roadmap':            policy.get('roadmap_hours', 168),
+            'project_state':      policy.get('project_state_hours', 168),
+            'ecosystem_snapshot': policy.get('ecosystem_hours', 24),
+            'archimate':          policy.get('archimate_hours', 720),
+        }
+        now = datetime.now(timezone.utc)
+
+        for name, hours in thresholds.items():
+            result = results.get(name)
+            if result is None or not result.source_path.exists():
+                continue
+            try:
+                mtime = datetime.fromtimestamp(os.path.getmtime(result.source_path), tz=timezone.utc)
+                age_hours = (now - mtime).total_seconds() / 3600
+                if age_hours > hours:
+                    self.warnings.append(BuildWarning(
+                        code="MAP-E008",
+                        message=(
+                            f"Source '{name}' is stale: last modified {age_hours:.0f}h ago "
+                            f"(threshold: {hours}h). Dataset freshness badge will show STALE."
+                        ),
+                        file=str(result.source_path)
+                    ))
+            except OSError:
+                pass
 
     def phase_normalize(self, collector_results: Dict[str, Any]) -> Dict[str, Any]:
         """Phase 2: Normalize to canonical model"""
@@ -213,7 +268,44 @@ class ProjectMapBuilder:
             self.log(f"Validated {len(registry['entities'])} entities", "OK")
             self.log(f"Validated {len(registry['relations'])} relations", "OK")
 
-    def phase_render(self, registry: Dict[str, Any], sources_manifest: List[Dict]) -> Dict[str, Path]:
+    @staticmethod
+    def _flatten_entity(e: Dict[str, Any]) -> Dict[str, Any]:
+        """Flatten entity from normalizer format (raw_data nested) to schema-conformant flat format."""
+        raw = e.get('raw_data', {})
+        base = {
+            'id': e['id'],
+            'kind': e['kind'],
+            'name': e['name'],
+            'summary': e.get('summary') or raw.get('summary', ''),
+            'status': raw.get('status', 'UNKNOWN'),
+            'health': raw.get('health', 'UNKNOWN'),
+            'owners': raw.get('owners', []),
+            'dependencies': raw.get('dependencies', []),
+            'blockers': raw.get('blockers', []),
+            'updated_at': raw.get('updated_at') or '1970-01-01T00:00:00Z',
+            'evidence': raw.get('evidence', []),
+            'source_refs': e.get('source_refs', []),
+            'detail_url': raw.get('detail_url', f"details/roadmap/{e['id']}.html"),
+        }
+        if e['kind'] == 'milestone':
+            base.update({
+                'outcome': raw.get('outcome') or raw.get('summary', ''),
+                'start_date': raw.get('start_date', None),
+                'end_date': raw.get('end_date', None),
+                'tasks': raw.get('tasks', []),
+                'critical_path': bool(raw.get('critical_path', False)),
+            })
+        elif e['kind'] == 'task':
+            base.update({
+                'milestone_id': raw.get('milestone_id', ''),
+                'acceptance_criteria': raw.get('acceptance_criteria') or ['(no criteria defined)'],
+                'outputs': raw.get('outputs') or ['(no outputs defined)'],
+                'estimated_effort': raw.get('estimated_effort', None),
+                'actual_completion_date': raw.get('actual_completion_date', None),
+            })
+        return base
+
+    def phase_render(self, registry: Dict[str, Any], sources_manifest: List[Dict], git_commit: str = 'unknown') -> Dict[str, Path]:
         """Phase 5: Render JSON datasets"""
         self.log_phase("5. RENDER")
 
@@ -223,7 +315,7 @@ class ProjectMapBuilder:
 
             rendered_files = {}
 
-            # Render roadmap.json
+            # Render roadmap.json — flatten entities to schema-conformant flat structure
             roadmap_entities = {
                 eid: e for eid, e in registry['entities'].items()
                 if e['kind'] in ['milestone', 'task']
@@ -231,8 +323,8 @@ class ProjectMapBuilder:
 
             roadmap_data = {
                 'schema_version': '1.0.0',
-                'milestones': [e for e in roadmap_entities.values() if e['kind'] == 'milestone'],
-                'tasks': [e for e in roadmap_entities.values() if e['kind'] == 'task']
+                'milestones': [self._flatten_entity(e) for e in roadmap_entities.values() if e['kind'] == 'milestone'],
+                'tasks': [self._flatten_entity(e) for e in roadmap_entities.values() if e['kind'] == 'task']
             }
 
             roadmap_path = staging_dir / 'roadmap.json'
@@ -240,12 +332,24 @@ class ProjectMapBuilder:
                 json.dump(roadmap_data, f, indent=2, ensure_ascii=False)
             rendered_files['roadmap.json'] = roadmap_path
 
-            # Render build-manifest.json
+            # Render build-manifest.json — omit null optional fields
+            def _warning_dict(w):
+                d = {'code': w.code, 'message': w.message}
+                if w.file is not None:
+                    d['file'] = w.file
+                return d
+
+            def _error_dict(err):
+                d = {'code': err.code, 'message': err.message, 'phase': err.phase}
+                if err.file is not None:
+                    d['file'] = err.file
+                return d
+
             manifest = {
                 'schema_version': '1.0.0',
                 'generated_at': datetime.now(timezone.utc).isoformat(),
                 'generator_version': '1.0.0',
-                'git_commit': 'unknown',  # TODO: get from git metadata
+                'git_commit': git_commit,
                 'sources': sources_manifest,
                 'datasets': [
                     {
@@ -254,11 +358,11 @@ class ProjectMapBuilder:
                         'schema_version': '1.0.0'
                     }
                 ],
-                'errors': [{'code': e.code, 'message': e.message, 'phase': e.phase, 'file': e.file} for e in self.errors],
-                'warnings': [{'code': w.code, 'message': w.message, 'file': w.file} for w in self.warnings],
-                'last_valid_snapshot': None,  # TODO: implement snapshot tracking
+                'errors': [_error_dict(e) for e in self.errors],
+                'warnings': [_warning_dict(w) for w in self.warnings],
+                'last_valid_snapshot': None,
                 'phase_durations': self.phase_durations,
-                'freshness_status': 'FRESH' if not any(w.code == 'MAP-W001' for w in self.warnings) else 'STALE'
+                'freshness_status': 'STALE' if any(w.code in ('MAP-E003', 'MAP-E008') for w in self.warnings) else 'FRESH'
             }
 
             manifest_path = staging_dir / 'build-manifest.json'
@@ -268,6 +372,58 @@ class ProjectMapBuilder:
 
             self.log(f"Rendered {len(rendered_files)} datasets to staging", "OK")
             return rendered_files
+
+    def phase_validate_generated(self, rendered_files: Dict[str, Path]):
+        """Phase 5b: Validate generated datasets against JSON schemas (MAP-E001)"""
+        self.log_phase("5b. VALIDATE GENERATED")
+
+        try:
+            import jsonschema
+            from jsonschema import RefResolver
+        except ImportError:
+            self.log("jsonschema not installed — skipping schema validation of generated datasets", "WARN")
+            return
+
+        schemas_dir = self.repo_root / 'artifacts' / 'features' / 'FEATURE-DOCS-PROJECT-MAP' / 'schemas'
+        pairs = [
+            ('roadmap.json', 'roadmap.schema.json'),
+            ('build-manifest.json', 'build-manifest.schema.json'),
+        ]
+
+        for dataset_name, schema_name in pairs:
+            dataset_path = rendered_files.get(dataset_name)
+            schema_path = schemas_dir / schema_name
+            if not dataset_path or not dataset_path.exists() or not schema_path.exists():
+                continue
+            try:
+                with open(dataset_path, encoding='utf-8') as f:
+                    data = json.load(f)
+                with open(schema_path, encoding='utf-8') as f:
+                    schema = json.load(f)
+                # Pre-load all schemas into store to avoid HTTP fetches for $ref resolution
+                store = {}
+                for sf in schemas_dir.glob('*.schema.json'):
+                    with open(sf, encoding='utf-8') as fsf:
+                        s = json.load(fsf)
+                    if '$id' in s:
+                        store[s['$id']] = s
+                    store[sf.as_uri()] = s
+                resolver = RefResolver(base_uri=schema_path.as_uri(), referrer=schema, store=store)
+                jsonschema.validate(instance=data, schema=schema, resolver=resolver)
+                self.log(f"Schema valid: {dataset_name}", "OK")
+            except jsonschema.ValidationError as e:
+                path_str = ' -> '.join(str(p) for p in e.absolute_path) or '(root)'
+                raise BuildError(
+                    code="MAP-E001",
+                    message=f"Generated '{dataset_name}' fails schema validation at {path_str}: {e.message}",
+                    phase="validate",
+                    file=str(dataset_path)
+                )
+            except Exception as e:
+                self.warnings.append(BuildWarning(
+                    code="MAP-W004",
+                    message=f"Could not validate '{dataset_name}' against schema: {e}"
+                ))
 
     def phase_publish(self, rendered_files: Dict[str, Path]):
         """Phase 6: Atomic publish to docs/data/generated/"""
@@ -290,6 +446,16 @@ class ProjectMapBuilder:
                 shutil.move(str(target_dir), str(backup_dir))
 
             target_dir.mkdir(parents=True, exist_ok=True)
+
+            # Guard: all required outputs must be present before atomic rename (MAP-E007)
+            required_outputs = ['roadmap.json', 'build-manifest.json']
+            missing = [r for r in required_outputs if r not in rendered_files or not rendered_files[r].exists()]
+            if missing:
+                raise BuildError(
+                    code="MAP-E007",
+                    message=f"Incomplete staging — missing: {', '.join(missing)}. Publish aborted to prevent partial output.",
+                    phase="publish"
+                )
 
             # Copy staged files
             for filename, staged_path in rendered_files.items():
@@ -322,7 +488,12 @@ class ProjectMapBuilder:
 
             # Phase 5: Render
             sources_manifest = CollectorRegistry(self.repo_root).collect_sources_manifest(collector_results)
-            rendered_files = self.phase_render(enriched_registry, sources_manifest)
+            git_commit = collector_results.get('git_metadata')
+            git_hash = git_commit.data.get('commit_hash', 'unknown') if git_commit else 'unknown'
+            rendered_files = self.phase_render(enriched_registry, sources_manifest, git_hash)
+
+            # Phase 5b: Validate generated datasets against schemas (MAP-E001)
+            self.phase_validate_generated(rendered_files)
 
             # Phase 6: Publish
             self.phase_publish(rendered_files)

@@ -1,9 +1,11 @@
 # TR4D3RZ — PROJECT_STATE
 
-**Maintainer**: Meta-Optimizer Agent (Claude Code) + Manus  
-**Last update**: 2026-07-13  
-**Current status**: AUTOPOIETIC_TRANSITION  
+**Maintainer**: Claude Code (Primary Agent)  
+**Last update**: 2026-07-15  
+**Current status**: M1_IN_PROGRESS  
 **Architecture baseline**: Single Raspberry Pi 2 backbone (NanoMQ/Mosquitto)
+
+> Questo file è il SSOT per lo stato del progetto. `COMMUNICATION/PROJECT_STATE.md` è deprecato.
 
 ---
 
@@ -11,149 +13,83 @@
 
 | Area | Status | Note |
 |---|---|---|
-| Repositories | READY | 7 repositories active, 2 with uncommitted code |
-| Infrastructure | READY | Single RPi 2 backbone topology defined |
-| MVP Contracts | READY | CBOR schemas and MQTT topics v0.1 stable |
-| Multi-Agent Workflow | **TRANSITIONING** | Autopoietic model with cognitive boards and veto gates **ACTIVE** |
-| Real Implementation | IN PROGRESS | M1-T1/T2 completed locally (not pushed), M1-T3/T4/T5 ready |
-| Meta-Layer | **NEW** | Convergence audit, KB refactoring, Panopticon Collaborativo initialized |
+| Repositories | READY | 7 repository attivi su GitHub |
+| Infrastructure | READY | Topologia Single RPi2 definita e validata (M1-T2-B) |
+| MVP Contracts | READY | CBOR schemas e MQTT topics v0.1 stabili |
+| Agent Model | UPDATED | Single primary (Claude Code) + subagent interni; Manus/Copilot/HRA rimossi (2026-07-15) |
+| Implementazione | IN PROGRESS | M1-T1, T2, T2-B completati; T3 parziale; T4/T5 pending |
+| FEATURE-DOCS-PROJECT-MAP | FUNCTIONALLY COMPLETE | Browser gate PENDING_HUMAN |
 
 ---
 
-## 2. Key Metrics
+## 2. Stato Task M1
 
-- **Total Tasks (M1)**: 9
-- **Completed**: 4 (M1-T0, T1, T2, T2-B)
-- **In Progress**: 3 (M1-T3, M1-T4, M1-T5)
-- **Blocked**: 2 (M1-T6, M1-T7)
-- **Code Coverage**: ~70% (Core/Messaging)
-- **Active Demos**: 2 (Enhanced MVP, MVP Browser)
-- **Veto Gates**: 6 defined, manual enforcement active
-- **Convergence Velocity**: 1.3 task/week (26 days: 14 Jun → 10 Jul)
-
----
-
-## 3. Critical Actions Required (Next 72h)
-
-### ✅ COMPLETED — Git Commit Deficit (Priority 1)
-
-**Completed**: 2026-07-10 20:20 UTC  
-**Commits**:
-- `tr4d3rz-core`: [e8ecad4](https://github.com/simpego81/tr4d3rz-core/commit/e8ecad4) — M1-T1 implementation pushed
-- `tr4d3rz-messaging`: [af19bee](https://github.com/simpego81/tr4d3rz-messaging/commit/af19bee) — M1-T2 implementation pushed
-
-**Impact**: Git commit deficit RESOLVED. M1-T1/M1-T2 now traceable and available on GitHub.
+| Task | Status | Note |
+|---|---|---|
+| M1-T0 | COMPLETED | Spec, protocolli, contratti MVP |
+| M1-T1 | COMPLETED | Tipi Rust condivisi; commit e8ecad4 su tr4d3rz-core |
+| M1-T2 | COMPLETED | MQTT library Rust; commit af19bee su tr4d3rz-messaging |
+| M1-T2-B | COMPLETED | Heartbeat Probe validato su RPi2 (2026-07-10) |
+| M1-T3 | IN_PROGRESS (PARTIAL) | Library (event_logger.rs, schema.rs, lib.rs) esistente; manca main.rs, config/, systemd/, migrations/ |
+| M1-T4 | PENDING | Repo tr4d3rz-evolution vuoto; dipendenze M1-T1/T2 soddisfatte |
+| M1-T5 | PENDING | Simulatore/firmware ESP8266; gate M1-T2-B soddisfatto |
+| M1-T6 | BLOCKED | Dipende da M1-T2 + M1-T3 |
+| M1-T7 | BLOCKED | Dipende da tutti i task M1 |
 
 ---
 
-### ✅ COMPLETED — Hardware Validation M1-T2-B (Priority 2)
+## 3. Decisioni architetturali attive
 
-**Validated**: 2026-07-10  
-**Validator**: Human Operator (U422756)  
-**Result**: Heartbeat Probe tested on Raspberry Pi 2 — **PASS**  
-**Documentation**: `tr4d3rz-messaging/COMMUNICATION/VALIDATION_REPORT.md`
-
-**Impact**: M1-T5 (ESP8266 Simulator/Firmware) now **UNBLOCKED**.
-
----
-
-### Priority 3 — Adopt Cognitive Boards
-
-**Problem**: Agents not using `tr4d3rz-docs/.ecosystem/agents/` boards yet (just initialized).
-
-**Action**:
-1. All agents update their boards with current intent and assumptions
-2. HRA trains agents on board usage via example
-3. **Owner**: All agents (Claude Code, Manus, GitHub Copilot, HRA)
-4. **Deadline**: 2026-07-13
+| ID | Decisione | Esito |
+|---|---|---|
+| D-M1-001 | 7 repository separati | Applicato |
+| D-M1-002 | RPi2 come nodo unico per broker/persistence | Applicato |
+| D-M1-003 | CBOR per capsule/fitness | Applicato |
+| D-M1-004 | Fallback a Mosquitto su RPi1 (dev profile) | Applicato; target resta NanoMQ su RPi2 |
+| D-M1-005 | Heartbeat Probe come validation gate per M1-T5 | COMPLETED |
+| **D-2026-07-15** | **Migrazione modello agenti: single primary (Claude Code) + subagent interni** | **Applicato** |
 
 ---
 
-## 4. Autopoietic Transition Status
+## 4. Ambiente
 
-### Completed (2026-07-10)
-
-✅ **Convergence Audit**: First audit generated, identified 3 entropia comunicativa, 3 gap architetturali  
-✅ **Cognitive Boards**: Templates and initial boards for 4 agents  
-✅ **Veto Gates**: 6 gates defined in `.ecosystem/rules/veto_gates.md`  
-✅ **Conflict Infrastructure**: `artifacts/meta/conflicts/` directory with templates  
-✅ **KB Refactoring Mandate**: Librarian role assigned to Meta-Optimizer
-
-### In Progress
-
-⏳ **Veto Enforcement**: Manual checklist (automated hooks planned Phase 2)  
-⏳ **Board Adoption**: Agents learning to update boards consistently  
-⏳ **Metrics Dashboard**: Planned for M1-T7
-
-### Pending
-
-🔲 **Automated Veto Hooks**: Pre-commit scripts for Gates 1, 2, 4  
-🔲 **Cognitive Loop Detection**: Monitoring agent file edit patterns  
-🔲 **KB Index**: `KB_INDEX.md` with ArchiMate-aligned structure  
-🔲 **Re-entry Dashboard**: HTML visualization of project_state.md for <5min comprehension
-
----
-
-## 5. Top Priorities (M1 Completion)
-
-1. **Commit M1-T1 and M1-T2 to GitHub** (Critical blocker)
-2. **Validate M1-T2-B on hardware** (Unblocks M1-T5)
-3. **Implement M1-T3** (SQLite Event Logger) — dependencies satisfied
-4. **Implement M1-T4** (Evolution CLI) — dependencies satisfied
-5. **Implement M1-T5** (ESP8266 Simulator/Firmware) — blocked by M1-T2-B validation
-
----
-
-## 6. Environment Context
-
-- **Master Node**: Raspberry Pi 2 Model B (`192.168.1.XX`)
-- **Broker**: NanoMQ (port 1883) or Mosquitto fallback
-- **Persistence**: SQLite (local WAL mode)
+- **Master Node**: Raspberry Pi 2 Model B (IP: configurabile via `.env.test`)
+- **Broker**: NanoMQ (porta 1883) o Mosquitto come fallback
+- **Persistence**: SQLite (WAL mode)
 - **Dev Env**: Windows 11 / WSL2 / VS Code
-- **Multi-Agent Platform**: `.ecosystem/` Panopticon Collaborativo
+- **Agent Platform**: Claude Code + Agent tool (subagent interni)
 
 ---
 
-## 7. Risks & Mitigation
+## 5. Prossimi passi (priorità)
 
-| Risk | Probability | Impact | Mitigation |
+1. **Completare M1-T3** — main.rs subscriber MQTT, config, systemd, migrations
+2. **Iniziare M1-T4** — Evolution CLI (dopo o in parallelo con T3 se deliverable indipendenti)
+3. **Implementare M1-T5** — simulatore ESP8266
+4. **Sbloccare M1-T6** — Observatory UI (dopo T3)
+
+---
+
+## 6. Rischi
+
+| Rischio | Probabilità | Impatto | Mitigation |
 |---|---|---|---|
-| Git commit deficit persists | Medium | High | Veto Gate 1 now enforced |
-| Hardware unavailable for M1-T2-B/M1-T5 | Medium | High | Simulator fallback for M1-T5 |
-| Agents ignore cognitive boards | Low | Medium | Meta-Optimizer periodic audit |
-| Convergence velocity slows | Medium | Medium | Weekly audits, bottleneck analysis |
-| Risorse frontend insufficienti dopo uscita Antigravity | Bassa | Media | Claude Code ha assunto Frontend + QA (2026-07-13) |
+| T3 parziale blocca T6 | MEDIO | ALTO | Completare binary subscriber |
+| ESP8266 memory constraints | MEDIO | MEDIO | no_std, CBOR minimale |
+| Observatory performance | BASSO | MEDIO | Deferred a M1-T6 |
+| FEATURE-DOCS browser gate | BASSO | MEDIO | Richiede verifica manuale owner |
 
 ---
 
-## 8. Next Audit
+## 7. Prossimo audit
 
-**Scheduled**: 2026-07-17 (weekly cadence during M1)
-
-**Trigger Conditions** (immediate audit):
-- >5 tasks marked COMPLETED without git commits
-- Requirement churn >3 for any task
+**Trigger** (audit immediato se):
+- >5 task COMPLETED senza commit git corrispondente
+- Requirement churn >3 per qualsiasi task
 - Rework ratio >0.4
-- Cognitive loop detected
-- Human requests audit
+- Owner richiede audit
 
 ---
 
-## 9. Changes from Previous Version (2026-06-18)
-
-**Major Updates**:
-- Added **Autopoietic Transition Status** section
-- Added **Critical Actions Required** with deadlines
-- Expanded **Risks & Mitigation** with new risks (git deficit, board adoption)
-- Integrated **Convergence Velocity** metric from first audit
-- Clarified **Multi-Agent Platform** with `.ecosystem/` reference
-
-**Status Change**: `MIGRATED_ACTIVE` → `AUTOPOIETIC_TRANSITION`
-
-**Deprecated**: `COMMUNICATION/PROJECT_STATE.md` — this file (`state/project_state.md`) is now SSOT
-
----
-
-*This is the Single Source of Truth for TR4D3RZ project state*  
-*Last updated by Meta-Optimizer Agent per METAMODEL_TRANSITION_MANDATE.md*  
-*Target: <5 minute comprehension after weeks of human absence*
+*SSOT per lo stato del progetto TR4D3RZ*  
+*Ultimo aggiornamento: Claude Code (Primary Agent) — 2026-07-15*

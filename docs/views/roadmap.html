@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TR4D3RZ — Roadmap View</title>
+  <meta name="description" content="Milestone roadmap e stato task del progetto TR4D3RZ — pipeline evolutiva distribuita.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    /* ── Page Header ── */
+    .page-header { margin-bottom: 2rem; }
+    .page-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6366f1;
+      margin-bottom: 0.25rem;
+    }
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 0.25rem;
+      line-height: 1.2;
+    }
+    .page-subtitle {
+      font-size: 0.9375rem;
+      color: #64748b;
+      margin: 0 0 0.25rem;
+    }
+    .page-meta {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin: 0;
+    }
+
+    /* ── Nav ── */
+    .nav-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #6366f1;
+      text-decoration: none;
+      padding: 0.25rem 0.75rem;
+      border: 1px solid #e0e7ff;
+      border-radius: 9999px;
+      background: #f0f2ff;
+      transition: background 0.15s;
+    }
+    .nav-link:hover { background: #e0e7ff; }
+    .nav-link.active { background: #6366f1; color: #fff; border-color: #6366f1; }
+
+    /* ── Section headings ── */
+    .section-heading {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #475569;
+      margin: 0 0 0.875rem;
+    }
+
+    /* ── Milestone Pipeline ── */
+    .milestone-pipeline {
+      display: flex;
+      gap: 0;
+      margin-bottom: 2.5rem;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .milestone-card {
+      flex: 1;
+      padding: 1rem 0.875rem;
+      background: #fff;
+      border-right: 1px solid #e2e8f0;
+      cursor: pointer;
+      transition: background 0.15s;
+      position: relative;
+    }
+    .milestone-card:last-child { border-right: none; }
+    .milestone-card:hover { background: #f8faff; }
+    .milestone-card.selected { background: #eef2ff; }
+    .milestone-card.current::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: #6366f1;
+    }
+
+    .ms-label {
+      font-size: 0.6rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #a5b4fc;
+      margin-bottom: 0.2rem;
+    }
+    .ms-name {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+    .ms-status-badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.15rem 0.45rem;
+      border-radius: 9999px;
+      margin-bottom: 0.5rem;
+    }
+    .ms-progress-bar {
+      height: 4px;
+      background: #e2e8f0;
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-bottom: 0.3rem;
+    }
+    .ms-progress-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 0.6s ease;
+    }
+    .ms-pct {
+      font-size: 0.65rem;
+      color: #94a3b8;
+    }
+
+    /* Status colors */
+    .status-IN_PROGRESS { background: #dbeafe; color: #1d4ed8; }
+    .status-COMPLETED   { background: #dcfce7; color: #166534; }
+    .status-PLANNED     { background: #f1f5f9; color: #64748b; }
+    .status-READY       { background: #fef9c3; color: #854d0e; }
+    .status-BLOCKED     { background: #fee2e2; color: #991b1b; }
+
+    .fill-IN_PROGRESS { background: #3b82f6; }
+    .fill-COMPLETED   { background: #22c55e; }
+    .fill-PLANNED     { background: #cbd5e1; }
+    .fill-READY       { background: #eab308; }
+    .fill-BLOCKED     { background: #ef4444; }
+
+    /* ── Task List Panel ── */
+    .task-panel {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .task-panel-header {
+      padding: 1rem 1.25rem 0.75rem;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+    .task-panel-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+    }
+    .task-panel-meta {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .task-list { padding: 0; margin: 0; list-style: none; }
+    .task-item {
+      display: grid;
+      grid-template-columns: 2rem 1fr auto;
+      align-items: start;
+      gap: 0.75rem;
+      padding: 0.875rem 1.25rem;
+      border-bottom: 1px solid #f8fafc;
+      transition: background 0.12s;
+    }
+    .task-item:last-child { border-bottom: none; }
+    .task-item:hover { background: #fafafa; }
+
+    .task-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .icon-COMPLETED   { background: #dcfce7; color: #166534; }
+    .icon-IN_PROGRESS { background: #dbeafe; color: #1d4ed8; }
+    .icon-READY       { background: #fef9c3; color: #854d0e; }
+    .icon-PLANNED     { background: #f1f5f9; color: #64748b; }
+    .icon-BLOCKED     { background: #fee2e2; color: #991b1b; }
+
+    .task-body {}
+    .task-name {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 0.2rem;
+    }
+    .task-summary {
+      font-size: 0.75rem;
+      color: #64748b;
+      line-height: 1.4;
+    }
+    .task-deps {
+      font-size: 0.65rem;
+      color: #94a3b8;
+      margin-top: 0.25rem;
+    }
+
+    .task-status {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.25rem;
+    }
+    .task-badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.15rem 0.4rem;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+    .effort-badge {
+      font-size: 0.6rem;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+    .completion-date {
+      font-size: 0.6rem;
+      color: #22c55e;
+      font-weight: 600;
+    }
+
+    /* ── Stats Row ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.875rem 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+    }
+    .stat-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+      margin-bottom: 0.25rem;
+    }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #1e293b;
+      line-height: 1;
+    }
+    .stat-unit {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #64748b;
+      margin-left: 0.2rem;
+    }
+
+    /* ── Loading / Error ── */
+    .loading-msg {
+      text-align: center;
+      padding: 3rem;
+      color: #94a3b8;
+      font-size: 0.875rem;
+    }
+    .error-banner {
+      background: #fee2e2;
+      color: #991b1b;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.8125rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 700px) {
+      .milestone-pipeline { flex-direction: column; }
+      .milestone-card { border-right: none; border-bottom: 1px solid #e2e8f0; }
+      .milestone-card:last-child { border-bottom: none; }
+      .task-item { grid-template-columns: 2rem 1fr; }
+      .task-status { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <header class="page-header">
+    <p class="page-eyebrow">TR4D3RZ — Roadmap View</p>
+    <h1 class="page-title">Project Milestones</h1>
+    <p class="page-subtitle">Pipeline evolutiva distribuita — stato e avanzamento per milestone e task.</p>
+    <p class="page-meta" id="page-meta">Caricamento dati…</p>
+  </header>
+
+  <!-- Nav -->
+  <nav class="nav-bar" aria-label="View navigation">
+    <a href="../index.html" class="nav-link">Home</a>
+    <a href="roadmap.html" class="nav-link active" aria-current="page">Roadmap</a>
+    <a href="process.html" class="nav-link">Process</a>
+    <a href="stakeholders.html" class="nav-link">Stakeholders</a>
+  </nav>
+
+  <!-- Stats -->
+  <div class="stats-row" id="stats-row">
+    <div class="stat-card">
+      <p class="stat-label">Milestone corrente</p>
+      <p class="stat-value" id="stat-current">—</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Completamento M1</p>
+      <p class="stat-value" id="stat-pct">—<span class="stat-unit">%</span></p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Task completati</p>
+      <p class="stat-value" id="stat-done">—</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Task totali M1</p>
+      <p class="stat-value" id="stat-total">—</p>
+    </div>
+  </div>
+
+  <!-- Error banner -->
+  <div class="error-banner" id="error-banner" style="display:none"></div>
+
+  <!-- Milestone Pipeline -->
+  <p class="section-heading">Pipeline Milestones</p>
+  <div class="milestone-pipeline" id="milestone-pipeline" role="list">
+    <div class="loading-msg">Caricamento…</div>
+  </div>
+
+  <!-- Task Panel -->
+  <div class="task-panel" id="task-panel" style="display:none">
+    <div class="task-panel-header">
+      <h2 class="task-panel-title" id="task-panel-title">Tasks</h2>
+      <span class="task-panel-meta" id="task-panel-meta"></span>
+    </div>
+    <ul class="task-list" id="task-list"></ul>
+  </div>
+
+</div>
+
+<script>
+  const STATUS_ICON = {
+    COMPLETED:   '✓',
+    IN_PROGRESS: '▶',
+    READY:       '○',
+    PLANNED:     '·',
+    BLOCKED:     '✕',
+  };
+
+  const EFFORT_LABEL = { S: 'S', M: 'M', L: 'L', XL: 'XL' };
+
+  let allData = null;
+  let selectedMilestoneIdx = 0;
+
+  async function loadData() {
+    const resp = await fetch('../data/roadmap_data.json');
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    return resp.json();
+  }
+
+  function showError(msg) {
+    const banner = document.getElementById('error-banner');
+    banner.textContent = msg;
+    banner.style.display = '';
+  }
+
+  function renderPipeline(milestones) {
+    const container = document.getElementById('milestone-pipeline');
+    container.innerHTML = '';
+    milestones.forEach((m, i) => {
+      const card = document.createElement('div');
+      card.className = 'milestone-card' +
+        (i === selectedMilestoneIdx ? ' selected' : '') +
+        (m.status === 'IN_PROGRESS' ? ' current' : '');
+      card.setAttribute('role', 'listitem');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-label', `${m.name}: ${m.status}`);
+
+      const mNum = m.id.replace('m', 'M').split('-')[0];
+      const pct = m.completion_pct;
+      const fillClass = `fill-${m.status}`;
+      const badgeClass = `status-${m.status}`;
+      const statusLabel = m.status.replace(/_/g, ' ');
+
+      card.innerHTML = `
+        <p class="ms-label">${mNum}</p>
+        <p class="ms-name">${escHtml(m.name.replace(/^M\d+: /, ''))}</p>
+        <span class="ms-status-badge ${badgeClass}">${statusLabel}</span>
+        <div class="ms-progress-bar">
+          <div class="ms-progress-fill ${fillClass}" style="width:${pct}%"></div>
+        </div>
+        <p class="ms-pct">${pct}% — ${m.completed_tasks}/${m.total_tasks} task</p>
+      `;
+      card.addEventListener('click', () => selectMilestone(i));
+      card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') selectMilestone(i); });
+      container.appendChild(card);
+    });
+  }
+
+  function renderTasks(milestone) {
+    const panel = document.getElementById('task-panel');
+    const title = document.getElementById('task-panel-title');
+    const meta = document.getElementById('task-panel-meta');
+    const list = document.getElementById('task-list');
+
+    title.textContent = milestone.name;
+    meta.textContent = `${milestone.completed_tasks}/${milestone.total_tasks} completati · ${milestone.completion_pct}%`;
+    list.innerHTML = '';
+    panel.style.display = '';
+
+    milestone.tasks.forEach(t => {
+      const li = document.createElement('li');
+      li.className = 'task-item';
+
+      const icon = STATUS_ICON[t.status] || '·';
+      const iconClass = `icon-${t.status}`;
+      const badgeClass = `status-${t.status} task-badge`;
+      const statusLabel = t.status.replace(/_/g, ' ');
+      const depLine = t.dependencies.length
+        ? `<span class="task-deps">Dipende da: ${t.dependencies.join(', ')}</span>`
+        : '';
+      const effort = t.estimated_effort ? `<span class="effort-badge">Effort: ${EFFORT_LABEL[t.estimated_effort] || t.estimated_effort}</span>` : '';
+      const date = t.actual_completion_date
+        ? `<span class="completion-date">✓ ${t.actual_completion_date}</span>`
+        : '';
+
+      li.innerHTML = `
+        <div class="task-icon ${iconClass}" aria-hidden="true">${icon}</div>
+        <div class="task-body">
+          <p class="task-name">${escHtml(t.name)}</p>
+          <p class="task-summary">${escHtml(t.summary)}</p>
+          ${depLine}
+        </div>
+        <div class="task-status">
+          <span class="${badgeClass}">${statusLabel}</span>
+          ${effort}
+          ${date}
+        </div>
+      `;
+      list.appendChild(li);
+    });
+  }
+
+  function selectMilestone(idx) {
+    selectedMilestoneIdx = idx;
+    renderPipeline(allData.milestones);
+    renderTasks(allData.milestones[idx]);
+  }
+
+  function updateStats(data) {
+    const currentId = data.current_milestone;
+    const current = data.milestones.find(m => m.id === currentId) || data.milestones[0];
+    const mLabel = currentId ? currentId.split('-')[0].replace('m', 'M') : '—';
+
+    document.getElementById('stat-current').textContent = mLabel;
+    document.getElementById('stat-pct').innerHTML = `${current.completion_pct}<span class="stat-unit">%</span>`;
+    document.getElementById('stat-done').textContent = current.completed_tasks;
+    document.getElementById('stat-total').textContent = current.total_tasks;
+
+    const ts = new Date(data.generated_at);
+    document.getElementById('page-meta').textContent =
+      `Generato il ${ts.toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric' })} · Source: state/roadmap.yaml`;
+  }
+
+  function escHtml(str) {
+    return String(str ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  async function init() {
+    try {
+      allData = await loadData();
+      const currentId = allData.current_milestone;
+      selectedMilestoneIdx = allData.milestones.findIndex(m => m.id === currentId);
+      if (selectedMilestoneIdx < 0) selectedMilestoneIdx = 0;
+
+      updateStats(allData);
+      renderPipeline(allData.milestones);
+      renderTasks(allData.milestones[selectedMilestoneIdx]);
+    } catch (err) {
+      showError(`Errore caricamento dati: ${err.message}. Verificare che docs/data/roadmap_data.json esista.`);
+      document.getElementById('milestone-pipeline').innerHTML =
+        '<div class="loading-msg">Dati non disponibili.</div>';
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>

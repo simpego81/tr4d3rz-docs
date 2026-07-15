@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-07-15T20:19:07Z",
+  "project": "TR4D3RZ",
+  "current_milestone": "m1-foundational-backbone",
+  "last_activity": "2026-07-15T09:00:00Z",
+  "overall_completion_pct": 18,
+  "milestones": [
+    {
+      "id": "m1-foundational-backbone",
+      "name": "M1: Foundational Backbone Single RPi2",
+      "status": "IN_PROGRESS",
+      "summary": "MQTT messaging infrastructure, minimal FSM runtime, OHLCV feed, ESP8266/simulator integration, event logger, and minimal Observatory UI on Raspberry Pi 2",
+      "completion_pct": 44,
+      "total_tasks": 9,
+      "completed_tasks": 4,
+      "active_task_ids": [
+        "m1-t3-event-persistence",
+        "m1-t4-evolution-cli",
+        "m1-t5-embedded-firmware"
+      ],
+      "critical_path": true,
+      "start_date": "2026-06-01",
+      "end_date": null,
+      "dependencies": []
+    },
+    {
+      "id": "m2-basic-evolution",
+      "name": "M2: Basic Evolution",
+      "status": "PLANNED",
+      "summary": "Mutation operators, fitness evaluation, lineage tracking, and replay system",
+      "completion_pct": 0,
+      "total_tasks": 4,
+      "completed_tasks": 0,
+      "active_task_ids": [],
+      "critical_path": true,
+      "start_date": null,
+      "end_date": null,
+      "dependencies": [
+        "m1-foundational-backbone"
+      ]
+    },
+    {
+      "id": "m3-cooperative-ecology",
+      "name": "M3: Cooperative Ecology",
+      "status": "PLANNED",
+      "summary": "Cooperative signaling protocols, niche detection, and archetype memory",
+      "completion_pct": 0,
+      "total_tasks": 3,
+      "completed_tasks": 0,
+      "active_task_ids": [],
+      "critical_path": true,
+      "start_date": null,
+      "end_date": null,
+      "dependencies": [
+        "m2-basic-evolution"
+      ]
+    },
+    {
+      "id": "m4-full-observatory",
+      "name": "M4: Full Observatory",
+      "status": "PLANNED",
+      "summary": "Galaxy visualization, topology analysis, and real-time ecosystem monitoring",
+      "completion_pct": 0,
+      "total_tasks": 3,
+      "completed_tasks": 0,
+      "active_task_ids": [],
+      "critical_path": false,
+      "start_date": null,
+      "end_date": null,
+      "dependencies": [
+        "m2-basic-evolution"
+      ]
+    },
+    {
+      "id": "m5-production-signals",
+      "name": "M5: Production Signals",
+      "status": "PLANNED",
+      "summary": "Signal ensemble logic, confidence scoring, and automated validation pipeline",
+      "completion_pct": 0,
+      "total_tasks": 3,
+      "completed_tasks": 0,
+      "active_task_ids": [],
+      "critical_path": true,
+      "start_date": null,
+      "end_date": null,
+      "dependencies": [
+        "m3-cooperative-ecology"
+      ]
+    }
+  ]
+}

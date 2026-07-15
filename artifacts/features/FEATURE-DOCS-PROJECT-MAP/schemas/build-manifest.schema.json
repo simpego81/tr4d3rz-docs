@@ -35,8 +35,8 @@
     },
     "git_commit": {
       "type": "string",
-      "description": "Git commit hash of tr4d3rz-docs when build ran",
-      "pattern": "^[a-f0-9]{7,40}$"
+      "description": "Git commit hash of tr4d3rz-docs when build ran ('unknown' when git is unavailable)",
+      "pattern": "^([a-f0-9]{7,40}|unknown)$"
     },
     "sources": {
       "type": "array",
@@ -144,8 +144,9 @@
         "properties": {
           "code": {
             "type": "string",
-            "pattern": "^MAP-W\\d{3}$",
-            "examples": ["MAP-W001", "MAP-W002"]
+            "pattern": "^MAP-[EW]\\d{3}$",
+            "description": "MAP-W codes for minor warnings, MAP-E codes for non-fatal anomalies that degrade data quality",
+            "examples": ["MAP-W001", "MAP-W002", "MAP-E003", "MAP-E008"]
           },
           "message": {
             "type": "string",

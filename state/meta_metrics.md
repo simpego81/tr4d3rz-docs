@@ -1,155 +1,129 @@
 # TR4D3RZ — META CONVERGENCE METRICS
 
-**Maintainer**: Meta-Optimizer Agent (Claude Code)  
-**Last update**: 2026-06-19  
-**Status**: BASELINE_ESTABLISHED
+**Maintainer**: Claude Code (Primary Agent, ruolo Meta-Optimizer)  
+**Last update**: 2026-07-15  
+**Status**: ACTIVE
 
 ---
 
-## Purpose
+## Scopo
 
-This file tracks convergence quality metrics for the multi-agent AI ecosystem. These metrics help the Meta-Optimizer Agent detect systemic inefficiencies and guide workflow improvements.
+Traccia le metriche di qualità della convergenza del sistema AI. Usato da Claude Code in modalità Meta-Optimizer per rilevare inefficienze sistemiche.
 
-**Core Question**: Is the multi-agent system converging toward the best solution fast enough?
+**Core Question**: Il sistema converge verso la soluzione giusta abbastanza velocemente?
 
 ---
 
 ## 1. Requirement Churn
 
-**Definition**: Frequency of specification revisions for a given feature.
+**Definizione**: frequenza di revisioni delle spec per feature.  
+**Soglia**: >3 revisioni indica instabilità dei requisiti.
 
-**Measurement**: Count of spec file updates per feature.
-
-**Threshold**: >3 revisions indicates requirement instability.
-
-| Feature ID | Spec Revisions | Status | Last Updated |
+| Feature | Revisioni spec | Status | Ultima modifica |
 |---|---|---|---|
+| M1-T1 | 1 | COMPLETED | 2026-06-05 |
 | M1-T2 | 2 | COMPLETED | 2026-06-05 |
-| M1-T2-B | 3 | COMPLETED | 2026-06-05 |
-| M1-T3 | 1 | IN_PROGRESS | 2026-06-19 |
+| M1-T2-B | 3 | COMPLETED | 2026-06-14 |
+| M1-T3 | 1 | IN_PROGRESS | 2026-07-15 |
 | M1-T4 | 1 | PENDING | — |
 | M1-T5 | 1 | PENDING | — |
+| FEATURE-DOCS-PROJECT-MAP | 2 | FUNCTIONALLY COMPLETE | 2026-07-14 |
 
-**Current Assessment**: ✅ Low churn — specs are stable.
+**Assessment**: GOOD — churn basso, spec stabili.
 
 ---
 
 ## 2. Rework Ratio
 
-**Definition**: `reworked_lines / total_lines` — measures code churn per feature.
+**Definizione**: `reworked_lines / total_lines` — churn di codice per feature.  
+**Soglia**: >0.4 indica iterazioni inefficienti.
 
-**Measurement**: Git diff analysis (lines added + removed in rework commits) / total feature lines.
-
-**Threshold**: >0.4 indicates inefficient iterations.
-
-| Feature ID | Total Lines | Reworked Lines | Ratio | Status |
+| Feature | Linee totali | Linee rework | Ratio | Status |
 |---|---|---|---|---|
-| M1-T2 | ~500 | ~150 | 0.30 | ✅ Acceptable |
-| M1-T2-B | ~200 | ~80 | 0.40 | ⚠️ Borderline |
-| M1-T3 | TBD | TBD | — | IN_PROGRESS |
+| M1-T1 | ~500 | ~150 | 0.30 | ACCEPTABLE |
+| M1-T2 | ~700 | ~200 | 0.29 | GOOD |
+| M1-T2-B | ~200 | ~80 | 0.40 | BORDERLINE |
+| M1-T3 (lib) | ~400 | TBD | — | IN_PROGRESS |
 
-**Current Assessment**: ⚠️ M1-T2-B had borderline rework — investigate validation process.
+**Assessment**: ACCEPTABLE — M1-T2-B borderline ma entro tolleranza.
 
 ---
 
 ## 3. Review Cycle Count
 
-**Definition**: Number of review loops before feature acceptance.
+**Definizione**: numero di loop di review prima dell'accettazione.  
+**Soglia**: >2 cicli indica qualità iniziale scarsa o criteri di accettazione poco chiari.
 
-**Measurement**: Count of validation report iterations per feature.
-
-**Threshold**: >2 cycles indicates poor initial quality or unclear acceptance criteria.
-
-| Feature ID | Review Cycles | Status | Notes |
+| Feature | Cicli review | Status | Note |
 |---|---|---|---|
-| M1-T2 | 1 | COMPLETED | Clean acceptance |
-| M1-T2-B | 2 | COMPLETED | Error handling refinement required |
+| M1-T1 | 1 | COMPLETED | Accettazione clean |
+| M1-T2 | 1 | COMPLETED | Accettazione clean |
+| M1-T2-B | 2 | COMPLETED | Refinamento error handling |
 | M1-T3 | TBD | IN_PROGRESS | — |
 
-**Current Assessment**: ✅ Good convergence — most features pass within 2 cycles.
+**Assessment**: GOOD — convergenza entro 1-2 cicli.
 
 ---
 
 ## 4. Demo Validation Time
 
-**Definition**: Time required for human to validate feature via demo (in minutes).
+**Definizione**: tempo (min) per l'owner per validare una feature via demo.  
+**Soglia**: >15 min indica scarsa osservabilità o demo complessa.
 
-**Measurement**: Human feedback on demo validation speed.
+| Feature | Tempo (min) | Status |
+|---|---|---|
+| M1-T2 | ~10 | COMPLETED |
+| M1-T2-B | ~5 | COMPLETED |
+| FEATURE-DOCS-PROJECT-MAP | ~8 (automatico) | PARTIAL (browser gate manuale) |
+| M1-T3 | TBD | IN_PROGRESS |
 
-**Threshold**: >15 minutes indicates poor demo observability or complexity.
-
-| Feature ID | Validation Time (min) | Status | Notes |
-|---|---|---|---|
-| M1-T2 | ~10 | COMPLETED | CLI tool — straightforward validation |
-| M1-T2-B | ~5 | COMPLETED | Validation scripts automated |
-| M1-T3 | TBD | IN_PROGRESS | SQLite logger — expect ~8 min |
-
-**Current Assessment**: ✅ Excellent — validation is fast and observable.
+**Assessment**: GOOD — validazione rapida.
 
 ---
 
-## 5. Systemic Inefficiencies Detected
+## 5. Inefficienze sistemiche rilevate
 
-**Meta-Optimizer Agent observations**:
+### 2026-07-15 — Ristrutturazione modello agenti
 
-### 2026-06-19 — Baseline Established
+**Trigger**: utente ha rimosso tutti gli agenti esterni (Manus, Copilot, Antigravity, HRA).
 
-- **Observation**: Ecosystem is currently converging well. No major inefficiencies detected.
-- **Requirement Churn**: Low — specs are stable.
-- **Rework Ratio**: Acceptable — M1-T2-B borderline but within tolerance.
-- **Review Cycles**: Good — features passing validation within 1-2 cycles.
-- **Demo Validation**: Excellent — human validation is fast (<10 min average).
+**Problema rilevato**: stato dei file di coordinamento era cronicamente stale. File di stato inconsistenti con la realtà del codice (es. persistence IMPLEMENTATION_LOG = NOT_STARTED ma codice esistente). Sessione di ripresa richiedeva >10 min di diagnosi.
 
-**Action**: No immediate intervention required. Continue monitoring M1-T3, M1-T4, M1-T5.
+**Intervento**:
+- Rimossi tutti i riferimenti agli agenti esterni
+- Nuovo modello: Claude Code (primary) + subagent interni
+- Aggiornati: AGENTS.md, SUBAGENT_PROTOCOL.md, DASHBOARD.md, project_state.md, current_task.md files
+- Aggiunto SUBAGENT_PROTOCOL.md come guida operativa per orchestrazione
 
----
+**Impatto atteso**: session resumption <5 min; stato file sincronizzato con realtà.
 
-## 6. TRIZ Contradictions Identified
+### 2026-06-19 — Baseline
 
-**Current Contradictions**: None detected in baseline.
-
-**Example Template** (for future use):
-
-```markdown
-### Contradiction: [Description]
-
-**Desired**: [Property A]
-**But also**: [Property B]
-**Normally**: More A → less B
-
-**TRIZ Goal**: Eliminate contradiction.
-
-**Proposed Strategies**:
-- [Strategy 1]
-- [Strategy 2]
-- [Strategy 3]
-
-**Status**: [PROPOSED / ACCEPTED / IMPLEMENTED]
-```
+**Assessment**: ecosistema convergeva bene. Nessuna inefficienza critica.
 
 ---
 
-## 7. Workflow Changes Log
+## 6. Convergence Velocity
 
-**Changes applied by Meta-Optimizer Agent**:
+**Metrica**: task completati per settimana.
 
-| Date | Change | Rationale | Impact |
-|---|---|---|---|
-| 2026-06-19 | Meta-layer roles added (Meta-Optimizer, Debug Intelligence) | Migration from Gemini CLI, enhanced system optimization and debug capabilities | TBD — track metrics post-migration |
+| Periodo | Task completati | Velocity |
+|---|---|---|
+| 2026-06-05 → 2026-07-10 | 4 (T0..T2-B) | ~1.1 task/settimana |
+| 2026-07-10 → 2026-07-15 | 0 (lavoro documentale) | 0 (non conta come task tecnico) |
 
----
-
-## Next Review
-
-**Scheduled**: After M1-T3, M1-T4, M1-T5 completion.
-
-**Trigger Conditions** (review immediately if):
-- Any feature >5 spec revisions
-- Rework ratio >0.5 for any feature
-- Review cycles >3 for any feature
-- Demo validation time >20 min for any feature
-- Human reports ecosystem inefficiency
+**Prossima review**: dopo completamento M1-T3.
 
 ---
 
-*Maintainer: Meta-Optimizer Agent (Claude Code) — Created: 2026-06-19*
+## 7. Trigger per review immediata
+
+- >5 task COMPLETED senza commit git
+- Churn >3 per qualsiasi task
+- Rework ratio >0.5
+- Demo validation time >20 min
+- Owner segnala inefficienza ecosistema
+
+---
+
+*Maintainer: Claude Code (Meta-Optimizer role) — Aggiornato: 2026-07-15*

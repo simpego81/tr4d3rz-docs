@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TR4D3RZ — Process View</title>
+  <meta name="description" content="Cronologia attività del team agenti AI del progetto TR4D3RZ — chi ha lavorato su cosa, quando, e con che risultato.">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    /* ── Reset & Base ──────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    /* ── Page Header ───────────────────────────────────────────────────── */
+    .page-header { margin-bottom: 2rem; }
+    .page-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6366f1;
+      margin-bottom: 0.25rem;
+    }
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 0.25rem;
+      line-height: 1.2;
+    }
+    .page-subtitle {
+      font-size: 0.9375rem;
+      color: #64748b;
+      margin: 0 0 0.25rem;
+    }
+    .page-meta {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin: 0;
+    }
+
+    /* ── Section headings ──────────────────────────────────────────────── */
+    .section-heading {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #475569;
+      margin: 0 0 0.875rem;
+    }
+
+    /* ── Metrics ───────────────────────────────────────────────────────── */
+    .metrics {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .metric-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      flex: 1;
+      min-width: 140px;
+      transition: box-shadow 0.15s;
+    }
+    .metric-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .metric-label {
+      font-size: 0.72rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Timeline container ────────────────────────────────────────────── */
+    .timeline-container {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      overflow-x: auto;
+    }
+
+    /* ── Table ─────────────────────────────────────────────────────────── */
+    .table-container {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .table-header {
+      padding: 1rem 1.5rem 0.75rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th {
+      background: #f1f5f9;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #64748b;
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+    td {
+      padding: 0.75rem 1rem;
+      border-top: 1px solid #f1f5f9;
+      font-size: 0.875rem;
+      vertical-align: top;
+    }
+    tr:hover td { background: #f8fafc; }
+
+    /* ── Chip ───────────────────────────────────────────────────────────── */
+    .chip {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      white-space: nowrap;
+      line-height: 1.5;
+    }
+    .verdict-pass    { background: #dcfce7; color: #15803d; }
+    .verdict-partial { background: #fef9c3; color: #a16207; }
+    .verdict-fail    { background: #fee2e2; color: #b91c1c; }
+
+    /* ── Findings ───────────────────────────────────────────────────────── */
+    .findings-ok   { color: #cbd5e1; font-size: 0.8rem; }
+    .findings-warn { color: #d97706; font-weight: 700; font-size: 0.875rem; }
+
+    /* ── Summary cell ───────────────────────────────────────────────────── */
+    .summary-text {
+      color: #475569;
+      line-height: 1.55;
+      max-width: 320px;
+    }
+
+    /* ── Date cell ──────────────────────────────────────────────────────── */
+    .date-cell {
+      white-space: nowrap;
+      color: #64748b;
+      font-variant-numeric: tabular-nums;
+      font-size: 0.8125rem;
+    }
+
+    /* ── Task cell ──────────────────────────────────────────────────────── */
+    .task-id {
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    /* ── Legend ─────────────────────────────────────────────────────────── */
+    .legend {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+    }
+    .legend-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8125rem;
+      color: #374151;
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── Empty state ────────────────────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #94a3b8;
+      font-size: 0.875rem;
+    }
+
+    /* ── Tooltip ────────────────────────────────────────────────────────── */
+    .tooltip {
+      position: fixed;
+      background: #1e293b;
+      color: #f1f5f9;
+      padding: 10px 13px;
+      border-radius: 7px;
+      font-size: 0.8rem;
+      pointer-events: none;
+      max-width: 290px;
+      line-height: 1.55;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.28);
+    }
+    .tt-title {
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: #f8fafc;
+      font-size: 0.8375rem;
+    }
+    .tt-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 2px;
+    }
+    .tt-label { color: #94a3b8; font-size: 0.75rem; }
+    .tt-value { color: #f1f5f9; font-weight: 600; font-size: 0.75rem; }
+    .tt-summary {
+      margin-top: 7px;
+      border-top: 1px solid #334155;
+      padding-top: 7px;
+      color: #cbd5e1;
+      font-style: italic;
+      font-size: 0.74rem;
+      line-height: 1.5;
+    }
+
+    /* ── D3 axis text ───────────────────────────────────────────────────── */
+    .axis text {
+      font-family: system-ui, -apple-system, sans-serif;
+      fill: #64748b;
+      font-size: 11px;
+    }
+    .axis path, .axis line {
+      stroke: #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navbar ──────────────────────────────────────────────────────────── -->
+<nav style="background:white; border-bottom:1px solid #e2e8f0; padding:0.75rem 1.5rem; display:flex; gap:1.5rem; align-items:center; position:sticky; top:0; z-index:50;">
+  <a href="../index.html" style="color:#64748b; text-decoration:none; font-size:0.875rem; transition:color .15s;" onmouseover="this.style.color='#0f172a'" onmouseout="this.style.color='#64748b'">← Project Map</a>
+  <a href="stakeholders.html" style="color:#64748b; text-decoration:none; font-size:0.875rem; transition:color .15s;" onmouseover="this.style.color='#0f172a'" onmouseout="this.style.color='#64748b'">Stakeholders</a>
+  <a href="roadmap.html" style="color:#64748b; text-decoration:none; font-size:0.875rem; transition:color .15s;" onmouseover="this.style.color='#0f172a'" onmouseout="this.style.color='#64748b'">Roadmap</a>
+  <a href="architecture.html" style="color:#64748b; text-decoration:none; font-size:0.875rem; transition:color .15s;" onmouseover="this.style.color='#0f172a'" onmouseout="this.style.color='#64748b'">Architecture</a>
+  <span style="margin-left:auto; font-weight:700; color:#0f172a; font-size:0.875rem; letter-spacing:0.01em;">TR4D3RZ Process View</span>
+</nav>
+
+<!-- ── Main content ────────────────────────────────────────────────────── -->
+<div class="container">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="page-eyebrow">TR4D3RZ</div>
+    <h1 class="page-title">Process View</h1>
+    <p class="page-subtitle">Cronologia attività del team agenti AI</p>
+    <p class="page-meta" id="generated-at"></p>
+  </div>
+
+  <!-- Metrics row -->
+  <div class="metrics">
+    <div class="metric-card">
+      <div class="metric-value" id="m-tasks">—</div>
+      <div class="metric-label">Task completati</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" id="m-activities">—</div>
+      <div class="metric-label">Attività totali</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" id="m-pass" style="color:#15803d;">—</div>
+      <div class="metric-label">Verdict PASS</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" id="m-partial" style="color:#a16207;">—</div>
+      <div class="metric-label">Verdict PARTIAL</div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="timeline-container">
+    <div class="section-heading">Timeline attività (Gantt)</div>
+    <div id="timeline-chart"></div>
+  </div>
+
+  <!-- Activity table -->
+  <div class="table-container">
+    <div class="table-header">
+      <div class="section-heading" style="margin:0;">Attività recenti</div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Task</th>
+          <th>Ruolo</th>
+          <th>Verdict</th>
+          <th>Finding</th>
+          <th>Sommario</th>
+        </tr>
+      </thead>
+      <tbody id="activity-table"></tbody>
+    </table>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="section-heading" style="margin-bottom:0.625rem;">Legenda ruoli</div>
+    <div class="legend-items" id="legend-items"></div>
+  </div>
+
+</div><!-- /.container -->
+
+<!-- Tooltip (shared) -->
+<div class="tooltip" id="tooltip"></div>
+
+<!-- ── JavaScript ───────────────────────────────────────────────────────── -->
+<script>
+(function () {
+  'use strict';
+
+  /* ── Fallback data (same structure as agent_activity.json) ──────────── */
+  var FALLBACK = {
+    schema_version: '1.0',
+    generated_at: '2026-07-15',
+    activities: [
+      {
+        id: 'act-001',
+        timestamp: '2026-06-05T10:00:00Z',
+        task_id: 'M1-T1',
+        task_title: 'Core Rust types',
+        agent_role: 'developer',
+        verdict: 'PASS',
+        summary: 'OhlcvBar, GenomeCapsule, FitnessResult, NodeStatus implementati — 8/8 test passing',
+        duration_estimate: 'long',
+        findings_count: 0
+      },
+      {
+        id: 'act-002',
+        timestamp: '2026-06-05T10:30:00Z',
+        task_id: 'M1-T1',
+        task_title: 'Core Rust types',
+        agent_role: 'reviewer',
+        verdict: 'PASS',
+        summary: 'CBOR serialization corretta, compatibilità no_std verificata, rustdoc completa',
+        duration_estimate: 'medium',
+        findings_count: 0
+      },
+      {
+        id: 'act-003',
+        timestamp: '2026-06-05T14:00:00Z',
+        task_id: 'M1-T2',
+        task_title: 'MQTT library Rust',
+        agent_role: 'developer',
+        verdict: 'PASS',
+        summary: 'rumqttc wrapper, topic builder, CBOR serialization automatica — 12/13 test passing',
+        duration_estimate: 'long',
+        findings_count: 0
+      },
+      {
+        id: 'act-004',
+        timestamp: '2026-06-14T09:00:00Z',
+        task_id: 'M1-T2-B',
+        task_title: 'Heartbeat Probe (validazione remota)',
+        agent_role: 'developer',
+        verdict: 'PASS',
+        summary: 'remote_validation_probe.rs implementato e validato su RPi2 hardware',
+        duration_estimate: 'medium',
+        findings_count: 0
+      },
+      {
+        id: 'act-005',
+        timestamp: '2026-07-12T09:00:00Z',
+        task_id: 'FEATURE-DOCS-PROJECT-MAP',
+        task_title: 'Project Map GitHub Pages',
+        agent_role: 'architect',
+        verdict: 'PASS',
+        summary: 'Pipeline 6 fasi, schema JSON, 4 mappe D3, CI/CD progettati',
+        duration_estimate: 'medium',
+        findings_count: 0
+      },
+      {
+        id: 'act-006',
+        timestamp: '2026-07-13T11:00:00Z',
+        task_id: 'FEATURE-DOCS-PROJECT-MAP',
+        task_title: 'Project Map GitHub Pages',
+        agent_role: 'developer',
+        verdict: 'PASS',
+        summary: '19/20 task completati — pipeline dati, 4 mappe D3, 27 pagine dettaglio, CI/CD',
+        duration_estimate: 'long',
+        findings_count: 0
+      },
+      {
+        id: 'act-007',
+        timestamp: '2026-07-14T10:00:00Z',
+        task_id: 'FEATURE-DOCS-PROJECT-MAP',
+        task_title: 'Project Map GitHub Pages',
+        agent_role: 'reviewer',
+        verdict: 'PARTIAL',
+        summary: 'FUNCTIONALLY COMPLETE — browser gate PENDING_HUMAN (viewport 360px, keyboard nav)',
+        duration_estimate: 'medium',
+        findings_count: 3
+      },
+      {
+        id: 'act-008',
+        timestamp: '2026-07-15T09:00:00Z',
+        task_id: 'COLLAB-SETUP',
+        task_title: 'Ristrutturazione setup collaborativo',
+        agent_role: 'architect',
+        verdict: 'PASS',
+        summary: 'AGENTS.md, SUBAGENT_PROTOCOL.md, DASHBOARD.md aggiornati — modello single primary + subagent interni',
+        duration_estimate: 'medium',
+        findings_count: 0
+      }
+    ]
+  };
+
+  /* ── Palette ────────────────────────────────────────────────────────── */
+  var ROLE_COLORS = {
+    architect:  '#8b5cf6',
+    developer:  '#2563eb',
+    tester:     '#f59e0b',
+    reviewer:   '#10b981',
+    debugger:   '#ef4444',
+    documenter: '#64748b'
+  };
+
+  var DURATION_WIDTH = { short: 22, medium: 52, long: 92 };
+
+  var VERDICT_STROKE = {
+    PASS:    null,       // use role color
+    PARTIAL: '#f59e0b',
+    FAIL:    '#ef4444'
+  };
+
+  var ROLES_ORDER = ['architect', 'developer', 'tester', 'reviewer', 'debugger', 'documenter'];
+
+  var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  /* ── Helpers ────────────────────────────────────────────────────────── */
+  function esc(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function fmtDate(ts) {
+    var d = new Date(ts);
+    return d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
+  }
+
+  function verdictClass(v) {
+    if (v === 'PASS')    return 'verdict-pass';
+    if (v === 'PARTIAL') return 'verdict-partial';
+    return 'verdict-fail';
+  }
+
+  function roleColor(role) {
+    return ROLE_COLORS[role] || '#94a3b8';
+  }
+
+  /* ── renderPage ─────────────────────────────────────────────────────── */
+  function renderPage(data) {
+    var acts = Array.isArray(data.activities) ? data.activities : [];
+
+    /* generated_at */
+    var ga = document.getElementById('generated-at');
+    if (data.generated_at) ga.textContent = 'Snapshot: ' + data.generated_at;
+
+    /* Metrics */
+    var tasksWithPass = {};
+    var countPass = 0, countPartial = 0;
+    acts.forEach(function (a) {
+      if (a.verdict === 'PASS') { tasksWithPass[a.task_id] = true; countPass++; }
+      if (a.verdict === 'PARTIAL') countPartial++;
+    });
+    var taskIds = Object.keys(tasksWithPass).length;
+
+    document.getElementById('m-tasks').textContent     = taskIds;
+    document.getElementById('m-activities').textContent = acts.length;
+    document.getElementById('m-pass').textContent      = countPass;
+    document.getElementById('m-partial').textContent   = countPartial;
+
+    /* Render sections */
+    renderTimeline(acts);
+    renderTable(acts.slice().sort(function (a, b) {
+      return new Date(b.timestamp) - new Date(a.timestamp);
+    }));
+    renderLegend();
+  }
+
+  /* ── renderTimeline (D3 Gantt) ──────────────────────────────────────── */
+  function renderTimeline(acts) {
+    var container = document.getElementById('timeline-chart');
+
+    if (!acts.length) {
+      container.innerHTML = '<div class="empty-state">Nessuna attività registrata</div>';
+      return;
+    }
+
+    /* Build ordered task list (first-appearance order) */
+    var taskOrder = [];
+    var seen = {};
+    acts.slice().sort(function (a, b) {
+      return new Date(a.timestamp) - new Date(b.timestamp);
+    }).forEach(function (a) {
+      if (!seen[a.task_id]) { seen[a.task_id] = true; taskOrder.push(a.task_id); }
+    });
+
+    /* SVG dimensions */
+    var margin    = { top: 30, right: 24, bottom: 48, left: 210 };
+    var svgW      = 920;
+    var rowH      = 46;
+    var barH      = 26;
+    var innerW    = svgW - margin.left - margin.right;
+    var innerH    = taskOrder.length * rowH;
+    var svgH      = innerH + margin.top + margin.bottom;
+
+    /* Time domain with padding */
+    var times   = acts.map(function (a) { return new Date(a.timestamp); });
+    var minTime = new Date(d3.min(times));
+    var maxTime = new Date(d3.max(times));
+    minTime.setUTCDate(minTime.getUTCDate() - 4);
+    maxTime.setUTCDate(maxTime.getUTCDate() + 6);
+
+    var xScale = d3.scaleTime()
+      .domain([minTime, maxTime])
+      .range([0, innerW]);
+
+    var yScale = d3.scaleBand()
+      .domain(taskOrder)
+      .range([0, innerH])
+      .padding(0.22);
+
+    /* SVG root */
+    var svg = d3.select(container)
+      .append('svg')
+        .attr('viewBox', '0 0 ' + svgW + ' ' + svgH)
+        .attr('width', '100%')
+        .style('display', 'block')
+        .style('min-width', '560px');
+
+    var g = svg.append('g')
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    /* Vertical grid lines */
+    var gridTicks = xScale.ticks(d3.timeWeek.every(1));
+    g.selectAll('.grid-vline')
+      .data(gridTicks)
+      .enter().append('line')
+        .attr('class', 'grid-vline')
+        .attr('x1', function (d) { return xScale(d); })
+        .attr('x2', function (d) { return xScale(d); })
+        .attr('y1', 0)
+        .attr('y2', innerH)
+        .attr('stroke', '#e2e8f0')
+        .attr('stroke-dasharray', '4,3');
+
+    /* Row backgrounds */
+    taskOrder.forEach(function (tid, i) {
+      g.append('rect')
+        .attr('x', 0).attr('y', yScale(tid))
+        .attr('width', innerW)
+        .attr('height', yScale.bandwidth())
+        .attr('fill', i % 2 === 0 ? '#f8fafc' : 'white')
+        .attr('rx', 2);
+    });
+
+    /* X axis */
+    var xAxis = d3.axisBottom(xScale)
+      .ticks(d3.timeWeek.every(1))
+      .tickFormat(d3.timeFormat('%-d %b'));
+
+    var xAxisG = g.append('g')
+      .attr('class', 'axis x-axis')
+      .attr('transform', 'translate(0,' + innerH + ')')
+      .call(xAxis);
+
+    xAxisG.select('.domain').attr('stroke', '#e2e8f0');
+    xAxisG.selectAll('text').attr('fill', '#64748b').attr('font-size', '11px').attr('dy', '1.1em');
+    xAxisG.selectAll('.tick line').attr('stroke', '#e2e8f0');
+
+    /* Y axis (task labels) */
+    var yAxis = d3.axisLeft(yScale).tickSize(0);
+
+    var yAxisG = g.append('g')
+      .attr('class', 'axis y-axis')
+      .call(yAxis);
+
+    yAxisG.select('.domain').remove();
+    yAxisG.selectAll('text')
+      .attr('dx', '-8')
+      .attr('fill', '#1e293b')
+      .attr('font-size', '12px')
+      .attr('font-weight', '600')
+      .attr('font-family', "'Courier New', monospace");
+
+    /* Tooltip element */
+    var tooltip = document.getElementById('tooltip');
+
+    /* Activity bars */
+    var sorted = acts.slice().sort(function (a, b) {
+      return new Date(a.timestamp) - new Date(b.timestamp);
+    });
+
+    sorted.forEach(function (act) {
+      var rc    = roleColor(act.agent_role);
+      var bw    = DURATION_WIDTH[act.duration_estimate] || 40;
+      var sc    = (act.verdict === 'PASS') ? rc : (VERDICT_STROKE[act.verdict] || '#ef4444');
+      var bandY = yScale(act.task_id);
+      if (bandY === undefined) return;
+      var bx    = xScale(new Date(act.timestamp));
+      var by    = bandY + (yScale.bandwidth() - barH) / 2;
+
+      /* Bar */
+      var rect = g.append('rect')
+        .attr('x', bx)
+        .attr('y', by)
+        .attr('width', bw)
+        .attr('height', barH)
+        .attr('rx', 4)
+        .attr('ry', 4)
+        .attr('fill', rc)
+        .attr('fill-opacity', 0.82)
+        .attr('stroke', sc)
+        .attr('stroke-width', 2.5)
+        .style('cursor', 'pointer');
+
+      /* Role abbreviation label */
+      if (bw >= 30) {
+        g.append('text')
+          .attr('x', bx + bw / 2)
+          .attr('y', by + barH / 2 + 4)
+          .attr('text-anchor', 'middle')
+          .attr('fill', 'white')
+          .attr('font-size', '9.5px')
+          .attr('font-weight', '800')
+          .attr('letter-spacing', '0.03em')
+          .attr('pointer-events', 'none')
+          .text(act.agent_role.slice(0, 3).toUpperCase());
+      }
+
+      /* Tooltip interactions */
+      rect
+        .on('mouseenter', function () {
+          d3.select(this).attr('fill-opacity', 1).attr('stroke-width', 3.5);
+          tooltip.style.display = 'block';
+          tooltip.innerHTML =
+            '<div class="tt-title">' + esc(act.task_title) + '</div>' +
+            '<div class="tt-row"><span class="tt-label">Ruolo</span>' +
+              '<span class="tt-value" style="color:' + rc + '">' + esc(act.agent_role) + '</span></div>' +
+            '<div class="tt-row"><span class="tt-label">Task ID</span>' +
+              '<span class="tt-value">' + esc(act.task_id) + '</span></div>' +
+            '<div class="tt-row"><span class="tt-label">Verdict</span>' +
+              '<span class="tt-value">' + esc(act.verdict) + '</span></div>' +
+            '<div class="tt-row"><span class="tt-label">Findings</span>' +
+              '<span class="tt-value">' + (act.findings_count > 0 ? '⚠ ' + act.findings_count : '0') + '</span></div>' +
+            '<div class="tt-row"><span class="tt-label">Data</span>' +
+              '<span class="tt-value">' + fmtDate(act.timestamp) + '</span></div>' +
+            '<div class="tt-summary">' + esc(act.summary) + '</div>';
+        })
+        .on('mousemove', function (event) {
+          var x = event.clientX + 16;
+          var y = event.clientY - 12;
+          if (x + 300 > window.innerWidth) x = event.clientX - 308;
+          if (y + 200 > window.innerHeight) y = event.clientY - 200;
+          tooltip.style.left = x + 'px';
+          tooltip.style.top  = y + 'px';
+        })
+        .on('mouseleave', function () {
+          d3.select(this).attr('fill-opacity', 0.82).attr('stroke-width', 2.5);
+          tooltip.style.display = 'none';
+        });
+    });
+
+    /* "Today" marker */
+    var today = new Date();
+    if (today >= minTime && today <= maxTime) {
+      var tx = xScale(today);
+      g.append('line')
+        .attr('x1', tx).attr('x2', tx)
+        .attr('y1', 0).attr('y2', innerH)
+        .attr('stroke', '#ef4444')
+        .attr('stroke-width', 1.5)
+        .attr('stroke-dasharray', '6,3')
+        .attr('opacity', 0.7);
+
+      g.append('text')
+        .attr('x', tx + 4)
+        .attr('y', -8)
+        .attr('fill', '#ef4444')
+        .attr('font-size', '10px')
+        .attr('font-weight', '700')
+        .text('oggi');
+    }
+  }
+
+  /* ── renderTable ────────────────────────────────────────────────────── */
+  function renderTable(acts) {
+    var tbody = document.getElementById('activity-table');
+
+    if (!acts.length) {
+      tbody.innerHTML = '<tr><td colspan="6" class="empty-state">Nessuna attività registrata</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = acts.map(function (act) {
+      var rc = roleColor(act.agent_role);
+      var roleChip = '<span class="chip" style="background:' + rc + '22;color:' + rc + ';">'
+        + esc(act.agent_role) + '</span>';
+      var verdictChip = '<span class="chip ' + verdictClass(act.verdict) + '">'
+        + esc(act.verdict) + '</span>';
+      var findings = act.findings_count > 0
+        ? '<span class="findings-warn">&#9888; ' + act.findings_count + '</span>'
+        : '<span class="findings-ok">—</span>';
+
+      return '<tr>' +
+        '<td class="date-cell">' + fmtDate(act.timestamp) + '</td>' +
+        '<td><div class="task-id">' + esc(act.task_id) + '</div></td>' +
+        '<td>' + roleChip + '</td>' +
+        '<td>' + verdictChip + '</td>' +
+        '<td style="text-align:center;">' + findings + '</td>' +
+        '<td><div class="summary-text">' + esc(act.summary) + '</div></td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  /* ── renderLegend ───────────────────────────────────────────────────── */
+  function renderLegend() {
+    document.getElementById('legend-items').innerHTML = ROLES_ORDER.map(function (role) {
+      return '<div class="legend-item">' +
+        '<div class="legend-dot" style="background:' + ROLE_COLORS[role] + ';"></div>' +
+        '<span>' + role + '</span>' +
+        '</div>';
+    }).join('');
+  }
+
+  /* ── Bootstrap: fetch or fallback ───────────────────────────────────── */
+  fetch('../data/agent_activity.json')
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function (data) {
+      renderPage(data);
+    })
+    .catch(function (err) {
+      console.warn('[Process View] fetch failed, using fallback data.', err);
+      renderPage(FALLBACK);
+    });
+
+})();
+</script>
+</body>
+</html>

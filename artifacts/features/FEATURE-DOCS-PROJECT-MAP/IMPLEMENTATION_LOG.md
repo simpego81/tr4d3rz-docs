@@ -231,6 +231,94 @@ Criteri PMAP-08 soddisfatti: status, health, owners, dependencies, blockers, upd
 
 ---
 
+---
+
+## Session 2026-07-14: PMAP-15 — CI validation and GitHub Pages publication gates
+
+### Completed Tasks
+
+#### PMAP-15: CI Workflow
+
+**Deliverables:**
+
+- `.github/workflows/project-map-ci.yml` — 5-job GitHub Actions workflow
+- `requirements-ci.txt` — Python CI dependencies (pyyaml, jsonschema)
+- `scripts/ci/__init__.py` + `scripts/ci/validate_schemas.py` — schema/dataset validator
+
+**Workflow jobs:**
+
+| Job | Trigger | Purpose |
+|-----|---------|---------|
+| `validate-schemas` | always | Validates all JSON Schema files + generated datasets |
+| `test-pipeline` | always | Runs `test_pipeline.py` (collector → normalizer → health engine) |
+| `build` | needs validate+test | Runs `build_project_map.py`; exit 2 warns, exit 1 blocks |
+| `link-check` | needs build | Lychee offline HTML link check on `docs/**/*.html` |
+| `deploy` | main push only | Regenerates data, commits if changed, deploys to Pages |
+
+**Deploy gate logic:**
+- Exit 0: full success → deploy
+- Exit 2: warnings (stale/missing optional sources) → annotate + deploy
+- Exit 1: error (invalid or missing required data) → deploy blocked
+
+**Ecosystem isolation:** `.ecosystem/` is never accessed. `EcosystemSnapshotCollector` reads the committed `ecosystem-snapshot.json` artifact only.
+
+**Bug fixes included:**
+- `build_project_map.py`: `git_commit` now reads from `GitMetadataCollector` result instead of hardcoding `"unknown"`
+- `build-manifest.schema.json`: `git_commit` pattern updated to accept `"unknown"` as fallback (`^([a-f0-9]{7,40}|unknown)$`)
+
+**Acceptance criteria:**
+- ✅ Workflow runs without access to unversioned ecosystem directory
+- ✅ Stale snapshot (exit 2) annotates warning and deploys
+- ✅ Invalid data (exit 1) blocks deploy
+- ✅ Build artifacts retained 30 days (`project-map-data-<sha>`)
+- ✅ Schema validation script validates schemas + generated datasets
+
+---
+
+## Session 2026-07-14 (cont.): PMAP-16 — Observability, runbook, failure scenarios
+
+### Completed Tasks
+
+#### PMAP-16: Debug Intelligence — MAP-E codes, runbook, failure injection
+
+**Pipeline additions (build_project_map.py)**:
+- `MAP-E001`: `phase_validate_generated()` — jsonschema validation di ogni dataset generato
+- `MAP-E003`: `phase_collect()` — warn specifico per ecosystem snapshot assente
+- `MAP-E007`: `phase_publish()` — guard pre-rename che blocca publish se staging incompleto
+- `MAP-E008`: `_check_source_freshness()` — confronto mtime vs soglie in freshness_policy.yaml
+- `freshness_status` ora STALE se MAP-E003 o MAP-E008 sono presenti
+
+**Deliverables:**
+- `docs/runbook.md` — runbook operativo con sezione per ogni MAP-E, checklist <5min, comandi failure injection
+- `artifacts/.../diagnostic_report.md` — registro codici, code location index, 5 scenari dimostrabili, tabella diagnosi < 2 min, coverage matrix
+- `scripts/ci/failure_injection.py` — 6 scenari (schema-invalid, missing-snapshot, missing-source, browser-corrupt, interrupted-publish, stale-data): backup → inject → build → restore automatico
+
+**Coverage MAP-E001–E008**: 8/8 codici emessi dalla pipeline o dalla CI, documentati nel runbook, con percorso diagnosi < 2 minuti.
+
+---
+
+## Session 2026-07-14 (chiusura): PMAP-19 — Architectural audit and feature closure
+
+### Completed Tasks
+
+#### PMAP-19: Architectural Audit
+
+**Deliverables:**
+- `COMMUNICATION/ARCHITECTURAL_AUDIT.md` (AUDIT-PMAP-001) — audit completo su spec conformance, ADR, debito tecnico, risoluzione rischi, gate di chiusura
+- `COMMUNICATION/TASKS/FEATURE-DOCS-PROJECT-MAP.md` → COMPLETED
+- `state/project_state.md` → sezione PMAP aggiornata
+- `artifacts/features/FEATURE-DOCS-PROJECT-MAP/tasks.yaml` → 20/20 task COMPLETED
+
+**Verdict**: FUNCTIONALLY COMPLETE — browser validation gate (viewport, keyboard, contrast, reduced motion) PENDING_HUMAN.
+
+**Azioni residue per chiusura totale**:
+1. Verifica browser homepage a 360/390/768/1440px (AC-01)
+2. Audit keyboard navigation e reduced motion su maps/*.html (AC-10)
+3. Approvazione owner per sostituzione `index.html` → `index-new.html` (PMAP-14)
+4. GitHub Copilot: QA indipendente browser items + aggiornamento qa_report.md
+
+---
+
 **Implementation Agent**: Claude Code  
-**Date**: 2026-07-12  
-**Approval**: Self-verified; QA validation pending (PMAP-17)
+**Date**: 2026-07-12/2026-07-14  
+**Verdict finale**: FUNCTIONALLY COMPLETE — 20/20 task COMPLETED; browser gate pending owner sign-off

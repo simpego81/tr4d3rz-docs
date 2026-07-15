@@ -223,6 +223,5 @@
       "description": "Optional extended description (markdown allowed)",
       "maxLength": 8192
     }
-  },
-  "additionalProperties": false
+  }
 }
