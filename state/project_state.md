@@ -1,7 +1,7 @@
 # TR4D3RZ — PROJECT_STATE
 
-**Maintainer**: Claude Code (Primary Agent)  
-**Last update**: 2026-07-15  
+**Maintainer**: Claude Code (Orchestratore)  
+**Last update**: 2026-07-16  
 **Current status**: M1_IN_PROGRESS  
 **Architecture baseline**: Single Raspberry Pi 2 backbone (NanoMQ/Mosquitto)
 
@@ -16,9 +16,10 @@
 | Repositories | READY | 7 repository attivi su GitHub |
 | Infrastructure | READY | Topologia Single RPi2 definita e validata (M1-T2-B) |
 | MVP Contracts | READY | CBOR schemas e MQTT topics v0.1 stabili |
-| Agent Model | UPDATED | Single primary (Claude Code) + subagent interni; Manus/Copilot/HRA rimossi (2026-07-15) |
-| Implementazione | IN PROGRESS | M1-T1, T2, T2-B completati; T3 parziale; T4/T5 pending |
+| Agent Model | OPTION_C | Orchestratore (Claude Code) + 10 subagent specializzati; AGENTS.md + agents/ aggiornati (2026-07-16) |
+| Implementazione | IN PROGRESS | M1-T1, T2, T2-B completati; T3 IN_PROGRESS (PARTIAL); T4/T5 READY |
 | FEATURE-DOCS-PROJECT-MAP | FUNCTIONALLY COMPLETE | Browser gate PENDING_HUMAN |
+| ARCH-AGENTS | FASE_1_COMPLETE | agents/ directory (12 file), AGENTS.md, SUBAGENT_PROTOCOL.md aggiornati |
 
 ---
 
@@ -47,7 +48,8 @@
 | D-M1-003 | CBOR per capsule/fitness | Applicato |
 | D-M1-004 | Fallback a Mosquitto su RPi1 (dev profile) | Applicato; target resta NanoMQ su RPi2 |
 | D-M1-005 | Heartbeat Probe come validation gate per M1-T5 | COMPLETED |
-| **D-2026-07-15** | **Migrazione modello agenti: single primary (Claude Code) + subagent interni** | **Applicato** |
+| D-2026-07-15 | Migrazione modello agenti: single primary (Claude Code) + subagent interni | Applicato (superato) |
+| **D-2026-07-16** | **Architettura agenti Option C: Orchestratore + 10 subagent specializzati (agents/ directory)** | **Applicato** |
 
 ---
 
@@ -92,4 +94,4 @@
 ---
 
 *SSOT per lo stato del progetto TR4D3RZ*  
-*Ultimo aggiornamento: Claude Code (Primary Agent) — 2026-07-15*
+*Ultimo aggiornamento: Claude Code (Orchestratore) — 2026-07-16*

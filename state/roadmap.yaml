@@ -10,8 +10,8 @@ metadata:
   project: TR4D3RZ
   description: Distributed evolutionary signal ecology system
   current_milestone: m1-foundational-backbone
-  owner: Manus (Chief Architect)
-  last_updated: "2026-07-12T00:00:00Z"
+  owner: Claude Code (Orchestratore) — User approves architectural decisions
+  last_updated: "2026-07-16T00:00:00Z"
 
 milestones:
   - id: m1-foundational-backbone
@@ -304,7 +304,7 @@ tasks:
     name: "M1-T3: Event Persistence"
     summary: "SQLite append-only event logger with MQTT subscription"
     milestone_id: m1-foundational-backbone
-    status: READY
+    status: IN_PROGRESS
     owners:
       - role: Implementation Agent
         agent: Claude Code
@@ -313,7 +313,8 @@ tasks:
       - m1-t1-core-types
       - m1-t2-mqtt-client
     blockers: []
-    updated_at: "2026-07-12T00:00:00Z"
+    updated_at: "2026-07-16T00:00:00Z"
+    notes: "PARTIAL — library exists (event_logger.rs, schema.rs, lib.rs); missing: main.rs subscriber, config/, systemd/, migrations/"
     acceptance_criteria:
       - "SQLite schema with append-only constraint"
       - "MQTT subscriber logs all MVP events"
@@ -370,7 +371,7 @@ tasks:
     status: READY
     owners:
       - role: Embedded Developer
-        agent: GitHub Copilot
+        agent: Claude Code
     dependencies:
       - m1-t1-core-types
       - m1-t2-mqtt-client
@@ -399,7 +400,7 @@ tasks:
     milestone_id: m1-foundational-backbone
     status: BLOCKED
     owners:
-      - role: Visualization Agent
+      - role: Implementation Agent
         agent: Claude Code
     dependencies:
       - m1-t2-mqtt-client
@@ -433,7 +434,7 @@ tasks:
     milestone_id: m1-foundational-backbone
     status: BLOCKED
     owners:
-      - role: Visualization Agent
+      - role: Implementation Agent
         agent: Claude Code
     dependencies:
       - m1-t1-core-types

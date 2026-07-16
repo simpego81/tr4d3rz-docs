@@ -2,7 +2,7 @@
 
 **Purpose**: Rapid project re-entry after inattività (target: <5 min)  
 **Maintainer**: Claude Code (Primary Agent)  
-**Last Updated**: 2026-07-15  
+**Last Updated**: 2026-07-16  
 **Auto-Update**: Dopo ogni task completato o cambio di stato significativo
 
 ---
@@ -12,9 +12,9 @@
 | Dimensione | Status | Note |
 |---|---|---|
 | **Architettura** | HEALTHY | Fondamenta solide; topologia Single RPi2 consolidata |
-| **M1 Progress** | IN PROGRESS — 57% | 4/7 task completati; T3 parziale |
-| **Agenti** | SEMPLIFICATO | Modello single primary (Claude Code) + subagent interni |
-| **Documentazione** | AGGIORNATA | AGENTS.md, SUBAGENT_PROTOCOL.md, DASHBOARD aggiornati oggi |
+| **M1 Progress** | IN PROGRESS — 44% | 4/9 task completati; T3 PARTIAL; T4/T5 READY |
+| **Agenti** | OPTION_C | Orchestratore + 10 subagent specializzati (agents/ 12 file) |
+| **Documentazione** | AGGIORNATA | AGENTS.md, SUBAGENT_PROTOCOL.md, state/, IMPLEMENTATION_LOG aggiornati 2026-07-16 |
 | **Blockers** | NESSUNO | Tutti i gate precedenti risolti |
 
 ---
@@ -62,18 +62,25 @@
 
 ---
 
-## Modello Agenti (aggiornato 2026-07-15)
-
-**Prima**: Manus (Chief Architect esterno) + Claude Code + GitHub Copilot + Antigravity + HRA  
-**Ora**: Claude Code (tutti i ruoli) + Subagent interni + User come approver
+## Modello Agenti — Option C (aggiornato 2026-07-16)
 
 | Chi | Ruolo |
 |---|---|
-| **User (Owner)** | Approva proposte architetturali e priorità |
-| **Claude Code** | Orchestrazione, implementazione, QA, doc, meta-optimizer, librarian, embedded |
-| **Subagent interni** | Spawned da Claude Code: research / plan / implement / review |
+| **User (Owner)** | Approva ADR, protocolli, cambi priorità |
+| **Claude Code** | **Orchestratore** — seleziona task, spawna subagent, integra output, trigera PQM |
+| **Planner** [Plan-type] | Spec incomplete, nuova feature |
+| **Architect** [claude] | ADR, protocollo, contratto cross-repo |
+| **Developer** [claude+wt] | Implementazione con worktree isolation |
+| **Reviewer** [code-reviewer] | QA avversariale post-implementazione |
+| **Debugger** [claude] | Root cause analysis su failure |
+| **Tester** [claude] | Validazione pre-COMPLETED |
+| **Documentation** [claude] | Sync state/ArchiMate — OBBLIGATORIO post-developer |
+| **PQM** [claude] | Audit conformità Costituzione (ogni 3 task) |
+| **Pipeline Mgr** [STUB] | CI/CD GitHub Actions — attivo post-M1 |
+| **Deployment Mgr** [STUB] | Deploy device — attivo post-M1 |
 
-Documentazione: `AGENTS.md`, `SUBAGENT_PROTOCOL.md`
+Definizioni complete: `agents/` directory (12 file)  
+Protocollo: `SUBAGENT_PROTOCOL.md`
 
 ---
 
@@ -81,7 +88,7 @@ Documentazione: `AGENTS.md`, `SUBAGENT_PROTOCOL.md`
 
 | Repository | Stato | Ultimo Task |
 |---|---|---|
-| `tr4d3rz-docs` | ACTIVE | Ristrutturazione collaborazione (2026-07-15) |
+| `tr4d3rz-docs` | ACTIVE | Architettura agenti Option C + Fase 2 state sync (2026-07-16) |
 | `tr4d3rz-core` | READY | M1-T1 completato (commit e8ecad4) |
 | `tr4d3rz-messaging` | READY | M1-T2 + T2-B completati (commit af19bee) |
 | `tr4d3rz-persistence` | IN_PROGRESS (PARTIAL) | Library esistente, binary mancante |
