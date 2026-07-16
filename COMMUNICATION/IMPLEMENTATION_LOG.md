@@ -108,7 +108,8 @@ cargo test
 ## M1-T2-B — Heartbeat Probe — 2026-07-10
 
 **Repository**: `tr4d3rz-messaging`  
-**Status**: COMPLETED — Validation gate per M1-T5 soddisfatto
+**Status**: COMPLETED — Validation gate per M1-T5 soddisfatto  
+**Commit**: af19bee (incluso nel commit M1-T2; probe aggiunto nella stessa release)
 
 ### Deliverable
 

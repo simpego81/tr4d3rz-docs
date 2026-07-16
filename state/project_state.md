@@ -19,7 +19,7 @@
 | Agent Model | OPTION_C | Orchestratore (Claude Code) + 10 subagent specializzati; AGENTS.md + agents/ aggiornati (2026-07-16) |
 | Implementazione | IN PROGRESS | M1-T1, T2, T2-B completati; T3 IN_PROGRESS (PARTIAL); T4/T5 READY |
 | FEATURE-DOCS-PROJECT-MAP | FUNCTIONALLY COMPLETE | Browser gate PENDING_HUMAN |
-| ARCH-AGENTS | FASE_1_COMPLETE | agents/ directory (12 file), AGENTS.md, SUBAGENT_PROTOCOL.md aggiornati |
+| ARCH-AGENTS | OPTION_C_COMPLETE | agents/ (12 file), AGENTS.md, SUBAGENT_PROTOCOL.md, state sync, PQM audit — Fase 1+2 completate |
 
 ---
 
@@ -32,8 +32,8 @@
 | M1-T2 | COMPLETED | MQTT library Rust; commit af19bee su tr4d3rz-messaging |
 | M1-T2-B | COMPLETED | Heartbeat Probe validato su RPi2 (2026-07-10) |
 | M1-T3 | IN_PROGRESS (PARTIAL) | Library (event_logger.rs, schema.rs, lib.rs) esistente; manca main.rs, config/, systemd/, migrations/ |
-| M1-T4 | PENDING | Repo tr4d3rz-evolution vuoto; dipendenze M1-T1/T2 soddisfatte |
-| M1-T5 | PENDING | Simulatore/firmware ESP8266; gate M1-T2-B soddisfatto |
+| M1-T4 | READY | Repo tr4d3rz-evolution vuoto; dipendenze M1-T1/T2 soddisfatte |
+| M1-T5 | READY | Simulatore/firmware ESP8266; gate M1-T2-B soddisfatto |
 | M1-T6 | BLOCKED | Dipende da M1-T2 + M1-T3 |
 | M1-T7 | BLOCKED | Dipende da tutti i task M1 |
 

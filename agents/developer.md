@@ -58,6 +58,7 @@ Prima di spawnare il Developer, l'Orchestratore verifica:
 - [ ] `COMMUNICATION/IMPLEMENTATION_LOG.md` aggiornato con entry per questo task
 - [ ] `COMMUNICATION/TASKS/current_task.md` → status: COMPLETED
 - [ ] **Git commit** nel repo target con messaggio descrittivo (formato: `<task-id>: <descrizione>`)
+- [ ] **Commit hash** annotato nell'entry IMPLEMENTATION_LOG (campo `**Commit**: <hash>`)
 - [ ] Nessun secret (`.env*`, credenziali) nel codice committato
 - [ ] `review_recommended: true` se il task è critico (M1-T3, M1-T4, M1-T6+)
 
