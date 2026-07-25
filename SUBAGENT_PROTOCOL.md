@@ -1,9 +1,24 @@
 # SUBAGENT_PROTOCOL.md — TR4D3RZ Subagent Orchestration Protocol
 
 > **Owner**: Claude Code (Orchestratore)  
-> **Aggiornato**: 2026-07-16 — migrazione a Option C (10 tipi specializzati)  
+> **Aggiornato**: 2026-07-25 — armonizzazione con Software House AI framework  
 > **Scopo**: Definisce come l'Orchestratore spawna e gestisce i subagent specializzati.  
 > **Riferimento ruoli**: `agents/` (source of truth per trigger, brief, output schema di ogni ruolo)
+
+---
+
+## 0. Scope: questo protocollo governa il livello implementativo
+
+TR4D3RZ usa un **modello a due livelli** (deciso 2026-07-25):
+
+| Livello | Protocollo | Quando usarlo |
+|---------|-----------|---------------|
+| **Organizzativo** | [Software House AI 12-step cycle](https://github.com/simpego81/software-house-ai/blob/master/protocols/operational-cycle.md) | Decisioni architetturali, nuovi ADR, modifiche a protocolli condivisi, feature specification, cambi a AGENTS.md o CONSTITUTION |
+| **Implementativo** | Questo documento | Implementazione di feature già specificate, bug fix, documentazione, PQM audit, CI/CD |
+
+**Regola pratica**: se l'output è un ADR o una modifica a `protocols/`, usa il ciclo Software House AI. Se l'output è codice, test o un log, usa questo protocollo.
+
+Vedere `AGENTS.md §0` per il mapping tra ruoli Software House AI e ruoli TR4D3RZ.
 
 ---
 

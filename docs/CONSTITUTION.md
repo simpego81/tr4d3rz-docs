@@ -1,4 +1,10 @@
 # Constitution for the tr4d3rz software company
+
+> **Note (2026-07-25):** This document is the original project-level mandate for TR4D3RZ.
+> Organizational governance (agent roles, operational cycle, quality principles) is now defined in the
+> [Software House AI framework](https://github.com/simpego81/software-house-ai).
+> This document remains valid for TR4D3RZ-specific rules (repositories, devices, roadmap, documentation).
+> In case of conflict, the Software House AI Constitution takes precedence.
 Voglio completare il salto di paradigma: tr4d3rz deve diventare una software house gestita da agent Claude Code
 
 ## Ambiti di lavoro

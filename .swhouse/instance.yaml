@@ -1,0 +1,46 @@
+framework_version: "0.1.0"
+framework_repo: "https://github.com/simpego81/software-house-ai"
+
+instance:
+  machine: "dev-pc-windows"
+  operator: "claude-sonnet-4-6"
+  project: "tr4d3rz"
+  project_repo: "https://github.com/simpego81/tr4d3rz-docs"
+
+agents:
+  - role: ARCHITECT
+    provider: claude
+    model: claude-sonnet-4-6
+  - role: EXPLORER
+    provider: claude
+    model: claude-sonnet-4-6
+  - role: CRITIC
+    provider: claude
+    model: claude-sonnet-4-6
+  - role: DESTROYER
+    provider: claude
+    model: claude-sonnet-4-6
+  - role: BUILDER
+    provider: claude
+    model: claude-sonnet-4-6
+  - role: OPTIMIZER
+    provider: claude
+    model: claude-sonnet-4-6
+  - role: LIBRARIAN
+    provider: claude
+    model: claude-sonnet-4-6
+  - role: SCIENTIST
+    provider: claude
+    model: claude-sonnet-4-6
+  - role: PRODUCT_OWNER
+    provider: unavailable
+    note: "Owner is human — provides value definition directly"
+  - role: COORDINATOR
+    provider: claude
+    model: claude-sonnet-4-6
+  - role: EVOLUTION_MASTER
+    provider: claude
+    model: claude-sonnet-4-6
+  - role: ARBITER
+    provider: unavailable
+    note: "Owner is human — has final decision authority on architectural matters"

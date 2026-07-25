@@ -14,23 +14,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This repository generates a static HTML documentation site hosted at [https://simpego81.github.io/tr4d3rz-docs/](https://simpego81.github.io/tr4d3rz-docs/).
 
-## Multi-Agent Ecosystem
+## Agent Model
 
-TR4D3RZ is developed by a coordinated team of AI agents, each owning specific repositories:
+TR4D3RZ uses **Option C** (adopted 2026-07-15): a single Claude Code Orchestrator + ephemeral specialized subagents. No external agents (Manus, GitHub Copilot) are active.
 
-| Repository | Scope | AI Owner |
+| Repository | Scope | Operator |
 |---|---|---|
-| `tr4d3rz-docs` | Architecture, specs, ADRs (THIS REPO) | Manus |
+| `tr4d3rz-docs` | Architecture, specs, ADRs, state (THIS REPO) | Claude Code |
 | `tr4d3rz-core` | L-System genome, FSM runtime | Claude Code |
 | `tr4d3rz-messaging` | MQTT/NATS, Gateway Nodes | Claude Code |
 | `tr4d3rz-evolution` | Mutation, fitness, niche discovery | Claude Code |
 | `tr4d3rz-observatory` | UI, visualization, replay system | Claude Code |
 | `tr4d3rz-persistence` | Event sourcing, archetype memory | Claude Code |
-| `tr4d3rz-embedded` | ESP8266, STM32 optimization nodes | GitHub Copilot |
+| `tr4d3rz-embedded` | ESP8266, STM32 optimization nodes | Claude Code |
 
-**Meta-Layer Agents** (operate orthogonally to feature development):
-- **Meta-Optimizer Agent** (Claude Code): System optimization, convergence analysis, workflow improvement
-- **Debug Intelligence Agent** (Claude Code): Root cause analysis, observability optimization, failure diagnosis
+**Organizational framework:** TR4D3RZ operates as a project under the [Software House AI](https://github.com/simpego81/software-house-ai) framework. Architectural decisions follow the Software House operational cycle. Implementation tasks follow the TR4D3RZ subagent workflow defined in `AGENTS.md` and `SUBAGENT_PROTOCOL.md`.
+
+**Subagent roles** (ephemeral, spawned by Orchestrator per task): Planner, Architect, Developer, Reviewer, Debugger, Tester, Documentation Agent, PQM, Pipeline Manager (stub), Deployment Manager (stub). See `AGENTS.md` for full specifications.
 
 ## Building the Documentation Site
 
