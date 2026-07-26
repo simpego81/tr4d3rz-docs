@@ -2,7 +2,7 @@
 
 **Purpose**: Rapid project re-entry after inattività (target: <5 min)  
 **Maintainer**: Claude Code (Primary Agent)  
-**Last Updated**: 2026-07-16  
+**Last Updated**: 2026-07-25  
 **Auto-Update**: Dopo ogni task completato o cambio di stato significativo
 
 ---
@@ -13,8 +13,8 @@
 |---|---|---|
 | **Architettura** | HEALTHY | Fondamenta solide; topologia Single RPi2 consolidata |
 | **M1 Progress** | IN PROGRESS — 44% | 4/9 task completati; T3 PARTIAL; T4/T5 READY |
-| **Agenti** | OPTION_C | Orchestratore + 10 subagent specializzati (agents/ 12 file) |
-| **Documentazione** | AGGIORNATA | AGENTS.md, SUBAGENT_PROTOCOL.md, state/, IMPLEMENTATION_LOG aggiornati 2026-07-16 |
+| **Agenti** | OPTION_C + Software House AI | Orchestratore + 10 subagent (impl); Software House AI 12-step cycle (architettura). Framework: github.com/simpego81/software-house-ai |
+| **Documentazione** | AGGIORNATA | AGENTS.md §0 mapping, SUBAGENT_PROTOCOL.md §0 two-level model, .swhouse/ bootstrap — 2026-07-25 |
 | **Blockers** | NESSUNO | Tutti i gate precedenti risolti |
 
 ---

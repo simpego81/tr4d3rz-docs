@@ -7,6 +7,7 @@
   <meta name="description" content="TR4D3RZ distributed evolutionary signal ecology — architecture, roadmap, and collaborative AI setup at a glance.">
   <link rel="stylesheet" href="shared/design-tokens.css">
   <link rel="stylesheet" href="shared/base.css">
+  <script src="https://unpkg.com/three@0.165.0/build/three.min.js" defer></script>
   <style>
     /* ── Hero ─────────────────────────────────────────────────────── */
     .hero {
@@ -196,6 +197,137 @@
     }
 
     .legacy-strip a { margin: 0 var(--space-sm); }
+
+    /* ── Algo Hero ────────────────────────────────────────────────────── */
+    .algo-hero {
+      width: 100%;
+      min-height: calc(100vh - 64px);
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .algo-hero__inner {
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .algo-hero__title {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #60a5fa;
+      text-align: center;
+    }
+
+    .algo-hero__panels {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: nowrap;
+    }
+
+    .algo-panel {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .algo-panel--ohlcv { width: 220px; }
+    .algo-panel--alu   { width: 190px; }
+    .algo-panel--sm    { flex: 1; min-width: 300px; max-width: 500px; flex-shrink: 1; }
+
+    .algo-panel__label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #60a5fa;
+      white-space: nowrap;
+    }
+
+    .algo-canvas {
+      width: 100%;
+      display: block;
+      border-radius: 6px;
+      height: 260px;
+    }
+
+    .alu-svg { width: 100%; height: 220px; display: block; }
+
+    .algo-arrow {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .algo-arrow svg { width: 48px; height: 20px; overflow: visible; }
+
+    .algo-condition {
+      position: absolute;
+      bottom: 0.75rem;
+      left: 0.75rem;
+      right: 0.75rem;
+      background: rgba(15, 23, 42, 0.97);
+      border: 1px solid #2563eb;
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 0.6875rem;
+      color: #93c5fd;
+      opacity: 0;
+      transition: opacity 250ms ease;
+      pointer-events: none;
+      text-align: center;
+      z-index: 10;
+      line-height: 1.5;
+    }
+
+    .algo-condition.visible { opacity: 1; }
+
+    .algo-hero__tagline {
+      font-size: 0.75rem;
+      color: #334155;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    @media (max-width: 820px) {
+      .algo-hero__panels { flex-wrap: wrap; justify-content: center; }
+      .algo-panel--ohlcv,
+      .algo-panel--alu   { width: 45%; min-width: 160px; }
+      .algo-panel--sm    { width: 100%; max-width: 480px; min-width: unset; flex: none; }
+      .algo-arrow        { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .algo-panel--ohlcv,
+      .algo-panel--alu { width: 100%; max-width: 360px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .algo-condition { transition: none; }
+    }
   </style>
 </head>
 <body>
@@ -216,6 +348,47 @@
 
   <main class="main" id="main-content">
     <div class="container">
+
+      <!-- ── Algorithm Visualization Hero ─────────────────────────────── -->
+      <section class="algo-hero" aria-label="TR4D3RZ algorithm visualization">
+        <div class="algo-hero__inner">
+          <p class="algo-hero__title">Distributed Evolutionary Signal Ecology — Algorithm Overview</p>
+
+          <div class="algo-hero__panels">
+
+            <div class="algo-panel algo-panel--ohlcv">
+              <div class="algo-panel__label">OHLCV Stream</div>
+              <canvas id="ohlcv-canvas" class="algo-canvas" aria-label="Simulated market data stream"></canvas>
+            </div>
+
+            <div class="algo-arrow" aria-hidden="true">
+              <svg viewBox="0 0 48 20" fill="none">
+                <path d="M0 10 H40 M32 3 L40 10 L32 17" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+
+            <div class="algo-panel algo-panel--alu">
+              <div class="algo-panel__label">Signal Processing</div>
+              <svg id="alu-svg" class="alu-svg" viewBox="0 0 190 220" aria-label="ALU signal processing block"></svg>
+            </div>
+
+            <div class="algo-arrow" aria-hidden="true">
+              <svg viewBox="0 0 48 20" fill="none">
+                <path d="M0 10 H40 M32 3 L40 10 L32 17" stroke="#2563eb" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+
+            <div class="algo-panel algo-panel--sm">
+              <div class="algo-panel__label">Finite State Machine</div>
+              <canvas id="sm-canvas" class="algo-canvas" aria-label="3D state machine visualization"></canvas>
+              <div class="algo-condition" id="algo-condition" aria-live="polite" aria-atomic="true"></div>
+            </div>
+
+          </div>
+
+          <p class="algo-hero__tagline">Agents competing across predictive niches · Emergent specialization</p>
+        </div>
+      </section>
 
       <section class="hero" aria-labelledby="hero-title">
         <span class="hero-eyebrow">Distributed Evolutionary Signal Ecology</span>
@@ -337,7 +510,7 @@
             </p>
             <div class="map-card-live" id="card-live-agents" aria-live="polite">
               <div class="live-row">
-                <span class="live-stat"><span id="agents-info">Manus · Claude Code · GitHub Copilot</span></span>
+                <span class="live-stat"><span id="agents-info">Claude Code · Software House AI</span></span>
                 <span id="agents-health" class="badge badge-health-healthy">Active</span>
               </div>
             </div>
@@ -378,6 +551,316 @@
       <p class="text-xs mt-sm" id="build-meta">Project map auto-generated from source-of-truth files.</p>
     </div>
   </footer>
+
+  <!-- ── Algo Hero Animation ───────────────────────────────────────────── -->
+  <script>
+  (function () {
+    'use strict';
+
+    var C = {
+      bg: '#0f172a', nodeIdle: 0x1e3a5f, nodeActive: 0x1d4ed8, nodeGlow: 0x60a5fa,
+      edge: 0x334155, edgeActive: 0x60a5fa,
+      candleUp: '#10b981', candleDn: '#ef4444',
+      gridLine: '#1e293b', priceLabel: '#60a5fa',
+      aluBg: '#0f172a', aluBorder: '#334155', aluAccent: '#2563eb',
+      aluKnob: '#334155', aluText: '#64748b', aluTitle: '#60a5fa',
+    };
+
+    var STATES = [
+      { label: 'IDLE',    x:  0.0, y:  1.6, z:  0.0 },
+      { label: 'LONG_E',  x:  1.5, y:  0.5, z:  0.3 },
+      { label: 'LONG_H',  x:  0.9, y: -1.4, z: -0.2 },
+      { label: 'SHORT_E', x: -0.9, y: -1.4, z:  0.2 },
+      { label: 'SHORT_H', x: -1.5, y:  0.5, z: -0.3 },
+    ];
+
+    var EDGES = [[0,1],[1,2],[2,0],[0,3],[3,4],[4,0],[2,3]];
+
+    var CONDITIONS = [
+      'IIR(P) > IIR₂(P) + Δmargin₁ && Vol < IIR(Vol)',
+      'IIR(P) < IIR₂(P) − Δmargin₂ && Vol > IIR(Vol)',
+      'IIR₂(P) ≈ IIR(P) || τ_state > T_max',
+      'IIR₂(Vol) > IIR(Vol) × 1.5 && ΔP > margin₁',
+      'P_close < P_open − Δmargin₁(P)',
+      'IIR(P) > P_open + Δmargin₂(P)',
+      'Vol < IIR(Vol) × 0.55 && ΔP < margin₂',
+    ];
+
+    var currentState = 0, transitioning = false, transitionEdgeIdx = -1;
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ── Three.js State Machine ──────────────────────────────────────── */
+    function initSM() {
+      var T = window.THREE;
+      if (!T) return null;
+      var canvas = document.getElementById('sm-canvas');
+      if (!canvas) return null;
+
+      var getWH = function () {
+        return { w: canvas.clientWidth || 380, h: canvas.clientHeight || 260 };
+      };
+      var s = getWH();
+
+      var renderer = new T.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(s.w, s.h, false);
+      renderer.setClearColor(0x000000, 0);
+
+      var scene  = new T.Scene();
+      var camera = new T.PerspectiveCamera(45, s.w / s.h, 0.1, 100);
+      camera.position.set(0, 0, 6.5);
+
+      scene.add(new T.AmbientLight(0x334155, 1.2));
+      var pl = new T.PointLight(0x2563eb, 3, 25);
+      pl.position.set(3, 4, 5);
+      scene.add(pl);
+
+      var group = new T.Group();
+      scene.add(group);
+
+      var sGeo  = new T.SphereGeometry(0.30, 32, 32);
+      var sMats = STATES.map(function () {
+        return new T.MeshStandardMaterial({
+          color: C.nodeIdle, emissive: 0x0f2040, emissiveIntensity: 0.3,
+          metalness: 0.15, roughness: 0.65,
+        });
+      });
+      var sMeshes = STATES.map(function (st, i) {
+        var m = new T.Mesh(sGeo, sMats[i]);
+        m.position.set(st.x, st.y, st.z);
+        group.add(m);
+        return m;
+      });
+
+      var gGeo  = new T.SphereGeometry(0.42, 32, 32);
+      var gMat  = new T.MeshStandardMaterial({
+        color: C.nodeGlow, emissive: C.nodeGlow, emissiveIntensity: 1.0,
+        transparent: true, opacity: 0.25,
+      });
+      var gMesh = new T.Mesh(gGeo, gMat);
+      group.add(gMesh);
+
+      var eMats  = EDGES.map(function () { return new T.LineBasicMaterial({ color: C.edge }); });
+      EDGES.forEach(function (e, i) {
+        var pts = [
+          new T.Vector3(STATES[e[0]].x, STATES[e[0]].y, STATES[e[0]].z),
+          new T.Vector3(STATES[e[1]].x, STATES[e[1]].y, STATES[e[1]].z),
+        ];
+        group.add(new T.Line(new T.BufferGeometry().setFromPoints(pts), eMats[i]));
+      });
+
+      window.addEventListener('resize', function () {
+        var ns = getWH();
+        renderer.setSize(ns.w, ns.h, false);
+        camera.aspect = ns.w / ns.h;
+        camera.updateProjectionMatrix();
+      });
+
+      return {
+        update: function (t) {
+          group.rotation.y = t * 0.00025;
+          group.rotation.x = Math.sin(t * 0.0001) * 0.12;
+          var pulse = Math.sin(t * 0.003);
+          sMeshes.forEach(function (m, i) {
+            if (i === currentState) {
+              sMats[i].color.setHex(C.nodeActive);
+              sMats[i].emissive.setHex(C.nodeGlow);
+              sMats[i].emissiveIntensity = 0.55 + pulse * 0.35;
+              m.scale.setScalar(1.0 + pulse * 0.07);
+            } else {
+              sMats[i].color.setHex(C.nodeIdle);
+              sMats[i].emissive.setHex(0x0f2040);
+              sMats[i].emissiveIntensity = 0.2;
+              m.scale.setScalar(1.0);
+            }
+          });
+          var cs = STATES[currentState];
+          gMesh.position.set(cs.x, cs.y, cs.z);
+          gMat.opacity = 0.18 + Math.abs(pulse) * 0.14;
+          gMesh.scale.setScalar(1.0 + pulse * 0.06);
+          eMats.forEach(function (mat, i) {
+            mat.color.setHex(i === transitionEdgeIdx ? C.edgeActive : C.edge);
+          });
+          renderer.render(scene, camera);
+        }
+      };
+    }
+
+    /* ── OHLCV Canvas ────────────────────────────────────────────────── */
+    function initOHLCV() {
+      var canvas = document.getElementById('ohlcv-canvas');
+      if (!canvas) return null;
+      var ctx = canvas.getContext('2d');
+      var price = 102.5;
+
+      function gen(ref) {
+        var d = (Math.random() - 0.47) * 2.8;
+        var o = ref, c = ref + d;
+        return { o: o, c: c, h: Math.max(o, c) + Math.random() * 1.4, l: Math.min(o, c) - Math.random() * 1.4 };
+      }
+
+      var candles = [];
+      for (var i = 0; i < 21; i++) {
+        candles.push(gen(price));
+        price = candles[candles.length - 1].c;
+      }
+
+      var lastAdd = 0;
+
+      function resize() {
+        canvas.width  = canvas.clientWidth  || 200;
+        canvas.height = canvas.clientHeight || 260;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      return {
+        draw: function (t) {
+          if (t - lastAdd > 380) {
+            lastAdd = t;
+            candles.push(gen(candles[candles.length - 1].c));
+            if (candles.length > 21) candles.shift();
+          }
+          var W = canvas.width, H = canvas.height;
+          ctx.clearRect(0, 0, W, H);
+          ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+          ctx.strokeStyle = C.gridLine; ctx.lineWidth = 1;
+          [1, 2, 3].forEach(function (i) {
+            var y = H / 4 * i;
+            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+          });
+          var vis = candles.slice(-20);
+          var all = vis.reduce(function (acc, c) { acc.push(c.h, c.l); return acc; }, []);
+          var lo = Math.min.apply(null, all) - 0.5;
+          var hi = Math.max.apply(null, all) + 0.5;
+          var range = hi - lo || 1;
+          var cw = (W - 16) / 20, bw = Math.max(cw * 0.65, 3), pad = 8;
+          var scaleY = function (y) { return ((hi - y) / range) * (H - 20) + 10; };
+          vis.forEach(function (c, i) {
+            var xc = pad + i * cw + (cw - bw) / 2;
+            var up = c.c >= c.o, col = up ? C.candleUp : C.candleDn;
+            ctx.strokeStyle = col; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(xc + bw / 2, scaleY(c.h)); ctx.lineTo(xc + bw / 2, scaleY(c.l)); ctx.stroke();
+            ctx.fillStyle = col;
+            ctx.fillRect(xc, Math.min(scaleY(c.o), scaleY(c.c)), bw, Math.max(Math.abs(scaleY(c.c) - scaleY(c.o)), 2));
+          });
+          var last = vis[vis.length - 1].c;
+          ctx.fillStyle = C.priceLabel; ctx.font = '10px monospace'; ctx.textAlign = 'right';
+          ctx.fillText(last.toFixed(2), W - 4, 14);
+        }
+      };
+    }
+
+    /* ── ALU SVG ─────────────────────────────────────────────────────── */
+    function initALU() {
+      var svg = document.getElementById('alu-svg');
+      if (!svg) return null;
+      var ns = 'http://www.w3.org/2000/svg';
+      function mk(tag, attrs) {
+        var el = document.createElementNS(ns, tag);
+        Object.keys(attrs).forEach(function (k) { el.setAttribute(k, attrs[k]); });
+        return el;
+      }
+      svg.appendChild(mk('rect', { x:4, y:4, width:182, height:212, rx:8, fill:C.aluBg, stroke:C.aluBorder, 'stroke-width':1.5 }));
+      var t = mk('text', { x:95, y:22, 'text-anchor':'middle', fill:C.aluTitle, 'font-size':8.5, 'font-weight':600, 'letter-spacing':1, 'font-family':'system-ui' });
+      t.textContent = 'ALU / SIGNAL PROCESSING'; svg.appendChild(t);
+      svg.appendChild(mk('line', { x1:16, y1:30, x2:174, y2:30, stroke:C.aluBorder, 'stroke-width':1 }));
+
+      var knobDefs = [
+        { cx:52,  cy:82,  label:'IIR₁(P)', spd: 0.40 },
+        { cx:138, cy:82,  label:'IIR₂(P)', spd:-0.28 },
+        { cx:52,  cy:155, label:'IIR₁(V)', spd: 0.55 },
+        { cx:138, cy:155, label:'IIR₂(V)', spd:-0.45 },
+      ];
+
+      var indicators = knobDefs.map(function (k) {
+        svg.appendChild(mk('circle', { cx:k.cx, cy:k.cy, r:26, fill:'#1a2535', stroke:'#475569', 'stroke-width':1.5 }));
+        svg.appendChild(mk('circle', { cx:k.cx, cy:k.cy, r:18, fill:C.aluKnob }));
+        for (var a = 0; a < 360; a += 45) {
+          var rad = a * Math.PI / 180;
+          svg.appendChild(mk('line', { x1:k.cx+20*Math.cos(rad), y1:k.cy+20*Math.sin(rad), x2:k.cx+24*Math.cos(rad), y2:k.cy+24*Math.sin(rad), stroke:'#334155', 'stroke-width':1 }));
+        }
+        var ind = mk('line', { x1:k.cx, y1:k.cy, x2:k.cx, y2:k.cy-13, stroke:C.aluAccent, 'stroke-width':2.5, 'stroke-linecap':'round' });
+        svg.appendChild(ind);
+        var lbl = mk('text', { x:k.cx, y:k.cy+40, 'text-anchor':'middle', fill:C.aluText, 'font-size':8.5, 'font-family':'system-ui' });
+        lbl.textContent = k.label; svg.appendChild(lbl);
+        return { el:ind, cx:k.cx, cy:k.cy, spd:k.spd };
+      });
+
+      svg.appendChild(mk('line', { x1:16, y1:178, x2:174, y2:178, stroke:C.aluBorder, 'stroke-width':1 }));
+
+      var leverHandles = [
+        { cx:62,  label:'Δmargin₁(P)', phase:0 },
+        { cx:128, label:'Δmargin₂(P)', phase:Math.PI },
+      ].map(function (lv) {
+        var ty1 = 188, ty2 = 208;
+        svg.appendChild(mk('line', { x1:lv.cx, y1:ty1, x2:lv.cx, y2:ty2, stroke:'#475569', 'stroke-width':3, 'stroke-linecap':'round' }));
+        var hdl = mk('rect', { x:lv.cx-9, y:ty1, width:18, height:9, rx:3, fill:C.aluAccent });
+        svg.appendChild(hdl);
+        var lbl = mk('text', { x:lv.cx, y:ty2+12, 'text-anchor':'middle', fill:C.aluText, 'font-size':8, 'font-family':'system-ui' });
+        lbl.textContent = lv.label; svg.appendChild(lbl);
+        return { el:hdl, ty1:ty1, ty2:ty2, phase:lv.phase };
+      });
+
+      return {
+        update: function (t) {
+          indicators.forEach(function (ind) {
+            var angle = t * ind.spd * 0.0009, r = 13;
+            ind.el.setAttribute('x2', ind.cx + r * Math.sin(angle));
+            ind.el.setAttribute('y2', ind.cy - r * Math.cos(angle));
+          });
+          leverHandles.forEach(function (lv) {
+            var range = lv.ty2 - lv.ty1 - 9;
+            lv.el.setAttribute('y', lv.ty1 + ((Math.sin(t * 0.0008 + lv.phase) + 1) / 2) * range);
+          });
+        }
+      };
+    }
+
+    /* ── Transitions ─────────────────────────────────────────────────── */
+    function doTransition(overlay) {
+      if (transitioning) return;
+      var cands = EDGES.map(function (e, i) { return { e:e, i:i }; }).filter(function (x) { return x.e[0] === currentState; });
+      if (!cands.length) return;
+      var chosen = cands[Math.floor(Math.random() * cands.length)];
+      transitioning = true; transitionEdgeIdx = chosen.i;
+      overlay.textContent = CONDITIONS[Math.floor(Math.random() * CONDITIONS.length)];
+      overlay.classList.add('visible');
+      setTimeout(function () {
+        currentState = chosen.e[1]; transitionEdgeIdx = -1;
+        overlay.classList.remove('visible');
+        setTimeout(function () { transitioning = false; }, 320);
+      }, 1500);
+    }
+
+    /* ── Main loop ───────────────────────────────────────────────────── */
+    function main() {
+      var smFn   = initSM();
+      var ohlcvFn = initOHLCV();
+      var aluFn   = initALU();
+      var overlay = document.getElementById('algo-condition');
+      var lastT   = 0;
+      var TRANS_MS = 5200;
+
+      function loop(t) {
+        requestAnimationFrame(loop);
+        if (smFn)   smFn.update(t);
+        if (!reducedMotion) {
+          if (ohlcvFn) ohlcvFn.draw(t);
+          if (aluFn)   aluFn.update(t);
+          if (overlay && !transitioning && t - lastT > TRANS_MS) { lastT = t; doTransition(overlay); }
+        }
+      }
+      requestAnimationFrame(loop);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', main);
+    } else {
+      main();
+    }
+  })();
+  </script>
 
   <script>window.DATA_BASE_URL = 'data/generated/';</script>
   <script src="shared/data-loader.js"></script>

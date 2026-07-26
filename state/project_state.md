@@ -50,6 +50,7 @@
 | D-M1-005 | Heartbeat Probe come validation gate per M1-T5 | COMPLETED |
 | D-2026-07-15 | Migrazione modello agenti: single primary (Claude Code) + subagent interni | Applicato (superato) |
 | **D-2026-07-16** | **Architettura agenti Option C: Orchestratore + 10 subagent specializzati (agents/ directory)** | **Applicato** |
+| **D-2026-07-25** | **Integrazione Software House AI: modello a due livelli (SW-House per decisioni architetturali, TR4D3RZ per implementazione). Memoria coesistente: `.swhouse/` + file TR4D3RZ esistenti.** | **Applicato** |
 
 ---
 

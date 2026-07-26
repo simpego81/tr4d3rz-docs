@@ -4,7 +4,7 @@
 **Owner**: User (approva decisioni architetturali) — Claude Code (Orchestratore)  
 **Protocollo**: Markdown-driven handover in `COMMUNICATION/`  
 **Milestone**: M1 — Foundational Backbone Single RPi2  
-**Aggiornato**: 2026-07-16
+**Aggiornato**: 2026-07-25
 
 ---
 
@@ -12,13 +12,13 @@
 
 | ID | Repo | Agent | Stato | Dipendenze | Output richiesto |
 |---|---|---|---|---|---|
-| M1-T0 | `tr4d3rz-docs` | Manus | ✅ COMPLETED | Nessuna | `SPEC_MASTER.md`, `TASK_QUEUE.md`, contratti MVP, `project-tasks.md`. |
+| M1-T0 | `tr4d3rz-docs` | Claude Code | ✅ COMPLETED | Nessuna | `SPEC_MASTER.md`, `TASK_QUEUE.md`, contratti MVP, `project-tasks.md`. |
 | M1-T1 | `tr4d3rz-core` | Claude Code | ✅ COMPLETED | M1-T0 | Tipi Rust condivisi: OHLCV, Genome Capsule, Fitness Result, trait FSM. |
 | M1-T2 | `tr4d3rz-messaging` | Claude Code | ✅ COMPLETED (Rust lib) | M1-T0, M1-T1 | Rust MQTT client library. |
 | M1-T2-B | `tr4d3rz-messaging` | Claude Code | ✅ COMPLETED | M1-T2 | Tool di validazione remota PC-to-RPi (Heartbeat Probe). **Validation gate obbligatorio prima di M1-T5.** |
 | M1-T3 | `tr4d3rz-persistence` | Claude Code | 🔄 IN_PROGRESS (PARTIAL) | M1-T0, M1-T1, M1-T2 | Event logger SQLite, schema append-only, subscriber MQTT. Library parziale — manca: main.rs, config/, systemd/, migrations/ |
 | M1-T4 | `tr4d3rz-evolution` | Claude Code | 🔲 READY | M1-T1, M1-T2 | CLI Linux che pubblica capsule MVP e ascolta fitness result. |
-| M1-T5 | `tr4d3rz-embedded` | Claude Code | 🔲 READY | M1-T1, M1-T2, **M1-T2-B** | Simulatore o firmware ESP8266 per capsule in/fitness out. |
+| M1-T5 | `tr4d3rz-embedded` | Claude Code | 🔲 READY | M1-T1, M1-T2, **M1-T2-B** | Simulatore o firmware ESP8266 per capsule in/fitness out. (Note: originariamente assegnato a GitHub Copilot — ora Claude Code) |
 | M1-T6 | `tr4d3rz-observatory` | Claude Code | ⏸️ BLOCKED | M1-T2, M1-T3 | UI browser con timeline eventi, stato nodi e fitness. |
 | M1-T7 | Cross-repo | Claude Code | ⏸️ BLOCKED | M1-T1..M1-T6 | `ARCHITECTURAL_AUDIT.md` e `PROJECT_STATE.md` aggiornato. |
 
@@ -28,7 +28,7 @@
 |---|---|---|---|---|---|
 | FEATURE-DOCS-PROJECT-MAP | `tr4d3rz-docs` | Claude Code | ✅ FUNCTIONALLY COMPLETE | — | Homepage Project Map, 4 mappe interattive, pagine dettaglio, pipeline CI/CD. Gate: browser validation PENDING_HUMAN. |
 | FEATURE-VIEWS | `tr4d3rz-docs` | Claude Code | ✅ COMPLETED | — | 4 stakeholder views (stakeholders, process, roadmap, architecture). |
-| **FEATURE-AGENT-ARCHITECTURE** | `tr4d3rz-docs` | Claude Code | 🔄 IN_PROGRESS (Fase 2) | Approvazione owner 2026-07-16 | Architettura agenti Option C: agents/ directory, AGENTS.md, SUBAGENT_PROTOCOL.md, state consistency, PQM audit. |
+| **FEATURE-AGENT-ARCHITECTURE** | `tr4d3rz-docs` | Claude Code | 🔄 IN_PROGRESS (Fase 3) | Approvazione owner 2026-07-16 | Architettura agenti Option C: agents/ directory, AGENTS.md, SUBAGENT_PROTOCOL.md, state consistency, PQM audit. Fase 3 (DevOps/CI) PENDING post-M1. |
 
 **FEATURE-AGENT-ARCHITECTURE — Fasi:**
 
