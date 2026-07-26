@@ -272,7 +272,7 @@
       height: 260px;
     }
 
-    .alu-svg { width: 100%; height: 220px; display: block; }
+    .alu-svg { width: 100%; height: 250px; display: block; }
 
     .algo-arrow {
       display: flex;
@@ -369,7 +369,7 @@
 
             <div class="algo-panel algo-panel--alu">
               <div class="algo-panel__label">Signal Processing</div>
-              <svg id="alu-svg" class="alu-svg" viewBox="0 0 190 220" aria-label="ALU signal processing block"></svg>
+              <svg id="alu-svg" class="alu-svg" viewBox="0 0 190 258" aria-label="ALU signal processing block"></svg>
             </div>
 
             <div class="algo-arrow" aria-hidden="true">
@@ -566,15 +566,18 @@
       aluKnob: '#334155', aluText: '#64748b', aluTitle: '#60a5fa',
     };
 
+    // Tree layout: IDLE is the root; LONG branch left, SHORT branch right.
+    // z-variation gives L-System 3D depth.
     var STATES = [
-      { label: 'IDLE',    x:  0.0, y:  1.6, z:  0.0 },
-      { label: 'LONG_E',  x:  1.5, y:  0.5, z:  0.3 },
-      { label: 'LONG_H',  x:  0.9, y: -1.4, z: -0.2 },
-      { label: 'SHORT_E', x: -0.9, y: -1.4, z:  0.2 },
-      { label: 'SHORT_H', x: -1.5, y:  0.5, z: -0.3 },
+      { label: 'IDLE',    x:  0.0, y:  2.0, z:  0.0  },  // root (top centre)
+      { label: 'LONG_E',  x: -1.5, y:  0.5, z:  0.55 },  // left branch (forward)
+      { label: 'LONG_H',  x: -2.0, y: -1.2, z:  0.35 },  // left leaf
+      { label: 'SHORT_E', x:  1.5, y:  0.5, z: -0.55 },  // right branch (back)
+      { label: 'SHORT_H', x:  2.0, y: -1.2, z: -0.35 },  // right leaf
     ];
 
-    var EDGES = [[0,1],[1,2],[2,0],[0,3],[3,4],[4,0],[2,3]];
+    // Primary tree edges first [0-3], cross/return edges after [4-6].
+    var EDGES = [[0,1],[0,3],[1,2],[3,4],[2,0],[4,0],[1,3]];
 
     var CONDITIONS = [
       'IIR(P) > IIR₂(P) + Δmargin₁ && Vol < IIR(Vol)',
@@ -607,8 +610,9 @@
       renderer.setClearColor(0x000000, 0);
 
       var scene  = new T.Scene();
-      var camera = new T.PerspectiveCamera(45, s.w / s.h, 0.1, 100);
-      camera.position.set(0, 0, 6.5);
+      var camera = new T.PerspectiveCamera(42, s.w / s.h, 0.1, 100);
+      camera.position.set(0, 0.4, 7.5);
+      camera.lookAt(0, 0, 0);
 
       scene.add(new T.AmbientLight(0x334155, 1.2));
       var pl = new T.PointLight(0x2563eb, 3, 25);
@@ -640,7 +644,10 @@
       var gMesh = new T.Mesh(gGeo, gMat);
       group.add(gMesh);
 
-      var eMats  = EDGES.map(function () { return new T.LineBasicMaterial({ color: C.edge }); });
+      // Indices 0-3: primary tree edges (brighter); 4-6: return/cross edges (dim).
+      var eMats  = EDGES.map(function (e, i) {
+        return new T.LineBasicMaterial({ color: i < 4 ? 0x4a6080 : 0x1e3050 });
+      });
       EDGES.forEach(function (e, i) {
         var pts = [
           new T.Vector3(STATES[e[0]].x, STATES[e[0]].y, STATES[e[0]].z),
@@ -696,7 +703,8 @@
       function gen(ref) {
         var d = (Math.random() - 0.47) * 2.8;
         var o = ref, c = ref + d;
-        return { o: o, c: c, h: Math.max(o, c) + Math.random() * 1.4, l: Math.min(o, c) - Math.random() * 1.4 };
+        return { o: o, c: c, h: Math.max(o, c) + Math.random() * 1.4, l: Math.min(o, c) - Math.random() * 1.4,
+                 v: 40000 + Math.random() * 180000 + (c >= o ? 60000 : 0) };
       }
 
       var candles = [];
@@ -734,8 +742,9 @@
           var lo = Math.min.apply(null, all) - 0.5;
           var hi = Math.max.apply(null, all) + 0.5;
           var range = hi - lo || 1;
+          var ohlcH = Math.floor(H * 0.64), gapH = Math.floor(H * 0.06), volH = H - ohlcH - gapH;
           var cw = (W - 16) / 20, bw = Math.max(cw * 0.65, 3), pad = 8;
-          var scaleY = function (y) { return ((hi - y) / range) * (H - 20) + 10; };
+          var scaleY = function (y) { return ((hi - y) / range) * (ohlcH - 16) + 8; };
           vis.forEach(function (c, i) {
             var xc = pad + i * cw + (cw - bw) / 2;
             var up = c.c >= c.o, col = up ? C.candleUp : C.candleDn;
@@ -746,7 +755,23 @@
           });
           var last = vis[vis.length - 1].c;
           ctx.fillStyle = C.priceLabel; ctx.font = '10px monospace'; ctx.textAlign = 'right';
-          ctx.fillText(last.toFixed(2), W - 4, 14);
+          ctx.fillText(last.toFixed(2), W - 4, 12);
+          // Volume separator
+          var sepY = ohlcH + Math.floor(gapH / 2);
+          ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(0, sepY); ctx.lineTo(W, sepY); ctx.stroke();
+          // Volume label
+          ctx.fillStyle = '#334155'; ctx.font = '8px monospace'; ctx.textAlign = 'left';
+          ctx.fillText('VOL', 4, ohlcH + gapH + 10);
+          // Volume bars
+          var maxVol = Math.max.apply(null, vis.map(function(c){ return c.v || 1; }));
+          vis.forEach(function (c, i) {
+            var xc = pad + i * cw + (cw - bw) / 2;
+            var up = c.c >= c.o;
+            var barH = Math.max(((c.v || 0) / maxVol) * (volH - 6), 2);
+            ctx.fillStyle = up ? 'rgba(16,185,129,0.50)' : 'rgba(239,68,68,0.50)';
+            ctx.fillRect(xc, H - 2 - barH, bw, barH);
+          });
         }
       };
     }
@@ -761,7 +786,7 @@
         Object.keys(attrs).forEach(function (k) { el.setAttribute(k, attrs[k]); });
         return el;
       }
-      svg.appendChild(mk('rect', { x:4, y:4, width:182, height:212, rx:8, fill:C.aluBg, stroke:C.aluBorder, 'stroke-width':1.5 }));
+      svg.appendChild(mk('rect', { x:4, y:4, width:182, height:250, rx:8, fill:C.aluBg, stroke:C.aluBorder, 'stroke-width':1.5 }));
       var t = mk('text', { x:95, y:22, 'text-anchor':'middle', fill:C.aluTitle, 'font-size':8.5, 'font-weight':600, 'letter-spacing':1, 'font-family':'system-ui' });
       t.textContent = 'ALU / SIGNAL PROCESSING'; svg.appendChild(t);
       svg.appendChild(mk('line', { x1:16, y1:30, x2:174, y2:30, stroke:C.aluBorder, 'stroke-width':1 }));
@@ -787,13 +812,13 @@
         return { el:ind, cx:k.cx, cy:k.cy, spd:k.spd };
       });
 
-      svg.appendChild(mk('line', { x1:16, y1:178, x2:174, y2:178, stroke:C.aluBorder, 'stroke-width':1 }));
+      svg.appendChild(mk('line', { x1:16, y1:208, x2:174, y2:208, stroke:C.aluBorder, 'stroke-width':1 }));
 
       var leverHandles = [
         { cx:62,  label:'Δmargin₁(P)', phase:0 },
         { cx:128, label:'Δmargin₂(P)', phase:Math.PI },
       ].map(function (lv) {
-        var ty1 = 188, ty2 = 208;
+        var ty1 = 220, ty2 = 242;
         svg.appendChild(mk('line', { x1:lv.cx, y1:ty1, x2:lv.cx, y2:ty2, stroke:'#475569', 'stroke-width':3, 'stroke-linecap':'round' }));
         var hdl = mk('rect', { x:lv.cx-9, y:ty1, width:18, height:9, rx:3, fill:C.aluAccent });
         svg.appendChild(hdl);
@@ -802,19 +827,7 @@
         return { el:hdl, ty1:ty1, ty2:ty2, phase:lv.phase };
       });
 
-      return {
-        update: function (t) {
-          indicators.forEach(function (ind) {
-            var angle = t * ind.spd * 0.0009, r = 13;
-            ind.el.setAttribute('x2', ind.cx + r * Math.sin(angle));
-            ind.el.setAttribute('y2', ind.cy - r * Math.cos(angle));
-          });
-          leverHandles.forEach(function (lv) {
-            var range = lv.ty2 - lv.ty1 - 9;
-            lv.el.setAttribute('y', lv.ty1 + ((Math.sin(t * 0.0008 + lv.phase) + 1) / 2) * range);
-          });
-        }
-      };
+      return {};
     }
 
     /* ── Transitions ─────────────────────────────────────────────────── */
@@ -847,7 +860,6 @@
         if (smFn)   smFn.update(t);
         if (!reducedMotion) {
           if (ohlcvFn) ohlcvFn.draw(t);
-          if (aluFn)   aluFn.update(t);
           if (overlay && !transitioning && t - lastT > TRANS_MS) { lastT = t; doTransition(overlay); }
         }
       }
