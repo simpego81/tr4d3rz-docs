@@ -982,6 +982,20 @@
                           {
                               "label":  "",
                               "from":  "ci_svc",
+                              "to":  "ci_core",
+                              "devices":  "rasp2",
+                              "type":  "Composition"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "ci_svc",
+                              "to":  "ci_messaging",
+                              "devices":  "rasp2",
+                              "type":  "Composition"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "ci_svc",
                               "to":  "ci_scraper",
                               "devices":  "rasp2",
                               "type":  "Composition"
@@ -1069,6 +1083,20 @@
                               "to":  "hw_rasp2",
                               "devices":  "rasp2",
                               "type":  "Assignment"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "rt_rust",
+                              "to":  "ci_core",
+                              "devices":  "rasp2",
+                              "type":  "Realization"
+                          },
+                          {
+                              "label":  "",
+                              "from":  "rt_rust",
+                              "to":  "ci_messaging",
+                              "devices":  "rasp2",
+                              "type":  "Realization"
                           },
                           {
                               "label":  "",
@@ -1522,6 +1550,20 @@
                                         "title":  "System Event (CBOR · QoS 1 · append-only)",
                                         "aspect":  "Passive Structure"
                                     },
+                     "cond_bucket":  {
+                                         "devices":  [
+                                                         "android",
+                                                         "linux"
+                                                     ],
+                                         "layer":  "Application",
+                                         "type":  "Application_Component",
+                                         "relations":  "Transforms OHLCV values. Used by OHLCV Condition and Indicator Primitives.",
+                                         "role":  "Discretizes continuous OHLCV values into categorical buckets (LOW/MEDIUM/HIGH/EXTREME) for FSM state matching. Enables the FSM to handle continuous market data.",
+                                         "type_desc":  "ArchiMate Application Component — value discretization.",
+                                         "tech":  "Rust (tr4d3rz-core). Bucket boundaries configurable per symbol. Adaptive bucketization based on historical distribution.",
+                                         "title":  "Bucketization Engine (LOW · NORMAL · HIGH · EXTREME)",
+                                         "aspect":  "Active Structure"
+                                     },
                      "data_environment":  {
                                               "devices":  [
                                                               "android",
@@ -2205,7 +2247,7 @@
                                        "role":  "",
                                        "type_desc":  "",
                                        "tech":  "",
-                                       "title":  "NanoMQ Broker MQTT 3.1.1/5.0 TCP:1883 · WS:8083",
+                                       "title":  "NanoMQ Broker [M1-T2 ✅] MQTT 3.1.1/5.0 TCP:1883 · WS:8083 12/13 tests passing",
                                        "aspect":  ""
                                    },
                      "obs_deploymap":  {
@@ -2278,7 +2320,7 @@
                                        "role":  "",
                                        "type_desc":  "",
                                        "tech":  "",
-                                       "title":  "Event Logger [M2] Rust · SQLite WAL append-only",
+                                       "title":  "Event Logger [M1-T3 ✅] Rust · SQLite WAL append-only · 4 tests passing",
                                        "aspect":  ""
                                    },
                      "capsule_mgr":  {
@@ -2377,20 +2419,17 @@
                                          "title":  "Base Metrics (trade_count · success_rate · CAGR · profit_factor)",
                                          "aspect":  "Active Structure"
                                      },
-                     "cond_bucket":  {
-                                         "devices":  [
-                                                         "android",
-                                                         "linux"
-                                                     ],
-                                         "layer":  "Application",
-                                         "type":  "Application_Component",
-                                         "relations":  "Transforms OHLCV values. Used by OHLCV Condition and Indicator Primitives.",
-                                         "role":  "Discretizes continuous OHLCV values into categorical buckets (LOW/MEDIUM/HIGH/EXTREME) for FSM state matching. Enables the FSM to handle continuous market data.",
-                                         "type_desc":  "ArchiMate Application Component — value discretization.",
-                                         "tech":  "Rust (tr4d3rz-core). Bucket boundaries configurable per symbol. Adaptive bucketization based on historical distribution.",
-                                         "title":  "Bucketization Engine (LOW · NORMAL · HIGH · EXTREME)",
-                                         "aspect":  "Active Structure"
-                                     },
+                     "ci_core":  {
+                                     "devices":  "rasp2",
+                                     "layer":  "",
+                                     "type":  "Application_Component",
+                                     "relations":  "",
+                                     "role":  "",
+                                     "type_desc":  "",
+                                     "tech":  "",
+                                     "title":  "tr4d3rz-core [M1-T1 ✅] Rust types library no_std · CBOR · WASM 8/8 tests passing",
+                                     "aspect":  ""
+                                 },
                      "net_usb":  {
                                      "devices":  "ra8",
                                      "layer":  "Technology",
@@ -2471,6 +2510,17 @@
                                           "tech":  "",
                                           "title":  "Mutation Engine (structural · parametric · crossover)",
                                           "aspect":  "Active Structure"
+                                      },
+                     "ci_messaging":  {
+                                          "devices":  "rasp2",
+                                          "layer":  "",
+                                          "type":  "Application_Component",
+                                          "relations":  "",
+                                          "role":  "",
+                                          "type_desc":  "",
+                                          "tech":  "",
+                                          "title":  "tr4d3rz-messaging [M1-T2 ✅] Rust MQTT client lib type-safe · CBOR auto-encode 12/13 tests passing",
+                                          "aspect":  ""
                                       },
                      "obs_replay":  {
                                         "devices":  [
@@ -2709,7 +2759,7 @@
                                         "role":  "",
                                         "type_desc":  "",
                                         "tech":  "",
-                                        "title":  "Persistence Service [M2] Rust · Parquet export archetype store",
+                                        "title":  "Persistence Service [M2 FUTURE] Rust · Parquet export archetype store",
                                         "aspect":  ""
                                     },
                      "fit_advanced":  {
@@ -2780,9 +2830,9 @@
                                     }
                  },
     "metadata":  {
-                     "total_relationships":  131,
-                     "total_elements":  110,
-                     "generated":  "2026-06-19 00:26:16",
+                     "total_relationships":  135,
+                     "total_elements":  112,
+                     "generated":  "2026-07-25 14:30:45",
                      "version":  "2.0"
                  }
 }

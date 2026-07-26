@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-07-15T20:19:07Z",
+  "generated_at": "2026-07-25T00:00:00Z",
   "project": "TR4D3RZ",
   "current_milestone": "m1-foundational-backbone",
   "milestones": [
@@ -95,8 +95,8 @@
         {
           "id": "m1-t3-event-persistence",
           "name": "M1-T3: Event Persistence",
-          "summary": "SQLite append-only event logger with MQTT subscription",
-          "status": "READY",
+          "summary": "SQLite append-only event logger with MQTT subscription — PARTIAL: library ok, mancano main.rs, config/, systemd/, migrations/",
+          "status": "IN_PROGRESS",
           "estimated_effort": "L",
           "actual_completion_date": null,
           "dependencies": [
