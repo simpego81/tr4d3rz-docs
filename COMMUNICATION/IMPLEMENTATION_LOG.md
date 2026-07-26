@@ -2,7 +2,7 @@
 
 **Scope**: MVP M1 — Foundational Backbone Single RPi2  
 **Maintainer**: Claude Code (Orchestratore)  
-**Last updated**: 2026-07-16
+**Last updated**: 2026-07-26
 
 > Questo log traccia le scelte implementative non ovvie, i comandi di test e le limitazioni note per ogni task completato. È la fonte di verità per la ripresa del contesto implementativo.
 
@@ -13,6 +13,7 @@
 | Timestamp | Task | Agent | Evento | Outcome |
 |---|---|---|---|---|
 | 2026-05-23 | — | Manus | Repository workspace inizializzato | Ready for agent handover |
+| 2026-07-26 | FEATURE-STAKEHOLDER-HERO | Claude Code | Implementato hero animato in docs/index.html (Step 1 spec): Three.js SM 3D, OHLCV Canvas, ALU SVG. Commit 9250ece. Fix stale agent refs + PQM state. | COMPLETED |
 | 2026-06-20 | M1-T1 | Claude Code | tr4d3rz-core v0.1.0 implementato | COMPLETED — 8/8 test |
 | 2026-06-25 | M1-T2 | Claude Code | tr4d3rz_messaging v0.1.0 implementato | COMPLETED — 12/13 test |
 | 2026-07-10 | M1-T2-B | Claude Code | Heartbeat Probe validato su RPi2 | COMPLETED — gate soddisfatto |
