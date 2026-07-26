@@ -63,6 +63,7 @@ L'Orchestratore spawna il Reviewer quando:
 3. **Test coverage**: cosa NON è testato? Edge cases mancanti?
 4. **Hardware constraints**: per codice embedded, rispetta no_std, 80KB RAM ESP8266?
 5. **Idempotence**: operazioni che devono essere idempotenti lo sono?
+6. **Frontend script loading order** (solo per deliverable HTML/JS/WebGL): ogni CDN `<script defer>` o `<script async>` viene eseguito PRIMA del codice che dipende dal suo global (`window.THREE`, ecc.)? URL CDN pinned a versione nota con build UMD? `onerror` presente? Fallback visibile se JS fallisce? Se un solo di questi punti è NO → finding CRITICAL.
 
 ## Mindset operativo
 

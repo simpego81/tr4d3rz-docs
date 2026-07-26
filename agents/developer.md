@@ -62,6 +62,15 @@ Prima di spawnare il Developer, l'Orchestratore verifica:
 - [ ] Nessun secret (`.env*`, credenziali) nel codice committato
 - [ ] `review_recommended: true` se il task è critico (M1-T3, M1-T4, M1-T6+)
 
+**Per deliverable frontend (HTML/JS/WebGL/Three.js):**
+- [ ] Aperto in browser — output visivo confermato (non canvas bianco, non blank)
+- [ ] DevTools Console: nessun errore
+- [ ] CDN script loading order verificato: ogni `<script defer>` dipendente da librerie CDN è in listener `DOMContentLoaded` e la CDN esegue prima di quell'evento
+- [ ] URL CDN pinned a versione nota con build UMD global (mai `latest` o path non verificato)
+- [ ] `onerror` su ogni `<script src="...cdn...">` esterno
+- [ ] `try/catch` attorno a costruttori WebGL/Canvas
+- [ ] Frontend-checklist letta: `software-house-ai/protocols/frontend-checklist.md`
+
 ## Regole operative
 
 1. **Leggi prima di scrivere**: leggi i file esistenti prima di qualsiasi modifica
@@ -69,6 +78,7 @@ Prima di spawnare il Developer, l'Orchestratore verifica:
 3. **No commenti ovvi**: solo commenti per WHY non-ovvi (invarianti nascosti, workaround)
 4. **Hardware constraints**: per codice che gira su ESP8266, rispetta no_std e 80KB RAM
 5. **CBOR always**: serializzazione payloads MQTT sempre in CBOR salvo ADR contrario
+6. **Frontend CDN**: per HTML con script CDN, verifica che l'URL serva un UMD global (`window.X`) — unpkg path per versioni recenti può servire ES module incompatibile con `<script>` plain. Usa cdnjs con versione esplicita per globals Three.js e simili.
 
 ## Brief Template
 

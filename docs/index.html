@@ -7,7 +7,9 @@
   <meta name="description" content="TR4D3RZ distributed evolutionary signal ecology — architecture, roadmap, and collaborative AI setup at a glance.">
   <link rel="stylesheet" href="shared/design-tokens.css">
   <link rel="stylesheet" href="shared/base.css">
-  <script src="https://unpkg.com/three@0.165.0/build/three.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+          defer
+          onerror="console.error('[AlgoHero] Three.js failed to load from CDN — SM canvas will be blank')"></script>
   <style>
     /* ── Hero ─────────────────────────────────────────────────────── */
     .hero {
@@ -381,6 +383,9 @@
             <div class="algo-panel algo-panel--sm">
               <div class="algo-panel__label">Finite State Machine</div>
               <canvas id="sm-canvas" class="algo-canvas" aria-label="3D state machine visualization"></canvas>
+              <div id="sm-fallback" style="display:none;align-items:center;justify-content:center;height:260px;width:100%;color:#475569;font-size:0.75rem;text-align:center;padding:1rem;line-height:1.6;">
+                3D visualization requires WebGL.<br>Enable hardware acceleration in your browser.
+              </div>
               <div class="algo-condition" id="algo-condition" aria-live="polite" aria-atomic="true"></div>
             </div>
 
@@ -595,7 +600,14 @@
     /* ── Three.js State Machine ──────────────────────────────────────── */
     function initSM() {
       var T = window.THREE;
-      if (!T) return null;
+      if (!T) {
+        console.error('[AlgoHero] window.THREE undefined — Three.js CDN failed to load');
+        var smC = document.getElementById('sm-canvas');
+        if (smC) smC.style.display = 'none';
+        var smFb = document.getElementById('sm-fallback');
+        if (smFb) smFb.style.display = 'flex';
+        return null;
+      }
       var canvas = document.getElementById('sm-canvas');
       if (!canvas) return null;
 
@@ -604,7 +616,16 @@
       };
       var s = getWH();
 
-      var renderer = new T.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      var renderer;
+      try {
+        renderer = new T.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      } catch (e) {
+        console.error('[AlgoHero] WebGL context creation failed:', e);
+        canvas.style.display = 'none';
+        var smFb2 = document.getElementById('sm-fallback');
+        if (smFb2) smFb2.style.display = 'flex';
+        return null;
+      }
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setSize(s.w, s.h, false);
       renderer.setClearColor(0x000000, 0);
