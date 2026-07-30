@@ -648,75 +648,81 @@
     .ga-scroll-hint svg { animation: ga-bounce 1.3s ease-in-out infinite; }
     @keyframes ga-bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
 
-    /* ── Selection table ──────────────────────────────────────── */
-    #ga-sel {
-      position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:20;
-      background: rgba(15,23,42,0.97);
-      display: none; flex-direction:column; align-items:center; justify-content:center;
-      padding: 60px 1rem 1rem; pointer-events: none;
+    /* ── Unified evolution overlay (2.5–2.7) ────────────────────────── */
+    #ga-ev-overlay {
+      position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:25;
+      background: rgba(13,22,38,0.97);
+      display: none; flex-direction:column; align-items:center;
+      justify-content:flex-start;
+      padding: 64px 1rem 2rem;
+      overflow-y: auto;
+      gap: 1rem;
     }
-    #ga-sel.visible { display: flex; }
+    #ga-ev-overlay.visible { display: flex; }
 
-    .ga-sel-panel {
-      background: #1e293b; border: 1px solid #334155; border-radius: 12px;
-      padding: 1.25rem; width: 560px; max-width: 95vw; position: relative;
-    }
-    .ga-sel-head {
-      display: grid; grid-template-columns: 32px 1fr 72px; gap: 8px;
-      padding: 0 8px 8px; margin-bottom: 4px;
-      border-bottom: 1px solid #334155;
-      font-size: 0.5625rem; letter-spacing: 0.12em; text-transform: uppercase;
-      color: #60a5fa; font-family: 'Consolas','Monaco',monospace;
-    }
-    .ga-sel-row {
-      display: grid; grid-template-columns: 32px 1fr 72px; gap: 8px;
-      padding: 4px 8px; border-radius: 6px; transition: background .25s;
-    }
-    .ga-sel-row.selected { background: rgba(37,99,235,0.18); border: 1px solid #2563eb; }
-    .ga-rank { font-size: 0.5625rem; color: #475569; font-family: 'Consolas','Monaco',monospace; line-height: 2; }
-    .ga-gstrip { display: flex; gap: 2px; align-items: center; }
-    .ga-gs { width: 13px; height: 8px; border-radius: 2px; }
-    .ga-cagr-val { font-size: 0.6875rem; font-weight: 600; color: #10b981; text-align: right; font-family: 'Consolas','Monaco',monospace; line-height: 2; }
-    .ga-arrow {
-      position: absolute; left: -22px; top: 0;
-      font-size: 0.75rem; color: #60a5fa; transition: top .35s cubic-bezier(.34,1.56,.64,1);
+    #ga-ev-phase-lbl { margin-bottom: 0.5rem; text-align: center; }
+
+    #ga-ev-table-wrap { width:100%; max-width:660px; }
+
+    #ga-ev-table {
+      background: #0d1626;
+      border: 1px solid #1e3a5f;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
     }
 
-    /* ── Crossover / Mutation ─────────────────────────────────── */
-    #ga-xover, #ga-mut {
-      position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:20;
-      background: rgba(15,23,42,0.97);
-      display: none; flex-direction:column; align-items:center; justify-content:center;
-      gap: 1.5rem; pointer-events: none;
+    /* 3-column override (rank + genome + cagr) scoped to ev-table only */
+    #ga-ev-table .ga-db-head { grid-template-columns: 32px 1fr 80px; }
+    #ga-ev-table .ga-db-row  { grid-template-columns: 32px 1fr 80px; font-size: 0.6875rem; }
+
+    /* Genome text inside ev-overlay — larger, readable */
+    #ga-ev-overlay .ga-db-genome { font-size: 0.6875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #ga-ev-overlay .ga-db-cagr   { font-size: 0.6875rem; }
+
+    .ga-ev-arrow {
+      position: absolute; left: -20px; top: 0;
+      font-size: 0.875rem; color: #60a5fa;
+      transition: top 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      pointer-events: none;
     }
-    #ga-xover.visible, #ga-mut.visible { display: flex; }
-    .ga-xover-panel {
-      background: #1e293b; border: 1px solid #334155; border-radius: 12px;
-      padding: 1.25rem 1.75rem;
+    .ga-ev-arrow--b { color: #a78bfa; }
+
+    /* crossover / mutation panels */
+    #ga-ev-parents-wrap {
+      display: flex; align-items:flex-start; gap:1.5rem;
+      justify-content:center; width:100%; max-width:960px;
+      flex-wrap: wrap;
     }
-    .ga-xover-lbl {
-      font-size: 0.5625rem; font-weight: 600; letter-spacing: 0.12em;
-      text-transform: uppercase; color: #60a5fa; margin-bottom: 0.75rem;
+    .ga-ev-parent-panel { display:flex; flex-direction:column; gap:0.5rem; min-width: 220px; }
+    .ga-ev-parent-lbl {
+      font-size: 0.5625rem; font-weight:600; letter-spacing:0.12em;
+      text-transform:uppercase; color:#60a5fa; font-family:'Consolas','Monaco',monospace;
+    }
+    .ga-ev-zoom-row {
+      background: #0d1626; border:1px solid #1e3a5f; border-radius:8px;
+      padding: 10px 14px;
       font-family: 'Consolas','Monaco',monospace;
+      font-size: 0.75rem; line-height: 1.85;
     }
-    .ga-gbig { display: flex; gap: 5px; }
-    .ga-gblock {
-      width: 48px; height: 32px; border-radius: 5px; opacity: 0.82;
-      transition: transform .2s, box-shadow .2s, opacity .2s; position: relative;
+    .ga-ev-gf      { color: #64748b; display:block; }
+    .ga-ev-gf--A   { color: #60a5fa; font-weight:600; }
+    .ga-ev-gf--B   { color: #a78bfa; font-weight:600; }
+    @keyframes ga-ev-mut {
+      0%,100% { color:#64748b; text-shadow:none; }
+      50%     { color:#fbbf24; text-shadow:0 0 8px #fbbf24; }
     }
-    .ga-gblock.lit { opacity:1; transform:scaleY(1.25); box-shadow:0 0 12px currentColor; }
-    .ga-gblock.dim { opacity: 0.15; }
-    .ga-gblock .gbig-lbl {
-      position: absolute; bottom: -14px; left: 50%; transform: translateX(-50%);
-      font-size: 0.4375rem; color: #475569; white-space: nowrap;
-      font-family: 'Consolas','Monaco',monospace;
+    .ga-ev-gf--mutating { animation: ga-ev-mut 0.5s ease-in-out 4; }
+    .ga-ev-xover-sep {
+      font-size:0.75rem; color:#475569; font-family:'Consolas','Monaco',monospace;
+      align-self:center; padding-top:1.5rem;
     }
-    .ga-xover-div {
-      font-size: 0.6875rem; color: #475569; letter-spacing: 0.1em;
-      font-family: 'Consolas','Monaco',monospace; text-align: center;
+
+    /* Mobile: stack panels vertically on narrow viewports */
+    @media (max-width: 600px) {
+      #ga-ev-parents-wrap { flex-direction: column; align-items:center; }
+      .ga-ev-xover-sep { padding-top:0; }
     }
-    @keyframes ga-mutate { 0%,100%{box-shadow:none} 50%{box-shadow:0 0 18px #fbbf24;transform:scaleY(1.4)} }
-    .ga-mutating { animation: ga-mutate .6s ease-in-out 3; }
 
     /* Spacer at end of GA concept */
     #ga-end { height: 50vh; background: #0f172a; }
@@ -955,37 +961,35 @@
 
     <div id="ga-end"></div>
 
-    <!-- Full-screen overlays for 2.5 / 2.6 / 2.7 -->
-    <div id="ga-sel" aria-hidden="true">
-      <p class="algo-panel__label" style="margin-bottom:0.75rem;">2.5 — Fitness Selection</p>
-      <div class="ga-sel-panel">
-        <div class="ga-sel-head"><span>#</span><span>GENOME</span><span>CAGR</span></div>
-        <div id="ga-sel-rows"></div>
-        <div class="ga-arrow" id="ga-arr-a">▶</div>
-        <div class="ga-arrow" id="ga-arr-b" style="color:#a78bfa;">▶</div>
-      </div>
-    </div>
+    <!-- Unified evolution overlay: 2.5 Selection → 2.6 Crossover → 2.7 Mutation -->
+    <div id="ga-ev-overlay" aria-hidden="true" role="region">
+      <p id="ga-ev-phase-lbl" class="algo-panel__label"></p>
 
-    <div id="ga-xover" aria-hidden="true">
-      <div class="ga-xover-panel">
-        <div class="ga-xover-lbl">Parent A</div>
-        <div class="ga-gbig" id="ga-gpa"></div>
+      <!-- 2.5 table view -->
+      <div id="ga-ev-table-wrap">
+        <div id="ga-ev-table">
+          <div class="ga-db-head" id="ga-ev-head"><span>#</span><span>GENOME</span><span>CAGR</span></div>
+          <div id="ga-ev-rows"></div>
+          <div class="ga-ev-arrow" id="ga-ev-arr-a" aria-hidden="true">▶</div>
+          <div class="ga-ev-arrow ga-ev-arrow--b" id="ga-ev-arr-b" aria-hidden="true">▶</div>
+        </div>
       </div>
-      <div class="ga-xover-div">⟶ CROSSOVER ⟶</div>
-      <div class="ga-xover-panel">
-        <div class="ga-xover-lbl">Parent B</div>
-        <div class="ga-gbig" id="ga-gpb"></div>
-      </div>
-      <div class="ga-xover-panel" style="opacity:0;" id="ga-gchild-wrap">
-        <div class="ga-xover-lbl" id="ga-child-lbl">Child</div>
-        <div class="ga-gbig" id="ga-gpc"></div>
-      </div>
-    </div>
 
-    <div id="ga-mut" aria-hidden="true">
-      <div class="ga-xover-panel">
-        <div class="ga-xover-lbl">Genome · Mutation</div>
-        <div class="ga-gbig" id="ga-gpm"></div>
+      <!-- 2.6 / 2.7 crossover + mutation view -->
+      <div id="ga-ev-parents-wrap">
+        <div class="ga-ev-parent-panel" id="ga-ev-pa-wrap">
+          <p class="ga-ev-parent-lbl">Parent A</p>
+          <div class="ga-ev-zoom-row" id="ga-ev-pa-row"></div>
+        </div>
+        <div class="ga-ev-xover-sep" id="ga-ev-xsep">⟶ CROSSOVER ⟶</div>
+        <div class="ga-ev-parent-panel" id="ga-ev-pb-wrap">
+          <p class="ga-ev-parent-lbl">Parent B</p>
+          <div class="ga-ev-zoom-row" id="ga-ev-pb-row"></div>
+        </div>
+        <div class="ga-ev-parent-panel" id="ga-ev-pc-wrap" style="opacity:0;">
+          <p class="ga-ev-parent-lbl" id="ga-ev-pc-lbl">Child</p>
+          <div class="ga-ev-zoom-row" id="ga-ev-pc-row"></div>
+        </div>
       </div>
     </div>
 
@@ -2163,149 +2167,297 @@
       onLeave:stopParallelism
     });
 
-    /* ── Phase 2.5: Selezione ────────────────────────────────────────── */
-    var selShown=false, selTimers=[];
+    /* ── Evolution overlay state machine (2.5–2.8) ───────────────────── */
+    var _evState = { phase: null, child: null, tl: null, timers: [], intervals: [] };
 
-    (function(){
-      var cont=document.getElementById('ga-sel-rows'); if(!cont||cont.childElementCount>0) return;
-      SEL.forEach(function(row,i){
-        var div=document.createElement('div'); div.className='ga-sel-row'; div.id='ga-sr-'+i;
-        var rank=document.createElement('span'); rank.className='ga-rank'; rank.textContent=i+1;
-        var strip=document.createElement('span'); strip.className='ga-gstrip';
-        row.genome.forEach(function(g){
-          var s=document.createElement('div'); s.className='ga-gs';
-          s.style.background=g.css; s.style.opacity=0.35+(g.v||.5)*.65; strip.appendChild(s);
-        });
-        var cv=document.createElement('span'); cv.className='ga-cagr-val'; cv.textContent='+'+row.cagr.toFixed(1)+'%';
-        div.appendChild(rank); div.appendChild(strip); div.appendChild(cv); cont.appendChild(div);
-      });
-    })();
-
-    function showSel(){
-      if(selShown) return; selShown=true;
-      var tbl=document.getElementById('ga-sel');
-      tbl.classList.add('visible'); gsap.fromTo(tbl,{opacity:0},{opacity:1,duration:.45}); animateArrows();
+    function _evClearTimers() {
+      _evState.timers.forEach(clearTimeout); _evState.timers = [];
+      _evState.intervals.forEach(clearInterval); _evState.intervals = [];
+      if (_evState.tl) { _evState.tl.kill(); _evState.tl = null; }
     }
 
-    function hideSel(){
-      selShown=false; selTimers.forEach(clearTimeout); selTimers=[];
-      var tbl=document.getElementById('ga-sel');
-      gsap.to(tbl,{opacity:0,duration:.35,onComplete:function(){
-        tbl.classList.remove('visible');
-        // Reset all row animations
-        document.querySelectorAll('#ga-sel-rows .ga-sel-row').forEach(function(r){
-          gsap.set(r,{opacity:1,height:'',marginBottom:'',paddingTop:'',paddingBottom:'',scale:1,y:0,clearProps:'all'});
+    function hideEvOverlay() {
+      _evClearTimers();
+      var ov = document.getElementById('ga-ev-overlay');
+      if (!ov || !ov.classList.contains('visible')) return;
+      gsap.to(ov, { opacity:0, duration:.35, onComplete: function() {
+        ov.classList.remove('visible');
+        ov.style.opacity = '';
+        // Reset inner panels
+        var pw = document.getElementById('ga-ev-parents-wrap');
+        var tw = document.getElementById('ga-ev-table-wrap');
+        if (pw) { pw.style.display='none'; gsap.set(pw, {clearProps:'all'}); }
+        if (tw) { tw.style.display=''; }
+        var pcw = document.getElementById('ga-ev-pc-wrap');
+        if (pcw) { gsap.set(pcw, {opacity:0, scale:1}); }
+        var paw = document.getElementById('ga-ev-pa-wrap');
+        var pbw = document.getElementById('ga-ev-pb-wrap');
+        if (paw) gsap.set(paw, {opacity:1, scale:1, clearProps:'all'});
+        if (pbw) gsap.set(pbw, {opacity:1, scale:1, clearProps:'all'});
+        // Reset row selections
+        document.querySelectorAll('#ga-ev-rows .ga-db-row').forEach(function(r) {
+          gsap.set(r, {opacity:1, height:'', scale:1, y:0, clearProps:'all'});
         });
-        document.querySelectorAll('.ga-sel-row.selected').forEach(function(r){r.classList.remove('selected');});
-        document.querySelectorAll('.ga-cagr-val').forEach(function(el){gsap.set(el,{opacity:1});});
+        _evState.phase = null;
       }});
     }
 
-    function animateArrows(){
-      var aA=document.getElementById('ga-arr-a'),aB=document.getElementById('ga-arr-b');
-      var ROW_H=25,BASE=32;
-      function walkTo(arrow,target,seed,cb){
-        var steps=8,cur=Math.floor(sr(seed)*10)+5,s=0;
-        function tick(){
-          cur=Math.max(0,Math.min(19,cur+(sr(seed+s)>.45?-1:1)));
-          arrow.style.top=(BASE+cur*ROW_H)+'px'; s++;
-          if(s<steps) selTimers.push(setTimeout(tick,125));
-          else{ arrow.style.top=(BASE+target*ROW_H)+'px'; if(cb)cb(); }
-        } tick();
+    /* Render a genome as per-field <span> elements for animation */
+    function renderGenomeFields(container, genome, lsRule, highlightMap) {
+      container.innerHTML = '';
+      var fields = [];
+      genome.forEach(function(g) {
+        var key = g.name.replace(/₁/g,'1').replace(/₂/g,'2').replace(/Δ/g,'D');
+        var val;
+        if (g.name === 'ls_ax' || g.name === 'ls_axiom') val = '"' + (g.v > 0.5 ? 'A' : 'F') + '"';
+        else if (g.name === 'ls_rule') val = '"' + (lsRule || 'A→AB') + '"';
+        else if (g.name === 'ls_it' || g.name === 'ls_iter') val = Math.round(3 + g.v * 3);
+        else val = g.v.toFixed(3);
+        fields.push({ key: key, rawKey: g.name, val: val, origVal: val });
+      });
+      fields.forEach(function(f, i) {
+        var span = document.createElement('span');
+        span.className = 'ga-ev-gf';
+        span.dataset.field = f.key;
+        var hl = highlightMap && highlightMap[f.key];
+        if (hl) span.classList.add('ga-ev-gf--' + hl);
+        span.textContent = '"' + f.key + '": ' + f.val + (i < fields.length-1 ? ',' : '');
+        container.appendChild(span);
+      });
+      return fields;
+    }
+
+    /* Build the selection table rows */
+    function buildEvSelRows() {
+      var cont = document.getElementById('ga-ev-rows');
+      if (!cont) return;
+      cont.innerHTML = '';
+      SEL.forEach(function(row, i) {
+        var div = document.createElement('div');
+        div.className = 'ga-db-row'; div.id = 'ga-ev-sr-' + i;
+        // rank
+        var rank = document.createElement('span');
+        rank.style.cssText = 'font-size:0.5625rem;color:#475569;font-family:monospace;line-height:2;';
+        rank.textContent = i + 1;
+        // genome text
+        var g = document.createElement('span'); g.className = 'ga-db-genome';
+        var genStr = '{' + row.genome.slice(0, 4).map(function(gf) {
+          var k = gf.name.replace(/₁/g,'1').replace(/₂/g,'2').replace(/Δ/g,'D');
+          var v = (gf.v !== undefined) ? gf.v.toFixed(2) : '?';
+          return '"' + k + '":' + v;
+        }).join(',') + ',...}';
+        g.textContent = genStr;
+        // cagr
+        var c = document.createElement('span'); c.className = 'ga-db-cagr';
+        c.textContent = '+' + row.cagr.toFixed(1) + '%';
+        div.appendChild(rank); div.appendChild(g); div.appendChild(c);
+        cont.appendChild(div);
+      });
+    }
+
+    /* Animate the two selection arrows walking up to targets */
+    function animateEvArrows(cb) {
+      var aA = document.getElementById('ga-ev-arr-a');
+      var aB = document.getElementById('ga-ev-arr-b');
+      var ROW_H = 28, BASE = 8;
+      function walkTo(arrow, target, seed, done) {
+        var steps = 9, cur = Math.floor(sr(seed)*12)+4, s = 0;
+        function tick() {
+          cur = Math.max(0, Math.min(19, cur + (sr(seed+s) > .45 ? -1 : 1)));
+          if (arrow) arrow.style.top = (BASE + cur * ROW_H) + 'px';
+          s++;
+          if (s < steps) _evState.timers.push(setTimeout(tick, 130));
+          else {
+            if (arrow) arrow.style.top = (BASE + target * ROW_H) + 'px';
+            if (done) done();
+          }
+        }
+        tick();
       }
-      walkTo(aA,0,17,function(){
-        walkTo(aB,1,37,function(){
-          var r0=document.getElementById('ga-sr-0'),r1=document.getElementById('ga-sr-1');
-          if(r0)r0.classList.add('selected'); if(r1)r1.classList.add('selected');
-          // After 800ms, focus on parents
-          selTimers.push(setTimeout(function(){
-            // Fade out non-selected rows
-            document.querySelectorAll('#ga-sel-rows .ga-sel-row:not(.selected)').forEach(function(r){
-              gsap.to(r,{opacity:0,height:0,marginBottom:0,paddingTop:0,paddingBottom:0,duration:.5});
+      walkTo(aA, 0, 17, function() {
+        walkTo(aB, 1, 37, function() {
+          // Highlight selected rows
+          var r0 = document.getElementById('ga-ev-sr-0');
+          var r1 = document.getElementById('ga-ev-sr-1');
+          if (r0) r0.style.background = 'rgba(37,99,235,0.18)';
+          if (r1) r1.style.background = 'rgba(167,139,250,0.12)';
+          // After 800ms: fade non-selected, scale parents
+          _evState.timers.push(setTimeout(function() {
+            document.querySelectorAll('#ga-ev-rows .ga-db-row').forEach(function(r, i) {
+              if (i !== 0 && i !== 1) gsap.to(r, {opacity:0, height:0, paddingTop:0, paddingBottom:0, duration:.4, delay: i*0.015});
             });
-            // Scale up selected parents
-            selTimers.push(setTimeout(function(){
-              if(r0) gsap.to(r0,{scale:1.25,y:-8,duration:.5,ease:'power2.out'});
-              if(r1) gsap.to(r1,{scale:1.25,y:8,duration:.5,ease:'power2.out'});
+            _evState.timers.push(setTimeout(function() {
+              if (r0) gsap.to(r0, {scale:1.08, y:-4, duration:.4, ease:'power2.out'});
+              if (r1) gsap.to(r1, {scale:1.08, y:4,  duration:.4, ease:'power2.out'});
               // Fade CAGR values
-              selTimers.push(setTimeout(function(){
-                document.querySelectorAll('.ga-sel-row.selected .ga-cagr-val').forEach(function(el){
-                  gsap.to(el,{opacity:0,duration:1.2});
+              _evState.timers.push(setTimeout(function() {
+                [r0, r1].forEach(function(r) {
+                  if (r) { var c = r.querySelector('.ga-db-cagr'); if(c) gsap.to(c, {opacity:0, duration:1.0}); }
                 });
-              },700));
-            },600));
-          },800));
+                if (cb) cb();
+              }, 700));
+            }, 500));
+          }, 900));
         });
       });
     }
 
-    ScrollTrigger.create({trigger:'#ga-s5',start:'top 65%',end:'bottom top',onEnter:showSel,onLeaveBack:hideSel});
+    /* Crossover animation: highlight fields alternating A/B, assemble child */
+    function animateEvCrossover() {
+      var pA = SEL[0], pB = SEL[1];
+      var LS_RULES = ['A→AB', 'F→F+F−F', 'A→AB,B→A', 'F→FF+F+F', 'F→F[+F]F−F', 'A→ABA,B→B', 'F→F+F+F−F−F', 'A→B,B→AB'];
+      var lsA = INDS[0] ? INDS[0].lsRule : LS_RULES[0];
+      var lsB = INDS[1] ? INDS[1].lsRule : LS_RULES[1];
 
-    /* ── Phase 2.6: Crossover ────────────────────────────────────────── */
-    var xoverTl=null;
+      var paRow = document.getElementById('ga-ev-pa-row');
+      var pbRow = document.getElementById('ga-ev-pb-row');
+      var pcRow = document.getElementById('ga-ev-pc-row');
+      var pcWrap = document.getElementById('ga-ev-pc-wrap');
 
-    function buildGBig(cid,genome){
-      var cont=document.getElementById(cid); if(!cont) return; cont.innerHTML='';
-      genome.forEach(function(g,i){
-        var b=document.createElement('div'); b.className='ga-gblock';
-        b.style.background=g.css; b.style.color=g.css; b.id=cid+'-g'+i;
-        var lbl=document.createElement('span'); lbl.className='gbig-lbl';
-        lbl.textContent=g.name||'gene'; b.appendChild(lbl); cont.appendChild(b);
+      var fieldsA = renderGenomeFields(paRow, pA.genome, lsA, null);
+      var fieldsB = renderGenomeFields(pbRow, pB.genome, lsB, null);
+      pcRow.innerHTML = '';
+
+      // Build child genome and decide origin for each field
+      var childGenome = GF.map(function(g, i) {
+        var fromA = sr(i * 7 + 3) > .5;
+        var vA = (pA.genome[i] && pA.genome[i].v !== undefined) ? pA.genome[i].v : sr(i*11);
+        var vB = (pB.genome[i] && pB.genome[i].v !== undefined) ? pB.genome[i].v : sr(i*13);
+        return { name: g.name, hex: g.hex, css: g.css, v: fromA ? vA : vB, fromA: fromA };
       });
+
+      var lsRule = LS_RULES[Math.floor(sr(42) * LS_RULES.length)];
+
+      // Animate: highlight each field in sequence, then add to child
+      var delay = 0;
+      var tl = gsap.timeline();
+      _evState.tl = tl;
+
+      GF.forEach(function(g, i) {
+        var keyStr = g.name.replace(/₁/g,'1').replace(/₂/g,'2').replace(/Δ/g,'D');
+        var fromA = childGenome[i].fromA;
+        var srcSpans = fromA ? paRow.querySelectorAll('.ga-ev-gf') : pbRow.querySelectorAll('.ga-ev-gf');
+        var srcSpan = srcSpans[i];
+        if (srcSpan) {
+          tl.to(srcSpan, {color: fromA ? '#60a5fa' : '#a78bfa', fontWeight: '600', duration:.12}, delay);
+          tl.to(srcSpan, {color: '#64748b', fontWeight: '400', duration:.12}, delay + .28);
+        }
+        // Add field to child row at this point in the timeline
+        tl.add(function() {
+          var span = document.createElement('span');
+          span.className = 'ga-ev-gf';
+          span.dataset.field = keyStr;
+          var val;
+          if (g.name === 'ls_ax' || g.name === 'ls_axiom') val = '"A"';
+          else if (g.name === 'ls_rule') val = '"' + lsRule + '"';
+          else if (g.name === 'ls_it' || g.name === 'ls_iter') val = Math.round(3 + childGenome[i].v * 3);
+          else val = childGenome[i].v.toFixed(3);
+          span.textContent = '"' + keyStr + '": ' + val + (i < GF.length-1 ? ',' : '');
+          pcRow.appendChild(span);
+        }, delay + .08);
+        delay += 0.22;
+      });
+
+      tl.add(function() {
+        gsap.to(pcWrap, {opacity:1, duration:.5});
+        _evState.child = childGenome;
+        _evState.childLsRule = lsRule;
+      }, delay);
     }
 
-    function showXover(){
-      var pA=SEL[0],pB=SEL[1];
-      buildGBig('ga-gpa',pA.genome); buildGBig('ga-gpb',pB.genome);
-      var xv=document.getElementById('ga-xover');
-      xv.classList.add('visible'); gsap.fromTo(xv,{opacity:0},{opacity:1,duration:.45});
-      var child=GF.map(function(g,i){
-        var fromA=sr(i*7+3)>.5;
-        return {name:g.name,css:g.css,v:fromA?(pA.genome[i]&&pA.genome[i].v)||.5:(pB.genome[i]&&pB.genome[i].v)||.5,fromA:fromA};
-      });
-      if(xoverTl) xoverTl.kill();
-      xoverTl=gsap.timeline({delay:.9,repeat:2});
-      GF.forEach(function(g,i){
-        var sel=child[i].fromA?'#ga-gpa-g'+i:'#ga-gpb-g'+i;
-        xoverTl.to(sel,{scaleY:1.3,boxShadow:'0 0 12px '+g.css,duration:.16},i*.08)
-                .to(sel,{scaleY:1,boxShadow:'none',duration:.16},i*.08+.22);
-      });
-      xoverTl.then(function(){
-        buildGBig('ga-gpc',child);
-        var wrap=document.getElementById('ga-gchild-wrap');
-        if(wrap) gsap.to(wrap,{opacity:1,duration:.4});
-        window._gaChild=child;
-      });
+    /* Mutation animation: one field pulses and its value changes slightly */
+    function animateEvMutation() {
+      if (!_evState.child) return;
+      var pcRow = document.getElementById('ga-ev-pc-row');
+      var spans = pcRow ? pcRow.querySelectorAll('.ga-ev-gf') : [];
+      var mutIdx = Math.floor(sr(42) * spans.length);
+      var mutSpan = spans[mutIdx];
+      if (!mutSpan) return;
+      _evState.timers.push(setTimeout(function() {
+        mutSpan.classList.add('ga-ev-gf--mutating');
+        _evState.timers.push(setTimeout(function() {
+          mutSpan.classList.remove('ga-ev-gf--mutating');
+          // Change value slightly
+          var txt = mutSpan.textContent;
+          var match = txt.match(/: (\d+\.\d+)/);
+          if (match) {
+            var oldVal = parseFloat(match[1]);
+            var newVal = Math.max(0.01, Math.min(0.99, oldVal + (sr(mutIdx*31)-0.5)*0.08));
+            mutSpan.textContent = txt.replace(match[1], newVal.toFixed(3));
+          }
+        }, 2200));
+      }, 400));
     }
 
-    function hideXover(){
-      if(xoverTl) xoverTl.kill();
-      var xv=document.getElementById('ga-xover');
-      gsap.to(xv,{opacity:0,duration:.3,onComplete:function(){xv.classList.remove('visible');}});
-    }
+    /* Main phase switcher */
+    function setEvPhase(phase) {
+      if (_evState.phase === phase) return;
+      _evClearTimers();
+      _evState.phase = phase;
 
-    ScrollTrigger.create({trigger:'#ga-s6',start:'top 65%',end:'bottom top',onEnter:showXover,onLeaveBack:hideXover});
+      var ov = document.getElementById('ga-ev-overlay');
+      var lbl = document.getElementById('ga-ev-phase-lbl');
+      var tw = document.getElementById('ga-ev-table-wrap');
+      var pw = document.getElementById('ga-ev-parents-wrap');
+      var pcWrap = document.getElementById('ga-ev-pc-wrap');
+      var xsep = document.getElementById('ga-ev-xsep');
 
-    /* ── Phase 2.7: Mutazione ────────────────────────────────────────── */
-    function showMut(){
-      var genome=window._gaChild||INDS[0].genome;
-      buildGBig('ga-gpm',genome);
-      var mv=document.getElementById('ga-mut');
-      mv.classList.add('visible'); gsap.fromTo(mv,{opacity:0},{opacity:1,duration:.45});
-      var mutIdx=Math.floor(sr(42)*GF.length);
-      setTimeout(function(){
-        var block=document.getElementById('ga-gpm-g'+mutIdx); if(!block) return;
-        block.classList.add('ga-mutating');
-        setTimeout(function(){
-          block.classList.remove('ga-mutating');
-          block.style.background=GF[(mutIdx+3)%GF.length].css;
-        },2000);
-      },500);
-    }
+      if (!ov) return;
 
-    function hideMut(){
-      var mv=document.getElementById('ga-mut');
-      gsap.to(mv,{opacity:0,duration:.3,onComplete:function(){mv.classList.remove('visible');}});
+      // Make sure overlay is visible
+      if (!ov.classList.contains('visible')) {
+        ov.style.opacity = '0';
+        ov.classList.add('visible');
+        gsap.to(ov, {opacity:1, duration:.4});
+      }
+
+      if (phase === 'sel') {
+        if (lbl) lbl.textContent = '2.5 — Fitness Selection';
+        if (pw) { pw.style.display = 'none'; gsap.set(pw, {clearProps:'all'}); }
+        if (tw) tw.style.display = '';
+        // Reset rows
+        document.querySelectorAll('#ga-ev-rows .ga-db-row').forEach(function(r) {
+          gsap.set(r, {opacity:1, height:'', scale:1, y:0, clearProps:'all', background:''});
+        });
+        // Re-populate with SEL data
+        buildEvSelRows();
+        // Reset arrows
+        var aA = document.getElementById('ga-ev-arr-a');
+        var aB = document.getElementById('ga-ev-arr-b');
+        if (aA) aA.style.top = '8px';
+        if (aB) aB.style.top = '8px';
+        // Animate arrows after short delay
+        _evState.timers.push(setTimeout(animateEvArrows, 300));
+
+      } else if (phase === 'xover') {
+        if (lbl) lbl.textContent = '2.6 — Crossover';
+        if (tw) tw.style.display = 'none';
+        if (pw) { pw.style.display = 'flex'; }
+        if (pcWrap) gsap.set(pcWrap, {opacity:0});
+        if (xsep) xsep.textContent = '⟶ CROSSOVER ⟶';
+        // Show both parents, hide child initially
+        var paw = document.getElementById('ga-ev-pa-wrap');
+        var pbw = document.getElementById('ga-ev-pb-wrap');
+        if (paw) gsap.set(paw, {opacity:1, clearProps:'scale,y'});
+        if (pbw) gsap.set(pbw, {opacity:1, clearProps:'scale,y'});
+        _evState.timers.push(setTimeout(animateEvCrossover, 400));
+
+      } else if (phase === 'mut') {
+        if (lbl) lbl.textContent = '2.7 — Mutation';
+        if (tw) tw.style.display = 'none';
+        if (pw) pw.style.display = 'flex';
+        if (xsep) xsep.textContent = '';
+        // Collapse Parent A and B, spotlight Child
+        var paw2 = document.getElementById('ga-ev-pa-wrap');
+        var pbw2 = document.getElementById('ga-ev-pb-wrap');
+        if (paw2) gsap.to(paw2, {opacity:0, duration:.4});
+        if (pbw2) gsap.to(pbw2, {opacity:0, duration:.4});
+        if (pcWrap) {
+          gsap.set(pcWrap, {opacity:1});
+          gsap.to(pcWrap, {scale:1.08, duration:.5, delay:.5, ease:'power2.out'});
+        }
+        _evState.timers.push(setTimeout(animateEvMutation, 600));
+      }
     }
 
     /* ── Reset helper ────────────────────────────────────────────────── */
@@ -2321,30 +2473,66 @@
       gsap.set('#ga-parallel-equities',{opacity:0});
       stopLifecycle();
       stopParallelism();
-      hideSel();
-      hideXover();
-      hideMut();
+      hideEvOverlay(); _evState.phase = null;
     }
 
-    ScrollTrigger.create({trigger:'#ga-s7',start:'top 65%',end:'bottom top',onEnter:showMut,onLeaveBack:hideMut});
+    /* ScrollTrigger wiring for 2.5–2.8 */
+    ScrollTrigger.create({
+      trigger: '#ga-s5', start: 'top 65%', end: 'bottom top',
+      onEnter:     function() { setEvPhase('sel'); },
+      onLeave:     function() { setEvPhase('xover'); },
+      onLeaveBack: function() { hideEvOverlay(); }
+    });
+    ScrollTrigger.create({
+      trigger: '#ga-s6', start: 'top 65%', end: 'bottom top',
+      onEnter:     function() { setEvPhase('xover'); },
+      onLeave:     function() { setEvPhase('mut'); },
+      onLeaveBack: function() { setEvPhase('sel'); }
+    });
+    ScrollTrigger.create({
+      trigger: '#ga-s7', start: 'top 65%', end: 'bottom top',
+      onEnter:     function() { setEvPhase('mut'); },
+      onLeave:     function() { showBirth(); },
+      onLeaveBack: function() { setEvPhase('xover'); }
+    });
+    ScrollTrigger.create({
+      trigger: '#ga-s8', start: 'top 65%', end: 'bottom top',
+      onEnter:     function() { showBirth(); },
+      onLeaveBack: function() { setEvPhase('mut'); }
+    });
 
     /* ── Phase 2.8: Nascita ──────────────────────────────────────────── */
-    function showBirth(){
-      hideMut();
-      var border=document.getElementById('ga-ind-border');
-      gsap.to(border,{borderColor:'rgba(16,185,129,0.9)',boxShadow:'0 0 30px rgba(16,185,129,0.4)',duration:.6,delay:.3});
-      gsap.to(border,{borderColor:'rgba(96,165,250,0.5)',boxShadow:'none',duration:1.2,delay:1.1});
-      var sw=document.getElementById('ga-ind-stack-wrap');
-      gsap.fromTo(sw,{opacity:0,y:25},{opacity:1,y:0,duration:.8,delay:.5,ease:'power2.out'});
+    function showBirth() {
+      hideEvOverlay();
+      _evState.timers.push(setTimeout(function() {
+        // Flash the individual border green (birth signal)
+        var border = document.getElementById('ga-ind-border');
+        gsap.to(border, {borderColor:'rgba(16,185,129,0.9)', boxShadow:'0 0 30px rgba(16,185,129,0.4)', duration:.5, delay:.1});
+        gsap.to(border, {borderColor:'rgba(96,165,250,0.5)', boxShadow:'none', duration:1.2, delay:.7});
+        // Add the child genome as a new row in the stage DB table (narrative closure)
+        if (_evState.child) {
+          var rows = document.getElementById('ga-stage-db-rows');
+          if (rows) {
+            var mainRow = document.createElement('div');
+            mainRow.className = 'ga-db-row';
+            mainRow.style.borderLeft = '2px solid #10b981';
+            mainRow.style.animation = 'ga-row-in 0.5s ease both';
+            var ind = INDS[0];
+            var json = '{' + (ind.genome || []).slice(0,3).map(function(g) {
+              return '"' + g.name.replace(/₁/g,'1').replace(/₂/g,'2').replace(/Δ/g,'D') + '":' + g.v.toFixed(2);
+            }).join(',') + ',...}';
+            var mg = document.createElement('span'); mg.className = 'ga-db-genome'; mg.textContent = json;
+            var mc = document.createElement('span'); mc.className = 'ga-db-cagr';
+            var meanCagr = (ind.cagrPerStock || [10,10,10,10]).reduce(function(a,b){return a+b;},0)/4;
+            mc.textContent = '+' + meanCagr.toFixed(1) + '%';
+            mainRow.appendChild(mg); mainRow.appendChild(mc); rows.appendChild(mainRow);
+          }
+        }
+        // Re-show the individual stack
+        var sw = document.getElementById('ga-ind-stack-wrap');
+        gsap.fromTo(sw, {opacity:0, y:20}, {opacity:1, y:0, duration:.7, delay:.3, ease:'power2.out'});
+      }, 350));
     }
-
-    ScrollTrigger.create({trigger:'#ga-s8',start:'top 65%',end:'bottom top',
-      onEnter:showBirth,
-      onLeaveBack:function(){
-        hideMut();
-        gsap.to('#ga-ind-border',{borderColor:'rgba(96,165,250,0.5)',boxShadow:'none',duration:.4});
-      }
-    });
 
     /* ── Resize ──────────────────────────────────────────────────────── */
     window.addEventListener('resize',function(){
