@@ -21,8 +21,8 @@
       color: #e2e8f0;
       font-family: system-ui, -apple-system, sans-serif;
       overflow-x: hidden;
-      /* 5 sections × 100vh */
-      height: 500vh;
+      /* 13 sections × 100vh */
+      height: 1300vh;
     }
 
     /* ─── Navbar ─── */
@@ -164,7 +164,246 @@
       pointer-events: none;
     }
 
-    /* Progress indicator */
+    /* ─── Genome overlay ─── */
+    #genome-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 45;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      opacity: 0;
+    }
+    .individual-genome {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+    }
+    .individual-label {
+      font-size: 9px;
+      color: #4a6080;
+      width: 22px;
+      text-align: right;
+      margin-right: 4px;
+      font-family: monospace;
+    }
+    .gene-block {
+      width: 28px;
+      height: 18px;
+      border-radius: 2px;
+      opacity: 0.85;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .gene-block.active {
+      transform: scaleY(1.4);
+      box-shadow: 0 0 8px currentColor;
+    }
+    .gene-block .gene-label {
+      position: absolute;
+      bottom: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 7px;
+      color: #4a6080;
+      white-space: nowrap;
+      font-family: monospace;
+    }
+
+    /* ─── Stock label ─── */
+    #stock-label {
+      position: fixed;
+      top: 12vh;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 55;
+      text-align: center;
+      pointer-events: none;
+      opacity: 0;
+    }
+    #stock-label .ticker {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #00d4ff;
+    }
+    #stock-label .stock-desc {
+      font-size: 0.75rem;
+      color: #4a6080;
+      margin-top: 2px;
+    }
+    .cagr-popup-big {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 60;
+      background: rgba(0,20,40,0.92);
+      border: 1px solid #00d4ff;
+      border-radius: 10px;
+      padding: 18px 36px;
+      text-align: center;
+      pointer-events: none;
+      opacity: 0;
+    }
+    .cagr-popup-big .cagr-title { font-size: 0.8rem; color: #4a7090; letter-spacing: 0.1em; }
+    .cagr-popup-big .cagr-value { font-size: 2.4rem; font-weight: 700; color: #00ff88; margin-top: 4px; }
+    .cagr-popup-big .cagr-label { font-size: 0.75rem; color: #4a7090; }
+
+    /* ─── Capital mini charts ─── */
+    #capital-charts {
+      position: fixed;
+      left: 3vw;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 45;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      pointer-events: none;
+      opacity: 0;
+    }
+    .capital-mini {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .capital-mini canvas {
+      width: 90px;
+      height: 36px;
+      background: rgba(0,20,40,0.6);
+      border: 1px solid rgba(0,212,255,0.15);
+      border-radius: 3px;
+    }
+    .capital-mini .ind-id {
+      font-size: 8px;
+      color: #4a6080;
+      font-family: monospace;
+      width: 18px;
+    }
+
+    /* ─── Selection table ─── */
+    #selection-table {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 70;
+      background: rgba(5,5,16,0.96);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px 20px;
+      pointer-events: none;
+    }
+    #selection-table.visible { display: flex; }
+    .sel-table-inner {
+      width: 600px;
+      max-width: 96vw;
+      position: relative;
+    }
+    .sel-header {
+      display: grid;
+      grid-template-columns: 40px 1fr 80px;
+      gap: 8px;
+      padding: 6px 10px;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      color: #4a6080;
+      border-bottom: 1px solid #1a2a40;
+      margin-bottom: 4px;
+    }
+    .sel-row {
+      display: grid;
+      grid-template-columns: 40px 1fr 80px;
+      gap: 8px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    .sel-row.selected { background: rgba(0,212,255,0.12); border: 1px solid rgba(0,212,255,0.3); }
+    .sel-rank { font-size: 11px; color: #4a6080; font-family: monospace; }
+    .sel-genome-strip { display: flex; gap: 2px; align-items: center; }
+    .sel-gene { width: 16px; height: 10px; border-radius: 1px; opacity: 0.8; }
+    .sel-cagr { font-size: 12px; font-weight: 700; color: #00ff88; text-align: right; font-family: monospace; }
+    .sel-arrow {
+      position: absolute;
+      left: -30px;
+      top: 0;
+      font-size: 18px;
+      color: #00d4ff;
+      pointer-events: none;
+      transition: top 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    /* ─── Crossover / Mutation overlays ─── */
+    #crossover-view, #mutation-view {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 70;
+      background: rgba(5,5,16,0.95);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      pointer-events: none;
+    }
+    #crossover-view.visible, #mutation-view.visible { display: flex; }
+    .genome-parent-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: #4a6080;
+      margin-bottom: 6px;
+    }
+    .genome-big {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .gene-block-big {
+      width: 52px;
+      height: 36px;
+      border-radius: 4px;
+      opacity: 0.8;
+      transition: transform 0.25s, box-shadow 0.25s, opacity 0.25s;
+      position: relative;
+    }
+    .gene-block-big.lit {
+      opacity: 1;
+      transform: scaleY(1.25);
+      box-shadow: 0 0 14px currentColor;
+    }
+    .gene-block-big.dim { opacity: 0.2; }
+    .gene-block-big .gbig-label {
+      position: absolute;
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 7px;
+      color: #4a6080;
+      white-space: nowrap;
+      font-family: monospace;
+    }
+    .crossover-divider {
+      font-size: 0.7rem;
+      color: #4a6080;
+      letter-spacing: 0.1em;
+    }
+    .mutating {
+      animation: mutate-pulse 0.6s ease-in-out 3;
+    }
+    @keyframes mutate-pulse {
+      0%, 100% { box-shadow: none; }
+      50% { box-shadow: 0 0 20px #ffcc00; transform: scaleY(1.4); }
+    }
+
+    /* ─── Progress indicator ─── */
     #scroll-progress {
       position: fixed;
       top: 0; left: 0;
@@ -194,6 +433,58 @@
 
 <!-- Fixed popup layer for BUY/SELL -->
 <div id="popups"></div>
+
+<!-- Genome overlay (sec6+) -->
+<div id="genome-overlay"></div>
+
+<!-- Stock label + CAGR popup (sec7) -->
+<div id="stock-label">
+  <div class="ticker">ENI</div>
+  <div class="stock-desc">Borsa Italiana · Serie storica giornaliera</div>
+</div>
+<div class="cagr-popup-big" id="cagr-popup">
+  <div class="cagr-title">CAGR</div>
+  <div class="cagr-value" id="cagr-value">+12.4%</div>
+  <div class="cagr-label" id="cagr-label">ENI · 1 anno</div>
+</div>
+
+<!-- Capital mini-charts (sec7/8) -->
+<div id="capital-charts"></div>
+
+<!-- Selection table (sec9) -->
+<div id="selection-table">
+  <div class="sel-table-inner" id="sel-table-inner">
+    <div class="sel-header">
+      <span>#</span><span>GENOMA</span><span>CAGR</span>
+    </div>
+    <div id="sel-rows"></div>
+    <div class="sel-arrow" id="sel-arrow-a">▶</div>
+    <div class="sel-arrow" id="sel-arrow-b" style="color:#8b5cf6;">▶</div>
+  </div>
+</div>
+
+<!-- Crossover view (sec10) -->
+<div id="crossover-view">
+  <div>
+    <div class="genome-parent-label">PARENT A</div>
+    <div class="genome-big" id="genome-parent-a"></div>
+  </div>
+  <div class="crossover-divider">⟶ CROSSOVER ⟶</div>
+  <div>
+    <div class="genome-parent-label">PARENT B</div>
+    <div class="genome-big" id="genome-parent-b"></div>
+  </div>
+  <div style="margin-top:12px;">
+    <div class="genome-parent-label" id="child-label" style="opacity:0;">FIGLIO</div>
+    <div class="genome-big" id="genome-child"></div>
+  </div>
+</div>
+
+<!-- Mutation view (sec11) -->
+<div id="mutation-view">
+  <div class="genome-parent-label">GENOMA · MUTAZIONE</div>
+  <div class="genome-big" id="genome-mutant"></div>
+</div>
 
 <!-- ─── Scroll sections ─── -->
 
@@ -230,8 +521,72 @@
   </div>
 </div>
 
-<!-- Section 5: empty spacer for last scroll -->
-<div class="section" id="section-5" style="height:100vh;"></div>
+<!-- Section 5: 2.1 Population -->
+<div class="section" id="section-5">
+  <div class="section-inner">
+    <h2>Una popolazione di individui in parallelo.</h2>
+    <p>Ogni individuo è un sistema completo: ALU Box + macchina a stati evolutiva.</p>
+  </div>
+</div>
+
+<!-- Section 6: 2.2 Genoma -->
+<div class="section" id="section-6">
+  <div class="section-inner">
+    <h2>Il genoma codifica ogni parametro dell'individuo.</h2>
+    <p>IIR coefficients, soglie di intervento, regole L-System — tutto in un cromosoma.</p>
+  </div>
+</div>
+
+<!-- Section 7: 2.3 Ciclo di vita -->
+<div class="section" id="section-7">
+  <div class="section-inner">
+    <h2>Il ciclo di vita: un anno di dati in pochi secondi.</h2>
+    <p>ENI · ENEL · GENERALI · UNIPOL — serie storica giornaliera. CAGR misurato su ogni titolo.</p>
+  </div>
+</div>
+
+<!-- Section 8: 2.4 Parallelismo -->
+<div class="section" id="section-8">
+  <div class="section-inner">
+    <h2>Tutti gli individui operano in parallelo.</h2>
+    <p>Lo stream OHLCV è condiviso. Ogni individuo costruisce la propria equity curve.</p>
+  </div>
+</div>
+
+<!-- Section 9: 2.5 Selezione -->
+<div class="section" id="section-9">
+  <div class="section-inner">
+    <h2>Selezione per fitness: sopravvivono i migliori.</h2>
+    <p>Due individui vengono scelti come genitori per la generazione successiva.</p>
+  </div>
+</div>
+
+<!-- Section 10: 2.6 Crossover -->
+<div class="section" id="section-10">
+  <div class="section-inner">
+    <h2>Crossover: i genomi si fondono.</h2>
+    <p>Segmenti casuali di ciascun genitore si combinano in un nuovo individuo.</p>
+  </div>
+</div>
+
+<!-- Section 11: 2.7 Mutazione -->
+<div class="section" id="section-11">
+  <div class="section-inner">
+    <h2>Mutazione: variazione casuale.</h2>
+    <p>Un gene del nuovo genoma subisce una piccola perturbazione stocastica.</p>
+  </div>
+</div>
+
+<!-- Section 12: 2.8 Nascita -->
+<div class="section" id="section-12">
+  <div class="section-inner">
+    <h2>Nascita: il genoma diventa un individuo.</h2>
+    <p>Il nuovo agente entra nella simulazione e inizia il suo ciclo di vita.</p>
+  </div>
+</div>
+
+<!-- Section 13: spacer finale -->
+<div id="section-13" style="height:100vh;"></div>
 
 <!-- ─── All JavaScript inline ─── -->
 <script>
@@ -242,6 +597,54 @@
   // 1. GSAP plugin registration
   // ──────────────────────────────────────────────
   gsap.registerPlugin(ScrollTrigger);
+
+  // ──────────────────────────────────────────────
+  // 1b. Data: genome, individuals, stocks
+  // ──────────────────────────────────────────────
+  var GENOME_FIELDS = [
+    { name: 'α_price', color: '#00d4ff', hex: 0x00d4ff },
+    { name: 'β_price', color: '#4488ff', hex: 0x4488ff },
+    { name: 'α_vol',   color: '#8b5cf6', hex: 0x8b5cf6 },
+    { name: 'β_vol',   color: '#a78bfa', hex: 0xa78bfa },
+    { name: 'mg_buy',       color: '#00ff88', hex: 0x00ff88 },
+    { name: 'mg_sell',      color: '#ff4444', hex: 0xff4444 },
+    { name: 'ls_ax',        color: '#ff9500', hex: 0xff9500 },
+    { name: 'ls_it',        color: '#ffcc00', hex: 0xffcc00 }
+  ];
+
+  function seededRand(s) { var x = Math.sin(s + 1) * 10000; return x - Math.floor(x); }
+
+  var INDIVIDUALS = [];
+  for (var _ii = 0; _ii < 8; _ii++) {
+    INDIVIDUALS.push({
+      id: _ii,
+      genome: GENOME_FIELDS.map(function(g, gi) {
+        return { name: g.name, color: g.color, hex: g.hex, value: seededRand(_ii * 13 + gi * 7) };
+      }),
+      cagr: 9 + seededRand(_ii * 31) * 16,
+      capitalHistory: [100]
+    });
+  }
+
+  var STOCK_SEQUENCE = [
+    { ticker: 'ENI',      desc: 'Eni S.p.A. · Energia' },
+    { ticker: 'ENEL',     desc: 'Enel S.p.A. · Utility' },
+    { ticker: 'GENERALI', desc: 'Assicurazioni Generali' },
+    { ticker: 'UNIPOL',   desc: 'Unipol Gruppo' }
+  ];
+
+  var SEL_TABLE_DATA = INDIVIDUALS.map(function(ind) {
+    return { genome: ind.genome, cagr: ind.cagr };
+  });
+  for (var _si = 8; _si < 20; _si++) {
+    SEL_TABLE_DATA.push({
+      genome: GENOME_FIELDS.map(function(g, gi) {
+        return { color: g.color, value: seededRand(_si * 11 + gi * 5) };
+      }),
+      cagr: 6 + seededRand(_si * 17) * 19
+    });
+  }
+  SEL_TABLE_DATA.sort(function(a, b) { return b.cagr - a.cagr; });
 
   // ──────────────────────────────────────────────
   // 2. Scroll progress bar
@@ -665,6 +1068,34 @@
   });
 
   // ──────────────────────────────────────────────
+  // 5b. ALU boxes for first 8 agents (sec5+)
+  // ──────────────────────────────────────────────
+  var aluBoxes = [];
+  var aluBoxGeom = new THREE.BoxGeometry(0.28, 0.18, 0.08);
+  for (var _ai = 0; _ai < 8; _ai++) {
+    var aluMat = new THREE.MeshPhongMaterial({
+      color: 0x1a3050, emissive: 0x0a1830,
+      transparent: true, opacity: 0,
+      wireframe: false
+    });
+    var aluMesh = new THREE.Mesh(aluBoxGeom, aluMat);
+    // Position to the left of sphere
+    aluMesh.position.set(-0.55, 0, 0);
+    agentData[_ai].mesh.add(aluMesh);
+    aluBoxes.push({ mesh: aluMesh, mat: aluMat });
+  }
+
+  // Target positions for population stack (sec5)
+  var STACK_POSITIONS = [];
+  for (var _si2 = 0; _si2 < 8; _si2++) {
+    STACK_POSITIONS.push(new THREE.Vector3(
+      1.0 - _si2 * 0.15,
+      2.8 - _si2 * 0.85,
+      -_si2 * 1.0
+    ));
+  }
+
+  // ──────────────────────────────────────────────
   // 6. Ambient particles (starfield)
   // ──────────────────────────────────────────────
   const starGeom = new THREE.BufferGeometry();
@@ -688,6 +1119,8 @@
   let sec2Progress = 0; // 0..1
   let sec3Progress = 0; // 0..1
   let sec4Progress = 0; // 0..1
+  var sec5Progress = 0, sec6Progress = 0, sec7Progress = 0, sec8Progress = 0;
+  var sec9Progress = 0, sec10Progress = 0, sec11Progress = 0, sec12Progress = 0;
 
   // ──────────────────────────────────────────────
   // 8. GSAP ScrollTrigger — one per section
@@ -727,6 +1160,61 @@
     end: 'bottom top',
     scrub: 1,
     onUpdate: function (self) { sec4Progress = self.progress; }
+  });
+
+  // Sections 5–12 (2nd concept)
+  ['section-5','section-6','section-7','section-8',
+   'section-9','section-10','section-11','section-12'].forEach(function(id, idx) {
+    var vars = [null, null, null, null,
+      function(v){ sec5Progress = v; }, function(v){ sec6Progress = v; },
+      function(v){ sec7Progress = v; }, function(v){ sec8Progress = v; },
+      function(v){ sec9Progress = v; }, function(v){ sec10Progress = v; },
+      function(v){ sec11Progress = v; }, function(v){ sec12Progress = v; }
+    ];
+    var setter = vars[idx + 4];
+    ScrollTrigger.create({
+      trigger: '#' + id,
+      start: 'top top',
+      end: 'bottom top',
+      scrub: 1,
+      onUpdate: function(self) { setter(self.progress); }
+    });
+  });
+
+  // sec9 onEnter/Leave for selection table
+  ScrollTrigger.create({
+    trigger: '#section-9',
+    start: 'top 60%',
+    end: 'bottom top',
+    onEnter: function() { showSelectionTable(); },
+    onLeaveBack: function() { hideSelectionTable(); }
+  });
+
+  // sec10 onEnter/Leave for crossover
+  ScrollTrigger.create({
+    trigger: '#section-10',
+    start: 'top 60%',
+    end: 'bottom top',
+    onEnter: function() { showCrossover(); },
+    onLeaveBack: function() { hideCrossover(); }
+  });
+
+  // sec11 onEnter/Leave for mutation
+  ScrollTrigger.create({
+    trigger: '#section-11',
+    start: 'top 60%',
+    end: 'bottom top',
+    onEnter: function() { showMutation(); },
+    onLeaveBack: function() { hideMutation(); }
+  });
+
+  // sec12 onEnter/Leave for birth
+  ScrollTrigger.create({
+    trigger: '#section-12',
+    start: 'top 60%',
+    end: 'bottom top',
+    onEnter: function() { showBirth(); },
+    onLeaveBack: function() { hideBirth(); }
   });
 
   // Text opacity for section overlays
@@ -1012,7 +1500,7 @@
     });
 
     // ── Section 4: nodes stay lit, activate popups ──
-    if (sec4Progress > 0) {
+    if (sec4Progress > 0 && sec5Progress === 0) {
       // Camera: orbita a raggio 2.5-3.0 attorno all'albero
       var angle = elapsed * 0.15;
       camera.position.x = lerp(camera.position.x, Math.sin(angle) * 2.5, 0.02);
@@ -1034,6 +1522,50 @@
       camera.lookAt(0, 0, 0);
     }
 
+    // ── Section 5: population stack ──────────────────────────────────────
+    if (sec5Progress > 0) {
+      var p5 = easeInOut(sec5Progress);
+      // Camera: pull back and tilt slightly right to show Z-stack
+      camera.position.x = lerp(camera.position.x, 3.5, 0.025);
+      camera.position.y = lerp(camera.position.y, 1.5, 0.025);
+      camera.position.z = lerp(camera.position.z, 10, 0.025);
+      camera.lookAt(1, 1, -3);
+      // Move first 8 agents to stack positions
+      for (var _i5 = 0; _i5 < 8; _i5++) {
+        var ad5 = agentData[_i5];
+        ad5.mesh.position.lerp(STACK_POSITIONS[_i5], 0.04);
+        ad5.mesh.material.opacity = lerp(ad5.mesh.material.opacity, 0.85, 0.04);
+        ad5.mesh.material.wireframe = false;
+        aluBoxes[_i5].mat.opacity = lerp(aluBoxes[_i5].mat.opacity, p5 * 0.8, 0.04);
+      }
+      // Fade out agents 8-24
+      for (var _i5b = 8; _i5b < AGENT_COUNT; _i5b++) {
+        agentData[_i5b].mesh.material.opacity = lerp(agentData[_i5b].mesh.material.opacity, 0, 0.05);
+      }
+    }
+
+    // ── Section 6: genome overlay fade ───────────────────────────────────
+    document.getElementById('genome-overlay').style.opacity = Math.min(1, sec6Progress * 3);
+
+    // ── Section 7: lifecycle — camera focuses on individual 0 ────────────
+    if (sec7Progress > 0) {
+      camera.position.x = lerp(camera.position.x, STACK_POSITIONS[0].x - 0.5, 0.03);
+      camera.position.y = lerp(camera.position.y, STACK_POSITIONS[0].y, 0.03);
+      camera.position.z = lerp(camera.position.z, STACK_POSITIONS[0].z + 4, 0.03);
+      camera.lookAt(STACK_POSITIONS[0].x, STACK_POSITIONS[0].y, STACK_POSITIONS[0].z);
+      // Capital charts fade in
+      document.getElementById('capital-charts').style.opacity = Math.min(1, sec7Progress * 4);
+      document.getElementById('stock-label').style.opacity = Math.min(1, sec7Progress * 4);
+    }
+
+    // ── Section 8: parallelism — camera pulls back to show all ───────────
+    if (sec8Progress > 0) {
+      camera.position.x = lerp(camera.position.x, 3.5, 0.025);
+      camera.position.y = lerp(camera.position.y, 1.5, 0.025);
+      camera.position.z = lerp(camera.position.z, 12, 0.025);
+      camera.lookAt(1, 1, -3);
+    }
+
     // Subtle star rotation
     stars.rotation.y = elapsed * 0.01;
     stars.rotation.x = elapsed * 0.005;
@@ -1047,6 +1579,377 @@
   }
 
   animate();
+
+  // ──────────────────────────────────────────────
+  // 10b. Helper: build genome overlay HTML
+  // ──────────────────────────────────────────────
+  var genomeOverlayBuilt = false;
+
+  function buildGenomeOverlay() {
+    if (genomeOverlayBuilt) return;
+    genomeOverlayBuilt = true;
+    var container = document.getElementById('genome-overlay');
+    INDIVIDUALS.forEach(function(ind) {
+      var row = document.createElement('div');
+      row.className = 'individual-genome';
+      var lbl = document.createElement('span');
+      lbl.className = 'individual-label';
+      lbl.textContent = 'I' + ind.id;
+      row.appendChild(lbl);
+      ind.genome.forEach(function(gene) {
+        var block = document.createElement('div');
+        block.className = 'gene-block';
+        var lightness = Math.round(30 + gene.value * 50);
+        block.style.background = gene.color;
+        block.style.opacity = 0.35 + gene.value * 0.65;
+        block.style.height = Math.round(10 + gene.value * 16) + 'px';
+        var glabel = document.createElement('span');
+        glabel.className = 'gene-label';
+        glabel.textContent = gene.name;
+        block.appendChild(glabel);
+        row.appendChild(block);
+      });
+      container.appendChild(row);
+    });
+  }
+  buildGenomeOverlay();
+
+  // ──────────────────────────────────────────────
+  // 10c. Helper: build capital mini-charts
+  // ──────────────────────────────────────────────
+  function buildCapitalCharts() {
+    var container = document.getElementById('capital-charts');
+    if (container.childElementCount > 0) return;
+    INDIVIDUALS.forEach(function(ind) {
+      var wrap = document.createElement('div');
+      wrap.className = 'capital-mini';
+      var idSpan = document.createElement('span');
+      idSpan.className = 'ind-id';
+      idSpan.textContent = 'I' + ind.id;
+      var cv = document.createElement('canvas');
+      cv.width = 90; cv.height = 36;
+      cv.id = 'cap-canvas-' + ind.id;
+      wrap.appendChild(idSpan);
+      wrap.appendChild(cv);
+      container.appendChild(wrap);
+    });
+  }
+  buildCapitalCharts();
+
+  function drawCapitalChart(ind) {
+    var cv = document.getElementById('cap-canvas-' + ind.id);
+    if (!cv) return;
+    var ctx = cv.getContext('2d');
+    ctx.clearRect(0, 0, 90, 36);
+    var hist = ind.capitalHistory;
+    if (hist.length < 2) return;
+    var mn = Math.min.apply(null, hist), mx = Math.max.apply(null, hist);
+    var range = mx - mn || 1;
+    ctx.beginPath();
+    ctx.strokeStyle = '#00d4ff';
+    ctx.lineWidth = 1.2;
+    hist.forEach(function(v, i) {
+      var x = (i / (hist.length - 1)) * 88;
+      var y = 34 - ((v - mn) / range) * 32;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  }
+
+  // ──────────────────────────────────────────────
+  // 10d. Lifecycle simulation (sec7)
+  // ──────────────────────────────────────────────
+  var lifecycleRunning = false;
+  var lifecycleTimer = null;
+
+  function startLifecycle() {
+    if (lifecycleRunning) return;
+    lifecycleRunning = true;
+    INDIVIDUALS.forEach(function(ind) { ind.capitalHistory = [100]; });
+    var stockIdx = 0;
+    function runStock() {
+      if (!lifecycleRunning || stockIdx >= STOCK_SEQUENCE.length) {
+        if (lifecycleRunning) showCagrPopup('Media', meanCagr());
+        return;
+      }
+      var stk = STOCK_SEQUENCE[stockIdx];
+      var ticker = document.querySelector('#stock-label .ticker');
+      var desc = document.querySelector('#stock-label .stock-desc');
+      if (ticker) ticker.textContent = stk.ticker;
+      if (desc) desc.textContent = stk.desc;
+      // Simulate 20 ticks fast
+      var ticks = 0;
+      var interval = setInterval(function() {
+        if (!lifecycleRunning) { clearInterval(interval); return; }
+        ticks++;
+        INDIVIDUALS.forEach(function(ind) {
+          var last = ind.capitalHistory[ind.capitalHistory.length - 1];
+          var delta = (seededRand(ind.id * 100 + stockIdx * 50 + ticks) - 0.46) * 3;
+          ind.capitalHistory.push(Math.max(50, last + delta));
+          drawCapitalChart(ind);
+        });
+        if (ticks >= 20) {
+          clearInterval(interval);
+          var cagrVal = (8 + seededRand(stockIdx * 41 + 7) * 15).toFixed(1);
+          showCagrPopup(stk.ticker, '+' + cagrVal + '%');
+          lifecycleTimer = setTimeout(function() { stockIdx++; runStock(); }, 2000);
+        }
+      }, 60);
+    }
+    runStock();
+  }
+
+  function stopLifecycle() {
+    lifecycleRunning = false;
+    if (lifecycleTimer) clearTimeout(lifecycleTimer);
+    document.getElementById('stock-label').style.opacity = 0;
+    hideCagrPopup();
+  }
+
+  function meanCagr() {
+    var total = INDIVIDUALS.reduce(function(s, ind) { return s + ind.cagr; }, 0);
+    return '+' + (total / INDIVIDUALS.length).toFixed(1) + '%';
+  }
+
+  function showCagrPopup(label, value) {
+    var popup = document.getElementById('cagr-popup');
+    document.getElementById('cagr-value').textContent = value;
+    document.getElementById('cagr-label').textContent = label + ' · CAGR annuo';
+    gsap.fromTo(popup, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.4 });
+    setTimeout(hideCagrPopup, 1500);
+  }
+
+  function hideCagrPopup() {
+    gsap.to(document.getElementById('cagr-popup'), { opacity: 0, duration: 0.3 });
+  }
+
+  // Trigger lifecycle on entering sec7
+  ScrollTrigger.create({
+    trigger: '#section-7',
+    start: 'top 60%',
+    end: 'bottom top',
+    onEnter: startLifecycle,
+    onLeaveBack: stopLifecycle
+  });
+
+  // ──────────────────────────────────────────────
+  // 10e. Selection table (sec9)
+  // ──────────────────────────────────────────────
+  var selectionTableShown = false;
+  var selArrowTimers = [];
+  var selectedParents = [0, 1]; // indices into sorted table
+
+  function buildSelectionRows() {
+    var container = document.getElementById('sel-rows');
+    if (container.childElementCount > 0) return;
+    SEL_TABLE_DATA.forEach(function(row, i) {
+      var div = document.createElement('div');
+      div.className = 'sel-row';
+      div.id = 'sel-row-' + i;
+      var rank = document.createElement('span');
+      rank.className = 'sel-rank';
+      rank.textContent = (i + 1);
+      var strip = document.createElement('span');
+      strip.className = 'sel-genome-strip';
+      row.genome.forEach(function(gene) {
+        var g = document.createElement('div');
+        g.className = 'sel-gene';
+        g.style.background = gene.color;
+        g.style.opacity = 0.35 + (gene.value || 0.5) * 0.65;
+        strip.appendChild(g);
+      });
+      var cagr = document.createElement('span');
+      cagr.className = 'sel-cagr';
+      cagr.textContent = '+' + row.cagr.toFixed(1) + '%';
+      div.appendChild(rank);
+      div.appendChild(strip);
+      div.appendChild(cagr);
+      container.appendChild(div);
+    });
+  }
+
+  function showSelectionTable() {
+    if (selectionTableShown) return;
+    selectionTableShown = true;
+    buildSelectionRows();
+    var tbl = document.getElementById('selection-table');
+    tbl.classList.add('visible');
+    gsap.fromTo(tbl, { opacity: 0 }, { opacity: 1, duration: 0.5 });
+    animateArrows();
+  }
+
+  function hideSelectionTable() {
+    selectionTableShown = false;
+    selArrowTimers.forEach(clearTimeout);
+    selArrowTimers = [];
+    var tbl = document.getElementById('selection-table');
+    gsap.to(tbl, { opacity: 0, duration: 0.4, onComplete: function() { tbl.classList.remove('visible'); } });
+    // Reset selection highlights
+    document.querySelectorAll('.sel-row.selected').forEach(function(r) { r.classList.remove('selected'); });
+  }
+
+  function animateArrows() {
+    var arrowA = document.getElementById('sel-arrow-a');
+    var arrowB = document.getElementById('sel-arrow-b');
+    var ROW_H = 29; // px per row
+    var BASE_TOP = 32; // offset to first row
+
+    function randomWalkTo(arrow, targetRow, cb) {
+      var steps = 6 + Math.floor(seededRand(targetRow * 7 + 3) * 6);
+      var current = Math.floor(seededRand(arrow.dataset.seed || 0) * 10) + 5;
+      arrow.dataset.seed = (arrow.dataset.seed || 0) + 1;
+      var stepCount = 0;
+      function step() {
+        current = Math.max(0, Math.min(19, current + (Math.random() > 0.4 ? -1 : 1)));
+        arrow.style.top = (BASE_TOP + current * ROW_H) + 'px';
+        stepCount++;
+        if (stepCount < steps) {
+          selArrowTimers.push(setTimeout(step, 120));
+        } else {
+          arrow.style.top = (BASE_TOP + targetRow * ROW_H) + 'px';
+          if (cb) cb();
+        }
+      }
+      step();
+    }
+
+    randomWalkTo(arrowA, selectedParents[0], function() {
+      randomWalkTo(arrowB, selectedParents[1], function() {
+        document.getElementById('sel-row-' + selectedParents[0]).classList.add('selected');
+        document.getElementById('sel-row-' + selectedParents[1]).classList.add('selected');
+      });
+    });
+  }
+
+  // ──────────────────────────────────────────────
+  // 10f. Crossover (sec10)
+  // ──────────────────────────────────────────────
+  var crossoverTimeline = null;
+
+  function buildGenomeBig(containerId, genome) {
+    var container = document.getElementById(containerId);
+    container.innerHTML = '';
+    genome.forEach(function(gene, i) {
+      var block = document.createElement('div');
+      block.className = 'gene-block-big';
+      block.style.background = gene.color;
+      block.id = containerId + '-g' + i;
+      var lbl = document.createElement('span');
+      lbl.className = 'gbig-label';
+      lbl.textContent = gene.name;
+      block.appendChild(lbl);
+      container.appendChild(block);
+    });
+  }
+
+  function showCrossover() {
+    var parentA = SEL_TABLE_DATA[selectedParents[0]];
+    var parentB = SEL_TABLE_DATA[selectedParents[1]];
+    buildGenomeBig('genome-parent-a', parentA.genome);
+    buildGenomeBig('genome-parent-b', parentB.genome);
+
+    var cv = document.getElementById('crossover-view');
+    cv.classList.add('visible');
+    gsap.fromTo(cv, { opacity: 0 }, { opacity: 1, duration: 0.5 });
+
+    // Animate highlight alternation
+    var childGenome = GENOME_FIELDS.map(function(g, i) {
+      var fromA = Math.random() > 0.5;
+      return {
+        name: g.name, color: g.color,
+        value: fromA ? (parentA.genome[i] && parentA.genome[i].value) || 0.5
+                     : (parentB.genome[i] && parentB.genome[i].value) || 0.5,
+        fromA: fromA
+      };
+    });
+
+    if (crossoverTimeline) crossoverTimeline.kill();
+    crossoverTimeline = gsap.timeline({ delay: 0.8, repeat: 2 });
+    GENOME_FIELDS.forEach(function(g, i) {
+      var selA = '#genome-parent-a-g' + i;
+      var selB = '#genome-parent-b-g' + i;
+      crossoverTimeline
+        .to(childGenome[i].fromA ? selA : selB, { scaleY: 1.3, boxShadow: '0 0 14px ' + g.color, duration: 0.18 }, i * 0.08)
+        .to(childGenome[i].fromA ? selA : selB, { scaleY: 1, boxShadow: 'none', duration: 0.18 }, i * 0.08 + 0.25);
+    });
+
+    crossoverTimeline.then(function() {
+      buildGenomeBig('genome-child', childGenome);
+      var childLabel = document.getElementById('child-label');
+      if (childLabel) gsap.to(childLabel, { opacity: 1, duration: 0.4 });
+      // Store child genome for mutation
+      window._childGenome = childGenome;
+    });
+  }
+
+  function hideCrossover() {
+    if (crossoverTimeline) crossoverTimeline.kill();
+    var cv = document.getElementById('crossover-view');
+    gsap.to(cv, { opacity: 0, duration: 0.3, onComplete: function() { cv.classList.remove('visible'); } });
+  }
+
+  // ──────────────────────────────────────────────
+  // 10g. Mutation (sec11)
+  // ──────────────────────────────────────────────
+  function showMutation() {
+    var genome = window._childGenome || INDIVIDUALS[0].genome;
+    buildGenomeBig('genome-mutant', genome);
+    var mv = document.getElementById('mutation-view');
+    mv.classList.add('visible');
+    gsap.fromTo(mv, { opacity: 0 }, { opacity: 1, duration: 0.5 });
+    // Pick random gene to mutate
+    var mutIdx = Math.floor(seededRand(42) * GENOME_FIELDS.length);
+    setTimeout(function() {
+      var block = document.getElementById('genome-mutant-g' + mutIdx);
+      if (!block) return;
+      block.classList.add('mutating');
+      setTimeout(function() {
+        block.classList.remove('mutating');
+        var newColor = GENOME_FIELDS[(mutIdx + 2) % GENOME_FIELDS.length].color;
+        block.style.background = newColor;
+      }, 2000);
+    }, 600);
+  }
+
+  function hideMutation() {
+    var mv = document.getElementById('mutation-view');
+    gsap.to(mv, { opacity: 0, duration: 0.3, onComplete: function() { mv.classList.remove('visible'); } });
+  }
+
+  // ──────────────────────────────────────────────
+  // 10h. Birth (sec12)
+  // ──────────────────────────────────────────────
+  var birthSphere = null;
+
+  function showBirth() {
+    hideMutation();
+    // Spawn new Three.js sphere at genome-strip position and animate into stack
+    if (!birthSphere) {
+      var bGeom = new THREE.SphereGeometry(0.35, 12, 12);
+      var bMat = new THREE.MeshPhongMaterial({
+        color: 0x00d4ff, emissive: 0x004466,
+        transparent: true, opacity: 0, shininess: 100
+      });
+      birthSphere = new THREE.Mesh(bGeom, bMat);
+      birthSphere.position.set(0, -4, 0);
+      scene.add(birthSphere);
+    }
+    gsap.to(birthSphere.material, { opacity: 0.85, duration: 1.0, delay: 0.5 });
+    gsap.to(birthSphere.position, {
+      x: STACK_POSITIONS[7].x + 0.2,
+      y: STACK_POSITIONS[7].y - 1.0,
+      z: STACK_POSITIONS[7].z,
+      duration: 1.5, delay: 1.0, ease: 'power2.out'
+    });
+    // Camera: pull back to show entire population
+    gsap.to(camera.position, { x: 3.5, y: 1.5, z: 13, duration: 1.5, delay: 1.0 });
+  }
+
+  function hideBirth() {
+    if (birthSphere) {
+      gsap.to(birthSphere.material, { opacity: 0, duration: 0.4 });
+    }
+  }
 
   // ──────────────────────────────────────────────
   // 11. Resize handler

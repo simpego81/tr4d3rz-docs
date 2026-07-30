@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -359,16 +359,237 @@
       border-top: 1px solid #1e293b;
     }
 
-    /* Sticky Three.js canvas — stays fixed while GA sections scroll over it */
-    #ga-canvas {
+    /* Sticky stage — same visual as algo-hero, sits behind scroll sections */
+    #ga-stage {
       position: sticky;
       top: 0;
-      width: 100%;
       height: 100vh;
-      display: block;
+      width: 100%;
+      background: #0f172a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      z-index: 1;
+      overflow: hidden;
       margin-bottom: -100vh;
-      z-index: 0;
     }
+
+    #ga-stage-inner {
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    #ga-stage-title {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #60a5fa;
+      text-align: center;
+    }
+
+    /* panels row */
+    #ga-panels-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: nowrap;
+      position: relative;
+    }
+
+    /* Portfolio panel — far left, hidden initially */
+    #ga-port-panel {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      width: 160px;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    #ga-port-canvas {
+      border-radius: 6px;
+      background: #0f172a;
+      display: block;
+      width: 100%;
+      height: 130px;
+    }
+
+    /* Individual dashed border — overlays ALU+SM panels */
+    #ga-ind-border {
+      position: absolute;
+      border: 2px dashed rgba(96,165,250,0.5);
+      border-radius: 16px;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0;
+    }
+
+    #ga-ind-border-label {
+      position: absolute;
+      top: -10px;
+      left: 16px;
+      background: #0f172a;
+      padding: 0 8px;
+      font-size: 0.5625rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #60a5fa;
+      font-family: 'Consolas', 'Monaco', monospace;
+      white-space: nowrap;
+    }
+
+    /* Stack copies — 3D perspective effect */
+    #ga-ind-stack-wrap {
+      position: absolute;
+      z-index: 3;
+      opacity: 0;
+      pointer-events: none;
+      perspective: 1200px;
+      transform-style: preserve-3d;
+    }
+
+    .ga-stack-copy {
+      position: absolute;
+      border: 2px dashed rgba(96,165,250,0.32);
+      border-radius: 16px;
+      pointer-events: none;
+      background: rgba(30,58,95,0.07);
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+
+    /* Genome JSON overlay (inside ga-stage-inner, centered on panels) */
+    #ga-genome-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      background: rgba(13,22,38,0.96);
+      border: 1px solid #1e3a5f;
+      border-radius: 10px;
+      padding: 14px 20px;
+      font-family: 'Consolas','Monaco',monospace;
+      font-size: 0.5rem;
+      line-height: 1.85;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    /* Ticker label at top of stage */
+    #ga-stage-ticker {
+      position: absolute;
+      top: -3.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+    }
+    #ga-stage-ticker .ga-tick-name {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #60a5fa;
+      font-family: 'Consolas','Monaco',monospace;
+    }
+    #ga-stage-ticker .ga-tick-desc {
+      font-size: 0.625rem;
+      color: #475569;
+      margin-top: 2px;
+    }
+
+    /* CAGR popup */
+    #ga-stage-cagr {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      z-index: 12;
+      background: #1e293b;
+      border: 1px solid #2563eb;
+      border-radius: 12px;
+      padding: 1.25rem 2.5rem;
+      text-align: center;
+      pointer-events: none;
+      opacity: 0;
+    }
+    #ga-stage-cagr .gc-lbl { font-size: 0.625rem; color: #475569; letter-spacing: 0.1em; text-transform: uppercase; }
+    #ga-stage-cagr .gc-val { font-size: 2.25rem; font-weight: 700; color: #10b981; margin-top: 0.25rem; font-family: 'Consolas','Monaco',monospace; }
+    #ga-stage-cagr .gc-sub { font-size: 0.625rem; color: #475569; margin-top: 0.15rem; }
+
+    /* DB table at bottom of stage */
+    #ga-stage-dbtable {
+      position: absolute;
+      bottom: -4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 14;
+      pointer-events: none;
+      opacity: 0;
+      background: #0d1626;
+      border: 1px solid #1e3a5f;
+      border-radius: 8px;
+      min-width: 420px;
+      max-width: 90vw;
+      overflow: hidden;
+    }
+    .ga-db-head {
+      display: grid; grid-template-columns: 1fr 80px;
+      padding: 5px 10px; border-bottom: 1px solid #1e3a5f;
+      font-size: 0.4375rem; color: #60a5fa; letter-spacing: 0.1em;
+      text-transform: uppercase; font-family: 'Consolas','Monaco',monospace;
+    }
+    .ga-db-row {
+      display: grid; grid-template-columns: 1fr 80px;
+      padding: 4px 10px; border-bottom: 1px solid rgba(30,58,95,0.4);
+      font-size: 0.4375rem; font-family: 'Consolas','Monaco',monospace;
+      animation: ga-row-in 0.4s ease both;
+    }
+    @keyframes ga-row-in {
+      from { opacity:0; transform: translateY(-12px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    .ga-db-genome { color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ga-db-cagr   { color: #10b981; text-align: right; font-weight: 600; }
+
+    /* Parallel equity mini-charts (2.4) — absolute inside panels-row */
+    #ga-parallel-equities {
+      position: absolute;
+      left: -120px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 6;
+    }
+    .ga-par-eq-row { display: flex; align-items: center; gap: 4px; }
+    .ga-par-eq-id { font-size: 0.4375rem; color: #334155; width: 12px; font-family: 'Consolas','Monaco',monospace; }
+    .ga-par-eq-cv { width: 72px; height: 24px; background: #1e293b; border: 1px solid #334155; border-radius: 3px; display: block; }
 
     /* Each of the 8 scroll sub-steps */
     .ga-section {
@@ -427,147 +648,6 @@
     .ga-scroll-hint svg { animation: ga-bounce 1.3s ease-in-out infinite; }
     @keyframes ga-bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
 
-    /* ── Genome overlay (JSON representation) ────────────────── */
-    #ga-genome {
-      position: fixed; top:0; left:0; width:100vw; height:100vh;
-      pointer-events: none; z-index:10;
-      display: flex; flex-direction:column; align-items:center; justify-content:center;
-      gap: 5px;
-      opacity: 0;
-    }
-    .ga-ind-row { display:flex; align-items:flex-start; gap:6px; }
-    .ga-ind-id {
-      font-size: 0.5rem; color: #60a5fa; width: 18px; text-align: right;
-      margin-top: 4px; font-family: var(--font-family-mono); font-weight: 600;
-    }
-    .ga-json-box {
-      background: rgba(13,22,38,0.92);
-      border: 1px solid #1e3a5f;
-      border-radius: 6px;
-      padding: 4px 9px;
-      font-family: var(--font-family-mono);
-      font-size: 0.4375rem;
-      line-height: 1.55;
-      white-space: nowrap;
-    }
-    .ga-json-key { color: #64748b; }
-    .ga-json-val { color: #10b981; }
-
-    /* ── Individual box overlay (2.1) ────────────────────────── */
-    #ga-ind-demo {
-      position: fixed; top:0; left:0; width:100vw; height:100vh;
-      pointer-events: none; z-index:10;
-      display: flex; align-items:center; justify-content:center;
-      opacity: 0;
-    }
-    .ga-ind-demo-inner {
-      display: flex; align-items:center; gap: 1.25rem;
-    }
-    .ga-demo-arrow {
-      font-size: 0.6875rem; color: #1e3a5f;
-      font-family: var(--font-family-mono);
-    }
-    #ga-port-wrap { text-align: center; }
-    .ga-port-lbl {
-      font-size: 0.4375rem; color: #475569; text-transform: uppercase;
-      letter-spacing: 0.1em; margin-bottom: 3px;
-    }
-    #ga-port-cv {
-      background: #1e293b; border: 1px solid #334155; border-radius: 4px;
-      display: block;
-    }
-    #ga-ind-stack {
-      display: flex; flex-direction: column; gap: 6px;
-    }
-    .ga-ind-box {
-      border: 1.5px solid #2563eb; border-radius: 10px;
-      padding: 8px 14px;
-      background: rgba(30,58,95,0.35);
-      position: relative;
-      transition: opacity 0.4s;
-    }
-    .ga-ind-box-lbl {
-      font-size: 0.375rem; color: #60a5fa;
-      text-transform: uppercase; letter-spacing: 0.1em;
-      position: absolute; top: -7px; left: 8px;
-      background: #0f172a; padding: 0 4px;
-      font-family: var(--font-family-mono);
-    }
-    .ga-ind-box-inner {
-      display: flex; align-items:center; gap: 7px;
-    }
-    .ga-alu-mini, .ga-sm-mini {
-      background: #1e293b; border: 1px solid #334155; border-radius: 5px;
-      padding: 4px 9px; font-size: 0.5rem; color: #60a5fa;
-      font-family: var(--font-family-mono);
-    }
-    .ga-box-arr { font-size: 0.625rem; color: #2563eb; }
-    .ga-ohlcv-src {
-      font-size: 0.5rem; color: #475569; font-family: var(--font-family-mono);
-      writing-mode: vertical-lr; transform: rotate(180deg);
-      letter-spacing: 0.08em;
-    }
-
-    /* ── DB table (2.3 animation) ─────────────────────────────── */
-    #ga-db-table {
-      position: fixed; bottom: 6vh; left: 50%; transform: translateX(-50%);
-      z-index: 14; pointer-events: none; opacity: 0;
-      background: #0d1626; border: 1px solid #1e3a5f; border-radius: 8px;
-      min-width: 420px; max-width: 90vw; overflow: hidden;
-    }
-    .ga-db-head {
-      display: grid; grid-template-columns: 1fr 80px;
-      padding: 5px 10px; border-bottom: 1px solid #1e3a5f;
-      font-size: 0.4375rem; color: #60a5fa; letter-spacing: 0.1em;
-      text-transform: uppercase; font-family: var(--font-family-mono);
-    }
-    .ga-db-row {
-      display: grid; grid-template-columns: 1fr 80px;
-      padding: 4px 10px; border-bottom: 1px solid rgba(30,58,95,0.4);
-      font-size: 0.4375rem; font-family: var(--font-family-mono);
-      animation: ga-row-in 0.4s ease both;
-    }
-    @keyframes ga-row-in {
-      from { opacity:0; transform: translateY(-12px); }
-      to   { opacity:1; transform: translateY(0); }
-    }
-    .ga-db-genome { color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .ga-db-cagr   { color: #10b981; text-align: right; font-weight: 600; }
-
-    /* ── Stock ticker + CAGR popup ────────────────────────────── */
-    #ga-ticker {
-      position: fixed; top: 10vh; left: 50%; transform: translateX(-50%);
-      z-index: 10; text-align: center; pointer-events: none; opacity: 0;
-    }
-    #ga-ticker .ga-tick-name {
-      font-size: 2rem; font-weight: 700; letter-spacing: 0.12em;
-      color: #60a5fa; font-family: var(--font-family-mono);
-    }
-    #ga-ticker .ga-tick-desc { font-size: 0.6875rem; color: #475569; margin-top: 2px; }
-
-    #ga-cagr {
-      position: fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-      z-index: 12;
-      background: #1e293b; border: 1px solid #2563eb; border-radius: 12px;
-      padding: 1.25rem 2.5rem; text-align: center; pointer-events: none; opacity: 0;
-    }
-    #ga-cagr .gc-lbl { font-size: 0.625rem; color: #475569; letter-spacing: 0.1em; text-transform: uppercase; }
-    #ga-cagr .gc-val { font-size: 2.25rem; font-weight: 700; color: #10b981; margin-top: 0.25rem; font-family: var(--font-family-mono); }
-    #ga-cagr .gc-sub { font-size: 0.625rem; color: #475569; margin-top: 0.15rem; }
-
-    /* ── Mini equity charts (parallelism) ─────────────────────── */
-    #ga-equity {
-      position: fixed; left: 2.5vw; top: 50%; transform: translateY(-50%);
-      z-index: 10; display: flex; flex-direction: column; gap: 4px;
-      pointer-events: none; opacity: 0;
-    }
-    .ga-eq-row { display: flex; align-items: center; gap: 5px; }
-    .ga-eq-id { font-size: 0.5rem; color: #334155; width: 14px; font-family: var(--font-family-mono); }
-    .ga-eq-canvas {
-      width: 86px; height: 32px;
-      background: #1e293b; border: 1px solid #334155; border-radius: 4px;
-    }
-
     /* ── Selection table ──────────────────────────────────────── */
     #ga-sel {
       position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:20;
@@ -581,26 +661,22 @@
       background: #1e293b; border: 1px solid #334155; border-radius: 12px;
       padding: 1.25rem; width: 560px; max-width: 95vw; position: relative;
     }
-
     .ga-sel-head {
       display: grid; grid-template-columns: 32px 1fr 72px; gap: 8px;
       padding: 0 8px 8px; margin-bottom: 4px;
       border-bottom: 1px solid #334155;
       font-size: 0.5625rem; letter-spacing: 0.12em; text-transform: uppercase;
-      color: #60a5fa; font-family: var(--font-family-mono);
+      color: #60a5fa; font-family: 'Consolas','Monaco',monospace;
     }
-
     .ga-sel-row {
       display: grid; grid-template-columns: 32px 1fr 72px; gap: 8px;
       padding: 4px 8px; border-radius: 6px; transition: background .25s;
     }
     .ga-sel-row.selected { background: rgba(37,99,235,0.18); border: 1px solid #2563eb; }
-
-    .ga-rank { font-size: 0.5625rem; color: #475569; font-family: var(--font-family-mono); line-height: 2; }
+    .ga-rank { font-size: 0.5625rem; color: #475569; font-family: 'Consolas','Monaco',monospace; line-height: 2; }
     .ga-gstrip { display: flex; gap: 2px; align-items: center; }
     .ga-gs { width: 13px; height: 8px; border-radius: 2px; }
-    .ga-cagr-val { font-size: 0.6875rem; font-weight: 600; color: #10b981; text-align: right; font-family: var(--font-family-mono); line-height: 2; }
-
+    .ga-cagr-val { font-size: 0.6875rem; font-weight: 600; color: #10b981; text-align: right; font-family: 'Consolas','Monaco',monospace; line-height: 2; }
     .ga-arrow {
       position: absolute; left: -22px; top: 0;
       font-size: 0.75rem; color: #60a5fa; transition: top .35s cubic-bezier(.34,1.56,.64,1);
@@ -614,7 +690,6 @@
       gap: 1.5rem; pointer-events: none;
     }
     #ga-xover.visible, #ga-mut.visible { display: flex; }
-
     .ga-xover-panel {
       background: #1e293b; border: 1px solid #334155; border-radius: 12px;
       padding: 1.25rem 1.75rem;
@@ -622,7 +697,7 @@
     .ga-xover-lbl {
       font-size: 0.5625rem; font-weight: 600; letter-spacing: 0.12em;
       text-transform: uppercase; color: #60a5fa; margin-bottom: 0.75rem;
-      font-family: var(--font-family-mono);
+      font-family: 'Consolas','Monaco',monospace;
     }
     .ga-gbig { display: flex; gap: 5px; }
     .ga-gblock {
@@ -634,18 +709,17 @@
     .ga-gblock .gbig-lbl {
       position: absolute; bottom: -14px; left: 50%; transform: translateX(-50%);
       font-size: 0.4375rem; color: #475569; white-space: nowrap;
-      font-family: var(--font-family-mono);
+      font-family: 'Consolas','Monaco',monospace;
     }
     .ga-xover-div {
       font-size: 0.6875rem; color: #475569; letter-spacing: 0.1em;
-      font-family: var(--font-family-mono); text-align: center;
+      font-family: 'Consolas','Monaco',monospace; text-align: center;
     }
-
     @keyframes ga-mutate { 0%,100%{box-shadow:none} 50%{box-shadow:0 0 18px #fbbf24;transform:scaleY(1.4)} }
     .ga-mutating { animation: ga-mutate .6s ease-in-out 3; }
 
     /* Spacer at end of GA concept */
-    #ga-end { height: 100vh; background: #0f172a; }
+    #ga-end { height: 50vh; background: #0f172a; }
   </style>
 </head>
 <body>
@@ -727,76 +801,92 @@
   <!-- ═══ 2ND CONCEPT ══════════════════════════════════════════════════════ -->
   <section id="ga-concept" aria-label="Genetic Algorithm — population evolution">
 
-    <!-- Sticky Three.js canvas -->
-    <canvas id="ga-canvas" aria-hidden="true"></canvas>
+    <!-- Sticky stage: mirrors algo-hero layout, sits behind scroll sections -->
+    <div id="ga-stage" aria-hidden="true">
+      <div id="ga-stage-inner">
+        <p id="ga-stage-title">Algoritmo Genetico — Evoluzione della Popolazione</p>
 
-    <!-- Fixed overlays (controlled by scroll) -->
-    <div id="ga-genome" aria-hidden="true"></div>
+        <div id="ga-panels-row">
 
-    <!-- 2.1 Individual box demo overlay -->
-    <div id="ga-ind-demo" aria-hidden="true">
-      <div class="ga-ind-demo-inner">
-        <div id="ga-port-wrap">
-          <div class="ga-port-lbl">Portfolio</div>
-          <canvas id="ga-port-cv" width="80" height="48"></canvas>
+          <!-- Portfolio chart — far left, appears in 2.1 -->
+          <div id="ga-port-panel">
+            <div class="algo-panel__label">Portfolio</div>
+            <canvas id="ga-port-canvas"></canvas>
+          </div>
+
+          <!-- Arrow portfolio → OHLCV -->
+          <div class="algo-arrow" id="ga-port-arrow" style="opacity:0;" aria-hidden="true">
+            <svg viewBox="0 0 48 20" fill="none">
+              <path d="M0 10 H40 M32 3 L40 10 L32 17" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <!-- OHLCV panel -->
+          <div class="algo-panel algo-panel--ohlcv" id="ga-ohlcv-panel">
+            <div class="algo-panel__label">OHLCV Stream</div>
+            <canvas id="ga-ohlcv-canvas" class="algo-canvas"></canvas>
+          </div>
+
+          <!-- Arrow OHLCV → ALU -->
+          <div class="algo-arrow" aria-hidden="true">
+            <svg viewBox="0 0 48 20" fill="none">
+              <path d="M0 10 H40 M32 3 L40 10 L32 17" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <!-- ALU panel -->
+          <div class="algo-panel algo-panel--alu" id="ga-alu-panel">
+            <div class="algo-panel__label">Signal Processing</div>
+            <svg id="ga-alu-svg" class="alu-svg" viewBox="0 0 190 258" aria-label="ALU signal processing block"></svg>
+          </div>
+
+          <!-- Arrow ALU → SM -->
+          <div class="algo-arrow" aria-hidden="true">
+            <svg viewBox="0 0 48 20" fill="none">
+              <path d="M0 10 H40 M32 3 L40 10 L32 17" stroke="#2563eb" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <!-- SM panel -->
+          <div class="algo-panel algo-panel--sm" id="ga-sm-panel">
+            <div class="algo-panel__label">Finite State Machine</div>
+            <canvas id="ga-sm-canvas" class="algo-canvas"></canvas>
+          </div>
+
+          <!-- Individual dashed border (positioned by JS over ALU+SM) -->
+          <div id="ga-ind-border">
+            <span id="ga-ind-border-label">Individuo</span>
+          </div>
+
+          <!-- 3D stack copies (built by JS) -->
+          <div id="ga-ind-stack-wrap"></div>
+
+          <!-- Parallel equity charts (2.4) -->
+          <div id="ga-parallel-equities"></div>
+
+        </div><!-- /ga-panels-row -->
+
+        <!-- Stage overlays -->
+        <div id="ga-stage-ticker" aria-live="polite">
+          <div class="ga-tick-name">ENI</div>
+          <div class="ga-tick-desc">Borsa Italiana · Serie storica giornaliera</div>
         </div>
-        <div class="ga-demo-arrow">⟵</div>
-        <div id="ga-ind-stack"></div>
-        <div class="ga-demo-arrow">⟵</div>
-        <div class="ga-ohlcv-src">OHLCV</div>
-      </div>
-    </div>
 
-    <!-- 2.3 DB table for genome insert animation -->
-    <div id="ga-db-table" aria-hidden="true">
-      <div class="ga-db-head"><span>GENOMA</span><span>CAGR</span></div>
-      <div id="ga-db-rows"></div>
-    </div>
+        <div id="ga-stage-cagr" role="status">
+          <div class="gc-lbl">CAGR</div>
+          <div class="gc-val" id="ga-stage-cagr-val">+12.4%</div>
+          <div class="gc-sub" id="ga-stage-cagr-sub">ENI · 1 anno</div>
+        </div>
 
-    <div id="ga-ticker" aria-hidden="true">
-      <div class="ga-tick-name">ENI</div>
-      <div class="ga-tick-desc">Borsa Italiana · Serie storica giornaliera</div>
-    </div>
-    <div id="ga-cagr" aria-hidden="true" role="status">
-      <div class="gc-lbl">CAGR</div>
-      <div class="gc-val" id="ga-cagr-val">+12.4%</div>
-      <div class="gc-sub" id="ga-cagr-sub">ENI · 1 anno</div>
-    </div>
+        <div id="ga-stage-dbtable">
+          <div class="ga-db-head"><span>GENOMA</span><span>CAGR</span></div>
+          <div id="ga-stage-db-rows"></div>
+        </div>
 
-    <div id="ga-equity" aria-hidden="true"></div>
+        <div id="ga-genome-overlay"></div>
 
-    <div id="ga-sel" aria-hidden="true">
-      <p class="algo-panel__label" style="margin-bottom:0.75rem;">2.5 — Selezione per fitness</p>
-      <div class="ga-sel-panel">
-        <div class="ga-sel-head"><span>#</span><span>GENOMA</span><span>CAGR</span></div>
-        <div id="ga-sel-rows"></div>
-        <div class="ga-arrow" id="ga-arr-a">▶</div>
-        <div class="ga-arrow" id="ga-arr-b" style="color:#a78bfa;">▶</div>
-      </div>
-    </div>
-
-    <div id="ga-xover" aria-hidden="true">
-      <div class="ga-xover-panel">
-        <div class="ga-xover-lbl">Parent A</div>
-        <div class="ga-gbig" id="ga-gpa"></div>
-      </div>
-      <div class="ga-xover-div">⟶ CROSSOVER ⟶</div>
-      <div class="ga-xover-panel">
-        <div class="ga-xover-lbl">Parent B</div>
-        <div class="ga-gbig" id="ga-gpb"></div>
-      </div>
-      <div class="ga-xover-panel" style="opacity:0;" id="ga-gchild-wrap">
-        <div class="ga-xover-lbl" id="ga-child-lbl">Figlio</div>
-        <div class="ga-gbig" id="ga-gpc"></div>
-      </div>
-    </div>
-
-    <div id="ga-mut" aria-hidden="true">
-      <div class="ga-xover-panel">
-        <div class="ga-xover-lbl">Genoma · Mutazione</div>
-        <div class="ga-gbig" id="ga-gpm"></div>
-      </div>
-    </div>
+      </div><!-- /ga-stage-inner -->
+    </div><!-- /ga-stage -->
 
     <!-- 8 scroll sections (2.1 → 2.8) -->
     <div class="ga-section" id="ga-s1">
@@ -864,6 +954,40 @@
     </div>
 
     <div id="ga-end"></div>
+
+    <!-- Full-screen overlays for 2.5 / 2.6 / 2.7 -->
+    <div id="ga-sel" aria-hidden="true">
+      <p class="algo-panel__label" style="margin-bottom:0.75rem;">2.5 — Selezione per fitness</p>
+      <div class="ga-sel-panel">
+        <div class="ga-sel-head"><span>#</span><span>GENOMA</span><span>CAGR</span></div>
+        <div id="ga-sel-rows"></div>
+        <div class="ga-arrow" id="ga-arr-a">▶</div>
+        <div class="ga-arrow" id="ga-arr-b" style="color:#a78bfa;">▶</div>
+      </div>
+    </div>
+
+    <div id="ga-xover" aria-hidden="true">
+      <div class="ga-xover-panel">
+        <div class="ga-xover-lbl">Parent A</div>
+        <div class="ga-gbig" id="ga-gpa"></div>
+      </div>
+      <div class="ga-xover-div">⟶ CROSSOVER ⟶</div>
+      <div class="ga-xover-panel">
+        <div class="ga-xover-lbl">Parent B</div>
+        <div class="ga-gbig" id="ga-gpb"></div>
+      </div>
+      <div class="ga-xover-panel" style="opacity:0;" id="ga-gchild-wrap">
+        <div class="ga-xover-lbl" id="ga-child-lbl">Figlio</div>
+        <div class="ga-gbig" id="ga-gpc"></div>
+      </div>
+    </div>
+
+    <div id="ga-mut" aria-hidden="true">
+      <div class="ga-xover-panel">
+        <div class="ga-xover-lbl">Genoma · Mutazione</div>
+        <div class="ga-gbig" id="ga-gpm"></div>
+      </div>
+    </div>
 
   </section>
 
@@ -1462,17 +1586,17 @@
     function _set(id, v) { const el = document.getElementById(id); if (el) el.textContent = v; }
   </script>
 
-  <!-- ── 2nd Concept: Genetic Algorithm ─────────────────────────────── -->
+  <!-- ── 2nd Concept: Genetic Algorithm (sticky stage) ───────────────── -->
   <script>
   document.addEventListener('DOMContentLoaded', function () {
     'use strict';
-    var T = window.THREE;
-    if (!T || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
     gsap.registerPlugin(ScrollTrigger);
+    var T = window.THREE;
 
-    /* ── Same color palette as algo-hero ─────────────────────────────── */
+    /* ── Color palette ───────────────────────────────────────────────── */
     var C = {
-      bg: 0x0f172a, panel: '#1e293b', border: '#334155',
+      bg: '#0f172a', panelBg: '#1e293b', border: '#334155',
       nodeIdle: 0x1e3a5f, nodeActive: 0x1d4ed8, nodeGlow: 0x60a5fa,
       nodeBuy: 0x166534, nodeBuyGlow: 0x22c55e,
       nodeSell: 0x7f1d1d, nodeSellGlow: 0xef4444,
@@ -1481,7 +1605,7 @@
       priceLabel: '#60a5fa', gridLine: '#1e293b',
     };
 
-    /* ── Genome fields — same nomenclature as ALU ────────────────────── */
+    /* ── Genome fields ───────────────────────────────────────────────── */
     var GF = [
       { name:'IIR₁(P)', hex:0x60a5fa, css:'#60a5fa' },
       { name:'IIR₂(P)', hex:0x818cf8, css:'#818cf8' },
@@ -1495,16 +1619,6 @@
 
     function sr(s) { var x = Math.sin(s+1)*10000; return x - Math.floor(x); }
 
-    var INDS = [];
-    for (var _i=0; _i<8; _i++) {
-      INDS.push({
-        id: _i,
-        genome: GF.map(function(g,gi){ return { name:g.name, hex:g.hex, css:g.css, v:sr(_i*13+gi*7) }; }),
-        cagr: 9 + sr(_i*31)*16,
-        capHist: [100],
-      });
-    }
-
     var STOCKS = [
       { ticker:'ENI',      desc:'Eni S.p.A. · Energia' },
       { ticker:'ENEL',     desc:'Enel S.p.A. · Utility' },
@@ -1512,600 +1626,604 @@
       { ticker:'UNIPOL',   desc:'Unipol Gruppo' },
     ];
 
+    var INDS = [];
+    for (var _i=0; _i<8; _i++) {
+      var _cs = [8+sr(_i*11+1)*12, 6+sr(_i*11+2)*15, 5+sr(_i*11+3)*18, 7+sr(_i*11+4)*14];
+      INDS.push({
+        id: _i,
+        genome: GF.map(function(g,gi){ return { name:g.name, hex:g.hex, css:g.css, v:sr(_i*13+gi*7) }; }),
+        cagrPerStock: _cs,
+        cagr: _cs.reduce(function(a,b){return a+b;},0)/4,
+        capHist: [100],
+      });
+    }
+
     var SEL = INDS.map(function(ind){ return { genome:ind.genome, cagr:ind.cagr }; });
     for (var _si=8; _si<20; _si++) {
-      SEL.push({ genome:GF.map(function(g,gi){ return {css:g.css, v:sr(_si*11+gi*5)}; }), cagr:6+sr(_si*17)*19 });
+      SEL.push({ genome:GF.map(function(g,gi){ return {name:g.name,css:g.css,v:sr(_si*11+gi*5)}; }), cagr:6+sr(_si*17)*19 });
     }
     SEL.sort(function(a,b){ return b.cagr - a.cagr; });
 
-    /* ── Three.js scene ──────────────────────────────────────────────── */
-    var canvas = document.getElementById('ga-canvas');
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    var scene = new T.Scene();
-    scene.background = new T.Color(C.bg);
-    scene.fog = new T.FogExp2(C.bg, 0.035);
-
-    var camera = new T.PerspectiveCamera(48, window.innerWidth/window.innerHeight, 0.1, 80);
-    camera.position.set(4, 2.5, 9);
-    camera.lookAt(0.5, 1, -2);
-
-    var renderer = new T.WebGLRenderer({ canvas:canvas, antialias:true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    scene.add(new T.AmbientLight(0x1e293b, 1.2));
-    var pl1 = new T.PointLight(0x3b82f6, 3, 25); pl1.position.set(3,5,4); scene.add(pl1);
-    var pl2 = new T.PointLight(0x4f46e5, 1.5, 20); pl2.position.set(-4,-2,2); scene.add(pl2);
-
-    /* Starfield — same as algo-hero feel */
-    (function() {
-      var geo = new T.BufferGeometry(), pts = [];
-      for (var s=0; s<400; s++) pts.push((Math.random()-.5)*50,(Math.random()-.5)*30,(Math.random()-.5)*40);
-      geo.setAttribute('position', new T.Float32BufferAttribute(pts,3));
-      scene.add(new T.Points(geo, new T.PointsMaterial({color:0x1e293b, size:0.06, transparent:true, opacity:0.7})));
-    })();
-
-    /* ── Mini SM states for each individual (same layout as main STATES) */
-    var MINI_STATES = [
-      { x:0, y:0.55, z:0 },    // 0: IDLE top
-      { x:-0.75, y:0, z:0.4 }, // 1: LONG_E (BUY, green)
-      { x:0.75, y:0, z:-0.4 }, // 2: SHORT_E (SELL, red)
-      { x:0, y:-0.55, z:0.3 }, // 3: LONG_H
-      { x:0, y:-0.55, z:-0.3}, // 4: SHORT_H
+    /* ── SM states/edges (shared definition) ────────────────────────── */
+    var SM_STATES = [
+      {x:0.0,y:2.0,z:0.0},{x:-1.5,y:0.4,z:1.1},{x:-2.2,y:-0.9,z:0.7},
+      {x:1.5,y:0.4,z:-1.1},{x:2.2,y:-0.9,z:-0.7},
+      {x:0.6,y:1.3,z:1.6},{x:-0.6,y:1.3,z:-1.6},
+      {x:1.2,y:-0.1,z:1.9},{x:-1.2,y:-0.1,z:-1.9},
+      {x:0.3,y:-1.6,z:1.2},{x:-0.3,y:-1.6,z:-1.2},
     ];
-    var MINI_EDGES = [[0,1],[0,2],[1,3],[2,4],[3,0],[4,0]];
+    var SM_EDGES = [
+      [0,1],[0,3],[1,2],[3,4],[2,0],[4,0],
+      [0,5],[5,7],[7,9],[9,0],[0,6],[6,8],[8,10],[10,0],
+    ];
 
-    /* Stack positions — diagonal Z-depth cascade */
-    var STACK = [];
-    for (var _k=0; _k<8; _k++) {
-      STACK.push(new T.Vector3(0.5 - _k*0.12, 3.2 - _k*0.75, -_k*0.95));
+    /* ── OHLCV for GA stage ──────────────────────────────────────────── */
+    var gaOHLCVCandles = [], gaOHLCVPrice = 102.5, gaOHLCVLastAdd = 0, gaOHLCVSpeed = 1.0;
+    var gaOHLCVCanvas = document.getElementById('ga-ohlcv-canvas');
+    var gaOHLCVCtx = gaOHLCVCanvas ? gaOHLCVCanvas.getContext('2d') : null;
+
+    function gaGenCandle(ref) {
+      var d = (sr(ref * 7 + gaOHLCVCandles.length * 3) - 0.47) * 2.8;
+      var o = ref, c2 = ref + d;
+      return { o:o, c:c2, h:Math.max(o,c2)+sr(Math.abs(ref+c2))*1.4, l:Math.min(o,c2)-sr(Math.abs(ref-c2))*1.4,
+               v:40000+sr(Math.abs(ref*c2))*180000+(c2>=o?60000:0) };
     }
 
-    /* Build individual groups */
-    var indGroups = [];
-    var sGeo = new T.SphereGeometry(0.16, 16, 16);
-    var aluGeo = new T.BoxGeometry(0.22, 0.14, 0.06);
-
-    for (var _j=0; _j<8; _j++) {
-      var grp = new T.Group();
-      grp.position.copy(STACK[_j]);
-
-      /* Mini SM spheres */
-      MINI_STATES.forEach(function(st, si) {
-        var isB = si===1, isS = si===2;
-        var mat = new T.MeshStandardMaterial({
-          color: isB ? C.nodeBuy : isS ? C.nodeSell : C.nodeIdle,
-          emissive: isB ? C.nodeBuyGlow : isS ? C.nodeSellGlow : 0x0f2040,
-          emissiveIntensity: (isB||isS) ? 0.45 : 0.25,
-          metalness: 0.15, roughness: 0.6,
-          transparent: true, opacity: 0,
-        });
-        var mesh = new T.Mesh(sGeo, mat);
-        mesh.position.set(st.x, st.y, st.z);
-        grp.add(mesh);
-      });
-
-      /* Mini SM edges */
-      MINI_EDGES.forEach(function(e) {
-        var pts2 = [
-          new T.Vector3(MINI_STATES[e[0]].x, MINI_STATES[e[0]].y, MINI_STATES[e[0]].z),
-          new T.Vector3(MINI_STATES[e[1]].x, MINI_STATES[e[1]].y, MINI_STATES[e[1]].z),
-        ];
-        var mat2 = new T.LineBasicMaterial({color: C.edge, transparent:true, opacity:0});
-        grp.add(new T.Line(new T.BufferGeometry().setFromPoints(pts2), mat2));
-      });
-
-      /* ALU box — matches algo-panel style */
-      var aluMat = new T.MeshStandardMaterial({
-        color: 0x1e293b, emissive: 0x0a1525,
-        metalness: 0.2, roughness: 0.7,
-        transparent: true, opacity: 0,
-      });
-      var aluMesh = new T.Mesh(aluGeo, aluMat);
-      aluMesh.position.set(-0.5, 0, 0);
-      grp.add(aluMesh);
-
-      /* Genome lines inside sphere (same as existing makeGenomeLines style) */
-      (function(j) {
-        var lGeo = new T.BufferGeometry(), lPts = [];
-        for (var l=0; l<4; l++) {
-          var th = Math.random()*Math.PI*2, ph = Math.random()*Math.PI;
-          lPts.push(Math.sin(ph)*Math.cos(th)*.08, Math.sin(ph)*Math.sin(th)*.08, Math.cos(ph)*.08,
-                    Math.sin(ph)*Math.cos(th)*.25, Math.sin(ph)*Math.sin(th)*.25, Math.cos(ph)*.25);
-        }
-        lGeo.setAttribute('position', new T.Float32BufferAttribute(lPts, 3));
-        var lMat = new T.LineBasicMaterial({color: GF[j%8].hex, transparent:true, opacity:0});
-        grp.add(new T.LineSegments(lGeo, lMat));
-      })(_j);
-
-      scene.add(grp);
-      indGroups.push({
-        grp: grp,
-        phase: Math.random()*Math.PI*2,
-        speed: 0.25 + Math.random()*0.3,
-        initPos: new T.Vector3((Math.random()-.5)*18,(Math.random()-.5)*10,(Math.random()-.5)*14),
-      });
-      grp.position.copy(indGroups[_j].initPos); // start scattered
-    }
-
-    /* Birth sphere */
-    var birthMat = new T.MeshStandardMaterial({
-      color: C.nodeGlow, emissive: C.nodeGlow, emissiveIntensity: 0.6,
-      metalness: 0.1, roughness: 0.5, transparent:true, opacity:0,
-    });
-    var birthMesh = new T.Mesh(new T.SphereGeometry(0.22, 20, 20), birthMat);
-    birthMesh.position.set(0, -6, 0);
-    scene.add(birthMesh);
-
-    /* ── Scroll state ─────────────────────────────────────────────────── */
-    var P = [0,0,0,0,0,0,0,0]; // progress for ga-s1 to ga-s8
-
-    function lerp(a,b,t){ return a+(b-a)*t; }
-    function ease(t){ return t<.5?2*t*t:-1+(4-2*t)*t; }
-
-    ['ga-s1','ga-s2','ga-s3','ga-s4','ga-s5','ga-s6','ga-s7','ga-s8'].forEach(function(id,idx){
-      ScrollTrigger.create({
-        trigger:'#'+id, start:'top top', end:'bottom top', scrub:1,
-        onUpdate:function(self){ P[idx] = self.progress; }
-      });
-    });
-
-    /* One-shot triggers */
-    ScrollTrigger.create({ trigger:'#ga-s3', start:'top 65%', end:'bottom top', onEnter:startLifecycle, onLeaveBack:stopLifecycle });
-    ScrollTrigger.create({ trigger:'#ga-s5', start:'top 65%', end:'bottom top', onEnter:showSel, onLeaveBack:hideSel });
-    ScrollTrigger.create({ trigger:'#ga-s6', start:'top 65%', end:'bottom top', onEnter:showXover, onLeaveBack:hideXover });
-    ScrollTrigger.create({ trigger:'#ga-s7', start:'top 65%', end:'bottom top', onEnter:showMut, onLeaveBack:hideMut });
-    ScrollTrigger.create({ trigger:'#ga-s8', start:'top 65%', end:'bottom top', onEnter:showBirth, onLeaveBack:hideBirth });
-
-    /* Section text fade */
-    document.querySelectorAll('.ga-section').forEach(function(sec) {
-      ScrollTrigger.create({ trigger:sec, start:'top 90%', end:'bottom 10%', scrub:true,
-        onUpdate:function(self){
-          var inner = sec.querySelector('.ga-text'); if (!inner) return;
-          var f = self.progress < .15 ? self.progress/.15 : self.progress > .85 ? (1-self.progress)/.15 : 1;
-          inner.style.opacity = f;
-          inner.style.transform = 'translateY('+(8*(1-Math.min(f,1)))+'px)';
-        }
-      });
-    });
-
-    /* ── Animation loop ───────────────────────────────────────────────── */
-    var clock = new T.Clock(), prevEl = 0;
-
-    function raf() {
-      requestAnimationFrame(raf);
-      var el = clock.getElapsedTime(), dt = el - prevEl; prevEl = el;
-
-      /* Skip render when GA section not in view */
-      var gaRect = document.getElementById('ga-concept').getBoundingClientRect();
-      if (gaRect.top > window.innerHeight || gaRect.bottom < 0) return;
-
-      var p0 = ease(P[0]), p1 = P[1];
-
-      /* s1: 2D individual box demo — show single then clone */
-      var indDemoEl = document.getElementById('ga-ind-demo');
-      if (P[0] > 0 && P[1] === 0) {
-        /* 2.1: entra con 1 individuo, poi clona */
-        indDemoEl.style.opacity = Math.min(1, P[0]*6);
-        var cloneThresh = [0, 0.45, 0.62, 0.78];
-        for (var ci=1; ci<4; ci++) {
-          var ib = document.getElementById('ga-ib-'+ci);
-          if (ib) ib.style.opacity = P[0] > cloneThresh[ci] ? Math.min(1,(P[0]-cloneThresh[ci])*8) : '0';
-        }
-      } else if (P[1] > 0 && P[2] === 0) {
-        /* 2.2: genome overlay — individuo demo sfuma, torna a 1 */
-        indDemoEl.style.opacity = Math.max(0, 1 - P[1]*4);
-        for (var ci2=1; ci2<4; ci2++) {
-          var ib2 = document.getElementById('ga-ib-'+ci2);
-          if (ib2) ib2.style.opacity = '0';
-        }
-      } else if (P[2] > 0 && P[3] === 0) {
-        /* 2.3: ciclo di vita — mostro di nuovo 1 individuo */
-        indDemoEl.style.opacity = Math.min(1, P[2]*4);
-        for (var ci3=1; ci3<4; ci3++) {
-          var ib3 = document.getElementById('ga-ib-'+ci3);
-          if (ib3) ib3.style.opacity = '0';
-        }
-      } else if (P[3] > 0) {
-        /* 2.4: parallelismo — individuo demo sfuma */
-        indDemoEl.style.opacity = Math.max(0, 1 - P[3]*4);
+    if (gaOHLCVCtx) {
+      for (var _oi=0; _oi<21; _oi++) {
+        gaOHLCVCandles.push(gaGenCandle(gaOHLCVPrice));
+        gaOHLCVPrice = gaOHLCVCandles[gaOHLCVCandles.length-1].c;
       }
+      (function resizeGAOHLCV() {
+        gaOHLCVCanvas.width  = gaOHLCVCanvas.clientWidth  || 200;
+        gaOHLCVCanvas.height = gaOHLCVCanvas.clientHeight || 260;
+      })();
+      window.addEventListener('resize', function() {
+        gaOHLCVCanvas.width  = gaOHLCVCanvas.clientWidth  || 200;
+        gaOHLCVCanvas.height = gaOHLCVCanvas.clientHeight || 260;
+      });
+    }
 
-      /* s1: individuals float from scattered → stack (3D background, secondary) */
-      indGroups.forEach(function(ind, idx) {
-        if (P[0] > 0) {
-          ind.grp.position.lerp(STACK[idx], 0.05);
-          var opacity = Math.min(0.45, P[0]*1.5); /* keep dim behind 2D overlay */
-          ind.grp.children.forEach(function(child) {
-            if (child.material) child.material.opacity = opacity;
+    function drawGAOHLCV(t) {
+      if (!gaOHLCVCtx) return;
+      var baseDelay = 380 / gaOHLCVSpeed;
+      if (t - gaOHLCVLastAdd > baseDelay) {
+        gaOHLCVLastAdd = t;
+        gaOHLCVCandles.push(gaGenCandle(gaOHLCVCandles[gaOHLCVCandles.length-1].c));
+        if (gaOHLCVCandles.length > 21) gaOHLCVCandles.shift();
+      }
+      var cv = gaOHLCVCanvas, ctx = gaOHLCVCtx, W = cv.width, H = cv.height;
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle = C.bg; ctx.fillRect(0,0,W,H);
+      ctx.strokeStyle = C.gridLine; ctx.lineWidth = 1;
+      [1,2,3].forEach(function(i){ var y=H/4*i; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); });
+      var vis = gaOHLCVCandles.slice(-20);
+      var all = vis.reduce(function(acc,c){ acc.push(c.h,c.l); return acc; },[]);
+      var lo = Math.min.apply(null,all)-0.5, hi = Math.max.apply(null,all)+0.5, range = hi-lo||1;
+      var ohlcH = Math.floor(H*0.64), gapH = Math.floor(H*0.06), volH = H-ohlcH-gapH;
+      var cw = (W-16)/20, bw = Math.max(cw*0.65,3), pad = 8;
+      function sy(v){ return ((hi-v)/range)*(ohlcH-16)+8; }
+      vis.forEach(function(c,i){
+        var xc = pad+i*cw+(cw-bw)/2, up = c.c>=c.o, col = up?C.candleUp:C.candleDn;
+        ctx.strokeStyle = col; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(xc+bw/2,sy(c.h)); ctx.lineTo(xc+bw/2,sy(c.l)); ctx.stroke();
+        ctx.fillStyle = col;
+        ctx.fillRect(xc, Math.min(sy(c.o),sy(c.c)), bw, Math.max(Math.abs(sy(c.c)-sy(c.o)),2));
+      });
+      var last = vis[vis.length-1].c;
+      ctx.fillStyle = C.priceLabel; ctx.font='10px monospace'; ctx.textAlign='right';
+      ctx.fillText(last.toFixed(2), W-4, 12);
+      var sepY = ohlcH+Math.floor(gapH/2);
+      ctx.strokeStyle='#1e293b'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(0,sepY); ctx.lineTo(W,sepY); ctx.stroke();
+      ctx.fillStyle='#334155'; ctx.font='8px monospace'; ctx.textAlign='left';
+      ctx.fillText('VOL',4,ohlcH+gapH+10);
+      var maxVol = Math.max.apply(null,vis.map(function(c){return c.v||1;}));
+      vis.forEach(function(c,i){
+        var xc = pad+i*cw+(cw-bw)/2, up = c.c>=c.o;
+        var bh = Math.max((c.v/maxVol)*(volH-6),2);
+        ctx.fillStyle = up?'rgba(16,185,129,0.50)':'rgba(239,68,68,0.50)';
+        ctx.fillRect(xc, H-2-bh, bw, bh);
+      });
+    }
+
+    /* ── ALU SVG for GA stage ────────────────────────────────────────── */
+    (function() {
+      var svg = document.getElementById('ga-alu-svg'); if (!svg) return;
+      var ns = 'http://www.w3.org/2000/svg';
+      function mk(tag,a){ var el=document.createElementNS(ns,tag); Object.keys(a).forEach(function(k){el.setAttribute(k,a[k]);}); return el; }
+      svg.appendChild(mk('rect',{x:4,y:4,width:182,height:250,rx:8,fill:'#0f172a',stroke:'#334155','stroke-width':1.5}));
+      var t=mk('text',{x:95,y:22,'text-anchor':'middle',fill:'#60a5fa','font-size':8.5,'font-weight':600,'letter-spacing':1,'font-family':'system-ui'});
+      t.textContent='ALU / SIGNAL PROCESSING'; svg.appendChild(t);
+      svg.appendChild(mk('line',{x1:16,y1:30,x2:174,y2:30,stroke:'#334155','stroke-width':1}));
+      [{cx:52,cy:82,lbl:'IIR₁(P)'},{cx:138,cy:82,lbl:'IIR₂(P)'},{cx:52,cy:155,lbl:'IIR₁(V)'},{cx:138,cy:155,lbl:'IIR₂(V)'}].forEach(function(k){
+        svg.appendChild(mk('circle',{cx:k.cx,cy:k.cy,r:26,fill:'#1a2535',stroke:'#475569','stroke-width':1.5}));
+        svg.appendChild(mk('circle',{cx:k.cx,cy:k.cy,r:18,fill:'#334155'}));
+        svg.appendChild(mk('line',{x1:k.cx,y1:k.cy,x2:k.cx,y2:k.cy-13,stroke:'#2563eb','stroke-width':2.5,'stroke-linecap':'round'}));
+        var lbl=mk('text',{x:k.cx,y:k.cy+40,'text-anchor':'middle',fill:'#64748b','font-size':8.5,'font-family':'system-ui'});
+        lbl.textContent=k.lbl; svg.appendChild(lbl);
+      });
+      svg.appendChild(mk('line',{x1:16,y1:208,x2:174,y2:208,stroke:'#334155','stroke-width':1}));
+      [{cx:62,lbl:'Δmargin₁(P)'},{cx:128,lbl:'Δmargin₂(P)'}].forEach(function(lv){
+        svg.appendChild(mk('line',{x1:lv.cx,y1:220,x2:lv.cx,y2:242,stroke:'#475569','stroke-width':3,'stroke-linecap':'round'}));
+        svg.appendChild(mk('rect',{x:lv.cx-9,y:220,width:18,height:9,rx:3,fill:'#2563eb'}));
+        var lbl=mk('text',{x:lv.cx,y:254,'text-anchor':'middle',fill:'#64748b','font-size':8,'font-family':'system-ui'});
+        lbl.textContent=lv.lbl; svg.appendChild(lbl);
+      });
+    })();
+
+    /* ── SM Three.js for GA stage ────────────────────────────────────── */
+    var gaSMUpdate = null, gaSMState = 0, gaSMEdgeIdx = -1, gaSMCount = 0;
+
+    if (T) {
+      var gaSmCanvas = document.getElementById('ga-sm-canvas');
+      if (gaSmCanvas) {
+        (function() {
+          function gwh() { return {w:gaSmCanvas.clientWidth||380,h:gaSmCanvas.clientHeight||260}; }
+          var s2 = gwh();
+          var rdr;
+          try { rdr = new T.WebGLRenderer({canvas:gaSmCanvas,alpha:true,antialias:true}); }
+          catch(e) { return; }
+          rdr.setPixelRatio(Math.min(devicePixelRatio,2)); rdr.setSize(s2.w,s2.h,false); rdr.setClearColor(0,0);
+          var sc2 = new T.Scene();
+          var cam2 = new T.PerspectiveCamera(42,s2.w/s2.h,0.1,100);
+          cam2.position.set(0,0.3,9.5); cam2.lookAt(0,0,0);
+          sc2.add(new T.AmbientLight(0x1e293b,1.0));
+          var spl = new T.PointLight(0x3b82f6,4,30); spl.position.set(4,5,6); sc2.add(spl);
+          var srl = new T.DirectionalLight(0x64748b,0.7); srl.position.set(-4,-2,-5); sc2.add(srl);
+          var grp = new T.Group(); sc2.add(grp);
+          var sGeo = new T.SphereGeometry(0.30,32,32);
+          var sMats = SM_STATES.map(function(st,i){
+            return new T.MeshStandardMaterial({
+              color:i===1?0x166534:i===3?0x7f1d1d:0x1e3a5f,
+              emissive:i===1?0x22c55e:i===3?0xef4444:0x0f2040,
+              emissiveIntensity:(i===1||i===3)?0.55:0.3,metalness:0.15,roughness:0.6
+            });
           });
-          ind.grp.rotation.y = el * ind.speed * 0.2;
-        }
-      });
-
-      /* genome overlay driven by s2 */
-      document.getElementById('ga-genome').style.opacity = Math.min(1, P[1]*3);
-
-      /* capital charts + ticker driven by s3 */
-      var capOp = Math.min(1, P[2]*4);
-      document.getElementById('ga-equity').style.opacity = capOp;
-      document.getElementById('ga-ticker').style.opacity = capOp;
-
-      /* Camera transitions */
-      if (P[0] > 0 && P[2] === 0) {
-        /* stack view */
-        camera.position.x = lerp(camera.position.x, 4.5, 0.022);
-        camera.position.y = lerp(camera.position.y, 2.5, 0.022);
-        camera.position.z = lerp(camera.position.z, 9, 0.022);
-        camera.lookAt(0.5, 1, -3);
+          var sMeshes = SM_STATES.map(function(st,i){
+            var m=new T.Mesh(sGeo,sMats[i]); m.position.set(st.x,st.y,st.z); grp.add(m); return m;
+          });
+          var gGeo=new T.SphereGeometry(0.42,32,32);
+          var gMat=new T.MeshStandardMaterial({color:0x60a5fa,emissive:0x60a5fa,emissiveIntensity:1.0,transparent:true,opacity:0.25});
+          var gMesh=new T.Mesh(gGeo,gMat); grp.add(gMesh);
+          var eMats=SM_EDGES.map(function(e,i){return new T.LineBasicMaterial({color:i<4?0x4a6080:i<6?0x2a4060:0x1e3050});});
+          SM_EDGES.forEach(function(e,i){
+            grp.add(new T.Line(new T.BufferGeometry().setFromPoints([
+              new T.Vector3(SM_STATES[e[0]].x,SM_STATES[e[0]].y,SM_STATES[e[0]].z),
+              new T.Vector3(SM_STATES[e[1]].x,SM_STATES[e[1]].y,SM_STATES[e[1]].z),
+            ]),eMats[i]));
+          });
+          window.addEventListener('resize',function(){
+            var ns=gwh(); rdr.setSize(ns.w,ns.h,false); cam2.aspect=ns.w/ns.h; cam2.updateProjectionMatrix();
+          });
+          setInterval(function(){
+            if (gaSMEdgeIdx>=0) return;
+            var cands=SM_EDGES.map(function(e,i){return{e:e,i:i};}).filter(function(x){return x.e[0]===gaSMState;});
+            if (!cands.length) return;
+            var ch=cands[Math.floor(sr(++gaSMCount*17)*cands.length)];
+            gaSMEdgeIdx=ch.i;
+            setTimeout(function(){ gaSMState=ch.e[1]; gaSMEdgeIdx=-1; },1500);
+          },5000);
+          gaSMUpdate=function(t){
+            grp.rotation.y=t*0.00025; grp.rotation.x=Math.sin(t*0.0001)*0.12;
+            var pulse=Math.sin(t*0.003);
+            sMeshes.forEach(function(m,i){
+              var isL=i===1,isS=i===3;
+              if(i===gaSMState){
+                sMats[i].color.setHex(isL?0x16a34a:isS?0xdc2626:0x1d4ed8);
+                sMats[i].emissive.setHex(isL?0x4ade80:isS?0xf87171:0x60a5fa);
+                sMats[i].emissiveIntensity=0.65+pulse*0.35; m.scale.setScalar(1.0+pulse*0.08);
+              } else {
+                sMats[i].color.setHex(isL?0x166534:isS?0x7f1d1d:0x1e3a5f);
+                sMats[i].emissive.setHex(isL?0x22c55e:isS?0xef4444:0x0f2040);
+                sMats[i].emissiveIntensity=(isL||isS)?0.42:0.2; m.scale.setScalar(1.0);
+              }
+            });
+            var cs=SM_STATES[gaSMState]; gMesh.position.set(cs.x,cs.y,cs.z);
+            gMat.opacity=0.18+Math.abs(pulse)*0.14; gMesh.scale.setScalar(1.0+pulse*0.06);
+            eMats.forEach(function(mat,i){ mat.color.setHex(i===gaSMEdgeIdx?0x60a5fa:i<4?0x4a6080:i<6?0x2a4060:0x1e3050); });
+            rdr.render(sc2,cam2);
+          };
+        })();
       }
-      if (P[2] > 0 && P[3] === 0) {
-        /* zoom to individual 0 */
-        camera.position.x = lerp(camera.position.x, STACK[0].x+0.5, 0.03);
-        camera.position.y = lerp(camera.position.y, STACK[0].y, 0.03);
-        camera.position.z = lerp(camera.position.z, STACK[0].z+4.5, 0.03);
-        camera.lookAt(STACK[0].x, STACK[0].y, STACK[0].z);
-      }
-      if (P[3] > 0) {
-        /* pull back for parallelism */
-        camera.position.x = lerp(camera.position.x, 5, 0.022);
-        camera.position.y = lerp(camera.position.y, 2.5, 0.022);
-        camera.position.z = lerp(camera.position.z, 12, 0.022);
-        camera.lookAt(0.5, 1, -3);
-      }
-
-      /* birth sphere rotation */
-      if (P[7] > 0) birthMesh.rotation.y = el * 0.8;
-
-      pl1.intensity = 3 + Math.sin(el*1.3)*0.6;
-      pl2.intensity = 1.5 + Math.sin(el*0.9+1)*0.5;
-      renderer.render(scene, camera);
-      ScrollTrigger.update();
     }
-    raf();
 
-    /* ── Build genome overlay (JSON boxes) ───────────────────────────── */
-    (function() {
-      var cont = document.getElementById('ga-genome');
-      INDS.forEach(function(ind) {
-        var row = document.createElement('div'); row.className = 'ga-ind-row';
-        var id = document.createElement('span'); id.className = 'ga-ind-id'; id.textContent = 'I'+ind.id;
-        row.appendChild(id);
-        var box = document.createElement('div'); box.className = 'ga-json-box';
-        var parts = ['{ '];
-        ind.genome.forEach(function(g, gi) {
-          var k = g.name.replace(/₁/g,'1').replace(/₂/g,'2').replace(/Δ/g,'D');
-          parts.push(
-            '<span class="ga-json-key">"'+k+'"</span>: ' +
-            '<span class="ga-json-val">'+g.v.toFixed(2)+'</span>' +
-            (gi < ind.genome.length-1 ? ', ' : '')
-          );
-        });
-        parts.push(' }');
-        box.innerHTML = parts.join('');
-        row.appendChild(box);
-        cont.appendChild(row);
+    /* ── Position individual border over ALU+SM ──────────────────────── */
+    function positionIndBorder() {
+      var row=document.getElementById('ga-panels-row');
+      var aluP=document.getElementById('ga-alu-panel');
+      var smP=document.getElementById('ga-sm-panel');
+      if(!row||!aluP||!smP) return;
+      var rr=row.getBoundingClientRect(), ar=aluP.getBoundingClientRect(), sr2=smP.getBoundingClientRect();
+      var PAD=14;
+      var left=ar.left-rr.left-PAD, top2=ar.top-rr.top-PAD;
+      var w=sr2.right-rr.left+PAD-left, h=sr2.bottom-rr.top+PAD-top2;
+      ['ga-ind-border','ga-ind-stack-wrap'].forEach(function(id){
+        var el=document.getElementById(id);
+        if(el){el.style.left=left+'px';el.style.top=top2+'px';el.style.width=w+'px';el.style.height=h+'px';}
+      });
+    }
+    positionIndBorder();
+    window.addEventListener('resize',positionIndBorder);
+
+    /* ── Stack copies (CSS 3D stacking effect) ───────────────────────── */
+    (function(){
+      var wrap=document.getElementById('ga-ind-stack-wrap'); if(!wrap) return;
+      wrap.innerHTML='';
+      [{dx:10,dy:-9},{dx:20,dy:-18},{dx:30,dy:-27}].forEach(function(off){
+        var d=document.createElement('div'); d.className='ga-stack-copy';
+        d.style.transform='translate('+off.dx+'px,'+off.dy+'px)'; wrap.appendChild(d);
       });
     })();
 
-    /* ── Build individual box demo overlay (2.1) ─────────────────────── */
-    (function() {
-      var stack = document.getElementById('ga-ind-stack');
-      for (var k=0; k<4; k++) {
-        var box = document.createElement('div');
-        box.className = 'ga-ind-box';
-        box.id = 'ga-ib-'+k;
-        box.style.opacity = k===0 ? '1' : '0';
-        var lbl = document.createElement('div'); lbl.className = 'ga-ind-box-lbl'; lbl.textContent = 'Individuo';
-        var inner = document.createElement('div'); inner.className = 'ga-ind-box-inner';
-        var alu = document.createElement('div'); alu.className = 'ga-alu-mini'; alu.textContent = 'ALU';
-        var arr = document.createElement('span'); arr.className = 'ga-box-arr'; arr.textContent = '→';
-        var fsm = document.createElement('div'); fsm.className = 'ga-sm-mini'; fsm.textContent = 'FSM';
-        inner.appendChild(alu); inner.appendChild(arr); inner.appendChild(fsm);
-        box.appendChild(lbl); box.appendChild(inner);
-        stack.appendChild(box);
-      }
-      /* Draw a simple sparkline in the portfolio canvas */
-      var cv = document.getElementById('ga-port-cv');
-      if (cv) {
-        var ctx = cv.getContext('2d');
-        ctx.fillStyle = '#1e293b'; ctx.fillRect(0,0,80,48);
-        var pts = [100,102,101,104,106,103,108,112,110,115,113,118,122,119,125];
-        var mn=Math.min.apply(null,pts), mx=Math.max.apply(null,pts), rng=mx-mn||1;
-        ctx.beginPath(); ctx.strokeStyle='#10b981'; ctx.lineWidth=1.5;
-        pts.forEach(function(v,i){
-          var x=(i/(pts.length-1))*78, y=44-((v-mn)/rng)*40;
-          i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-        });
-        ctx.stroke();
-      }
-    })();
-
-    /* ── Build equity mini-charts ─────────────────────────────────────── */
-    (function() {
-      var cont = document.getElementById('ga-equity');
-      INDS.forEach(function(ind) {
-        var row = document.createElement('div'); row.className = 'ga-eq-row';
-        var id = document.createElement('span'); id.className = 'ga-eq-id'; id.textContent = 'I'+ind.id;
-        var cv = document.createElement('canvas'); cv.className = 'ga-eq-canvas';
-        cv.width = 86; cv.height = 32; cv.id = 'ga-eqcv-'+ind.id;
-        row.appendChild(id); row.appendChild(cv);
-        cont.appendChild(row);
+    /* ── Parallel equity charts ──────────────────────────────────────── */
+    (function(){
+      var cont=document.getElementById('ga-parallel-equities'); if(!cont) return;
+      cont.innerHTML='';
+      INDS.forEach(function(ind){
+        var row=document.createElement('div'); row.className='ga-par-eq-row';
+        var id=document.createElement('span'); id.className='ga-par-eq-id'; id.textContent='I'+ind.id;
+        var cv=document.createElement('canvas'); cv.className='ga-par-eq-cv'; cv.id='ga-peq-'+ind.id;
+        cv.width=72; cv.height=24;
+        row.appendChild(id); row.appendChild(cv); cont.appendChild(row);
       });
     })();
 
-    function drawEquity(ind) {
-      var cv = document.getElementById('ga-eqcv-'+ind.id); if (!cv) return;
-      var ctx = cv.getContext('2d');
-      ctx.clearRect(0,0,86,32);
-      ctx.fillStyle = '#1e293b'; ctx.fillRect(0,0,86,32);
-      var h = ind.capHist; if (h.length < 2) return;
-      var mn = Math.min.apply(null,h), mx = Math.max.apply(null,h), rng = mx-mn||1;
-      ctx.beginPath(); ctx.strokeStyle = '#10b981'; ctx.lineWidth = 1.2;
-      h.forEach(function(v,i) {
-        var x = (i/(h.length-1))*84, y = 30-((v-mn)/rng)*28;
-        i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-      });
+    function drawParEq(ind){
+      var cv=document.getElementById('ga-peq-'+ind.id); if(!cv) return;
+      var ctx=cv.getContext('2d'),h=ind.capHist;
+      ctx.clearRect(0,0,72,24); ctx.fillStyle='#1e293b'; ctx.fillRect(0,0,72,24);
+      if(h.length<2) return;
+      var mn=Math.min.apply(null,h),mx=Math.max.apply(null,h),rng=mx-mn||1;
+      ctx.beginPath(); ctx.strokeStyle='#10b981'; ctx.lineWidth=1.2;
+      h.forEach(function(v,i){var x=(i/(h.length-1))*70,y=22-((v-mn)/rng)*20;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
       ctx.stroke();
     }
 
-    /* ── OHLCV fast-forward: 250 tick/titolo, 1x→5x velocità ────────── */
-    var lcRunning = false, lcTimer = null;
-    var TICKS_PER_STOCK = 250;
-
-    function startLifecycle() {
-      if (lcRunning) return; lcRunning = true;
-      INDS.forEach(function(ind){ ind.capHist=[100]; });
-      var si = 0;
-      function runStock() {
-        if (!lcRunning || si >= STOCKS.length) {
-          if (lcRunning) showFinalCagr();
-          return;
-        }
-        var stk = STOCKS[si];
-        var tickEl = document.querySelector('#ga-ticker .ga-tick-name');
-        var descEl = document.querySelector('#ga-ticker .ga-tick-desc');
-        if (tickEl) tickEl.textContent = stk.ticker;
-        if (descEl) descEl.textContent = stk.desc;
-        var ticks = 0;
-        function tick() {
-          if (!lcRunning) return;
-          ticks++;
-          INDS.forEach(function(ind){
-            var last = ind.capHist[ind.capHist.length-1];
-            ind.capHist.push(Math.max(50, last+(sr(ind.id*100+si*50+ticks)-.46)*2.8));
-            drawEquity(ind);
-          });
-          if (ticks >= TICKS_PER_STOCK) {
-            /* CAGR popup per titolo */
-            var cv = (8+sr(si*41+7)*15).toFixed(1);
-            showCagrPopup(stk.ticker, '+'+cv+'%', false);
-            lcTimer = setTimeout(function(){ si++; runStock(); }, 1500);
-          } else {
-            /* accelerazione lineare: 55ms → 11ms (5x) */
-            var progress = ticks / TICKS_PER_STOCK;
-            var delay = Math.round(55 * (1 - progress * 0.8));
-            lcTimer = setTimeout(tick, delay);
-          }
-        }
-        tick();
-      }
-      runStock();
+    /* ── Portfolio chart ─────────────────────────────────────────────── */
+    function drawPortfolio(hist){
+      var cv=document.getElementById('ga-port-canvas'); if(!cv) return;
+      if(!cv._sized){cv.width=cv.clientWidth||140;cv.height=cv.clientHeight||130;cv._sized=true;}
+      var ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+      ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+      if(!hist||hist.length<2) return;
+      var mn=Math.min.apply(null,hist),mx=Math.max.apply(null,hist),rng=mx-mn||1;
+      ctx.beginPath();
+      hist.forEach(function(v,i){var x=(i/(hist.length-1))*(W-4)+2,y=H-4-((v-mn)/rng)*(H-10);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+      ctx.lineTo(W-2,H-4); ctx.lineTo(2,H-4); ctx.closePath();
+      ctx.fillStyle='rgba(16,185,129,0.12)'; ctx.fill();
+      ctx.beginPath(); ctx.strokeStyle='#10b981'; ctx.lineWidth=1.5;
+      hist.forEach(function(v,i){var x=(i/(hist.length-1))*(W-4)+2,y=H-4-((v-mn)/rng)*(H-10);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+      ctx.stroke();
+      var last=hist[hist.length-1],pct=((last/hist[0]-1)*100).toFixed(1);
+      ctx.fillStyle=last>=hist[0]?'#10b981':'#ef4444';
+      ctx.font='bold 10px monospace'; ctx.textAlign='right';
+      ctx.fillText((last>=hist[0]?'+':'')+pct+'%',W-3,14);
     }
+    drawPortfolio([100,102,101,104,106,103,108,112,110,115,113,118,122,119,125]);
 
-    function stopLifecycle() {
-      lcRunning = false; if (lcTimer) clearTimeout(lcTimer);
-      document.getElementById('ga-ticker').style.opacity = 0;
-      gsap.to(document.getElementById('ga-cagr'), {opacity:0, duration:.3});
-      gsap.to(document.getElementById('ga-db-table'), {opacity:0, duration:.3});
-    }
-
-    function meanCagr() {
-      return (INDS.reduce(function(s,i){ return s+i.cagr; },0)/INDS.length).toFixed(1);
-    }
-
-    function showCagrPopup(lbl, val, isFinal) {
-      var popup = document.getElementById('ga-cagr');
-      document.getElementById('ga-cagr-val').textContent = val;
-      document.getElementById('ga-cagr-sub').textContent = lbl + ' · CAGR annuo';
-      gsap.fromTo(popup, {opacity:0, scale:0.85}, {opacity:1, scale:1, duration:.35});
-      if (!isFinal) {
-        setTimeout(function(){ gsap.to(popup, {opacity:0, duration:.3}); }, 1200);
-      }
-    }
-
-    function showFinalCagr() {
-      var mean = meanCagr();
-      showCagrPopup('CAGR medio — tutti i titoli', '+'+mean+'%', true);
-      /* dopo 2s, trasforma popup in record di tabella */
-      lcTimer = setTimeout(function(){
-        if (!lcRunning) return;
-        gsap.to(document.getElementById('ga-cagr'), {opacity:0, duration:.4});
-        setTimeout(function(){
-          if (!lcRunning) return;
-          showDbTable(mean);
-        }, 500);
-      }, 2000);
-    }
-
-    function showDbTable(meanCagrVal) {
-      var tbl = document.getElementById('ga-db-table');
-      var rows = document.getElementById('ga-db-rows');
-      rows.innerHTML = '';
-      /* inserisce prima i record di background, poi il record dell'individuo */
-      var bgRows = [
-        {g:'{"IIR1_P":0.31,"IIR2_P":0.58,...}', c:'+11.2%'},
-        {g:'{"IIR1_P":0.72,"IIR2_P":0.24,...}', c:'+9.8%'},
-        {g:'{"IIR1_P":0.45,"IIR2_P":0.61,...}', c:'+8.3%'},
-      ];
-      bgRows.forEach(function(r, i){
-        var row = document.createElement('div'); row.className = 'ga-db-row';
-        row.style.animationDelay = (i*0.08)+'s';
-        var gCell = document.createElement('span'); gCell.className = 'ga-db-genome'; gCell.textContent = r.g;
-        var cCell = document.createElement('span'); cCell.className = 'ga-db-cagr';   cCell.textContent = r.c;
-        row.appendChild(gCell); row.appendChild(cCell);
-        rows.appendChild(row);
+    /* ── Genome overlay ──────────────────────────────────────────────── */
+    (function(){
+      var cont=document.getElementById('ga-genome-overlay'); if(!cont) return;
+      var ind=INDS[0], lines=['{'];
+      ind.genome.forEach(function(g,i){
+        var k='"'+g.name.replace(/₁/g,'1').replace(/₂/g,'2').replace(/Δ/g,'D')+'"';
+        lines.push('  <span style="color:#64748b">'+k+'</span>: <span style="color:#10b981">'+g.v.toFixed(3)+'</span>'+(i<ind.genome.length-1?',':''));
       });
-      /* record principale (individuo appena simulato) */
-      var ind0 = INDS[0];
-      var jsonStr = '{' + ind0.genome.slice(0,3).map(function(g){
+      lines.push('}'); cont.innerHTML=lines.join('<br>');
+    })();
+
+    /* ── Main RAF ────────────────────────────────────────────────────── */
+    (function loop(t){
+      requestAnimationFrame(loop);
+      var gaEl=document.getElementById('ga-concept'); if(!gaEl) return;
+      var br=gaEl.getBoundingClientRect();
+      if(br.top>innerHeight||br.bottom<0) return;
+      drawGAOHLCV(t);
+      if(gaSMUpdate) gaSMUpdate(t);
+    })(0);
+
+    /* ── Scroll text fade ────────────────────────────────────────────── */
+    document.querySelectorAll('.ga-section').forEach(function(sec){
+      ScrollTrigger.create({trigger:sec,start:'top 90%',end:'bottom 10%',scrub:true,
+        onUpdate:function(self){
+          var inn=sec.querySelector('.ga-text'); if(!inn) return;
+          var f=self.progress<.15?self.progress/.15:self.progress>.85?(1-self.progress)/.15:1;
+          inn.style.opacity=f; inn.style.transform='translateY('+(8*(1-Math.min(f,1)))+'px)';
+        }
+      });
+    });
+
+    /* ── Phase 2.1: Popolazione ──────────────────────────────────────── */
+    ScrollTrigger.create({
+      trigger:'#ga-s1', start:'top 80%', end:'bottom top',
+      onEnter:function(){
+        gsap.to(document.getElementById('ga-ind-border'),{opacity:1,duration:.6});
+        gsap.to(document.getElementById('ga-port-panel'),{opacity:1,duration:.6,delay:.4});
+        gsap.to(document.getElementById('ga-port-arrow'),{opacity:1,duration:.4,delay:.6});
+      },
+      onLeave:function(){
+        gsap.to(document.getElementById('ga-ind-stack-wrap'),{opacity:1,duration:.7,delay:.2});
+      },
+      onEnterBack:function(){
+        gsap.to(document.getElementById('ga-ind-stack-wrap'),{opacity:0,duration:.4});
+        gsap.to(document.getElementById('ga-genome-overlay'),{opacity:0,duration:.3});
+      },
+      onLeaveBack:function(){
+        gsap.to(document.getElementById('ga-ind-border'),{opacity:0,duration:.4});
+        gsap.to(document.getElementById('ga-port-panel'),{opacity:0,duration:.4});
+        gsap.to(document.getElementById('ga-port-arrow'),{opacity:0,duration:.3});
+      }
+    });
+
+    /* ── Phase 2.2: Genoma ───────────────────────────────────────────── */
+    ScrollTrigger.create({
+      trigger:'#ga-s2', start:'top 80%', end:'bottom top',
+      onEnter:function(){ gsap.to(document.getElementById('ga-genome-overlay'),{opacity:1,duration:.6}); },
+      onLeaveBack:function(){ gsap.to(document.getElementById('ga-genome-overlay'),{opacity:0,duration:.4}); },
+      onLeave:function(){ gsap.to(document.getElementById('ga-genome-overlay'),{opacity:0,duration:.4}); }
+    });
+
+    /* ── Phase 2.3: Ciclo di vita ────────────────────────────────────── */
+    var lcRunning=false, lcTimers=[], lcTick=0, lcStockIdx=0;
+
+    function startLifecycle(){
+      if(lcRunning) return; lcRunning=true;
+      INDS.forEach(function(ind){ind.capHist=[100];}); lcStockIdx=0; lcTick=0; gaOHLCVSpeed=1.0;
+      gsap.to(document.getElementById('ga-ind-stack-wrap'),{opacity:0,duration:.4});
+      gsap.to(document.getElementById('ga-stage-ticker'),{opacity:1,duration:.4});
+      runLCStock();
+    }
+
+    function stopLifecycle(){
+      lcRunning=false; lcTimers.forEach(clearTimeout); lcTimers=[]; gaOHLCVSpeed=1.0;
+      gsap.to(document.getElementById('ga-stage-ticker'),{opacity:0,duration:.3});
+      gsap.to(document.getElementById('ga-stage-cagr'),{opacity:0,duration:.3});
+      gsap.to(document.getElementById('ga-stage-dbtable'),{opacity:0,duration:.3});
+    }
+
+    function runLCStock(){
+      if(!lcRunning||lcStockIdx>=STOCKS.length){ if(lcRunning) showFinalCAGR(); return; }
+      var stk=STOCKS[lcStockIdx];
+      var tn=document.querySelector('#ga-stage-ticker .ga-tick-name');
+      var td=document.querySelector('#ga-stage-ticker .ga-tick-desc');
+      if(tn) tn.textContent=stk.ticker; if(td) td.textContent=stk.desc;
+      lcTick=0; runLCTick();
+    }
+
+    function runLCTick(){
+      if(!lcRunning) return; lcTick++;
+      var ind0=INDS[0], last=ind0.capHist[ind0.capHist.length-1];
+      ind0.capHist.push(Math.max(50,last+(sr(lcTick*7+lcStockIdx*50)-.46)*2.8));
+      drawPortfolio(ind0.capHist);
+      gaOHLCVSpeed=1+(lcTick/250)*4;
+      if(lcTick>=250){
+        gaOHLCVSpeed=1.0;
+        var cagr=(INDS[0].cagrPerStock[lcStockIdx])||10;
+        showCAGRPopup(STOCKS[lcStockIdx].ticker,'+'+cagr.toFixed(1)+'%',false);
+        lcTimers.push(setTimeout(function(){lcStockIdx++;runLCStock();},1600));
+      } else {
+        var delay=Math.round(55*(1-(lcTick/250)*0.8));
+        lcTimers.push(setTimeout(runLCTick,delay));
+      }
+    }
+
+    function showCAGRPopup(lbl,val,isFinal){
+      var popup=document.getElementById('ga-stage-cagr');
+      document.getElementById('ga-stage-cagr-val').textContent=val;
+      document.getElementById('ga-stage-cagr-sub').textContent=lbl+(isFinal?' · CAGR medio':' · CAGR annuo');
+      gsap.fromTo(popup,{opacity:0,scale:.85},{opacity:1,scale:1,duration:.35});
+      if(!isFinal) lcTimers.push(setTimeout(function(){gsap.to(popup,{opacity:0,duration:.3});},1200));
+    }
+
+    function showFinalCAGR(){
+      var mean=INDS[0].cagrPerStock.reduce(function(a,b){return a+b;},0)/4;
+      showCAGRPopup('CAGR medio — tutti i titoli','+'+mean.toFixed(1)+'%',true);
+      lcTimers.push(setTimeout(function(){
+        if(!lcRunning) return;
+        gsap.to(document.getElementById('ga-stage-cagr'),{opacity:0,duration:.4});
+        lcTimers.push(setTimeout(function(){if(lcRunning)showDBTable(mean);},500));
+      },2200));
+    }
+
+    function showDBTable(meanCagr){
+      var tbl=document.getElementById('ga-stage-dbtable');
+      var rows=document.getElementById('ga-stage-db-rows');
+      if(!tbl||!rows) return; rows.innerHTML='';
+      [{g:'{"IIR1":0.31,"IIR2":0.58,...}',c:'+11.2%'},{g:'{"IIR1":0.72,"IIR2":0.24,...}',c:'+9.8%'},{g:'{"IIR1":0.45,"IIR2":0.61,...}',c:'+8.3%'}].forEach(function(r,i){
+        var row=document.createElement('div'); row.className='ga-db-row'; row.style.animationDelay=(i*.08)+'s';
+        var g=document.createElement('span'); g.className='ga-db-genome'; g.textContent=r.g;
+        var c=document.createElement('span'); c.className='ga-db-cagr'; c.textContent=r.c;
+        row.appendChild(g); row.appendChild(c); rows.appendChild(row);
+      });
+      var ind=INDS[0];
+      var json='{'+ind.genome.slice(0,3).map(function(g){
         return '"'+g.name.replace(/₁/g,'1').replace(/₂/g,'2').replace(/Δ/g,'D')+'":'+g.v.toFixed(2);
-      }).join(',') + ',...}';
-      var mainRow = document.createElement('div'); mainRow.className = 'ga-db-row';
-      mainRow.style.animationDelay = '0.32s';
-      mainRow.style.borderLeft = '2px solid #2563eb';
-      var gMain = document.createElement('span'); gMain.className = 'ga-db-genome'; gMain.textContent = jsonStr;
-      var cMain = document.createElement('span'); cMain.className = 'ga-db-cagr';   cMain.textContent = '+'+meanCagrVal+'%';
-      mainRow.appendChild(gMain); mainRow.appendChild(cMain);
-      rows.appendChild(mainRow);
-      gsap.fromTo(tbl, {opacity:0, y:20}, {opacity:1, y:0, duration:.5});
+      }).join(',')+',...}';
+      var mainRow=document.createElement('div'); mainRow.className='ga-db-row';
+      mainRow.style.animationDelay='0.28s'; mainRow.style.borderLeft='2px solid #2563eb';
+      var mg=document.createElement('span'); mg.className='ga-db-genome'; mg.textContent=json;
+      var mc=document.createElement('span'); mc.className='ga-db-cagr'; mc.textContent='+'+meanCagr.toFixed(1)+'%';
+      mainRow.appendChild(mg); mainRow.appendChild(mc); rows.appendChild(mainRow);
+      gsap.fromTo(tbl,{opacity:0,y:20},{opacity:1,y:0,duration:.5});
     }
 
-    /* ── Selection table ──────────────────────────────────────────────── */
-    var selShown = false, selTimers = [];
+    ScrollTrigger.create({trigger:'#ga-s3',start:'top 65%',end:'bottom top',onEnter:startLifecycle,onLeaveBack:stopLifecycle});
 
-    function buildSelRows() {
-      var cont = document.getElementById('ga-sel-rows');
-      if (cont.childElementCount > 0) return;
+    /* ── Phase 2.4: Parallelismo ─────────────────────────────────────── */
+    var p4Running=false, p4Timers=[], p4Tick=0;
+
+    function startParallelism(){
+      if(p4Running) return; p4Running=true;
+      INDS.forEach(function(ind){ind.capHist=[100];}); p4Tick=0;
+      gsap.to(document.getElementById('ga-ind-stack-wrap'),{opacity:1,duration:.6});
+      gsap.to(document.getElementById('ga-parallel-equities'),{opacity:1,duration:.6,delay:.3});
+      gsap.to(document.getElementById('ga-stage-ticker'),{opacity:1,duration:.4});
+      var tn=document.querySelector('#ga-stage-ticker .ga-tick-name');
+      var td=document.querySelector('#ga-stage-ticker .ga-tick-desc');
+      if(tn) tn.textContent='PARALLELO'; if(td) td.textContent='8 individui · stream OHLCV condiviso';
+      runP4Tick();
+    }
+
+    function stopParallelism(){
+      p4Running=false; p4Timers.forEach(clearTimeout); p4Timers=[];
+      gsap.to(document.getElementById('ga-parallel-equities'),{opacity:0,duration:.4});
+      gsap.to(document.getElementById('ga-stage-ticker'),{opacity:0,duration:.3});
+    }
+
+    function runP4Tick(){
+      if(!p4Running) return; p4Tick++;
+      INDS.forEach(function(ind){
+        var last=ind.capHist[ind.capHist.length-1];
+        ind.capHist.push(Math.max(50,last+(sr(ind.id*100+p4Tick*3)-.46)*2.8));
+        drawParEq(ind);
+      });
+      drawPortfolio(INDS[0].capHist);
+      if(p4Tick<1000) p4Timers.push(setTimeout(runP4Tick,35));
+    }
+
+    ScrollTrigger.create({trigger:'#ga-s4',start:'top 65%',end:'bottom top',onEnter:startParallelism,onLeaveBack:stopParallelism,onLeave:stopParallelism});
+
+    /* ── Phase 2.5: Selezione ────────────────────────────────────────── */
+    var selShown=false, selTimers=[];
+
+    (function(){
+      var cont=document.getElementById('ga-sel-rows'); if(!cont||cont.childElementCount>0) return;
       SEL.forEach(function(row,i){
-        var div = document.createElement('div'); div.className = 'ga-sel-row'; div.id = 'ga-sr-'+i;
-        var rank = document.createElement('span'); rank.className = 'ga-rank'; rank.textContent = i+1;
-        var strip = document.createElement('span'); strip.className = 'ga-gstrip';
+        var div=document.createElement('div'); div.className='ga-sel-row'; div.id='ga-sr-'+i;
+        var rank=document.createElement('span'); rank.className='ga-rank'; rank.textContent=i+1;
+        var strip=document.createElement('span'); strip.className='ga-gstrip';
         row.genome.forEach(function(g){
-          var s = document.createElement('div'); s.className = 'ga-gs';
-          s.style.background = g.css; s.style.opacity = 0.35+(g.v||.5)*.65;
-          strip.appendChild(s);
+          var s=document.createElement('div'); s.className='ga-gs';
+          s.style.background=g.css; s.style.opacity=0.35+(g.v||.5)*.65; strip.appendChild(s);
         });
-        var cv = document.createElement('span'); cv.className = 'ga-cagr-val'; cv.textContent = '+'+row.cagr.toFixed(1)+'%';
-        div.appendChild(rank); div.appendChild(strip); div.appendChild(cv);
-        cont.appendChild(div);
+        var cv=document.createElement('span'); cv.className='ga-cagr-val'; cv.textContent='+'+row.cagr.toFixed(1)+'%';
+        div.appendChild(rank); div.appendChild(strip); div.appendChild(cv); cont.appendChild(div);
       });
+    })();
+
+    function showSel(){
+      if(selShown) return; selShown=true;
+      var tbl=document.getElementById('ga-sel');
+      tbl.classList.add('visible'); gsap.fromTo(tbl,{opacity:0},{opacity:1,duration:.45}); animateArrows();
     }
 
-    function showSel() {
-      if (selShown) return; selShown = true;
-      buildSelRows();
-      var tbl = document.getElementById('ga-sel');
-      tbl.classList.add('visible');
-      gsap.fromTo(tbl, {opacity:0}, {opacity:1, duration:.45});
-      animateArrows();
+    function hideSel(){
+      selShown=false; selTimers.forEach(clearTimeout); selTimers=[];
+      var tbl=document.getElementById('ga-sel');
+      gsap.to(tbl,{opacity:0,duration:.35,onComplete:function(){tbl.classList.remove('visible');}});
+      document.querySelectorAll('.ga-sel-row.selected').forEach(function(r){r.classList.remove('selected');});
     }
 
-    function hideSel() {
-      selShown = false; selTimers.forEach(clearTimeout); selTimers = [];
-      var tbl = document.getElementById('ga-sel');
-      gsap.to(tbl, {opacity:0, duration:.35, onComplete:function(){ tbl.classList.remove('visible'); }});
-      document.querySelectorAll('.ga-sel-row.selected').forEach(function(r){ r.classList.remove('selected'); });
-    }
-
-    function animateArrows() {
-      var aA = document.getElementById('ga-arr-a'), aB = document.getElementById('ga-arr-b');
-      var ROW_H = 25, BASE = 32;
-      function walkTo(arrow, target, seed, cb) {
-        var steps = 8, cur = Math.floor(sr(seed)*10)+5, s = 0;
+    function animateArrows(){
+      var aA=document.getElementById('ga-arr-a'),aB=document.getElementById('ga-arr-b');
+      var ROW_H=25,BASE=32;
+      function walkTo(arrow,target,seed,cb){
+        var steps=8,cur=Math.floor(sr(seed)*10)+5,s=0;
         function tick(){
-          cur = Math.max(0, Math.min(19, cur+(sr(seed+s)>.45?-1:1)));
-          arrow.style.top = (BASE+cur*ROW_H)+'px'; s++;
-          if (s<steps) selTimers.push(setTimeout(tick,125));
-          else { arrow.style.top=(BASE+target*ROW_H)+'px'; if(cb) cb(); }
-        }
-        tick();
+          cur=Math.max(0,Math.min(19,cur+(sr(seed+s)>.45?-1:1)));
+          arrow.style.top=(BASE+cur*ROW_H)+'px'; s++;
+          if(s<steps) selTimers.push(setTimeout(tick,125));
+          else{ arrow.style.top=(BASE+target*ROW_H)+'px'; if(cb)cb(); }
+        } tick();
       }
-      walkTo(aA, 0, 17, function(){
-        walkTo(aB, 1, 37, function(){
-          var r0 = document.getElementById('ga-sr-0'), r1 = document.getElementById('ga-sr-1');
-          if(r0) r0.classList.add('selected'); if(r1) r1.classList.add('selected');
+      walkTo(aA,0,17,function(){
+        walkTo(aB,1,37,function(){
+          var r0=document.getElementById('ga-sr-0'),r1=document.getElementById('ga-sr-1');
+          if(r0)r0.classList.add('selected'); if(r1)r1.classList.add('selected');
         });
       });
     }
 
-    /* ── Crossover ────────────────────────────────────────────────────── */
-    var xoverTl = null;
+    ScrollTrigger.create({trigger:'#ga-s5',start:'top 65%',end:'bottom top',onEnter:showSel,onLeaveBack:hideSel});
 
-    function buildGBig(containerId, genome) {
-      var cont = document.getElementById(containerId); cont.innerHTML = '';
+    /* ── Phase 2.6: Crossover ────────────────────────────────────────── */
+    var xoverTl=null;
+
+    function buildGBig(cid,genome){
+      var cont=document.getElementById(cid); if(!cont) return; cont.innerHTML='';
       genome.forEach(function(g,i){
-        var b = document.createElement('div'); b.className = 'ga-gblock';
-        b.style.background = g.css; b.style.color = g.css;
-        b.id = containerId+'-g'+i;
-        var lbl = document.createElement('span'); lbl.className = 'gbig-lbl';
-        lbl.textContent = g.name; b.appendChild(lbl);
-        cont.appendChild(b);
+        var b=document.createElement('div'); b.className='ga-gblock';
+        b.style.background=g.css; b.style.color=g.css; b.id=cid+'-g'+i;
+        var lbl=document.createElement('span'); lbl.className='gbig-lbl';
+        lbl.textContent=g.name||'gene'; b.appendChild(lbl); cont.appendChild(b);
       });
     }
 
-    function showXover() {
-      var pA = SEL[0], pB = SEL[1];
-      buildGBig('ga-gpa', pA.genome); buildGBig('ga-gpb', pB.genome);
-      var xv = document.getElementById('ga-xover');
-      xv.classList.add('visible'); gsap.fromTo(xv, {opacity:0}, {opacity:1, duration:.45});
-      var childGenome = GF.map(function(g,i){
-        var fromA = sr(i*7+3)>.5;
-        return {name:g.name, css:g.css, v: fromA?(pA.genome[i]&&pA.genome[i].v)||.5:(pB.genome[i]&&pB.genome[i].v)||.5, fromA:fromA};
+    function showXover(){
+      var pA=SEL[0],pB=SEL[1];
+      buildGBig('ga-gpa',pA.genome); buildGBig('ga-gpb',pB.genome);
+      var xv=document.getElementById('ga-xover');
+      xv.classList.add('visible'); gsap.fromTo(xv,{opacity:0},{opacity:1,duration:.45});
+      var child=GF.map(function(g,i){
+        var fromA=sr(i*7+3)>.5;
+        return {name:g.name,css:g.css,v:fromA?(pA.genome[i]&&pA.genome[i].v)||.5:(pB.genome[i]&&pB.genome[i].v)||.5,fromA:fromA};
       });
-      if (xoverTl) xoverTl.kill();
-      xoverTl = gsap.timeline({delay:.9, repeat:2});
+      if(xoverTl) xoverTl.kill();
+      xoverTl=gsap.timeline({delay:.9,repeat:2});
       GF.forEach(function(g,i){
-        var sel = childGenome[i].fromA ? '#ga-gpa-g'+i : '#ga-gpb-g'+i;
-        xoverTl.to(sel, {scaleY:1.3, boxShadow:'0 0 12px '+g.css, duration:.16}, i*.08)
-                .to(sel, {scaleY:1, boxShadow:'none', duration:.16}, i*.08+.22);
+        var sel=child[i].fromA?'#ga-gpa-g'+i:'#ga-gpb-g'+i;
+        xoverTl.to(sel,{scaleY:1.3,boxShadow:'0 0 12px '+g.css,duration:.16},i*.08)
+                .to(sel,{scaleY:1,boxShadow:'none',duration:.16},i*.08+.22);
       });
       xoverTl.then(function(){
-        buildGBig('ga-gpc', childGenome);
-        var wrap = document.getElementById('ga-gchild-wrap');
-        if (wrap) gsap.to(wrap, {opacity:1, duration:.4});
-        window._gaChildGenome = childGenome;
+        buildGBig('ga-gpc',child);
+        var wrap=document.getElementById('ga-gchild-wrap');
+        if(wrap) gsap.to(wrap,{opacity:1,duration:.4});
+        window._gaChild=child;
       });
     }
 
-    function hideXover() {
-      if (xoverTl) xoverTl.kill();
-      var xv = document.getElementById('ga-xover');
-      gsap.to(xv, {opacity:0, duration:.3, onComplete:function(){ xv.classList.remove('visible'); }});
+    function hideXover(){
+      if(xoverTl) xoverTl.kill();
+      var xv=document.getElementById('ga-xover');
+      gsap.to(xv,{opacity:0,duration:.3,onComplete:function(){xv.classList.remove('visible');}});
     }
 
-    /* ── Mutation ─────────────────────────────────────────────────────── */
-    function showMut() {
-      var genome = window._gaChildGenome || INDS[0].genome;
-      buildGBig('ga-gpm', genome);
-      var mv = document.getElementById('ga-mut');
-      mv.classList.add('visible'); gsap.fromTo(mv, {opacity:0}, {opacity:1, duration:.45});
-      var mutIdx = Math.floor(sr(42)*GF.length);
+    ScrollTrigger.create({trigger:'#ga-s6',start:'top 65%',end:'bottom top',onEnter:showXover,onLeaveBack:hideXover});
+
+    /* ── Phase 2.7: Mutazione ────────────────────────────────────────── */
+    function showMut(){
+      var genome=window._gaChild||INDS[0].genome;
+      buildGBig('ga-gpm',genome);
+      var mv=document.getElementById('ga-mut');
+      mv.classList.add('visible'); gsap.fromTo(mv,{opacity:0},{opacity:1,duration:.45});
+      var mutIdx=Math.floor(sr(42)*GF.length);
       setTimeout(function(){
-        var block = document.getElementById('ga-gpm-g'+mutIdx); if (!block) return;
+        var block=document.getElementById('ga-gpm-g'+mutIdx); if(!block) return;
         block.classList.add('ga-mutating');
         setTimeout(function(){
           block.classList.remove('ga-mutating');
-          block.style.background = GF[(mutIdx+3)%GF.length].css;
-        }, 2000);
-      }, 500);
+          block.style.background=GF[(mutIdx+3)%GF.length].css;
+        },2000);
+      },500);
     }
 
-    function hideMut() {
-      var mv = document.getElementById('ga-mut');
-      gsap.to(mv, {opacity:0, duration:.3, onComplete:function(){ mv.classList.remove('visible'); }});
+    function hideMut(){
+      var mv=document.getElementById('ga-mut');
+      gsap.to(mv,{opacity:0,duration:.3,onComplete:function(){mv.classList.remove('visible');}});
     }
 
-    /* ── Birth ────────────────────────────────────────────────────────── */
-    function showBirth() {
+    ScrollTrigger.create({trigger:'#ga-s7',start:'top 65%',end:'bottom top',onEnter:showMut,onLeaveBack:hideMut});
+
+    /* ── Phase 2.8: Nascita ──────────────────────────────────────────── */
+    function showBirth(){
       hideMut();
-      gsap.to(birthMat, {opacity:.9, duration:1.0, delay:.35});
-      gsap.to(birthMesh.position, {x:STACK[7].x+.3, y:STACK[7].y-1.0, z:STACK[7].z, duration:1.5, delay:.7, ease:'power2.out'});
-      gsap.to(camera.position, {x:5, y:2.5, z:13, duration:1.5, delay:.7});
+      var border=document.getElementById('ga-ind-border');
+      gsap.to(border,{borderColor:'rgba(16,185,129,0.9)',boxShadow:'0 0 30px rgba(16,185,129,0.4)',duration:.6,delay:.3});
+      gsap.to(border,{borderColor:'rgba(96,165,250,0.5)',boxShadow:'none',duration:1.2,delay:1.1});
+      var sw=document.getElementById('ga-ind-stack-wrap');
+      gsap.fromTo(sw,{opacity:0,y:25},{opacity:1,y:0,duration:.8,delay:.5,ease:'power2.out'});
     }
 
-    function hideBirth() {
-      gsap.to(birthMat, {opacity:0, duration:.35});
-      birthMesh.position.set(0,-6,0);
-    }
+    ScrollTrigger.create({trigger:'#ga-s8',start:'top 65%',end:'bottom top',
+      onEnter:showBirth, onLeaveBack:function(){hideMut();}
+    });
 
-    /* ── Resize ───────────────────────────────────────────────────────── */
-    window.addEventListener('resize', function(){
-      camera.aspect = window.innerWidth/window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+    /* ── Resize ──────────────────────────────────────────────────────── */
+    window.addEventListener('resize',function(){
+      positionIndBorder();
+      var cv=document.getElementById('ga-port-canvas'); if(cv) cv._sized=false;
     });
 
   });
