@@ -470,7 +470,7 @@
       border: 2px dashed rgba(96,165,250,0.32);
       border-radius: 16px;
       pointer-events: none;
-      background: rgba(30,58,95,0.07);
+      background: rgba(30,58,95,0.12);
       width: 100%;
       height: 100%;
       top: 0;
@@ -804,7 +804,7 @@
     <!-- Sticky stage: mirrors algo-hero layout, sits behind scroll sections -->
     <div id="ga-stage" aria-hidden="true">
       <div id="ga-stage-inner">
-        <p id="ga-stage-title">Algoritmo Genetico — Evoluzione della Popolazione</p>
+        <p id="ga-stage-title">Genetic Algorithm — Population Evolution</p>
 
         <div id="ga-panels-row">
 
@@ -855,7 +855,7 @@
 
           <!-- Individual dashed border (positioned by JS over ALU+SM) -->
           <div id="ga-ind-border">
-            <span id="ga-ind-border-label">Individuo</span>
+            <span id="ga-ind-border-label">Individual</span>
           </div>
 
           <!-- 3D stack copies (built by JS) -->
@@ -869,7 +869,7 @@
         <!-- Stage overlays -->
         <div id="ga-stage-ticker" aria-live="polite">
           <div class="ga-tick-name">ENI</div>
-          <div class="ga-tick-desc">Borsa Italiana · Serie storica giornaliera</div>
+          <div class="ga-tick-desc">Italian Stock Exchange · Daily historical series</div>
         </div>
 
         <div id="ga-stage-cagr" role="status">
@@ -879,7 +879,7 @@
         </div>
 
         <div id="ga-stage-dbtable">
-          <div class="ga-db-head"><span>GENOMA</span><span>CAGR</span></div>
+          <div class="ga-db-head"><span>GENOME</span><span>CAGR</span></div>
           <div id="ga-stage-db-rows"></div>
         </div>
 
@@ -891,65 +891,65 @@
     <!-- 8 scroll sections (2.1 → 2.8) -->
     <div class="ga-section" id="ga-s1">
       <div class="ga-text">
-        <p class="algo-panel__label">2.1 — Popolazione</p>
-        <h2>Una popolazione di individui in parallelo.</h2>
-        <p>Ogni individuo è un sistema completo: ALU Box + macchina a stati evolutiva con i propri parametri IIR e soglie di intervento.</p>
+        <p class="algo-panel__label">2.1 — Population</p>
+        <h2>A population of individuals running in parallel.</h2>
+        <p>Each individual is a complete system: ALU Box + evolutionary state machine with its own IIR parameters and intervention thresholds.</p>
       </div>
     </div>
 
     <div class="ga-section" id="ga-s2">
       <div class="ga-text">
-        <p class="algo-panel__label">2.2 — Genoma</p>
-        <h2>Il genoma codifica ogni parametro dell'individuo.</h2>
-        <p>IIR₁(P), IIR₂(P), IIR₁(V), IIR₂(V), Δmgn₁, Δmgn₂, ls_ax, ls_it — tutto in un cromosoma a blocchi colorati.</p>
+        <p class="algo-panel__label">2.2 — Genome</p>
+        <h2>The genome encodes every parameter of the individual.</h2>
+        <p>IIR₁(P), IIR₂(P), IIR₁(V), IIR₂(V), Δmgn₁, Δmgn₂, ls_ax, ls_rule, ls_it — all packed in a colour-block chromosome.</p>
       </div>
     </div>
 
     <div class="ga-section" id="ga-s3">
       <div class="ga-text">
-        <p class="algo-panel__label">2.3 — Ciclo di vita</p>
-        <h2>Un anno di dati di mercato, titolo per titolo.</h2>
-        <p>ENI · ENEL · GENERALI · UNIPOL — serie storica giornaliera a velocità crescente (1x → 5x). CAGR calcolato su ogni titolo, poi media annua dell'individuo inserita in tabella.</p>
+        <p class="algo-panel__label">2.3 — Life Cycle</p>
+        <h2>One year of market data, stock by stock.</h2>
+        <p>ENI · ENEL · GENERALI · UNIPOL — daily historical series at increasing speed (1x → 15x). CAGR computed per stock, then the individual's annual average is stored in the table.</p>
       </div>
     </div>
 
     <div class="ga-section" id="ga-s4">
       <div class="ga-text">
-        <p class="algo-panel__label">2.4 — Parallelismo</p>
-        <h2>Tutti gli individui operano sullo stesso stream.</h2>
-        <p>Lo stream OHLCV è unico e condiviso. Ogni individuo costruisce la propria equity curve in parallelo, con le proprie regole IIR e margini.</p>
+        <p class="algo-panel__label">2.4 — Parallelism</p>
+        <h2>All individuals operate on the same stream.</h2>
+        <p>The OHLCV stream is unique and shared. Each individual builds its own equity curve in parallel, applying its own IIR rules and margin thresholds.</p>
       </div>
     </div>
 
     <div class="ga-section" id="ga-s5">
       <div class="ga-text">
-        <p class="algo-panel__label">2.5 — Selezione</p>
-        <h2>Selezione per fitness: sopravvivono i migliori.</h2>
-        <p>La tabella di CAGR viene ordinata decrescente. Due frecce scelgono casualmente tra i top performer — i due genitori della generazione successiva.</p>
+        <p class="algo-panel__label">2.5 — Selection</p>
+        <h2>Fitness selection: only the best survive.</h2>
+        <p>The CAGR table is sorted in descending order. Two arrows pick randomly among the top performers — the two parents of the next generation.</p>
       </div>
     </div>
 
     <div class="ga-section" id="ga-s6">
       <div class="ga-text">
         <p class="algo-panel__label">2.6 — Crossover</p>
-        <h2>I genomi si fondono in un figlio.</h2>
-        <p>Segmenti casuali di ciascun genitore si combinano — parte del gene IIR₁ dal Parent A, parte del Δmgn₂ dal Parent B, e così via.</p>
+        <h2>Genomes merge into a child.</h2>
+        <p>Random segments from each parent combine — IIR₁ gene from Parent A, Δmgn₂ from Parent B, and so on. L-System rules recombine to shape a new growth topology.</p>
       </div>
     </div>
 
     <div class="ga-section" id="ga-s7">
       <div class="ga-text">
-        <p class="algo-panel__label">2.7 — Mutazione</p>
-        <h2>Una piccola perturbazione stocastica.</h2>
-        <p>Un gene del genoma figlio viene perturbato di poco. Introduce variabilità genetica che permette all'evoluzione di esplorare nuove nicchie.</p>
+        <p class="algo-panel__label">2.7 — Mutation</p>
+        <h2>A small stochastic perturbation.</h2>
+        <p>One gene in the child genome is slightly perturbed. This introduces genetic variability that allows evolution to explore new predictive niches.</p>
       </div>
     </div>
 
     <div class="ga-section" id="ga-s8">
       <div class="ga-text">
-        <p class="algo-panel__label">2.8 — Nascita</p>
-        <h2>Il genoma diventa un individuo.</h2>
-        <p>Il nuovo agente entra nella simulazione e inizia il suo ciclo di vita — competendo per nicchie predittive con la generazione precedente.</p>
+        <p class="algo-panel__label">2.8 — Birth</p>
+        <h2>The genome becomes an individual.</h2>
+        <p>The new agent enters the simulation and begins its life cycle — competing for predictive niches with the previous generation.</p>
       </div>
     </div>
 
@@ -957,9 +957,9 @@
 
     <!-- Full-screen overlays for 2.5 / 2.6 / 2.7 -->
     <div id="ga-sel" aria-hidden="true">
-      <p class="algo-panel__label" style="margin-bottom:0.75rem;">2.5 — Selezione per fitness</p>
+      <p class="algo-panel__label" style="margin-bottom:0.75rem;">2.5 — Fitness Selection</p>
       <div class="ga-sel-panel">
-        <div class="ga-sel-head"><span>#</span><span>GENOMA</span><span>CAGR</span></div>
+        <div class="ga-sel-head"><span>#</span><span>GENOME</span><span>CAGR</span></div>
         <div id="ga-sel-rows"></div>
         <div class="ga-arrow" id="ga-arr-a">▶</div>
         <div class="ga-arrow" id="ga-arr-b" style="color:#a78bfa;">▶</div>
@@ -977,14 +977,14 @@
         <div class="ga-gbig" id="ga-gpb"></div>
       </div>
       <div class="ga-xover-panel" style="opacity:0;" id="ga-gchild-wrap">
-        <div class="ga-xover-lbl" id="ga-child-lbl">Figlio</div>
+        <div class="ga-xover-lbl" id="ga-child-lbl">Child</div>
         <div class="ga-gbig" id="ga-gpc"></div>
       </div>
     </div>
 
     <div id="ga-mut" aria-hidden="true">
       <div class="ga-xover-panel">
-        <div class="ga-xover-lbl">Genoma · Mutazione</div>
+        <div class="ga-xover-lbl">Genome · Mutation</div>
         <div class="ga-gbig" id="ga-gpm"></div>
       </div>
     </div>
@@ -1614,23 +1614,28 @@
       { name:'Δmgn₁',   hex:0x4ade80, css:'#4ade80' },
       { name:'Δmgn₂',   hex:0xf87171, css:'#f87171' },
       { name:'ls_ax',   hex:0xfbbf24, css:'#fbbf24' },
+      { name:'ls_rule', hex:0xf59e0b, css:'#f59e0b' },
       { name:'ls_it',   hex:0x34d399, css:'#34d399' },
     ];
+
+    var LS_RULES = ['A→AB','F→F+F−F','A→AB,B→A','F→FF+F+F','F→F[+F]F−F','A→ABA,B→B','F→F+F+F−F−F','A→B,B→AB'];
 
     function sr(s) { var x = Math.sin(s+1)*10000; return x - Math.floor(x); }
 
     var STOCKS = [
-      { ticker:'ENI',      desc:'Eni S.p.A. · Energia' },
+      { ticker:'ENI',      desc:'Eni S.p.A. · Energy' },
       { ticker:'ENEL',     desc:'Enel S.p.A. · Utility' },
-      { ticker:'GENERALI', desc:'Assicurazioni Generali' },
-      { ticker:'UNIPOL',   desc:'Unipol Gruppo' },
+      { ticker:'GENERALI', desc:'Assicurazioni Generali · Insurance' },
+      { ticker:'UNIPOL',   desc:'Unipol Gruppo · Finance' },
     ];
 
     var INDS = [];
     for (var _i=0; _i<8; _i++) {
       var _cs = [8+sr(_i*11+1)*12, 6+sr(_i*11+2)*15, 5+sr(_i*11+3)*18, 7+sr(_i*11+4)*14];
+      var _lsRule = LS_RULES[_i % LS_RULES.length];
       INDS.push({
         id: _i,
+        lsRule: _lsRule,
         genome: GF.map(function(g,gi){ return { name:g.name, hex:g.hex, css:g.css, v:sr(_i*13+gi*7) }; }),
         cagrPerStock: _cs,
         cagr: _cs.reduce(function(a,b){return a+b;},0)/4,
@@ -1850,9 +1855,42 @@
     (function(){
       var wrap=document.getElementById('ga-ind-stack-wrap'); if(!wrap) return;
       wrap.innerHTML='';
-      [{dx:10,dy:-9},{dx:20,dy:-18},{dx:30,dy:-27}].forEach(function(off){
+      var offsets=[{dx:18,dy:-16},{dx:36,dy:-32},{dx:54,dy:-48}];
+      var copyStates=[1,3,0];
+      var ns='http://www.w3.org/2000/svg';
+      var pts=[{x:0,y:-1.2},{x:-0.9,y:0},{x:0.9,y:0},{x:-0.6,y:1.2},{x:0.6,y:1.2}];
+      var edges=[[0,1],[0,2],[1,3],[2,4],[3,0],[4,0]];
+      offsets.forEach(function(off,ci){
         var d=document.createElement('div'); d.className='ga-stack-copy';
-        d.style.transform='translate('+off.dx+'px,'+off.dy+'px)'; wrap.appendChild(d);
+        d.style.transform='translate('+off.dx+'px,'+off.dy+'px)';
+        // Mini SM SVG
+        var svg=document.createElementNS(ns,'svg');
+        svg.setAttribute('width','80'); svg.setAttribute('height','60');
+        svg.setAttribute('viewBox','-2 -2 4 4');
+        svg.style.cssText='position:absolute;bottom:8px;right:8px;opacity:0.6;';
+        edges.forEach(function(e){
+          var line=document.createElementNS(ns,'line');
+          line.setAttribute('x1',pts[e[0]].x); line.setAttribute('y1',pts[e[0]].y);
+          line.setAttribute('x2',pts[e[1]].x); line.setAttribute('y2',pts[e[1]].y);
+          line.setAttribute('stroke','#334155'); line.setAttribute('stroke-width','0.12');
+          svg.appendChild(line);
+        });
+        pts.forEach(function(p,pi){
+          var circle=document.createElementNS(ns,'circle');
+          circle.setAttribute('cx',p.x); circle.setAttribute('cy',p.y); circle.setAttribute('r','0.22');
+          var isActive=pi===copyStates[ci];
+          circle.setAttribute('fill',isActive?(ci===0?'#22c55e':'#ef4444'):'#1e3a5f');
+          circle.setAttribute('stroke',isActive?(ci===0?'#4ade80':'#f87171'):'#334155');
+          circle.setAttribute('stroke-width','0.06');
+          svg.appendChild(circle);
+        });
+        d.appendChild(svg);
+        // IND label
+        var lbl=document.createElement('span');
+        lbl.style.cssText='position:absolute;top:6px;left:10px;font-size:0.375rem;color:#60a5fa;font-family:monospace;letter-spacing:0.08em;';
+        lbl.textContent='IND #'+(ci+2);
+        d.appendChild(lbl);
+        wrap.appendChild(d);
       });
     })();
 
@@ -1903,15 +1941,32 @@
     drawPortfolio([100,102,101,104,106,103,108,112,110,115,113,118,122,119,125]);
 
     /* ── Genome overlay ──────────────────────────────────────────────── */
-    (function(){
+    function buildGenomeOverlay(ind){
       var cont=document.getElementById('ga-genome-overlay'); if(!cont) return;
-      var ind=INDS[0], lines=['{'];
+      var AXIOM_LETTERS=['A','B','F','X','Y'];
+      var lines=['{'];
       ind.genome.forEach(function(g,i){
-        var k='"'+g.name.replace(/₁/g,'1').replace(/₂/g,'2').replace(/Δ/g,'D')+'"';
-        lines.push('  <span style="color:#64748b">'+k+'</span>: <span style="color:#10b981">'+g.v.toFixed(3)+'</span>'+(i<ind.genome.length-1?',':''));
+        var rawKey=g.name.replace(/₁/g,'1').replace(/₂/g,'2').replace(/Δ/g,'D');
+        var dispKey, dispVal, valColor='#10b981';
+        if(rawKey==='ls_ax'){
+          dispKey='"ls_axiom"';
+          var letter=AXIOM_LETTERS[Math.floor(g.v*AXIOM_LETTERS.length)%AXIOM_LETTERS.length];
+          dispVal='"'+letter+'"'; valColor='#fbbf24';
+        } else if(rawKey==='ls_rule'){
+          dispKey='"ls_rule"';
+          dispVal='"'+(ind.lsRule||LS_RULES[0])+'"'; valColor='#f59e0b';
+        } else if(rawKey==='ls_it'){
+          dispKey='"ls_iter"';
+          dispVal=String(Math.floor(2+g.v*5));
+        } else {
+          dispKey='"'+rawKey+'"';
+          dispVal=g.v.toFixed(3);
+        }
+        lines.push('  <span style="color:#64748b">'+dispKey+'</span>: <span style="color:'+valColor+'">'+dispVal+'</span>'+(i<ind.genome.length-1?',':''));
       });
       lines.push('}'); cont.innerHTML=lines.join('<br>');
-    })();
+    }
+    buildGenomeOverlay(INDS[0]);
 
     /* ── Main RAF ────────────────────────────────────────────────────── */
     (function loop(t){
@@ -1982,9 +2037,24 @@
       gsap.to(document.getElementById('ga-stage-dbtable'),{opacity:0,duration:.3});
     }
 
+    var TICKS_PER_STOCK = 200;
+
     function runLCStock(){
       if(!lcRunning||lcStockIdx>=STOCKS.length){ if(lcRunning) showFinalCAGR(); return; }
       var stk=STOCKS[lcStockIdx];
+
+      // Reset OHLCV for this stock — fresh start
+      gaOHLCVCandles = [];
+      gaOHLCVPrice = 98 + sr(lcStockIdx * 7) * 10;
+      for(var _ri=0; _ri<21; _ri++){
+        gaOHLCVCandles.push(gaGenCandle(gaOHLCVPrice));
+        gaOHLCVPrice = gaOHLCVCandles[gaOHLCVCandles.length-1].c;
+      }
+
+      // Reset portfolio for this stock
+      INDS[0].capHist = [100];
+      drawPortfolio([100]);
+
       var tn=document.querySelector('#ga-stage-ticker .ga-tick-name');
       var td=document.querySelector('#ga-stage-ticker .ga-tick-desc');
       if(tn) tn.textContent=stk.ticker; if(td) td.textContent=stk.desc;
@@ -1996,14 +2066,14 @@
       var ind0=INDS[0], last=ind0.capHist[ind0.capHist.length-1];
       ind0.capHist.push(Math.max(50,last+(sr(lcTick*7+lcStockIdx*50)-.46)*2.8));
       drawPortfolio(ind0.capHist);
-      gaOHLCVSpeed=1+(lcTick/250)*4;
-      if(lcTick>=250){
+      gaOHLCVSpeed=1+(lcTick/TICKS_PER_STOCK)*14;
+      if(lcTick>=TICKS_PER_STOCK){
         gaOHLCVSpeed=1.0;
         var cagr=(INDS[0].cagrPerStock[lcStockIdx])||10;
         showCAGRPopup(STOCKS[lcStockIdx].ticker,'+'+cagr.toFixed(1)+'%',false);
         lcTimers.push(setTimeout(function(){lcStockIdx++;runLCStock();},1600));
       } else {
-        var delay=Math.round(55*(1-(lcTick/250)*0.8));
+        var delay=Math.round(55*(1-(lcTick/TICKS_PER_STOCK)*0.8));
         lcTimers.push(setTimeout(runLCTick,delay));
       }
     }
@@ -2011,14 +2081,14 @@
     function showCAGRPopup(lbl,val,isFinal){
       var popup=document.getElementById('ga-stage-cagr');
       document.getElementById('ga-stage-cagr-val').textContent=val;
-      document.getElementById('ga-stage-cagr-sub').textContent=lbl+(isFinal?' · CAGR medio':' · CAGR annuo');
+      document.getElementById('ga-stage-cagr-sub').textContent=lbl+(isFinal?' · average CAGR':' · annual CAGR');
       gsap.fromTo(popup,{opacity:0,scale:.85},{opacity:1,scale:1,duration:.35});
       if(!isFinal) lcTimers.push(setTimeout(function(){gsap.to(popup,{opacity:0,duration:.3});},1200));
     }
 
     function showFinalCAGR(){
       var mean=INDS[0].cagrPerStock.reduce(function(a,b){return a+b;},0)/4;
-      showCAGRPopup('CAGR medio — tutti i titoli','+'+mean.toFixed(1)+'%',true);
+      showCAGRPopup('Average CAGR — all stocks','+'+mean.toFixed(1)+'%',true);
       lcTimers.push(setTimeout(function(){
         if(!lcRunning) return;
         gsap.to(document.getElementById('ga-stage-cagr'),{opacity:0,duration:.4});
@@ -2037,9 +2107,7 @@
         row.appendChild(g); row.appendChild(c); rows.appendChild(row);
       });
       var ind=INDS[0];
-      var json='{'+ind.genome.slice(0,3).map(function(g){
-        return '"'+g.name.replace(/₁/g,'1').replace(/₂/g,'2').replace(/Δ/g,'D')+'":'+g.v.toFixed(2);
-      }).join(',')+',...}';
+      var json='{"IIR1_P":'+ind.genome[0].v.toFixed(2)+',"ls_rule":"'+(ind.lsRule||LS_RULES[0])+'",...}';
       var mainRow=document.createElement('div'); mainRow.className='ga-db-row';
       mainRow.style.animationDelay='0.28s'; mainRow.style.borderLeft='2px solid #2563eb';
       var mg=document.createElement('span'); mg.className='ga-db-genome'; mg.textContent=json;
@@ -2048,7 +2116,12 @@
       gsap.fromTo(tbl,{opacity:0,y:20},{opacity:1,y:0,duration:.5});
     }
 
-    ScrollTrigger.create({trigger:'#ga-s3',start:'top 65%',end:'bottom top',onEnter:startLifecycle,onLeaveBack:stopLifecycle});
+    ScrollTrigger.create({trigger:'#ga-s3',start:'top 65%',end:'bottom top',onEnter:startLifecycle,
+      onLeaveBack:function(){
+        stopLifecycle();
+        gsap.set('#ga-ind-stack-wrap',{opacity:0});
+      }
+    });
 
     /* ── Phase 2.4: Parallelismo ─────────────────────────────────────── */
     var p4Running=false, p4Timers=[], p4Tick=0;
@@ -2061,7 +2134,7 @@
       gsap.to(document.getElementById('ga-stage-ticker'),{opacity:1,duration:.4});
       var tn=document.querySelector('#ga-stage-ticker .ga-tick-name');
       var td=document.querySelector('#ga-stage-ticker .ga-tick-desc');
-      if(tn) tn.textContent='PARALLELO'; if(td) td.textContent='8 individui · stream OHLCV condiviso';
+      if(tn) tn.textContent='PARALLEL'; if(td) td.textContent='8 individuals · shared OHLCV stream';
       runP4Tick();
     }
 
@@ -2082,7 +2155,13 @@
       if(p4Tick<1000) p4Timers.push(setTimeout(runP4Tick,35));
     }
 
-    ScrollTrigger.create({trigger:'#ga-s4',start:'top 65%',end:'bottom top',onEnter:startParallelism,onLeaveBack:stopParallelism,onLeave:stopParallelism});
+    ScrollTrigger.create({trigger:'#ga-s4',start:'top 65%',end:'bottom top',onEnter:startParallelism,
+      onLeaveBack:function(){
+        stopParallelism();
+        gsap.set('#ga-ind-stack-wrap',{opacity:0});
+      },
+      onLeave:stopParallelism
+    });
 
     /* ── Phase 2.5: Selezione ────────────────────────────────────────── */
     var selShown=false, selTimers=[];
@@ -2111,8 +2190,15 @@
     function hideSel(){
       selShown=false; selTimers.forEach(clearTimeout); selTimers=[];
       var tbl=document.getElementById('ga-sel');
-      gsap.to(tbl,{opacity:0,duration:.35,onComplete:function(){tbl.classList.remove('visible');}});
-      document.querySelectorAll('.ga-sel-row.selected').forEach(function(r){r.classList.remove('selected');});
+      gsap.to(tbl,{opacity:0,duration:.35,onComplete:function(){
+        tbl.classList.remove('visible');
+        // Reset all row animations
+        document.querySelectorAll('#ga-sel-rows .ga-sel-row').forEach(function(r){
+          gsap.set(r,{opacity:1,height:'',marginBottom:'',paddingTop:'',paddingBottom:'',scale:1,y:0,clearProps:'all'});
+        });
+        document.querySelectorAll('.ga-sel-row.selected').forEach(function(r){r.classList.remove('selected');});
+        document.querySelectorAll('.ga-cagr-val').forEach(function(el){gsap.set(el,{opacity:1});});
+      }});
     }
 
     function animateArrows(){
@@ -2131,6 +2217,24 @@
         walkTo(aB,1,37,function(){
           var r0=document.getElementById('ga-sr-0'),r1=document.getElementById('ga-sr-1');
           if(r0)r0.classList.add('selected'); if(r1)r1.classList.add('selected');
+          // After 800ms, focus on parents
+          selTimers.push(setTimeout(function(){
+            // Fade out non-selected rows
+            document.querySelectorAll('#ga-sel-rows .ga-sel-row:not(.selected)').forEach(function(r){
+              gsap.to(r,{opacity:0,height:0,marginBottom:0,paddingTop:0,paddingBottom:0,duration:.5});
+            });
+            // Scale up selected parents
+            selTimers.push(setTimeout(function(){
+              if(r0) gsap.to(r0,{scale:1.25,y:-8,duration:.5,ease:'power2.out'});
+              if(r1) gsap.to(r1,{scale:1.25,y:8,duration:.5,ease:'power2.out'});
+              // Fade CAGR values
+              selTimers.push(setTimeout(function(){
+                document.querySelectorAll('.ga-sel-row.selected .ga-cagr-val').forEach(function(el){
+                  gsap.to(el,{opacity:0,duration:1.2});
+                });
+              },700));
+            },600));
+          },800));
         });
       });
     }
@@ -2204,6 +2308,24 @@
       gsap.to(mv,{opacity:0,duration:.3,onComplete:function(){mv.classList.remove('visible');}});
     }
 
+    /* ── Reset helper ────────────────────────────────────────────────── */
+    function resetAll(){
+      gsap.set('#ga-ind-border',{opacity:0,borderColor:'rgba(96,165,250,0.5)',boxShadow:'none'});
+      gsap.set('#ga-port-panel',{opacity:0});
+      gsap.set('#ga-port-arrow',{opacity:0});
+      gsap.set('#ga-ind-stack-wrap',{opacity:0});
+      gsap.set('#ga-genome-overlay',{opacity:0});
+      gsap.set('#ga-stage-ticker',{opacity:0});
+      gsap.set('#ga-stage-cagr',{opacity:0});
+      gsap.set('#ga-stage-dbtable',{opacity:0});
+      gsap.set('#ga-parallel-equities',{opacity:0});
+      stopLifecycle();
+      stopParallelism();
+      hideSel();
+      hideXover();
+      hideMut();
+    }
+
     ScrollTrigger.create({trigger:'#ga-s7',start:'top 65%',end:'bottom top',onEnter:showMut,onLeaveBack:hideMut});
 
     /* ── Phase 2.8: Nascita ──────────────────────────────────────────── */
@@ -2217,7 +2339,11 @@
     }
 
     ScrollTrigger.create({trigger:'#ga-s8',start:'top 65%',end:'bottom top',
-      onEnter:showBirth, onLeaveBack:function(){hideMut();}
+      onEnter:showBirth,
+      onLeaveBack:function(){
+        hideMut();
+        gsap.to('#ga-ind-border',{borderColor:'rgba(96,165,250,0.5)',boxShadow:'none',duration:.4});
+      }
     });
 
     /* ── Resize ──────────────────────────────────────────────────────── */
