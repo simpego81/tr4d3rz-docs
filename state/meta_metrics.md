@@ -83,6 +83,23 @@ Traccia le metriche di qualità della convergenza del sistema AI. Usato da Claud
 
 ## 5. Inefficienze sistemiche rilevate
 
+### 2026-07-30 — Cycle #002: GA phases 2.5–2.8 visual continuity failure
+
+**Trigger**: Owner rejected delivery of GitHub Pages 2nd Concept GA phases 2.5–2.8 (selection, crossover, mutation).
+
+**Problema rilevato**: BUILDER created independent full-screen overlay DOM elements for phases 2.5–2.8 instead of transforming the existing table from 2.3. Added unsolicited colored genome-block strips not present in spec. CRITIC and REVIEWER did not catch the identity break before delivery. Review cycle count for this feature went to 2 (borderline threshold).
+
+**Intervento**:
+- Documented error pattern: `.swhouse/memory/errors/2026-07-30-ga-phases-disconnected-overlay.md`
+- Documented correct approach: `.swhouse/memory/decisions/2026-07-30-gh-pages-ga-2.5-2.8-correct-approach.md`
+- Documented UX knowledge: `.swhouse/memory/knowledge/2026-07-30-scroll-driven-narrative-ux.md`
+- Required process fix: CRITIC/REVIEWER protocol must add "visual continuity audit" step for multi-phase scroll narratives (verify each phase transforms existing DOM nodes per spec)
+- Required process fix: SCIENTIST protocol must add mandatory browser observation of scroll narrative before delivery gate
+
+**Impatto atteso**: no future phase-replacement errors in scroll-driven narrative implementations.
+
+---
+
 ### 2026-07-15 — Ristrutturazione modello agenti
 
 **Trigger**: utente ha rimosso tutti gli agenti esterni (Manus, Copilot, Antigravity, HRA).

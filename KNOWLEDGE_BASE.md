@@ -132,9 +132,10 @@ The Knowledge Base is a **primary product** of the TR4D3RZ AI-Native Collaborati
 | [artifacts/meta/](artifacts/meta/) | Meta-layer artifacts (convergence audits, optimization proposals, workflow changes) | Meta-Optimizer Agent |
 | [artifacts/debug/](artifacts/debug/) | Debug intelligence artifacts (root cause summaries, observability improvements) | Debug Intelligence Agent |
 
-**Planned** (not yet implemented):
-- Agent memory persistence (pattern recognition, recurring issues)
-- Shared learnings catalog
+**Active** (updated per Software House AI cycles):
+- [`.swhouse/memory/errors/`](.swhouse/memory/errors/) — Implementation errors with root cause and rule (Cycle #001: Three.js CDN silent failure; Cycle #002: GA phases disconnected overlay)
+- [`.swhouse/memory/decisions/`](.swhouse/memory/decisions/) — Architectural decisions log (Software House AI integration; GA 2.5–2.8 correct approach)
+- [`.swhouse/memory/knowledge/`](.swhouse/memory/knowledge/) — Domain and UX knowledge (scroll-driven narrative UX principles)
 
 ---
 
@@ -294,6 +295,13 @@ The Knowledge Base is a **primary product** of the TR4D3RZ AI-Native Collaborati
 ---
 
 ## Knowledge Base Evolution Log
+
+**2026-07-30**: Cycle #002 memory entries added by Librarian Agent (GA phases 2.5–2.8 failure post-mortem)
+- ERROR: `.swhouse/memory/errors/2026-07-30-ga-phases-disconnected-overlay.md` — visual continuity break in scroll narrative phases; rule: never replace existing DOM node with a parallel overlay
+- DECISION: `.swhouse/memory/decisions/2026-07-30-gh-pages-ga-2.5-2.8-correct-approach.md` — single-table in-place transformation, no color coding, GSAP scrub timeline
+- KNOWLEDGE: `.swhouse/memory/knowledge/2026-07-30-scroll-driven-narrative-ux.md` — UX principles for scroll-driven stakeholder narratives (6 principles, anti-pattern table)
+- Updated `state/meta_metrics.md` §5 with process failure entry
+- Updated §6 Agent Memories in this index from "Planned" to "Active"
 
 **2026-07-11**: Knowledge Base created by Librarian Agent (architectural migration audit)  
 - Initial index structure defined
